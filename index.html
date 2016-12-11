@@ -9,11 +9,9 @@ title : Home
         {% for post in site.posts %}
             {% if post.publish %}
                 <li class="post-item clearfix">
-                    <div class="post-author-info">
-                        <h2 class="post-title"><a href="{{post.url}}"><span class="post-title-words">{{ post.title }}</span></a></h2>
-                        <p class="post-excerpt">{{post.excerpt}}</p>
-                        <span class="post-date">{{post.date | date: "%Y년 %m월 %d일"}}</span>
-                    </div>
+                    <h2 class="post-title"><a href="{{post.url}}"><span class="post-title-words">{{ post.title }}</span></a></h2>
+                    <p class="post-excerpt">{{post.excerpt}}</p>
+                    <span class="post-date">{{post.date | date: "%Y년 %m월 %d일"}} 작성</span>
                 </li>
             {% endif %}
         {% endfor %}
