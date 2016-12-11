@@ -1,37 +1,68 @@
 ---
 layout: default
-title: Home
+title : Home
 ---
 
-<div class="posts">
-  {% for post in paginator.posts %}
-  <div class="post">
-    <h1 class="post-title">
-      <a href="{{ post.url }}">
-        {{ post.title }}
-      </a>
-    </h1>
+<div class="container">
 
-    <span class="post-date">{{ post.date | date_to_string }}</span>
-
-    {{ post.content }}
-  </div>
-  {% endfor %}
+    <ul class="posts">
+        {% for post in site.posts %}
+            {% if post.publish %}
+                <li class="post-item clearfix">
+                    <div class="post-author-info">
+                        <h2 class="post-title"><a href="{{post.url}}"><span class="post-title-words">{{ post.title }}</span></a></h2>
+                        <p class="post-excerpt">{{post.excerpt}}</p>
+                        <span class="post-date">{{post.date | date: "%Y년 %m월 %d일"}}</span>
+                    </div>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 </div>
 
-<div class="pagination">
-  {% if paginator.next_page %}
-    <a class="pagination-item older" href="{{ site.baseurl }}page{{paginator.next_page}}">Older</a>
-  {% else %}
-    <span class="pagination-item older">Older</span>
-  {% endif %}
-  {% if paginator.previous_page %}
-    {% if paginator.page == 2 %}
-      <a class="pagination-item newer" href="{{ site.baseurl }}">Newer</a>
+<div id="post-pagination" class="pagination clearfix">
+
+    {% if paginator.previous_page %}
+        <p class="previous">
+            {% if paginator.previous_page == 1 %}
+                <a href="/">이전 페이지</a>
+            {% else %}
+                <a href="/page{{paginator.previous_page}}">이전 페이지</a>
+            {% endif %}
+        </p>
     {% else %}
-      <a class="pagination-item newer" href="{{ site.baseurl }}page{{paginator.previous_page}}">Newer</a>
+        <p class="previous disabled">
+            <span>이전 페이지</span>
+        </p>
     {% endif %}
-  {% else %}
-    <span class="pagination-item newer">Newer</span>
-  {% endif %}
+
+    <ol class="pages">
+        <li class="page">
+            {% if paginator.page == 1 %}
+                <span class="current-page">1</span>
+            {% else %}
+                <a href="/">1</a>
+            {% endif %}
+        </li>
+
+        {% for count in (2..paginator.total_pages) %}
+            <li class="page">
+                {% if count == paginator.page %}
+                    <span class="current-page">{{count}}</span>
+                {% else %}
+                    <a href="/page{{count}}">{{count}}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+
+    {% if paginator.next_page %}
+        <p class="next">
+        <a href="/page{{paginator.next_page}}">다음 페이지</a>
+        </p>
+    {% else %}
+        <p class="next disabled">
+        <span>다음 페이지</span>
+        </p>
+    {% endif %}
 </div>

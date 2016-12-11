@@ -1,0 +1,92 @@
+---
+---
+
+.posts {
+    .post-author-info {
+        margin: 0;
+        text-align: left;
+
+        .portrait {
+            width: 60px;
+            vertical-align: middle;
+            border-radius: 50%;
+            float: right;
+            margin-left: 40px;
+        }
+    }
+
+    li {
+        list-style: none;
+        border-bottom: 1px solid #e9ebf0;
+        padding: 8% 0;
+    }
+
+    .post-title {
+        margin: 0 0 5px;
+        font-size: 24px;
+    }
+}
+
+/* 페이지네이터 */
+
+.pagination {
+    text-align: center;
+    font-size: 18px;
+    padding: 10px 0;
+    margin-top: 30px;
+
+    ol {
+        display: inline-block;
+        margin: 14px 24px;
+    }
+
+    li {
+        display: inline-block;
+
+        a {
+            -webkit-transition: 0.2s ease-out all;
+            margin: 4px 0;
+            padding: 9px 14px;
+            border-radius: 2px;
+            font-size: 18px;
+            color: #5a6173;
+        }
+    }
+
+    .page .current-page,
+    .page .current-page:hover {
+        margin: 4px 0;
+        padding: 9px 14px;
+        border-radius: 2px;
+        font-size: 18px;
+        color: #5a6173;
+        background-color: #f5f7fa;
+    }
+
+    .previous a,
+    .next a,
+    .previous.disabled,
+    .next.disabled {
+        font-size: 18px;
+        color: #5a6173;
+    }
+
+    .previous.disabled,
+    .next.disabled {
+        color: #b0b6c2;
+    }
+
+    .previous,
+    .next {
+        padding: 2% 4%;
+        border-radius: 2px;
+        display: inline-block;
+    }
+
+    .previous:hover,
+    .next:hover,
+    .page a:hover {
+        -webkit-transition: 0.2s ease-out all;
+        background-color: #f5f7fa;
+    }
+}

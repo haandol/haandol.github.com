@@ -1,7 +1,11 @@
 # Site settings
 title:          Haandol
-description:    Vincent Lee
+tagline:        Vincent Lee
 url:            "http://haandol.github.io"
+baseurl:        /
+
+sass:
+  style:        compressed
 
 # Build settinga
 markdown:       kramdown
