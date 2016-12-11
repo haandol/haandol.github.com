@@ -5,7 +5,7 @@ url:            "http://haandol.github.io"
 
 # Build settinga
 markdown:       kramdown
-highlighter:    pygments
+highlighter:    rouge
 
 # Custom vars
 author:
