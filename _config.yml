@@ -1,10 +1,12 @@
 # Site settings
-title: Monolithic Life
-tag_text: Haandol
-description: CS01
-url: "http://haandol.github.io"
+title:          Haandol
+description:    Vincent Lee
+url:            "http://haandol.github.io"
 
-# Build settings
-markdown: kramdown
+# Build settinga
+markdown:       kramdown
+highlighter:    pygments
 
-exclude: ["README.md"]
+# Custom vars
+author:
+  name:         'Vincent Lee'

@@ -1,22 +1,8 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ site.title }}</title>
-  <link rel="stylesheet" href="/css/normalize.css">
-  <link rel="stylesheet" href="/css/solo.css">
-</head>
-<body>
+---
+layout: default
+---
 
-  <article>
-   <div class="container">
-    <h3>{{ page.title }}</h3>
-
-    {{ content }}
-     </div>
-   </article>
-
-</body>
-</html>
+<div class="page">
+  <h1 class="page-title">{{ page.title }}</h1>
+  {{ content }}
+</div>
