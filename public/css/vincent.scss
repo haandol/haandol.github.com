@@ -63,28 +63,6 @@
         background-color: #f5f7fa;
     }
 
-    .previous a,
-    .next a,
-    .previous.disabled,
-    .next.disabled {
-        font-size: 18px;
-        color: #5a6173;
-    }
-
-    .previous.disabled,
-    .next.disabled {
-        color: #b0b6c2;
-    }
-
-    .previous,
-    .next {
-        padding: 2% 4%;
-        border-radius: 2px;
-        display: inline-block;
-    }
-
-    .previous:hover,
-    .next:hover,
     .page a:hover {
         -webkit-transition: 0.2s ease-out all;
         background-color: #f5f7fa;
