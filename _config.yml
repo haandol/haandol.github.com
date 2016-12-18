@@ -1,8 +1,9 @@
 # Site settings
 title:          Haandol
-tagline:        Vincent Lee
+tagline:        Machine Learning For Dummies
 url:            "http://haandol.github.io"
 baseurl:        /
+issueurl:       "https://github.com/haandol/haandol.github.com"
 
 sass:
   style:        compressed
