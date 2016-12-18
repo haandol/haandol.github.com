@@ -3,7 +3,7 @@ title:          Haandol
 tagline:        Machine Learning For Dummies
 url:            "http://haandol.github.io"
 baseurl:        /
-issueurl:       "https://github.com/haandol/haandol.github.com"
+issueurl:       "https://github.com/haandol/haandol.github.com/issues"
 
 sass:
   style:        compressed
