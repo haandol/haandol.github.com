@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 평범한 개발자를 위한 머신러닝 노트 서문
-excerpt: 머신러닝을 한번도 배워보지 않은, 수학을 못하는 개발자를 위한 머신러닝 노트의 서문
+title: 블로그 소개
+excerpt: 머신러닝을 한번도 배워보지 않은, 수학을 못하는 개발자를 위한 머신러닝 노트
 frame: https://www.google.co.kr/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwik_5Cn9f3QAhXLFZQKHWcWA8YQjRwIBw&url=http%3A%2F%2Foliviaklose.com%2Fmachine-learning-11-algorithms-explained%2F&psig=AFQjCNGasRtT0UNJbYDI0tNFQZZ3cm5qbQ&ust=1482156476722080
 author: vincent
 email: ldg55d@gmail.com
