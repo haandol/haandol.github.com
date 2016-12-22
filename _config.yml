@@ -1,6 +1,6 @@
 # Site settings
 title:          Haandol
-tagline:        Machine Learning For Dummies
+tagline:        TL;DR
 url:            "http://haandol.github.io"
 baseurl:        /
 issueurl:       "https://github.com/haandol/haandol.github.com/issues"
