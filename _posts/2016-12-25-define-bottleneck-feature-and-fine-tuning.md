@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Bottleneck-feature? Fine-tuning?
+title: Bottleneck feature? Fine-tuning?
 excerpt: 처음 보는 단어 보틀넥 피쳐, 파인튜닝을 알아보자
 author: vincent
 email: ldg55d@gmail.com
@@ -33,13 +33,13 @@ keras 블로그에는 keras 튜토리얼이 몇개 올라와 있는데, 그 중 
 
 이 튜토리얼은 딥러닝을 이용한 기본적인 문제해결 순서의 거의 모든 것을 담고 있으므로 keras 를 사용할 계획이라면 반드시 읽어보길 바란다.
 
-머신러닝 입문자인 나는, 이 튜토리얼에서 보틀넥 피쳐(bottleneck-feature) 라는 단어와 파인튜닝(fine tuning) 이라는 단어를 처음 접했다.
+머신러닝 입문자인 나는, 이 튜토리얼에서 보틀넥 피쳐(bottleneck feature) 라는 단어와 파인튜닝(fine-tuning) 이라는 단어를 처음 접했다.
 
 두 단어를 구글에 넣어도 뭔가 확 와닿지 않는 설명만 있어서 답답했다.
 
 본 글에서는 내가 이해한대로 간단히 정리해본다.
 
-## 보틀넥 피쳐(Bottleneck-feature)
+## 보틀넥 피쳐(Bottleneck feature)
 
 ![VGG16 bottleneck feature](https://blog.keras.io/img/imgclf/vgg16_original.png)
 
