@@ -14,7 +14,7 @@ publish: true
 
 모델에서 가장 추상화된 피쳐
 
-특히 CNN 모델에서는 Affine Layer(Fully-connected layer) 바로전 CNN 블록의 output 값
+특히 CNN 모델에서는 어파인 레이어(Fully-connected layer) 바로전 CNN 블록의 output 값
 
 ### 파인 튜닝(Fine-tuning)
 
