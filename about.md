@@ -3,6 +3,8 @@ layout: page
 title: About
 ---
 
+<a href="https://kr.linkedin.com/pub/dongkyun-lee/13/3a1/b53"><img src="https://static.licdn.com/scds/common/u/img/webpromo/btn_viewmy_160x25.png" width="160" height="25" border="0" alt="View DongKyun Lee's profile on LinkedIn"></a>
+
 나는 5년차 개발자로 경기대학교 데이터베이스 연구실에서 (쌩뚱맞게도) SNS ~~페북, 트위터 같은 그거~~ 를 전공했다.
 
 스타트업을 3년쯤 하다가 망한 경험이 있으며, 덕분에 다양한 분야에 대해 조금씩의 지식은 있지만 한 분야에 대한 깊은 지식이 늘 부족하다.
