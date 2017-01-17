@@ -85,6 +85,7 @@ VGG16 모델의 경우 1000 개의 카테고리를 학습시켰기 때문에 고
 
 한동안은 단어설명위주의 글을 쓰며 머리에 정리해 나갈 생각이다.
 
+----
 
 [^1]: [fchollet 의 트위터](https://twitter.com/fchollet/status/810201293151145984)
 [^2]: [building-powerful-image-classification-models-using-very-little-data](https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html)
