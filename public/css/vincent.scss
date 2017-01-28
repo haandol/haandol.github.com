@@ -73,3 +73,15 @@ del {
     font-size: 0.8em;
     color: #999;
 }
+
+.post {
+    .tags {
+        padding: 0;
+
+        li {
+            color: #999;
+            font-size: 16px;
+            display: inline-block;
+        }
+    }
+}

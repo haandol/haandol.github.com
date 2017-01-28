@@ -4,6 +4,11 @@ layout: default
 
 <div class="post">
   <h1 class="post-title">{{ page.title }}</h1>
+  <ul class="tags">
+      {% for tag in page.tags %}
+          <li>#{{tag}}</li>
+      {% endfor %}
+  </ul>
   <span class="post-date">{{ page.date | date_to_string }}</span>
   {{ content }}
 </div>
