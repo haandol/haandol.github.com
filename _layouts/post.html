@@ -9,7 +9,7 @@ layout: default
           <li>#{{tag}}</li>
       {% endfor %}
   </ul>
-  <span class="post-date">{{ page.date | date_to_string }}</span>
+  <span class="post-date">{{ page.date | date: "%Y년 %m월 %d일"}} 작성</span>
   {{ content }}
 </div>
 
@@ -21,7 +21,7 @@ layout: default
         <h3>
           <a href="{{ post.url }}">
             {{ post.title }}
-            <small>{{ post.date | date_to_string }}</small>
+            <small>{{post.date | date: "%Y년 %m월 %d일"}}</small>
           </a>
         </h3>
       </li>
