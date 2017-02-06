@@ -42,6 +42,13 @@ XGBoost와 Random Forest 를 찾아봤더니 앙상블 기법을 쓴다고 한�
 
 이 글에서도 그냥 영상만 소개하고 넘어가겠다.
 
+### 배깅(Bagging)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2Mg8QD0F1dQ" frameborder="0" allowfullscreen></iframe>
+
+### 부스팅(Boosting)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/GM3CDQfQ4sw" frameborder="0" allowfullscreen></iframe>
 
 ## 마치며
 
