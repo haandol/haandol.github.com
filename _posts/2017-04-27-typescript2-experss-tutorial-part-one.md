@@ -26,9 +26,9 @@ Python 으로만 서버 개발하다가 지난주부터 nodejs 를 공부하게 
 글 순서는 아래와 같으며, 전체 시리즈의 끝에는 간단한 채팅 서비스를 만들게 될 것이다.
 
 1. hello world (당연하게도)
-1. express + typescript 로 간단한 REST API 개발
-1. mongoose + typescript 로 앞서 만든 REST API 에 CRUD 추가
-1. socket.io + typescript 로 실시간으로 여러 소스에서 CRUD 기능 추가
+1. express + Typescript 로 간단한 REST API 개발
+1. mongoose + Typescript 로 앞서 만든 REST API 에 CRUD 추가
+1. socket.io + Typescript 로 실시간으로 여러 소스에서 CRUD 기능 추가
 1. 앞선 내용을 다 합쳐서 간단한 채팅서버 개발
 
 node 기본과 Typescript 는 알고 있다고 가정하고 진행하겠다.
@@ -44,7 +44,7 @@ $ mkdir cinnamon
 $ cd cinnamon
 ```
 
-typescript 를 이용해 서버를 돌리려면 무조건 2개를 init 해줘야한다.
+Typescript 를 이용해 서버를 돌리려면 무조건 2개를 init 해줘야한다.
 
 **npm** 과 **tsc** 이다. npm 은 패키지 매니저이고 tsc 는 타입스크립트 컴파일러다.
 
@@ -89,7 +89,7 @@ $ npm install --save typescript @types/node
 ```
 
 *--save* 옵션은 package.json 에 자동으로 설치되는 패키지의 의존성을 붙여준다.
-*@types/패키지* 은 패키지의 선언(declaration) 을 typescript 에서 사용할 수 있게 해준다.
+*@types/패키지* 은 패키지의 선언(declaration) 을 Typescript 에서 사용할 수 있게 해준다.
 1.x 에서는 tsd 나 typings 같은 패키지로 복잡하게 했었는데 2.x 에서는 *@types/패키지* 를 npm install 하면 끝난다.
 
 타입스크립트는 TS 형태를 JS 로 컴파일하는 방식이며 컴파일시 **tsconfig.json** 파일을 참조한다.
@@ -116,22 +116,22 @@ outDir 은 직접 추가해주면 되는데 아래에서 설명하겠다.
 }
 ```
 
-다른건 신경안써도 되고 일단 target 만 보자.
+다른건 신경안써도 되고 일단 *target* 필드만 보자.
 
 위에서 말했듯 TS 는 JS로 컴파일을 하는데, 어떤 ES 표준버전으로 컴파일 할지 결정할 수 있다.
 node 6.4 이상은 es2015 를 지원하기 때문에[^1] node 구 버전을 쓰거나 프론트엔드 작업을 할 게 아니면 굳이 es5 로 컴파일을 할 이유가 없다.
 es2015 에는 Promise, Generator, Iterator 같은 편리한 기능들이 많이 있기 때문에 평소에는 *es2015*로 설정해주면 된다.
 
-다만 여기서는 컴파일된 코드와의 차이를 보기 위해 es5 를 그대로 놔두겠다.
+다만 여기서는 컴파일된 코드가 컴파일 전 코드와 다르다는 것을 보여주기 위해 target 을 es5 로 놔두겠다.
 
-마지막으로 outDir 옵션을 추가해주자. 맨 윗줄에 추가한 이유는 *쉼표(,)* 때문에 잘못입력할까봐 그런것인데 위치는 사실 상관없다.
+마지막으로 *outDir* 필드를 추가해주자. 맨 윗줄에 추가한 이유는 *쉼표(,)* 때문에 잘못입력할까봐 그런것인데 위치는 사실 상관없다.
 
-outDir 은 컴파일된 JS 파일이 어디에 위치할지 결정해주는 것으로 없으면 소스파일(.ts) 과 동일한 폴더로 위치하게 된다.
-이렇게 ts 파일과 js 파일이 섞이면 굉장히 보기 안좋기 때문에, 특별한 이유가 없으면 outDir 로 ts 와 js 위치를 구분해주는 것이 정신건강에 좋다.
+outDir 은 컴파일된 JS 파일이 어디에 위치할지 결정해주는 것으로, 해당 옵션이 없으면 컴파일된 파일(.js) 이 소스파일(.ts) 과 동일한 폴더에 위치하게 된다.
+ts 파일과 js 파일이 섞이면 보기도 안좋고 관리하기도 어렵기 때문에, outDir 로 ts 와 js 위치를 구분해주는 것이 정신건강에 좋다.
 
 ## Hello world!
 
-typescript 는 src 폴더아래에 위치시키는 것이 관례이다. 스타일가이드를 잘 지키면 여러모로 편리하다. src 폴더를 만들자.
+Typescript 파일은 src 폴더 아래에 위치시키는 것이 관례인 것 같다. 우리도 src 폴더를 만들자.
 
 ```bash
 $ mkdir src
@@ -143,7 +143,7 @@ $ mkdir src
 $ touch index.ts
 ```
 
-좋아하는 편집기로 아래 내용을 index.ts 에 입력한다.
+좋아하는 편집기로 아래 내용을 *index.ts* 에 입력한다.
 
 ```typescript
 class Greeter {
@@ -160,7 +160,7 @@ console.log(greeter.greet());
 
 *es6* 에 추가된 *class* 와 *formatting* 를 써야 구분이 될 것 같아서 다소 위와 같은 복잡한 hello world 예제를 작성했다.
 
-이제 ts 파일을 tsc 를 이용해 컴파일 해보자.
+이제 index.ts 파일을 tsc 를 이용해 컴파일 해보자.
 
 ```bash
 $ tsc
@@ -190,7 +190,7 @@ Hello world, Vincent!!
 
 ## npm start
 
-NPM 은 패키지 매니저이지만 간단한 빌드명령도 수행할 수 있다.
+NPM 은 패키지 매니저이지만 간단한 스크립트 명령도 수행할 수 있다.
 
 ```bash
 $ npm install
@@ -207,6 +207,8 @@ npm ERR! Test failed.  See above for more details.
 
 *npm test* 명령은 어디서 온것인가?
 아까 작성된 package.json 의 **scripts** 필드를 보면 **test** 필드가 있는데 필드명은 npm 파라미터이고 값은 셸에서 실행되는 명령어이다.
+즉, 아래는 npm test 를 실행하면 echo 명령으로 에러메시지를 보여준 뒤 프로그램을 강제종료한다.
+
 ```json
 ...
 "scripts": {
@@ -217,7 +219,7 @@ npm ERR! Test failed.  See above for more details.
 
 대부분의 인터넷 예제들은 *npm start* 를 이용해 실행되도록 설정되어 있는데 우리도 해보자.
 
-우리는 tsc 를 이용하여 typescript 를 컴파일한 뒤 node 를 이용해 index.js 를 실행하기만 하면 된다.
+우리는 tsc 를 이용하여 index.ts 를 컴파일한 뒤 node 를 이용해 index.js 를 실행하기만 하면 된다.
 
 아래와 같이 scripts 필드에 *start* 를 추가하고 저장한다.
 
@@ -250,7 +252,7 @@ const greeter = new Greeter("Vincent");
 console.log(greeter.hugeGreet());
 ```
 
-이제 *npm start* 명령만 입력하면 자동으로 index.ts 를 JS 로 컴파일하고 해당 파일을 실행하는 것을 볼 수 있다.
+이제 *npm start* 명령만 입력하면 자동으로 *index.ts* 를 *build/index.js* 로 컴파일하고 해당 파일을 node 로 실행한다.
 
 ```bash
 $ npm start
@@ -263,12 +265,12 @@ HELLO WORLD, Vincent!!!!!
 
 ## 마치며
 
-Typescript 는 기본적으로 서버 뿐만이 아니라 Angular, React, React Native 등의 다양한 환경에서 쓸 수 있게 범용으로 만든 (MS 니까..) 언어이므로
+Typescript 가 Angular, React, React Native 등의 다양한 환경에서 쓸 수 있게 범용으로 만든 ~~MS 니까~~ 언어라 그런지
 튜토리얼도 너무나 다양한 내용을 다루고 있어서 혼란스러웠다.
 
-구글 검색에 나온 다른 예제들 역시 대부분 프론트 개발자가 풀스택을 하면서 쓴 글이라 마찬가지로 돌잔치에서 돌잡이하는 기분이었다. ~~뭘 잡아도 뭔지도 모르고 잡음~~
+구글 검색으로 찾은 다른 튜토리얼들 역시 프론트 개발자가 풀스택을 하면서 쓴 글이 많아서 마찬가지로 혼란스러웠다. ~~돌잔치에서 돌잡이하는 기분이었다. 뭘 잡아도 뭔지도 모르고 잡음.~~
 
-위 내용은 막 Node 개발을 시작한 서버 개발자로서 내가 궁금해하던 내용들만 짚어서 만들었기 때문에 다른 부분은 다른 예제들을 찾아보며 공부하면 될 것 같다.
+본 글의 내용은 막 Node 개발을 시작한 서버 개발자로서 내가 궁금해하던 내용들만 짚어서 만들었기 때문에 다른 부분은 다른 예제들을 찾아보며 공부하면 될 것 같다.
 
 짧게 쓴다고 썼는데도 겁나 기네...
 
