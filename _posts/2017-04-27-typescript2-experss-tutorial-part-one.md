@@ -230,7 +230,7 @@ npm ERR! Test failed.  See above for more details.
 ...
 ```
 
-제대로 적용이 되는지 확인하기 위해 index.js 를 수정해보자.
+제대로 적용이 되는지 확인하기 위해 index.ts 를 수정해보자.
 
 ```typescript
 class Greeter {
