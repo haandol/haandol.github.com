@@ -1,10 +1,10 @@
 ---
 layout: post
-title: Typescript2 + Express + MongoDB 튜토리얼
-excerpt: typescript2 로 만드는 서버 튜토리얼
+title: Typescript2 서버 튜토리얼 - 1/5
+excerpt: Hello world, Typescript + Node!!
 author: vincent
 email: ldg55d@gmail.com
-tags: typescript2, express, mongodb, mongoose, nodejs
+tags: typescript2, nodejs, tutorial
 publish: true
 ---
 
