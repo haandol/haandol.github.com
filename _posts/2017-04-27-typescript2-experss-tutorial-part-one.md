@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Typescript2 서버 튜토리얼 - 1/5
-excerpt: Hello world, Typescript + Node!!
+excerpt: Typescript + Node
 author: vincent
 email: ldg55d@gmail.com
 tags: typescript2, nodejs, tutorial
@@ -9,6 +9,8 @@ publish: true
 ---
 
 ## TL;DR
+
+ * 코드는 여기[^1]
 
  * 예제마다 뭔가 많이 달라서 뭘로 해야할지 모르겠다구요?
 ``` 정상입니다. 설정이 제일 쉬워보이는거 정해서 하세요. ```
@@ -119,7 +121,7 @@ outDir 은 직접 추가해주면 되는데 아래에서 설명하겠다.
 다른건 신경안써도 되고 일단 *target* 필드만 보자.
 
 위에서 말했듯 TS 는 JS로 컴파일을 하는데, 어떤 ES 표준버전으로 컴파일 할지 결정할 수 있다.
-node 6.4 이상은 es2015 를 지원하기 때문에[^1] node 구 버전을 쓰거나 프론트엔드 작업을 할 게 아니면 굳이 es5 로 컴파일을 할 이유가 없다.
+node 6.4 이상은 es2015 를 지원하기 때문에[^2] node 구 버전을 쓰거나 프론트엔드 작업을 할 게 아니면 굳이 es5 로 컴파일을 할 이유가 없다.
 es2015 에는 Promise, Generator, Iterator 같은 편리한 기능들이 많이 있기 때문에 평소에는 *es2015*로 설정해주면 된다.
 
 다만 여기서는 컴파일된 코드가 컴파일 전 코드와 다르다는 것을 보여주기 위해 target 을 es5 로 놔두겠다.
@@ -276,4 +278,5 @@ Typescript 가 Angular, React, React Native 등의 다양한 환경에서 쓸 �
 
 ----
 
-[^1]: [node.green](http://node.green/)
+[^1]: [ts-tutorial](https://github.com/haandol/ts-tutorial/tree/v1.0)
+[^2]: [node.green](http://node.green/)
