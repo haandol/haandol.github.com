@@ -29,7 +29,25 @@ express 기본 사용법은 공식 홈페이지의 문서로도 충분한 것 �
 
 ## 프로젝트 생성
 
-이전 강의를 보고 ts-tutorial v1[^2] 을 기반으로 구조를 잡겠다.
+본 글은 ts-tutorial v1[^2]의 프로젝트 구조를 기반으로 진행하겠다.
+
+```bash
+$ git clone git@github.com:haandol/ts-tutorial.git
+$ cd ts-tutorial
+$ git checkout v1.0
+```
+
+프로젝트 구조는 다음과 같다.
+
+```bash
+.
+├── LICENSE
+├── README.md
+├── package.json
+├── src
+│   └── index.ts
+└── tsconfig.json
+```
 
 서비스를 개발하는 순서는 개인별로 다양할 수 있다. 본 글에서는~~개인적으로~~ 아래 순서를 선호한다.
 
