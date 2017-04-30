@@ -15,7 +15,7 @@ publish: true
 
 ## 시작하며
 
-본 글은 typescript 를 이용하여 mongodb 를 쓰는 것이 목적이므로 일단 mongodb 의 기본은 안다고 가정한다.
+본 글은 typescript 를 이용하여 mongodb 를 쓰는 것이 목적이므로 일단 mongodb 의 기본은 안다고 가정한다. 
 mongodb 기본 사용법은 공식 홈페이지의 문서로도 충분한 것 같다.
 
 본 글에서는 mongodb 를 이용하여 밀짚모자 해적단 등장인물의 정보를 다룰(CRUD) 수 있는 클래스를 작성해본다.
@@ -61,8 +61,8 @@ $ mongo
 
 ## typescript, mongoose 설치
 
-이제 typescript 와 mongodb 드라이버인 *mongoose* 패키지를 설치해보자.
-개발모드에 *@types/패키지명* 으로 타입정의를 함께 설치하는 것도 잊지 말자.
+이제 typescript 와 mongodb 드라이버인 *mongoose* 패키지를 설치해보자. 
+*@types/패키지명* 으로 타입정의를 함께 설치하는 것도 잊지 말자.
 
 ```bash
 $ npm install --save mongoose typescript
@@ -71,7 +71,7 @@ $ npm install --save-dev @types/mongoose @types/node
 
 ## 스키마 정의
 
-mongodb 는 아래와 같이 Schema 를 이용해 Model을 생성하고, 해당 Model 을 이용하여 DB 에 데이터를 추가한다.
+mongodb 는 아래와 같이 Schema 를 이용해 Model을 생성하고, 이를 이용하여 DB 에 Document 를 추가한다.
 
 ```javascript
 var mongoose = require('mongoose');
@@ -95,7 +95,7 @@ printAge({name: 'robin'});      // this prints 'undefined'
 *printAge* 함수의 경우 User 모델의 age 필드를 참조하여 처리를 하지만
 javascript 특성상 아무 객체나 다 던져줘도 처리할 수 있다.
 
-Typescript 를 사용하면 해당 함수가 스키마에 맞는 객체가 아니면 컴파일타임에 에러를 낸다.
+Typescript 를 사용하면, 아래처럼 파라미터가 스키마에 맞는 객체가 아니면 컴파일타임에 에러를 낸다.
 
 ```typescript
 // src/index.ts
@@ -123,9 +123,20 @@ printAge(robin);            // 30
 printAge({name: 'robin'});  // CompileError: can not convert to User
 ```
 
+Typescript 를 쓰면서 추가된 사항은 아래와 같다.
+
+1. mongoose.Document 를 상속받은 Pirate 인터페이스를 정의하고
+2. 모델 생성시 Pirate 인터페이스를 제너릭 파라미터로 전달해준다.
+
+
 ### IPirate 정의하기
 
-해적 정보를 저장하기 위해 src/domain/models.ts 를 만들고 IPirate 인터페이스를 추가하자
+~~당연하게도~~ 타입체크를 하기 위해서 먼저 인터페이스나 클래스를 만들어야 한다.
+
+해적 정보를 저장하기 위해 src/domain/models.ts 를 만들고 Pirate 인터페이스를 추가하자
+
+참고로 많은 인터넷 예제들이 `IPirate` 이런 식으로 `I` 를 앞에 붙여서 인터페이스를 명명하는데
+공식 스타일가이드는 인터페이스 앞에 `I`를 붙이지 않도록 권장한다.
 
 ```bash
 $ mkdir -p src/domain
@@ -150,6 +161,7 @@ const pirateSchema = new mongoose.Schema({
 });
 export const PirateModel = mongoose.model<Pirate>('Pirate', pirateSchema);
 ```
+
 
 ## DB 클래스 만들기
 
@@ -188,14 +200,15 @@ export class DB {
 }
 ```
 
-*PirateModel* 은 mongoose.Model 을 상속받아 만들어지며
-Model.save 는 해당 모델을 mongodb 에 Document 를 생성해준다.
+*PirateModel* 은 mongoose.Model 을 상속받아 만들어지며,
+Model.save() 는 해당 모델을 이용해 mongodb 에 Document 를 생성한다.
 
-이 때 반환된 값은 *Promise<T>* 의 제너릭 형태인데,
-*<T>* 제너릭은 런타임에 타입을 지정할 수 있게 해주는 기법으로
-Model 생성시 Pirate 로 우리가 지정해줬었다.
+이 때 반환된 값은 `Promise<T>` 의 제너릭 형태인데,
+`<T>` 제너릭은 런타임에 타입을 지정할 수 있게 해주는 기법으로
+처음 *PirateModel* 생성시 Pirate 로 지정해줬었다.
 
-Promise 를 쓰지 않고 전통적인 콜백방식으로도 호출 할 수 있는데 아래와 같이 해주면 된다.
+Promise 를 쓰지 않고 콜백(callback) 방식으로 호출 할 수도 있는데 아래와 같이 해주면 된다.
+
 ```typescript
 let p = new PirateModel(pirate);
 p.save((err, raw) => {
@@ -203,10 +216,10 @@ p.save((err, raw) => {
 });
 ```
 
-콜백방식은 여러 비동기 요청을 다룰 때 굉장히 복잡한 코드를 만들게 되므로 Promise 와 친해지는 것이 좋다.
-최근에는 generator 나 async/awaits 를 이용한 코루틴 기법도 많이 사용되고 있다.
+콜백 방식은 여러 비동기 요청을 다룰 때 복잡한 코드를 만들게 되므로 가급적 Promise 와 친해지는 것이 좋다.
+최근에는 generator 나 async/awaits 를 이용한 코루틴 기법도 많이 사용되고 있으니 참고하기 바란다.
 
-본 글에서는 mongoose 에서도 잘 지원하고 있고, 범용적으로 많이 쓰는 Promise 방법을 사용하기로 한다.
+본 글에서는 CRUD 비동기 요청을 위해 Promise 방법을 사용하기로 한다.
 
 
 ### 데이터 가져오기(Read)
@@ -229,10 +242,11 @@ export class DB {
 }
 ```
 
-Model.find 함수는 *mongoose.DocumentQuery<Pirate[], Pirate>* 를 반환하며 DocumentQuery 인터페이스는 Promise 타입을 상속받는다.
-따라서 실제로 반환하는 것은 *Promise<Pirate[], Pirate>* 형태라고 생각해도 무방하다.
+Model.find 함수는 `mongoose.DocumentQuery<Pirate[], Pirate>` 를 반환하며
+mongoose.DocumentQuery 인터페이스는 Promise 타입을 상속받는다.
+따라서 실제로 반환하는 것은 `Promise<Pirate[], Pirate>` 형태라고 생각하면 편하다.
 
-마찬가지로 read 함수도 콜백을 이용해 리턴없이 구현할 수도 있다.
+마찬가지로 read 함수도 아래와 같이 콜백 방식으로 구현할 수도 있다.
 
 ```typescript
 // src/domain/db.ts
@@ -273,8 +287,9 @@ export class DB {
 }
 ```
 
-Model.update 함수는 *mongoose.Query<number>* 를 반환하며 Query 인터페이스는 DocumentQuery 를 상속받으므로, 역시 Promise 타입을 상속받는다.
-따라서 실제로 반환하는 것은 *Promise<number>* 형태라고 생각해도 무방하다.
+Model.update 함수는 `mongoose.Query<number>` 를 반환하며
+Query 인터페이스는 DocumentQuery 를 상속받으므로, 역시 Promise 타입을 상속받는다. 
+따라서 실제로 반환하는 것은 `Promise<number>` 형태라고 생각하면 된다.
 
 
 ### 데이터 삭제하기(Delete)
@@ -299,13 +314,13 @@ export class DB {
 }
 ```
 
-Model.delete 함수의 반환값은 update 와 같으며 Promise 타입이라고 보면 된다.
-따라서 실제로 반환하는 것은 *Promise<void>* 형태라고 생각해도 무방하다.
+Model.delete 함수의 반환값은 update 와 같은데 대신 삭제한 개수를 반환하지 않는다. 
+따라서 실제로 반환하는 것은 `Promise<void>` 형태라고 생각하면 편하다.
 
 
 ## 테스트
 
-모든 준비가 끝났다. 이제 우리가 만든 DB 클래스를 이용하여 루피의 정보를 CRUD 해보자.
+마지막으로 우리가 만든 DB 클래스를 이용하여 Document 를 다뤄(CRUD) 보자.
 
 ```typescript
 // src/index.ts
@@ -329,14 +344,14 @@ connection.then(() => {
 ```
 
 먼저 mongodb 에 mongoose.connect 를 이용하여 연결하고
-반환되는 Promise(Thenable 은 then 을 포함하는 인터페이스)를 connection 변수에 저장해둔다.
+반환되는 Promise ~~Thenable 은 then 을 포함하는 인터페이스~~ 를 connection 변수에 저장해둔다.
 
-그리고 luffy 객체를 만들고 Pirate 형태로 타입캐스팅 한다. 
+그리고 *luffy* 객체를 만들고 Pirate 로 타입캐스팅 한다. 
 
-해당 객체를 mongodb 에 저장하기 위해 db.create 에 파라미터로 전달하고 Promise 를 반환받아서 리턴해준다.
+해당 객체를 mongodb 에 저장하기 위해 db.create() 에 파라미터로 전달하고 Promise 를 반환받아서 리턴한다. 
 create가 Promise 를 리턴했기 때문에 해당 Promise 를 이용하여 작업을 이어나갈 수 있다.
 
-그럼 이어서 name 이 'luffy' 인 해적목록을 가져와보자.
+그럼 데이터가 잘 저장되었는지 확인하기 위해 mongoDB 에서 name 이 *luffy* 인 Document 를 가져와보자.
 
 ```typescript
 connection
@@ -351,11 +366,12 @@ connection
 })
 ```
 
-db.create 는 Model.save 를 바로 리턴하고 Model.save 는 *Promise<Pirate>* 을 리턴한다.
-이때 Pirate 은 저장된 도큐먼트를 반환하므로 다음 then 의 콜백에서 raw 를 이용해 해당 도큐먼트를 사용할 수 있다.
+db.create 는 Model.save 를 바로 리턴하고 Model.save 는 `Promise<Pirate>` 을 리턴한다.
+이때 Pirate 은 저장된 Document 를 반환하므로
+다음 then 의 콜백에서 raw 를 이용해 해당 Document 를 사용할 수 있다.
 
 db.read 의 경우 Promise 를 리턴하지만 출력만 하면 되기 때문에 read 의 Promise 는 따로 리턴하지 않는다.
-Promise 콜백(resolve) 는 리턴하지 않으면 *Promise<void>* 를 자동으로 리턴한다.
+Promise 콜백(resolve) 는 리턴하지 않으면 `Promise<void>` 를 자동으로 리턴한다.
 
 계속해서 db.update 함수를 이용해 luffy 의 현상금을 3천만에서 5억으로 올려보자.
 
@@ -372,12 +388,11 @@ Promise 콜백(resolve) 는 리턴하지 않으면 *Promise<void>* 를 자동으
 })
 ```
 
-db.update 도 Promise 를 리턴하는데 반환값은 Promise<number> 로 몇개의 도큐먼트가 업데이트 되었는지만 반환해준다.
-사용하지 않을 파라미터(n) 는 생략해도 상관없다.
+db.update 도 Promise 를 리턴하는데 반환값은 Promise<number> 로
+몇개의 Document 가 업데이트 되었는지만 반환해준다.
 db.read 를 이용해 실제로 데이터가 다 수정되었는지도 확인해보았다.
 
-이제 거의 끝이다.
-db.delete 함수를 이용해 luffy 를 현상수배명단에서 삭제하자.
+마지막으로 db.delete 함수를 이용해 luffy 를 현상수배명단에서 삭제하자.
 
 ```typescript
 .then(() => {
@@ -394,7 +409,7 @@ db.delete 함수를 이용해 luffy 를 현상수배명단에서 삭제하자.
 db.delete 도 Promise 를 반환하는데 Promise<void> 를 반환한다. 따라서 파라미터가 없는 것을 볼 수 있다.
 db.read 를 이용해 실제로 데이터가 다 지워졌는지도 확인해보았다.
 
-마지막으로 mongodb 커넥션을 닫아주자.
+모든 작업을 마쳤으면 mongodb 커넥션을 닫아주자.
 
 ```typescript
 .then(() => {
@@ -402,12 +417,14 @@ db.read 를 이용해 실제로 데이터가 다 지워졌는지도 확인해보
 });
 ```
 
+## 실행결과
+
 실행은 여느때와 마찬가지로 `npm start` 해주면 되겠다.
 
 ```bash
 $ npm start
 
-> cinnamon@1.0.0 start /Users/haandol/git/ts-tutorial
+> ts-tutorial@1.0.0 start /Users/haandol/git/ts-tutorial
 > tsc; node ./build/index.js
 
 Created
@@ -416,24 +433,27 @@ name: 'luffy',
 bounty: 0.3,
 isEsper: true,
 __v: 0 } ]
+
 Updated
 [ { _id: 5905f3efb1b5611171a5bccd,
 name: 'luffy',
 bounty: 5,
 isEsper: true,
 __v: 0 } ]
+
 Deleted
 []
 ```
 
-참고로 mongoose.mpromise 관련 warning 이 나오는데 typescript 에서는 Promise 를 global.Promise 로 대체할 수가 없어서 해결을 못했다.
-~~그냥 무시해도 상관없긴하지만~~
+> 참고로 mongoose.mpromise 관련 warning 이 나오는데 ~~그냥 무시해도 상관없음~~
+> typescript 에서는 Promise 를 global.Promise 로 대체할 수가 없어서 해결을 못했다.
 
 ## 마치며
 
-이런저런 기능이나 다양한 Promise 활용법도 넣으려고 했는데 코드가 복잡해져서 다 빼고 핵심적인 부분만 담았다.
+넣고 싶은 내용은 많았지만 다 빼고 핵심적인 부분만 담으려고 했다.
+이상한 내용은 댓글이나 티켓을 보내주시면 빠르게 수정하겠다.
 
-이상한 점은 댓글이나 QnA 로 티켓을 만들어주면 빠르게 반영하도록 하겠다.
+다음은 typescript + socket.io 를 이용하여 아주 간단한 채팅서비스를 만들어보자.
 
 ----
 
