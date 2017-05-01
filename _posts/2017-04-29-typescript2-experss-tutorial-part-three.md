@@ -133,14 +133,14 @@ Typescript 를 쓰면서 추가된 사항은 아래와 같다.
 
 ~~당연하게도~~ 타입체크를 하기 위해서 먼저 인터페이스나 클래스를 만들어야 한다.
 
-해적 정보를 저장하기 위해 src/domain/models.ts 를 만들고 Pirate 인터페이스를 추가하자
+해적 정보를 저장하기 위해 src/domain/pirate.ts 를 만들고 Pirate 인터페이스를 추가하자
 
 참고로 많은 인터넷 예제들이 `IPirate` 이런 식으로 `I` 를 앞에 붙여서 인터페이스를 명명하는데
 공식 스타일가이드는 인터페이스 앞에 `I`를 붙이지 않도록 권장한다.
 
 ```bash
 $ mkdir -p src/domain
-$ touch models.ts
+$ touch pirate.ts
 ```
 
 ```typescript
@@ -193,7 +193,7 @@ import { Pirate, PirateModel } from './pirate';
 export class DB {
     constructor() { }
 
-    create(pirate: Pirate: Promise<Pirate> {
+    create(pirate: Pirate): Promise<Pirate> {
         let p = new PirateModel(pirate);
         return p.save();
     }
@@ -238,7 +238,7 @@ export class DB {
         return PirateModel.find(query);
     }
 
-    create(pirate: Pirate: Promise<Pirate> { ... }
+    create(pirate: Pirate): Promise<Pirate> { ... }
 }
 ```
 
@@ -262,7 +262,7 @@ export class DB {
         });
     }
 
-    create(pirate: Pirate: Promise<Pirate> { ... }
+    create(pirate: Pirate): Promise<Pirate> { ... }
 }
 ```
 
@@ -283,12 +283,12 @@ export class DB {
     }
 
     read(query: any): mongoose.DocumentQuery<Pirate[], Pirate> { ... }
-    create(pirate: Pirate: Promise<Pirate> { ... }
+    create(pirate: Pirate): Promise<Pirate> { ... }
 }
 ```
 
 Model.update 함수는 `mongoose.Query<number>` 를 반환하며
-Query 인터페이스는 DocumentQuery 를 상속받으므로, 역시 Promise 타입을 상속받는다. 
+Query 인터페이스는 DocumentQuery 를 상속받으므로, 역시 Promise 타입을 상속받는다.
 따라서 실제로 반환하는 것은 `Promise<number>` 형태라고 생각하면 된다.
 
 
@@ -310,7 +310,7 @@ export class DB {
 
     update(pirate: Pirate): mongoose.Query<number> { ... }
     read(query: any): mongoose.DocumentQuery<Pirate[], Pirate> { ... }
-    create(pirate: Pirate: Promise<Pirate> { ... }
+    create(pirate: Pirate): Promise<Pirate> { ... }
 }
 ```
 
