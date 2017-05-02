@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Typescript2 서버 튜토리얼 - 4/5
+title: Typescript2 서버 튜토리얼 - 4/4
 excerpt: Typescript + socket.io
 author: vincent
 email: ldg55d@gmail.com

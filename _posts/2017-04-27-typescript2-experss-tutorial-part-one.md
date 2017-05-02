@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Typescript2 서버 튜토리얼 - 1/5
+title: Typescript2 서버 튜토리얼 - 1/4
 excerpt: Typescript + Node
 author: vincent
 email: ldg55d@gmail.com
@@ -30,8 +30,7 @@ Python 으로만 서버 개발하다가 지난주부터 nodejs 를 공부하게 
 1. hello world (당연하게도)
 1. express + Typescript 로 간단한 REST API 개발
 1. mongoose + Typescript 로 앞서 만든 REST API 에 CRUD 추가
-1. socket.io + Typescript 로 실시간으로 여러 소스에서 CRUD 기능 추가
-1. 앞선 내용을 다 합쳐서 간단한 채팅서버 개발
+1. socket.io + Typescript 로 실시간 채팅 서비스 개발
 
 node 기본과 Typescript 는 알고 있다고 가정하고 진행하겠다.
 

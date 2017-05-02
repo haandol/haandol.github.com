@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Typescript2 서버 튜토리얼 - 3/5
+title: Typescript2 서버 튜토리얼 - 3/4
 excerpt: Typescript + MongoDB
 author: vincent
 email: ldg55d@gmail.com

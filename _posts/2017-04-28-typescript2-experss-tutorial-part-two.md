@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Typescript2 서버 튜토리얼 - 2/5
+title: Typescript2 서버 튜토리얼 - 2/4
 excerpt: Typescript + Express
 author: vincent
 email: ldg55d@gmail.com
