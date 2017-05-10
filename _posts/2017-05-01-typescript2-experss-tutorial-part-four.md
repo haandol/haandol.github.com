@@ -115,7 +115,7 @@ function run(port: number = 3000): void {
         console.log('Listening port %s', port);
     });
 
-    io.on('connect', (socket: any) => {
+    io.on('connection', (socket: any) => {
         socket.on('message', (message: Message) => {
             io.emit('message', JSON.stringify(message));
         });
