@@ -1,4 +1,4 @@
----
+assets
 layout: post
 title: 파이썬 슬랙봇 튜토리얼
 excerpt: Honey 로 만다는 파이썬 슬랙봇
@@ -25,8 +25,8 @@ Honey[^1] 를 이용하여
 튜토리얼이 다루는 내용은 아래와 같다.
 
 1. Honey 설치
-1. Honey 를 말하게 하기
-1. REST 요청으로 결과 출력하는 앱 추가하기
+2. Honey 를 말하게 하기
+3. REST 요청으로 결과 출력하는 앱 추가하기
 
 ## 설치
 
@@ -36,8 +36,8 @@ Honey[^1] 를 이용하여
 여기서는 Custom Integration 으로 진행한다. (엄청 간단하기 때문)
 
 1. 웹으로 [slack](slack.com) 에 로그인 한다.
-1. [봇 추가](https://my.slack.com/services/new/bot) 페이지에서 봇을 추가한다.
-1. 바로 나오는 설정페이지에서 Integration Settings 메뉴의 API Token 을 복사해서 메모장에 붙여둔다.
+2. [봇 추가](https://my.slack.com/services/new/bot) 페이지에서 봇을 추가한다.
+3. 바로 나오는 설정페이지에서 Integration Settings 메뉴의 API Token 을 복사해서 메모장에 붙여둔다.
 
 ### Honey 설치
 
@@ -74,10 +74,10 @@ $ python robot.py
 INFO:honey:RTM Connected.
 ```
 
-![](/public/img/20190430/honey-online.png =200x)
+![](/assets/img/20190430/honey-online.png =200x)
 
 2. honey 에게 DM 으로 `!help` 라고 보내보고 적절히 응답이 오는지 확인한다.
-![](/public/img/20190430/honey-response.png =200x)
+![](/assets/img/20190430/honey-response.png =200x)
 
 ## 앱 추가하기
 
@@ -153,8 +153,8 @@ APPS = ['helper', 'hello_world', 'fake']
 
 5. 적당한 슬랙채널에 @honey 를 초대하고 !help, !fake 를 입력해본다.
 
-![](/public/img/20190430/honey-invite.png =200x)
-![](/public/img/20190430/honey-send-command.png =200x)
+![](/assets/img/20190430/honey-invite.png =200x)
+![](/assets/img/20190430/honey-send-command.png =200x)
 
 
 ## 마치며
