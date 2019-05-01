@@ -74,10 +74,10 @@ $ python robot.py
 INFO:honey:RTM Connected.
 ```
 
-![](/assets/img/20190430/honey-online.png =200x)
+![](/assets/img/20190430/honey-online.png)
 
 2. honey 에게 DM 으로 `!help` 라고 보내보고 적절히 응답이 오는지 확인한다.
-![](/assets/img/20190430/honey-response.png =200x)
+![](/assets/img/20190430/honey-response.png)
 
 ## 앱 추가하기
 
@@ -153,8 +153,8 @@ APPS = ['helper', 'hello_world', 'fake']
 
 5. 적당한 슬랙채널에 @honey 를 초대하고 !help, !fake 를 입력해본다.
 
-![](/assets/img/20190430/honey-invite.png =200x)
-![](/assets/img/20190430/honey-send-command.png =200x)
+![](/assets/img/20190430/honey-invite.png)
+![](/assets/img/20190430/honey-send-command.png)
 
 
 ## 마치며
