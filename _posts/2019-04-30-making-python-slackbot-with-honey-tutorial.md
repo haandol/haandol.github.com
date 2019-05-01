@@ -151,11 +151,67 @@ APPS = ['helper', 'hello_world', 'fake']
 ...
 ```
 
-5. 적당한 슬랙채널에 @honey 를 초대하고 !help, !fake 를 입력해본다.
+5. robot.py 를 실행하여 슬랙봇을 띄워준다.
+
+```bash
+$ python robot.py
+$ tail -F honey.log
+2019-05-01 16:50:06,266 - honey - INFO - RTM Connected.
+...
+```
+
+6. 적당한 슬랙채널에 @honey 를 초대하고 !help, !fake 를 입력해본다.
 
 ![](/assets/img/20190430/honey-invite.png)
 ![](/assets/img/20190430/honey-send-command.png)
 
+## Redis 저장소 사용하기
+
+Honey 는 redis_brain 을 통해 Redis 에 데이터를 넣고 가져올 수 있다.
+이번 섹션에서는 내장된 redis_brain 을 이용하여 메모하는 방법을 알아보자.
+
+1. docker 로 redis 를 띄워본다.
+
+```bash
+$ docker run --name redis -d --publish 6379:6379 redis
+57eef9fc911f5b0eb468a55688fc33897ba0a52e0d3f96e9fe7ca9628bb986e5
+$ docker ps
+```
+
+2. settings.py 에 Redis 주소를 추가해주고 `redis_brain` 앱을 추가해주자.
+
+```bash
+$ vim settings.py
+...
+REDIS_URL = 'localhost'
+REDIS_PORT = 6379
+...
+APPS = ['helper', 'hello_world', 'fake', 'redis_brain']
+```
+
+3. Honey 를 재시작해준다.
+
+```bash
+$ python robot.py
+2019-05-01 16:50:06,266 - honey - INFO - RTM Connected.
+```
+
+4. honey 가 초대되어 있는 채널에서 `!memo` 명령으로 값을 저장하고 가져와본다.
+
+![](/assets/img/20190430/honey-memo.png)
+
+입력 순서는 다음과 같다.
+```bash
+!help
+!memo
+!memo hi
+!memo hi there
+!memo hi
+``` 
+
+hi 에 대해서 there 값을 저장해두고 잘 가져오는 것을 확인할 수 있다. Redis 를 이용하면 봇을 껐다키더라도 데이터를 유지할 수 있다.
+
+내가 만든 앱에서 무언가 저장하고 가져오고 싶다면 `run()` 함수의 파라미터인 robot.brain 을 사용하면 된다.
 
 ## 마치며
 
