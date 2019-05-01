@@ -1,10 +1,10 @@
 ---
 layout: post
 title: 파이썬 슬랙봇 튜토리얼
-excerpt: Honey 로 만다는 파이썬 슬랙봇
+excerpt: Honey 로 만드는 스크립터블 파이썬 슬랙봇
 author: vincent
 email: ldg55d@gmail.com
-tags: slack, slackbot, honey, tutorial
+tags: slack, scriptable, plugin, slackbot, honey, tutorial
 publish: true
 ---
 
