@@ -1,4 +1,4 @@
-assets
+---
 layout: post
 title: 파이썬 슬랙봇 튜토리얼
 excerpt: Honey 로 만다는 파이썬 슬랙봇
