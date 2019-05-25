@@ -79,6 +79,8 @@ Minhash 는 아래 3개의 스텝으로 구성되어 있다.
 2. Matrix 의 row 인덱스 를 셔플한 리스트(permutation 이라고 부름)를 여러개 만든다.
 3. 각 컬럼에 대해 permutation 을 1~n 까지 순서대로 확인하면서, 1이 나오면 Signature matrix 를 permutation 번호로 채운다.
 
+![](https://cdn-images-1.medium.com/max/1600/1*wkjgq-9UPR2rDjQ68bI9tg.png)
+
 3번이 원문의 내용과 그림만 봐서는 이해가 안될 수 있어서, 좀 더 상세히 적어본다. 첫 Signature matrix 가 `2, 1, 2, 1` 인데, 이것은 아래 순서를 통해 만들어진다.
 
 1. permutation 을 순서대로 선택하고 (1~7 순서)
