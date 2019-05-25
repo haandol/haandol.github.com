@@ -116,7 +116,10 @@ datasketch 는 위의 문제점을 아래방법으로 해결했다.
 ![](https://cdn-images-1.medium.com/max/2400/1*BEXAQmgCUZN8Rp-11AX53g.png)
 
 
-```TODO: 디테일한 설명추가하자...```
+```
+TODO: 디테일한 설명추가하자...
+메르센 소수, binascii.crc32
+```
 
 ## 마치며
 
