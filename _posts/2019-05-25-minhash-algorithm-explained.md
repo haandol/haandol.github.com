@@ -107,9 +107,9 @@ minhash 구현체를 몇개 뜯어 봤는데 datasketch 의 구현체가 가장 
 datasketch 는 위의 문제점을 아래방법으로 해결했다.
 
 1. psuedo random generator 를 통해 미리 permutations 를 만들어둔다. 즉, seed 가 동일한 Minhash 는 동일한 permutations 를 가진다.
-2. permtations 크기와 동일한 매트릭스를 미리 만들어두고, signature 를 계산할 때마다 해당 매트릭스의 모든 값을 최소 signature 값으로 업데이트 해준다.
+2. permtations 크기와 동일한 매트릭스를 미리 만들어두고, shingle 의 signature 를 계산할 때마다 해당 매트릭스의 모든 값을 최소 signature 값으로 업데이트 해준다.
 
-위의 구현방식은 사실 아래의 수식과 동일하기 때문에 글에서 설명한 방식과 동일한 효과를 가진다.
+위의 구현은 사실 아래의 수식과 동일하기 때문에, 글에서 설명한 방식과 동일한 효과를 기대할 수 있다.
 
 ![](https://cdn-images-1.medium.com/max/2400/1*BEXAQmgCUZN8Rp-11AX53g.png)
 
