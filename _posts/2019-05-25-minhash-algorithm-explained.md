@@ -91,7 +91,7 @@ Minhash 는 아래 3개의 스텝으로 구성되어 있다.
 
 ![](https://cdn-images-1.medium.com/max/2400/1*WKNfxHCviPHTFavK_dQflw.png)
 
-이렇게 해서 3개의 permutation 을 쓰면 그림처럼 7바이트의 데이터를 3바이트로 표현할 수 있다. (원본보다 더 적은 개수의 permutation 을 만들어야 축소 된다는 점은 굳이 언급 안해도 될 것이다.)
+3개의 permutation 을 쓰면 위 그림처럼 7바이트의 데이터를 3바이트로 표현할 수 있다. (원본보다 더 적은 개수의 permutation 을 만들어야 축소 된다는 점은 굳이 언급 안해도 될 것이다.)
 
 보통 input 은 문서이고 shingling 을 거치면 엄청 큰 크기의 배열이 된다. 대부분의 경우 대략 128 또는 256 정도의 길이(128 개의 permutations)로 signature matrix 를 만들면 적절한 결과를 얻을 수 있다.
 
