@@ -8,6 +8,10 @@ issueurl:       "https://github.com/haandol/haandol.github.com/issues"
 sass:
   style:        compressed
 
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+
 # Build settinga
 markdown:       kramdown
 highlighter:    rouge
