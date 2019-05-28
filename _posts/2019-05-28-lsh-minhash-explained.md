@@ -91,7 +91,7 @@ b 가 작아지면 similarity threshold 가 높다(higher false negatives) 는 �
 
 ![](https://cdn-images-1.medium.com/max/2400/1*PBwrCCquPw2MM0_m6zcDNQ.png)
 
-b 와 r (그래프 에서는 n) 을 조정하면서 확인해보면 reference 인 원래 그래프와 가장 비슷하게 나타나는 그래프는 b = 100, r = 2 일 때이다. 따라서 해당 값으로 b 와 r 을 설정하고 LSH 알고리즘을 계산하면 Jaccard Simialrity 가 0.17 이상이면 비슷한 문서로 분류되는 해시함수를 얻을 수 있다.
+b 와 r (그래프 에서는 n) 을 조정하면서 확인해보면 reference 인 원래 그래프와 가장 비슷하게 나타나는 그래프는 b = 100, r = 2 일 때이다. 따라서 해당 값으로 b 와 r 을 설정하고 LSH 알고리즘을 계산하면 두 문서간의 Jaccard Simialrity 가 0.17 이상이면 비슷한 문서로 분류되는 해시함수를 얻을 수 있다.
 
 ## 구현
 
