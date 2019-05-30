@@ -4,7 +4,7 @@ title: 거의 정렬된 경우 가장 빠른 알고리즘은?
 excerpt: 데이터에 따라 적합한 정렬 알고리즘이 다르다는 사실
 author: vincent
 email: ldg55d@gmail.com
-tags: sort, algorithm, dataset
+tags: sort algorithm dataset
 publish: true
 ---
 

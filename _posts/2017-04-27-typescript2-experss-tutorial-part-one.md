@@ -4,7 +4,7 @@ title: Typescript2 서버 튜토리얼 - 1/4
 excerpt: Typescript + Node
 author: vincent
 email: ldg55d@gmail.com
-tags: typescript2, nodejs, tutorial
+tags: typescript typescript2 nodejs tutorial
 publish: true
 ---
 

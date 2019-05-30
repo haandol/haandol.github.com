@@ -4,7 +4,7 @@ title: 쉽게 설명한 LSH-Minhash 알고리즘
 excerpt: LSH Minhash concept and implementation
 author: vincent
 email: ldg55d@gmail.com
-tags: minhash, hash, algorithm, locality sensitive hash, lsh
+tags: minhash hash algorithm locality-sensitive-hash lsh
 publish: true
 ---
 

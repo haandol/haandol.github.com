@@ -4,7 +4,7 @@ title: Bottleneck feature? Fine-tuning?
 excerpt: 처음 보는 단어 보틀넥 피쳐, 파인튜닝을 알아보자
 author: vincent
 email: ldg55d@gmail.com
-tags: bottleneck feature, fine tuning, meaning, definition
+tags: bottleneck-feature fine-tuning meaning definition
 publish: true
 ---
 

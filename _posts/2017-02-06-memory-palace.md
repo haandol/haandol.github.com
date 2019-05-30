@@ -4,7 +4,7 @@ title: 기억궁전이 동작한다고?
 excerpt: 제 생각엔 되는 것 같아요.
 author: vincent
 email: ldg55d@gmail.com
-tags: memory palace, memory, hashing, hash
+tags: memory-palace memory hashing hash
 publish: true
 ---
 

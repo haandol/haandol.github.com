@@ -4,7 +4,7 @@ title: 앙상블(ensemble)기법 설명
 excerpt: ensemble, bagging, boosting 이 뭘까?
 author: vincent
 email: ldg55d@gmail.com
-tags: ensemble, bagging, boost, machine learning, kaggle
+tags: ensemble bagging boost machine-learning kaggle
 publish: true
 ---
 

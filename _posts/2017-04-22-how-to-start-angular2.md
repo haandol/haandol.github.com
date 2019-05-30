@@ -4,7 +4,7 @@ title: 내가 Angular 를 선택한 이유
 excerpt: Reactive 처음 시작한 서버개발자
 author: vincent
 email: ldg55d@gmail.com
-tags: start blog, machine learning, progmatic
+tags: angularjs start-blog machine-learning progmatic
 publish: true
 ---
 
