@@ -22,7 +22,7 @@
   {% else %}
     <meta name="title" content="{{ page.title }}">
     <meta name="description" content="{{ page.excerpt }}">
-    <meta name="keywords" content="{{ page.tags }}">
+    <meta name="keywords" content="{{ page.tags | join:' ' }}">
   {% endif %}
   <meta name="author" content="haandol">
 
