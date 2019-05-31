@@ -22,7 +22,6 @@ ELO 는 `1:1, 2:2 용으로 사용하기 좋은 알고리즘이다. 정해진 �
 2. Glicko, Glicko2
 3. Truskill
 
-
 ## 설명
 
 LSH: `Find documents with Jaccard similarity of at least t`
