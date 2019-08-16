@@ -4,23 +4,23 @@ title: Node.js 를 이용한 MQTT 튜토리얼
 excerpt: MQTT tutorial using Node.js
 author: vincent
 email: ldg55d@gmail.com
-tags: mqtt, nodejs, k8s, kubernetes, docker, tutorial
+tags: mqtt, nodejs, k8s, kubernetes, docker, tutorial, helm
 publish: false
 ---
 
 ## TL;DR
 
-ELO 는 `1:1, 2:2 용으로 사용하기 좋은 알고리즘이다. 정해진 점수를 승자와 패자가 나눠 가지며 자기 실력이 반영되는데 10판이상이 필요하다.`
+MQTT 는 경량 AMQP 에 가깝다.
+
+클러스터링을 지원하는 브로커를 찾는다면 EMQ 와 VerneMQ 가 있다.
 
 ## 시작하며
 
-다인전 매치메이킹 서비스를 만들면서 찾아본 알고리즘들의 특성을 정리하고 간단한 형태로 구현해본다.
+내가 자주 쓰던 MQ 는 AMQP 기반의 RabbitMQ 였다. 요즘 IoT 가 뜨면서 MQTT 라는 녀석이 뜨고 있어서 간단하게 사용해보았다.
 
-우리가 다룰 알고리즘은 아래의 3가지로 각각 하나의 글로 다룰 예정이며 본 글에서는 ELO를 설명하고 구현해본다.
 
-1. ELO
-2. Glicko, Glicko2
-3. Truskill
+
+MQTT 도 AMQP 처럼 프로토콜 스펙이므로 AMQP-RabbitMQ 처럼 브로커 구현체를 이용하여 개발을 할 수 있다.
 
 ## 설명
 
