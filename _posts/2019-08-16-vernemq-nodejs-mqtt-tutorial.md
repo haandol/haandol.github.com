@@ -1,10 +1,10 @@
 ---
 layout: post
-title: 매치메이킹 알고리즘 (1/3)
-excerpt: rating algorithm explained
+title: Node.js 를 이용한 MQTT 튜토리얼
+excerpt: MQTT tutorial using Node.js
 author: vincent
 email: ldg55d@gmail.com
-tags: elo, matchmaking, rating system, algorithm
+tags: mqtt, nodejs, k8s, kubernetes, docker, tutorial
 publish: false
 ---
 
