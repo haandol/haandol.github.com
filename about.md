@@ -6,7 +6,7 @@ title: About
 <a href="https://kr.linkedin.com/pub/dongkyun-lee/13/3a1/b53" target="_blank"><img src="https://static.licdn.com/scds/common/u/img/webpromo/btn_viewmy_160x25.png" width="160" height="25" border="0" alt="View DongKyun Lee's profile on LinkedIn"></a>
 
 
-나는 8년차 개발자로 아마존 코리아에서 프로토타이밍 엔지니어로 일하고 있다.
+나는 8년차 개발자로 아마존 코리아에서 프로토타이핑 엔지니어로 일하고 있다.
 
 EA 코리아의 니드포스피드 엣지, 피파 온라인4 팀에서 각각 TS, JS 를 이용하여 MSA 를 개발했으며,
 이전에는 버즈니라는 회사에서 파이썬과 머신러닝을 이용하여 풀스택 개발을 했다.
