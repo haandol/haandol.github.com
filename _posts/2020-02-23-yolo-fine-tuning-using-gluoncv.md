@@ -5,7 +5,7 @@ excerpt: finding pikachu
 author: vincent
 email: ldg55d@gmail.com
 tags: yolo, yolov3, object detection, finetuning, transfer learning, gluoncv, mxnet, pikachu
-publish: true
+publish: false
 ---
 
 ## TL;DR
