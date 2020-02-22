@@ -30,7 +30,7 @@ Gluon 에서는 모델 주와 함께 퍼포먼스 테이블[^4]도 제공하고 
 
 여기서 제공하는 mAP 는 COCO 데이터 셋에서 평가하는 기준으로 IOU 를 0.5 씩 올려가면서 얻은 AP 의 평균을 말한다. 따라서 VOC 나 기타 다른 데이터셋으로 학습하면 해당 수치는 얻을 수가 없다.
 
-![MOT Perf Table](assets/img/20200222/bokeh_plot.png)
+![MOT Perf Table](/assets/img/20200222/bokeh_plot.png)
 
 당연히 정확도(mAP) 는 높을수록 좋다. 그리고 속도는 정확도와 반비례 관계에 있다. 둘의 트레이드 오프를 잘 따져서 모델을 선택하면 된다.
 
@@ -40,7 +40,7 @@ Gluon 에서는 모델 주와 함께 퍼포먼스 테이블[^4]도 제공하고 
 
 우리는 사람만 찾을 계획이므로 사람(Person) 카테고리에 대한 성능만 따로 보자.
 
-![Person Perf Graph](assets/img/20200222/categorical_perf.png)
+![Person Perf Graph](/assets/img/20200222/categorical_perf.png)
 
 가장 뛰어난 FasterRCNN 이 mAP 54 인데 608x608 인풋을 사용한 YOLO 가 mAP 50 이다. 해당 모델의 Throughput (# of samples/second) 이 5.8 인데 반해 YOLO 는 104.5 이다. 그리고 두 모델의 overall mAP 는 둘다 37로 거의 동일하다.
 
@@ -74,7 +74,7 @@ plt.show()
 모든 작업을 MXNet 의 NDArray 로 비동기로 처리할 수 있다면 0.1 내외로 걸리겠지만 동기방식의 로직이 들어가는 순간 작업을 기다리게 되고 설명한대로 0.7초 내외로 걸리게 된다.
 (class_IDs 를 print 로 찍어보기만 하면 바로 알 수 있다)
 
-![YOLO@416 result](assets/images/20200222/fig1.png)
+![YOLO@416 result](/assets/images/20200222/fig1.png)
 
 YOLO 는 FCL(Fully Connected Layer) 가 없기 때문에 다양한 크기의 이미지를 입력받아서 처리할 수 있다. (대신 320, 416, 608 처럼 32의 배수여야 하고, 추가로 논문의 의도를 생각해봤을땐 13x13 처럼 마지막 풀링이 레이어가 끝났을 때 홀수로 구성되도록(416, 512, 608) 하는 것이 좋다.)
 
@@ -82,7 +82,7 @@ YOLO 는 FCL(Fully Connected Layer) 가 없기 때문에 다양한 크기의 이
 
 아래는 동일한 코드에 short 를 608 로만 바꿔준 결과이다. 오렌지, 바나나 등의 더 작은 물체들을 찾아내는 모습을 확인할 수 있다. 평균 1.57초 걸린다.
 
-![YOLO@608 result](assets/images/20200222/fig2.png)
+![YOLO@608 result](/assets/images/20200222/fig2.png)
 
 ### Detect Person Only
 
