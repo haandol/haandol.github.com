@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Detect person using YOLO3
+title: Object Detection using YOLO3
 excerpt: detect person using pretrained mxnet YOLO3
 author: vincent
 email: ldg55d@gmail.com
