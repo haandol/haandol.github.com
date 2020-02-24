@@ -39,7 +39,7 @@ publish: true
 
 Gluon 에서는 모델 주와 함께 퍼포먼스 테이블[^4]도 제공하고 있어서 모델을 선택할 때 큰 도움이 된다.
 
-여기서 제공하는 mAP 는 COCO 데이터 셋에서 평가하는 기준으로 IOU 를 0.5 씩 올려가면서 얻은 AP 의 평균을 말한다. 따라서 VOC 나 기타 다른 데이터셋으로 학습하면 해당 수치는 얻을 수가 없다.
+여기서 제공하는 mAP 는 COCO 데이터 셋에서 결과를 평가하는 기준으로 IOU 를 조금씩 올려가면서 얻은 각 AP 의 평균을 말한다. 따라서 VOC 나 기타 다른 데이터셋으로 학습한 모델은 해당 수치로 평가하지 않는다.
 
 ![MOT Perf Table](/assets/img/20200222/bokeh_plot.png)
 
@@ -53,9 +53,9 @@ Gluon 에서는 모델 주와 함께 퍼포먼스 테이블[^4]도 제공하고 
 
 ![Person Perf Graph](/assets/img/20200222/categorical_perf.png)
 
-가장 뛰어난 FasterRCNN 이 mAP 54 인데 608x608 인풋을 사용한 YOLO 가 mAP 50 이다. 해당 모델의 Throughput (# of samples/second) 이 5.8 인데 반해 YOLO 는 104.5 이다. 그리고 두 모델의 overall mAP 는 둘다 37로 거의 동일하다.
+가장 뛰어난 FasterRCNN 이 mAP 54 인데 608x608 인풋을 사용한 YOLO 가 mAP 50 이다. 해당 모델의 Throughput (# of samples/second) 이 5.8 인데 반해 YOLO 는 104.5 이다. 그리고 두 모델의 overall mAP 는 둘다 37로 거의 동일하다. (GTX1070 기준으로 초당 104 장을 처리할 수 있다. 60fps 에서 608x608 이미지로 실시간 처리가 가능한 수준.)
 
-그리고 동일한 모델에서 인풋 이미지를 416 으로 줄이면 속도를 220 으로 두배 올리면서도 mAP 는 1만 손해보면 된다. 개인 프로젝트에서는 가장 균형잡혀 보이는 `yolo3_darknet53_coco@416` 모델을 사용했다. 하지만 본 글에서는 속도를 조금 50% 더 올리고 mAP를 4 정도 손해보는 320 모델을 사용하겠다.
+그리고 동일한 모델에서 인풋 이미지를 416 으로 줄이면 속도를 220 으로 두배 올리면서도 mAP 는 1만 손해보면 된다. 여기서는 가장 균형잡혀 보이는 `yolo3_darknet53_coco@416` 모델을 사용했다.
 
 ## 모델 테스트
 
@@ -68,7 +68,7 @@ from matplotlib import pyplot as plt
 net = model_zoo.get_model('yolo3_darknet53_coco', pretrained=True)
 utils.download('https://www.ctvnews.ca/polopoly_fs/1.4632164.1570679172!/httpImage/image.jpg_gen/derivatives/landscape_1020/image.jpg', path='market.jpg')
 tic1 = time.time()
-x, img = data.transforms.presets.yolo.load_test('market.jpg', short=416)
+x, img = data.transforms.presets.yolo.load_test('market.jpg', short=320)
 print(f'Shape of pre-processed image: {x.shape}, took: {time.time() - tic1:.3f} sec')
 class_IDs, scores, bounding_boxs = net(x)
 
@@ -82,14 +82,14 @@ plt.show()
 ```
 
 결과는 아래와 같다. i9 맥북프로에서 평균 0.45초 걸린다.
-모든 작업을 MXNet 의 NDArray 로 비동기로 처리할 수 있다면 0.1 내외로 걸리겠지만 동기방식의 로직이 들어가는 순간 작업을 기다리게 되고 설명한대로 0.7초 내외로 걸리게 된다.
+모든 작업을 MXNet 의 NDArray 로 비동기로 처리할 수 있다면 0.1 내외로 걸리겠지만 동기방식의 로직이 들어가는 순간 작업을 기다리게 되고 설명한대로 0.5초 내외로 걸리게 된다.
 (class_IDs 를 print 로 찍어보기만 하면 바로 알 수 있다)
 
 ![YOLO@416 result](/assets/img/20200222/fig1.png)
 
-YOLO 는 FCL(Fully Connected Layer) 가 없기 때문에 다양한 크기의 이미지를 입력받아서 처리할 수 있다. (대신 320, 416, 608 처럼 32의 배수여야 하고, 추가로 논문의 의도를 생각해봤을땐 13x13 처럼 마지막 풀링이 레이어가 끝났을 때 홀수로 구성되도록(416, 512, 608) 하는 것이 좋다.)
+YOLO 는 FCL(Fully Connected Layer) 가 없기 때문에 다양한 크기의 이미지를 입력받아서 처리할 수 있다. (대신 320, 416 처럼 32의 배수여야 하고, 추가로 논문의 의도를 생각해봤을땐 13x13 처럼 마지막 풀링 레이어가 끝났을 때 피쳐맵이 홀수로 구성되도록(416, 512, 608) 하는 것이 좋다.)
 
-이런 이유로 인풋의 resolution 을 올려주기만해도 동일한 모델에서 더 나은 정확도와 느려진 속도를 경험할 수 있다.
+이런 이유로 인풋의 resolution 을 올려주기만해도 동일한 모델에서 더 나은 정확도와 느려진 속도를 경험할 수 있다. (CNN 계역에서 이미지 크기가 클수록 성능이 좋아진다는 것은 잘 알려져있고, 이미지 크기와 채널수, 모델 깊이 등의 상관관계를 최적화한 EffiecientNet[^6] 같은 모델들이 있다.)
 
 아래는 동일한 코드에 short 를 608 로만 바꿔준 결과이다. 오렌지, 바나나 등의 더 작은 물체들을 찾아내는 모습을 확인할 수 있다. 평균 1.57초 걸린다.
 
@@ -122,3 +122,4 @@ net.reset_class(['person'], reuse_weights=['person'])
 [^3]: [Predict with pre-trained YOLO models](https://gluon-cv.mxnet.io/build/examples_detection/demo_yolo.html) 
 [^4]: [GluonCV Model Zoo](https://gluon-cv.mxnet.io/model_zoo/detection.html)
 [^5]: [Skip Finetuning](https://gluon-cv.mxnet.io/build/examples_detection/skip_fintune.html)
+[^6]: [EfficientNet Review](https://hoya012.github.io/blog/EfficientNet-review/)
