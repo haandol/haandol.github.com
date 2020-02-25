@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Object Detection using YOLO3
-excerpt: detect person using pretrained mxnet YOLO3
+title: Pretrained MXNet YOLO3
+excerpt: pretrained mxnet YOLO3 for person detection
 author: vincent
 email: ldg55d@gmail.com
 tags: yolo, yolo3, yolov3, object detection, gluoncv, gluon, mxnet
