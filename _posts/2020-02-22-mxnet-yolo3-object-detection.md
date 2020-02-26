@@ -62,6 +62,7 @@ Gluon 에서는 모델 주와 함께 퍼포먼스 테이블[^4]도 제공하고 
 코드는 예제[^3] 를 보면 알 수 있듯이 엄청 간단하다. utils 안에 있는 다양한 함수들(plot_bbox, plot_image 등)이 엄청 유용하다.
 
 ```python
+from timeit import time
 from gluoncv import model_zoo, data, utils
 from matplotlib import pyplot as plt
 
