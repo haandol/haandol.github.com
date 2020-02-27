@@ -4,7 +4,7 @@ title: Finetune YOLO3
 excerpt: finding pikachu
 author: vincent
 email: ldg55d@gmail.com
-tags: yolo, yolov3, object detection, finetuning, transfer learning, gluoncv, mxnet, pikachu
+tags: yolo yolov3 object-detection finetuning transfer-learning gluon mxnet pikachu machine-learning
 publish: false
 ---
 

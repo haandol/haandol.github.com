@@ -4,7 +4,7 @@ title: Pretrained MXNet YOLO3
 excerpt: pretrained mxnet YOLO3 for person detection
 author: vincent
 email: ldg55d@gmail.com
-tags: yolo, yolo3, yolov3, object detection, gluoncv, gluon, mxnet
+tags: yolo yolo3 yolov3 object-detection gluon mxnet machine-learning
 publish: true
 ---
 

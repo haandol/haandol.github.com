@@ -4,7 +4,7 @@ title: Deep-SORT with MXNet YOLO3
 excerpt: person tracker using Deep-SORT
 author: vincent
 email: ldg55d@gmail.com
-tags: deepsort, deep-sort, mxnet, yolo3, yolov3, object tracking
+tags: deepsort deep-sort mxnet yolo yolov3 object-tracking machine-learning
 publish: true
 ---
 

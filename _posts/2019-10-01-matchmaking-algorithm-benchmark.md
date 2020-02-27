@@ -4,7 +4,7 @@ title: 다인전 매치메이킹 벤치마크
 excerpt: Benchmark ELO and Glicko2
 author: vincent
 email: ldg55d@gmail.com
-tags: matchmaking, elo, glicko, glicko2, benchmark
+tags: matchmaking elo glicko glicko2 benchmark
 publish: true
 ---
 
