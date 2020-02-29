@@ -142,7 +142,7 @@ dotProduct, consineSimialrity 같은 쿼리를 쉽게 할 수 있는 분산 저�
 
 ----
 
-[^1]: [es-dense-vector-tutorial](https://github.com/haandol/es-dense-vector-tutorial)
+[^1]: [es-dense-vector-tutorial](https://github.com/haandol/es-dense-vector-tutorial/blob/master/Elasticsearch.ipynb)
 [^2]: [Script Score Query](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/query-dsl-script-score-query.html)
 [^3]: [Elasticsearch 7.3.0 released](https://www.elastic.co/kr/blog/elasticsearch-7-3-0-released)
 [^4]: [Amazon Elasticsearch Service FAQ](https://aws.amazon.com/ko/elasticsearch-service/faqs/?nc=sn&loc=6)
