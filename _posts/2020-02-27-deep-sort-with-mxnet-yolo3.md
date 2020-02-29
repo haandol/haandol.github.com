@@ -1,10 +1,10 @@
 ---
 layout: post
-title: Deep-SORT with MXNet YOLO3
-excerpt: person tracker using Deep-SORT
+title: DeepSORT with MXNet YOLO3
+excerpt: person tracker using DeepSORT
 author: vincent
 email: ldg55d@gmail.com
-tags: deepsort deep-sort mxnet yolo yolov3 object-tracking machine-learning
+tags: deepsort mxnet yolo yolov3 object-tracking machine-learning
 publish: true
 ---
 
@@ -19,7 +19,7 @@ DeepSORT = 딥러닝 + SORT
 
 영상 데이터에서 사람을 트래킹 하는 프로젝트를 진행하고 있는데, 적절한 알고리즘을 찾아보다가
 
-Deep-SORT(이하 딥소트) 를 보게되었고 프로덕션에 사용하기에도 나쁘지 않은 것 같아 정리해본다.
+DeepSORT(이하 딥소트) 를 보게되었고 프로덕션에 사용하기에도 나쁘지 않은 것 같아 정리해본다.
 
 딥소트 알고리즘의 개념은 복잡하지 않지만 상당히 다양한 기술들을 사용하고 있기 때문에 상세히 설명하기 쉽지 않다. 정말 잘 설명된 글들[^2][^3] 도 많기 때문에 내가 따로 글을 쓰는 것보다 해당 글을 보는 것이 훨씬 나을 것이다.
 
