@@ -94,42 +94,12 @@ es.indices.create(index='features', body={
     }
   }
 }, ignore=400)
-
-pprint(es.indices.get(index='features'))
 ```
 
 인덱스가 잘 생성되었는지 확인해본다.
 
-```bash
-$ curl -X GET http://localhost:9200/features
-{
-    "features": {
-        "aliases": {},
-        "mappings": {
-            "properties": {
-                "feature": {
-                    "dims": 128,
-                    "type": "dense_vector"
-                },
-                "image_id": {
-                    "type": "text"
-                }
-            }
-        },
-        "settings": {
-            "index": {
-                "creation_date": "1581654972189",
-                "number_of_replicas": "1",
-                "number_of_shards": "1",
-                "provided_name": "features",
-                "uuid": "48n8VtMfT0aVOPZD8tAZwg",
-                "version": {
-                    "created": "7060099"
-                }
-            }
-        }
-    }
-}
+```python
+pprint(es.indices.get(index='features'))
 ```
 
 ## 인덱스 쿼리
