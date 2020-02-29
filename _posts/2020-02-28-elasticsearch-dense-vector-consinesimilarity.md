@@ -4,7 +4,7 @@ title: CosineSimilarity using Elasticsearch
 excerpt: use dense_vector on Elasticsearch
 author: vincent
 email: ldg55d@gmail.com
-tags: elasticsearch dense_vector cosineSimiarity dotProduct es mxnet machine-learning
+tags: elasticsearch dense_vector cosineSimiarity dotProduct es
 publish: true
 ---
 
