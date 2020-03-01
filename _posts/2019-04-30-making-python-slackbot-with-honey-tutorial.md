@@ -11,7 +11,7 @@ publish: true
 ## TL;DR
 
 
-Honey[^1] 를 이용하여
+Honey[^1] 는 이곳에서.
 
 ## 시작하며
 
