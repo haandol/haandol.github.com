@@ -17,8 +17,8 @@ plugins:
 markdown:       kramdown
 highlighter:    rouge
 
-paginate:       8
-paginate_path:  "/posts/page:num/"
+paginate:       10
+paginate_path:  "/page:num/"
 
 # Custom vars
 author:
