@@ -11,22 +11,15 @@ sass:
 plugins:
   - jekyll-sitemap
   - jekyll-feed
-  - jekyll-paginate-v2
+  - jekyll-paginate
 
 # Build settinga
 markdown:       kramdown
 highlighter:    rouge
 
-pagination:
-  enabled: true
-  per_page: 8
-  sort_reverse: true
-  title: ':title'
-  permalink: '/page/:num_'
-  trail:
-    before: 2
-    after: 2
+paginate:       8
+paginate_path:  /posts/page:num
 
 # Custom vars
 author:
-  name:         'Vincent Lee'
+  name:         'DongGyun Lee'
