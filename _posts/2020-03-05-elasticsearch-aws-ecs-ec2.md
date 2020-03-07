@@ -87,6 +87,6 @@ initial master 태스크를 따로 생성해야 한다는 점 때문에, EKS 를
 
 ----
 
-[^1]: [es-dense-vector-tutorial](https://github.com/haandol/es-dense-vector-tutorial/blob/master/Elasticsearch.ipynb)
+[^1]: [elasticsearch-cluster-ecs](https://github.com/haandol/elasticsearch-cluster-ecs)
 [^2]: [AWS CDK](https://github.com/aws/aws-cdk)
 [^3]: [CDKWorkshop](https://cdkworkshop.com/)
