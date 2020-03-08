@@ -70,14 +70,10 @@ query = '췟'
 code = ord(query) - BASE
 
 jongsung = code % 28
-print(jongsung, chr(BASE + jongsung))
-
 jungsung = ((code-jongsung) // 28) % 21
-print(jungsung, chr(BASE + (jungsung * 28)))
-
 chosung = ((code - jongsung) // 28) // 21
-print(chosung, chr(BASE + (chosung * 28 * 21)))
 
+print(chut[chosung], ga[jungsung], ggut[jongsung])
 >>>
 ㅊ ㅞ ㅅ
 ```
