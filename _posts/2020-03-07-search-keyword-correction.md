@@ -11,6 +11,7 @@ publish: true
 ## TL;DR
 
 코드는 여기[^1]. 
+코드의 ipynb 파일을 실행하려면 `jupyter notebook` 이 필요하며, 그냥 보는 것은 github 링크에서 바로 확인하거나 vscode 에서 ipynb 를 열면 된다.
 
 원 글은 몇년전 컴퓨터 월드[^2] 에 올렸었다. 백업용으로 간소화 시켜서 옮겨본다.
 
@@ -52,6 +53,26 @@ publish: true
 
 `췟`을 예로 들면, 유니코드 테이블의 첫 글자인 ‘가’를 기준으로 종성 ‘ㅅ’까지 종성 간 거리가 19, 중성인 ‘ㅞ’까지의 중성 간 거리가 15, 초성인 ‘ㅊ’까지의 초성 간 거리가 14다. 각각 위치를 얻어 적절히 치환해주면 ‘ㅊㅞㅅ’이라는 분리된 자모음을 얻을 수 있다.
 
+```python
+chut = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ#'
+ga = 'ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ#'
+ggut = ' ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ#'
+
+BASE = 0xAC00
+
+query = '췟'
+
+code = ord(query) - BASE
+
+jongsung = code % 28
+jungsung = ((code-jongsung) / 28) % 21
+chosung = ((code - jongsung) / 28) / 21
+print(chut[chosung], ga[jungsung], ggut[jongsung])
+
+>>>
+ㅊ ㅞ ㅅ
+```
+
 ### 유니코드 자모음간의 거리 계산
 
 이제 자모음을 분리했으니 글자 간 차이를 계산해보자.
@@ -65,6 +86,46 @@ publish: true
 difflib 의 `ratio()` 함수는 전체 문자 길이에 대한 LCS의 비율을 반환하는데 이 값을 우리의 `diff_score` 로 사용할 수 있다. 
 
 이를 적용한 코드를 보면 `이불`과 `이줄` 간 점수(0.83)가 `이놈`과의 점수(0.5)보다 높고, `입불`과의 점수(0.83)와는 같다는 것을 확인할 수 있다
+
+```python
+import difflib
+
+def segment(ch):
+    '''유니코드 글자를 입력받아 초,중,종성에 대한 인덱스를 반환한다'''
+    code = ord(ch) - BASE
+    jongsung = code % 28
+    
+    code = code - jongsung
+    jungsung = (code / 28) % 21
+    
+    code = code / 28
+    chosung = code / 21
+    
+    if chosung < 0:
+        chosung = -1
+    if 19 < jongsung:
+        jongsung = -1
+    
+    return chut[chosung], ga[jungsung], ggut[jongsung]
+
+
+def diff(word1, word2):
+    '''두 유니코드 단어의 거리를 계산하여 차이를 반환한다'''
+    L1 = ''.join(reduce(lambda x1,x2: x1+x2, map(segment, word1)))
+    L2 = ''.join(reduce(lambda x1,x2: x1+x2, map(segment, word2)))
+    differ = difflib.SequenceMatcher(None, L1, L2)
+    return differ.ratio()
+```
+
+```python
+print(segment(u'ㅜ'))
+>>>
+(u'#', u'\u315b', u'#')
+
+print diff(u'이불', u'이줄'), ',', diff(u'이불', u'입불')
+>>>
+0.833333333333 , 0.833333333333
+```
 
 ## 사용자 검색어 교정하기
 
@@ -84,9 +145,28 @@ difflib 의 `ratio()` 함수는 전체 문자 길이에 대한 LCS의 비율을 
 위의 기준으로 저장된 데이터가 `query_count.csv` 에 들어있다.
 코드에서는 데이터 분석을 위해 `pandas` 라는 라이브러리를 사용하는데, 데이터 분석에 관심이 있다면 반드시 알아둬야 하는 도구중의 하나이다. 여기서 제공하는 데이터 구조인 `DataFrame`를 이용하면 데이터 객체를 RDBMS의 테이블처럼 편리하게 사용할 수 있다.
 
+```python
+import pandas as pd
+
+df = pd.read_csv('query_count.csv', index_col='user_q').drop_duplicates()
+df[:3]
+```
+
 마지막으로 앞서 세웠던 가설대로 먼저 검색한 결과(오타키워드)가 10개 미만이면서 후에 검색한 결과(정상키워드)에 비해 개수가 현저하게 적은 검색어를 출력하면 가설에 대한 검증을 할 수 있다.
 
-```
+```python
+for index in df2.index:
+    row = df2.ix[index]
+    row_type = type(row)
+    if pd.DataFrame == row_type:
+        if row[(row.user_q_count < 10) | 
+               ((row.user_q_count / row.later_q_count > 0.3) & (row.user_q_count / row.later_q_count < 1.0))
+              ].any().user_q_count:
+            print index, '=>', ','.join(row.later_q.values)
+    elif pd.Series == row_type:
+        if row.user_q_count < 10 and row.later_q_count > 10:
+            print index, '=>', row.later_q
+>>>
 이줄 => 이불
 락엔락 => 락앤락
 뷔아느레 => 비아느레
