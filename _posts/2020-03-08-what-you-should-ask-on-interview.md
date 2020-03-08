@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 면접때 회사에 물어봐야할 질문 (1/2)
-excerpt: ask these questions on interview (1/2)
+title: 면접때 회사에 물어봐야할 질문
+excerpt: ask these questions on interview
 author: vincent
 email: ldg55d@gmail.com
 tags: cultural inteview question trivia career
