@@ -65,9 +65,13 @@ query = '췟'
 code = ord(query) - BASE
 
 jongsung = code % 28
-jungsung = ((code-jongsung) / 28) % 21
-chosung = ((code - jongsung) / 28) / 21
-print(chut[chosung], ga[jungsung], ggut[jongsung])
+print(jongsung, chr(BASE + jongsung))
+
+jungsung = ((code-jongsung) // 28) % 21
+print(jungsung, chr(BASE + (jungsung * 28)))
+
+chosung = ((code - jongsung) // 28) // 21
+print(chosung, chr(BASE + (chosung * 28 * 21)))
 
 >>>
 ㅊ ㅞ ㅅ
@@ -94,6 +98,7 @@ difflib 의 `ratio()` 함수는 전체 문자 길이에 대한 LCS의 비율을 
 
 ```python
 import difflib
+from functools import reduce
 
 def segment(ch):
     '''유니코드 글자를 입력받아 초,중,종성에 대한 인덱스를 반환한다'''
@@ -101,10 +106,10 @@ def segment(ch):
     jongsung = code % 28
     
     code = code - jongsung
-    jungsung = (code / 28) % 21
+    jungsung = (code // 28) % 21
     
-    code = code / 28
-    chosung = code / 21
+    code = code // 28
+    chosung = code // 21
     
     if chosung < 0:
         chosung = -1
@@ -125,11 +130,11 @@ def diff(word1, word2):
 ```python
 print(segment(u'ㅜ'))
 >>>
-(u'#', u'\u315b', u'#')
+('#', 'ㅛ', '#')
 
-print diff(u'이불', u'이줄'), ',', diff(u'이불', u'입불')
+print(diff('이불', '이줄'), diff('이불', '입불'), diff('이불', '이놈'))
 >>>
-0.833333333333 , 0.833333333333
+0.8333333333333334 0.8333333333333334 0.5
 ```
 
 ## 사용자 검색어 교정하기
@@ -161,16 +166,16 @@ df[:3]
 
 ```python
 for index in df2.index:
-    row = df2.ix[index]
+    row = df2.loc[index]
     row_type = type(row)
     if pd.DataFrame == row_type:
         if row[(row.user_q_count < 10) | 
                ((row.user_q_count / row.later_q_count > 0.3) & (row.user_q_count / row.later_q_count < 1.0))
               ].any().user_q_count:
-            print index, '=>', ','.join(row.later_q.values)
+            print(index, '=>', ','.join(row.later_q.values))
     elif pd.Series == row_type:
         if row.user_q_count < 10 and row.later_q_count > 10:
-            print index, '=>', row.later_q
+            print(index, '=>', row.later_q)
 >>>
 이줄 => 이불
 락엔락 => 락앤락
