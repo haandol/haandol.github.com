@@ -11,7 +11,6 @@ publish: true
 ## TL;DR
 
 코드는 여기[^1]. 
-코드의 ipynb 파일을 실행하려면 `jupyter notebook` 이 필요하며, 그냥 보는 것은 github 링크에서 바로 확인하거나 vscode 에서 ipynb 를 열면 된다.
 
 원 글은 몇년전 컴퓨터 월드[^2] 에 올렸었다. 백업용으로 간소화 시켜서 옮겨본다.
 
