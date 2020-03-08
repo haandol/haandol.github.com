@@ -76,7 +76,7 @@ sysctl -w vm.max_map_count=262144
 
 이러한 이유로 CDK 를 디플로이 하면 구축되는 시스템의 모양은 아래와 같다.
 
-![이미지 추가하기]()
+![](/assets/img/20200307/elasticsearch.png)
 
 ## 마치며
 
