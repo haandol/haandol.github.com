@@ -101,8 +101,9 @@ base64 는 스트링 형태로 데이터를 가공해야한다면 어쩔 수 없
 
 Protobuffer 는 크기를 줄이는데는 효과적이지만, 직렬화/역직렬화를 빠르게 처리하는데는 큰 강점이 없다.
 
-여기엔 적어두지 않았지만 Ray, Arrow 가 큰 벡터를 처리하는데 효과적으로 설계되었다고 해서 실험해봤다. 하지만 msgpack 이랑 속도차이가 엄청 크지 않았다.
+여기엔 적어두지 않았지만 Arrow(with ray)[^2] 가 큰 벡터를 처리하는데 효과적으로 설계되었다고 해서 실험해봤다. 하지만 msgpack 이랑 속도차이가 엄청 크지 않았다.
 
 ----
 
 [^1]: [Python Serialization Benchmarks](https://medium.com/@shmulikamar/python-serialization-benchmarks-8e5bb700530b)
+[^2]: [Fast Python Serialization with Ray and Apache Arrow](https://arrow.apache.org/blog/2017/10/15/fast-python-serialization-with-ray-and-arrow/)
