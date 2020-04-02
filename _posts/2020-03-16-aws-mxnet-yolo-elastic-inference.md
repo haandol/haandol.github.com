@@ -55,7 +55,7 @@ bucket = s3.Bucket(BUCKET_NAME)
 
 mxnet inference 컨테이너는 처음 인스턴스 생성시 *model.tar.gz* 파일을 */opt/ml/models* 아래에 다운받고 압축을 풀어준다. 이 안에는 일반적으로 *model.params* 과 같이 학습된 모델 파라미터가 포함된다. 
 
-`src/inference.py` 를 보면 알 수 있지만, 여기서는 따로 학습된 모델을 쓰지 않고 MXNet 에서 제공하는 pretrained 모델을 사용한다. 따라서 빈 model.tar.gz 를 미리 생성해두고 그냥 업로드만 한다.
+`src/inference.py` 를 보면 알 수 있지만, 여기서는 따로 학습된 모델을 쓰지 않고 MXNet 에서 제공하는 pretrained 모델을 사용한다. 따라서 빈 *model.params* 를 미리 생성해두고 그냥 업로드만 한다.
 
 ```python
 # upload emtpy model.tar.gz
