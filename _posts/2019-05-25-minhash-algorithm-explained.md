@@ -83,11 +83,13 @@ Minhash 는 아래 3개의 스텝으로 구성되어 있다.
 
 3번이 원문의 내용과 그림만 봐서는 이해가 안될 수 있어서, 좀 더 상세히 적어본다. 첫 Signature matrix 가 `2, 1, 2, 1` 인데, 이것은 아래 순서를 통해 만들어진다.
 
+0. 최종 생성해야하는 Signature matrix 의 값은 permutation index 이다.
 1. permutation 을 순서대로 선택하고 (1~7 순서)
 2. permutation 에 해당하는 Matrix 의 컬럼값이 1 이면 동일한 컬럼에 해당하는 signature matrix 를 permutation index 로 채운다.
-3. 처음 선택된 permutation index 는 항상 1 이고, Matrix 의 5번째 row 를 가리키고 있다.
-4. Matrix 의 5번째 row 는 C2, C4 가 1 이므로 signature matrix 의 2, 4 번째에 permutation index 인 1 을 채워준다.
-5. 두번째 index 는 항상 2 이고, 해당하는 Matrix 의 C1, C3 이 1 이므로, signature matrix 의 1, 3 번째에 permutation index 인 2 를 채워서 permutation 하나의 signature 를 만들어냈다.
+3. permutation index 가 작은 순서대로 row 를 선택하여 진행한다.
+4. 순열의 가장 작은값 1은 Matrix 의 5번째 row를 가리키고 있다.
+5. Matrix 의 5번째 row 는 C2, C4 가 1 이므로 signature matrix 의 2, 4 번째에 permutation index 인 1 을 채워준다.
+6. 두번째로 작은 값은 2 이고, 해당하는 Matrix 의 2번째 row 의 C1, C3 이 1 이다. 따라서 signature matrix 의 1, 3 번째에 permutation index 인 2 를 채워서 permutation 하나의 signature 를 만들어냈다.
 
 ![](https://cdn-images-1.medium.com/max/2400/1*JSPUfzDnwwxt7tjsxOCchw.png)
 
