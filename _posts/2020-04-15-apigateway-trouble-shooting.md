@@ -12,7 +12,8 @@ publish: true
 
 `The provided role does not have sufficient permissions to access CodeDeploy`
 
-ECS Fargate 로 CodeDeploy 를 쓸때 권한이 없다고 하면 `taskdef.json`, `appspec.yaml`, `imageDetail.json` 이 정상적인 값으로 생성되었는지 먼저 확인해보자.
+* ECS Fargate 로 CodeDeploy 를 쓸때 권한이 없다고 하면 `taskdef.json`, `appspec.yaml`, `imageDetail.json` 이 정상적인 값으로 생성되었는지 먼저 확인해보자.
+* CDK 밖에서 만든 CodeDeploy DeploymentGroup 의 세팅이 CDK 의 설정과 일치하는지 확인해보자. (특히 배포방식에서 DeploymentType)
 
 ## 시작하며
 
@@ -22,17 +23,29 @@ ECS Fargate 로 CodeDeploy 를 쓸때 권한이 없다고 하면 `taskdef.json`,
 
 관련된 내용은 시간이 나면 정리하고, 오늘은 삽질을 많이 했던 부분만 공유해본다.
 
-위의 구성을 만들때 다른건 다 쉬웠는데, 아래의 3개가 대부분의 시간을 잡아먹었다.
+위의 구성을 만들때 다른건 다 쉬웠는데, 아래의 2개가 대부분의 시간을 잡아먹었다.
 
 1. CodePipline 의 CodeDeploy 스테이지에서 ECS 로 디플로이 할 때, `The provided role does not have sufficient permissions to access CodeDeploy` 가 나오는 문제
-2. CodeDeploy ECS 로 배포할때 AllAtOnce 가 아니라 Canary 옵션으로 배포하면 배포실패하는 문제(에러메시지가 뭐였는지는 잘 모르겠다)
-3. API Gateway 에서 ALB 로 Proxy 연결시 `Internal Server Error` 가 나오는 문제 (ALB 로 접근하면 문제가 없이 잘 출력되고, 클라우드 워치에도 제대로 된 로그가 안나옴)
+2. API Gateway 에서 ALB 로 Proxy 연결시 `Internal Server Error` 가 나오는 문제 (ALB 로 접근하면 문제가 없이 잘 출력되고, 클라우드 워치에도 제대로 된 로그가 안나옴)
 
 이 글에서는 1번만 간단하게 설명한다.
 
 ## 문제상황
 
-내 경우는 Docker 이미지를 빌드하고 결과를 아티팩트로 전달하는데 이 때, 이미지 주소가 잘못되어서 생긴 문제였다.
+위의 문제가 발생하는 2개의 경우가 있는데,
+
+1. CodeDeploy ECS 로 배포할때 ECSAllAtOnce 가 아니라 Canary 옵션으로 배포하는 경우
+2. Docker 이미지를 빌드하고 결과를 아티팩트로 전달하는데 이 때, 이미지 주소가 잘못된 경우
+
+### Canary 배포시 에러
+
+사실 이건 Canary 배포시 문제가 아니었다. 
+
+DeploymentGroup 는 생성시 수동으로 생성해줘야하는데 이때 DeploymentType 옵션을 CDK 와 다르게 주면 권한이 없다는 에러가 나온다.
+
+따라서 CDK 에서 카나리로 설정해뒀으면 카나리로, 일시배포면 일시배포로 옵션을 동일하게 맞춰주면 해결할 수 있다.
+
+### 이미지 주소가 잘못된 경우
 
 CodeDeploy 는 빌드 과정에서 *taskdef.json* 에 있는 *placeholder*(여기서는 <IMAGE>) *imageDetail.json* 에 들어있는 이미지 주소로 대체해서 ECS Fargate Task 를 배포한다. 
 
