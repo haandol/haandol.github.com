@@ -43,7 +43,7 @@ RDS 의 5432 포트를 배스쳔호스트에서 8888로 포트포워딩 해주�
 
 ### BastionHost 연결
 
-[RDS] - [BastionHost] 간의 연결은 배스쳔호스트에서 `socat(Socket Concatenator)` 를 통해 할 수 있다. 따라서 배스쳔호스트에 먼저 접속을 해서 *socat* 프로그램을 실행해줘야한다.
+[RDS] - [BastionHost] 간의 연결은 배스쳔호스트에서 `socat(Socket Concatenator)`[^2] 를 통해 할 수 있다. 따라서 배스쳔호스트에 먼저 접속을 해서 *socat* 프로그램을 실행해줘야한다.
 
 SSM 을 통해 배스쳔호스트에 연결하는 것은 아주 쉽다.
 
@@ -138,3 +138,4 @@ AWS Sytems Manager, AWS Secrets Manager 등은 좀 생소할 것이다.(참고�
 ----
 
 [^1]: [BastionHost RDS Tutorial](https://github.com/haandol/bastionhost-rds-tutorial)
+[^2]: [socat](https://medium.com/@copyconstruct/socat-29453e9fc8a6)
