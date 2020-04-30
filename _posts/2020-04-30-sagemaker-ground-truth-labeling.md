@@ -4,7 +4,7 @@ title: Sagemaker Ground Truth 로 바운딩박스 라벨링 하기
 excerpt: Draw bounding box using Sagemaker Ground Truth
 author: vincent
 email: ldg55d@gmail.com
-tags: object-detection bounding-box bbox labeling deeplearning yolo
+tags: aws sagemaker ground-truth object-detection bounding-box bbox labeling deeplearning yolo
 publish: true
 ---
 
