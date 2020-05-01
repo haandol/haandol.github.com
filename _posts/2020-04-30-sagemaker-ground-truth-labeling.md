@@ -47,10 +47,10 @@ Yolo, SSD, FasterRCNN 등의 객체 탐지(Object Detection) 모델 학습을 �
 기본 버킷의 모양은 *sagemaker-리젼-아이디* 를 가진다.
 
 ```python
-for filepath in glob('./images/*.jpg'):
-    filename = filepath.rsplit('/', 1)[1]
-    print(f'upload file: {filename}')
-    bucket.upload_file(filepath, f'images/{filename}')
+for filepath in glob("./images/*.jpg"):
+    filename = filepath.rsplit("/", 1)[1]
+    print(f"upload file: {filename}")
+    bucket.upload_file(filepath, f"images/{filename}")
 ```
 
 ## manifest 파일 생성하기
@@ -70,13 +70,13 @@ GT 라벨링 잡은 S3 에 업로드된 manifest 라는 파일을 입력값으�
 위에 업로드한 정보를 가지고 *catdot.manifest* 파일을 만들고 s3 에 업로드 한다.
 
 ```python
-os.makedirs(f'manifests', exist_ok=True)
-manifest_loc = f'manifests/catdog.manifest'
+os.makedirs(f"manifests", exist_ok=True)
+manifest_loc = f"manifests/catdog.manifest"
 
-with open(manifest_loc, 'w') as fp:
+with open(manifest_loc, "w") as fp:
     for filename in filenames:
-        source_ref = f's3://{bucket.name}/images/{filename}'
-        fp.write(json.dumps({'source-ref': source_ref})+'\n')
+        source_ref = f"s3://{bucket.name}/images/{filename}"
+        fp.write(json.dumps({"source-ref": source_ref})+"\n")
 
 bucket.upload_file(manifest_loc, manifest_loc)
 ```
@@ -116,27 +116,33 @@ GT는 라벨링 잡을 처리하기 위해 3종류의 작업자를 선택할 수
 
 ![](https://github.com/haandol/sagemaker-groundtruth-tutorial/raw/49bdc7e4064f9e648e1501306234288ee8120d0b/assets/2Labels.png)
 
-모든 라벨링 작업이 완료되고 나면 처음 라벨링 잡을 만들때 지정했던 *output_data_location* 아래에 *output.manifest* 가 생긴다.
+## 결과확인
+
+![](/assets/img/20200430/result.png)
+
+라벨링 잡의 결과는 콘솔 페이지에서 확인할 수 있다. 하지만 우리가 필요한 것은 디텍션 모델 학습에 사용할 **(class, top, left, width, height)** 형태의 라벨이다.
+
+이런 라벨 데이터는, 모든 라벨링 작업이 완료되고 나면 처음 라벨링 잡을 만들때 지정했던 *output_data_location* 아래에 *output.manifest* 로 저장된다.
 
 *output.manifest* 의 라벨데이터는 다음과 같은 형태로 저장된다.
 
 ```json
-{'labels': {'annotations': [{'class_id': 1,
-                             'height': 386,
-                             'left': 98,
-                             'top': 89,
-                             'width': 339}],
-            'image_size': [{'depth': 3, 'height': 512, 'width': 512}]},
- 'labels-metadata': {'class-map': {'1': 'Dog'},
-                     'creation-date': '2020-04-29T16:38:58.542746',
-                     'human-annotated': 'yes',
-                     'job-name': 'labeling-job/catdog-lablel-0',
-                     'objects': [{'confidence': 0.09}],
-                     'type': 'groundtruth/object-detection'},
- 'source-ref': 's3://sagemaker-ap-northeast-2-929831892372/images/8.jpg'}
+{"labels": {"annotations": [{"class_id": 1,
+                             "height": 386,
+                             "left": 98,
+                             "top": 89,
+                             "width": 339}],
+            "image_size": [{"depth": 3, "height": 512, "width": 512}]},
+ "labels-metadata": {"class-map": {"1": "Dog"},
+                     "creation-date": "2020-04-29T16:38:58.542746",
+                     "human-annotated": "yes",
+                     "job-name": "labeling-job/catdog-lablel-0",
+                     "objects": [{"confidence": 0.09}],
+                     "type": "groundtruth/object-detection"},
+ "source-ref": "s3://sagemaker-ap-northeast-2-929831892372/images/8.jpg"}
 ```
 
-이 output.manifest 를 이용하여 온프레미스 또는 Sagemaker 에서 Object Detection 모델 학습을 진행하면 된다.
+이 *output.manifest* 를 적절히 변환하여, 온프레미스 또는 Sagemaker 에서 Object Detection 모델 학습을 진행하면 된다.
 
 ## 마치며
 
