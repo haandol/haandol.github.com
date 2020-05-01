@@ -81,7 +81,7 @@ GT 라벨링 잡(Labeling Job)은 S3 에 업로드된 *manifest* 라고 부르�
 {"source-ref": "s3://sagemaker-ap-northeast-2-929831892372/images/8.jpg"}
 ```
 
-앞서 업로드한 이미지들의 정보를 가지고 *catdot.manifest* 파일을 만들고 s3 에 업로드 한다.
+앞서 업로드한 이미지들의 정보를 가지고 *catdog.manifest* 파일을 만들고 s3 에 업로드 한다.
 
 ```python
 os.makedirs(f"manifests", exist_ok=True)
