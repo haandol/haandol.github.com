@@ -275,8 +275,8 @@ xray_recorder.configure(
 xray_recorder.configure(sampling_rules='./get_posts_rule.json')
 ```
 
+*get_posts_rule.json 파일 내용*
 ```json
-// myrule.json
 {
     "version": 1,
     "rules": [{
