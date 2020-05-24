@@ -12,6 +12,8 @@ publish: true
 
 코드는 여기[^1].
 
+배치 / 실시간으로 메일을 보낼 수 있는 메일링리스트를 만들어보자.
+
 ## 시작하며
 
 AWS에는 Simple Email Service(SES) 라는 서비스가 있다. SES 를 이용하면 AWS SDK 방식이나 SES 에서 제공하는 SMTP 를 이용하여 메일을 직접 발송할 수 있다.
