@@ -5,6 +5,11 @@
 
   <!-- Enable responsiveness on mobile devices-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  {% if page.title == "Home" %}
+    <meta name="description" content="{{ site.title }}">
+  {% else %}
+    <meta name="description" content="{{ page.excertpt }}">
+  {% endif %}
 
   <title>
   {% if page.title == "Home" %}
