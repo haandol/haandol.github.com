@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 서버리스 메일링 서비스 만들어보기
+title: AWS 로 서버리스 메일링 서비스 만들어보기
 excerpt: Making serverless mailing service on AWS
 author: vincent
 email: ldg55d@gmail.com
