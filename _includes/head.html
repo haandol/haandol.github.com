@@ -10,7 +10,7 @@
   {% if page.title == "Home" %}
     {{ site.title }}, {{ site.tagline }}
   {% else %}
-    {{ page.title }}, {{ site.title }}
+    {{ page.title }} ({{ page.excerpt }}), {{ site.title }}
   {% endif %}
   </title>
 
