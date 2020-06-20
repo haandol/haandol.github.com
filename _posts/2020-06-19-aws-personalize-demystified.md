@@ -10,7 +10,7 @@ publish: true
 
 ## TL;DR
 
-![https://www.youtube.com/watch?v=XCE3PnGb3As](/assets/img/20200620/personalize-intern.png)
+![](/assets/img/20200620/personalize-intern.png)
 
 퍼스널라이즈를 잘(!) 쓰면 인턴도 1주일만에 전문가급의 추천엔진 만들 수 있다.
 
