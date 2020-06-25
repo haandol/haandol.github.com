@@ -10,6 +10,8 @@ publish: true
 
 ## TL;DR
 
+코드는 여기[^1]
+
 API Gateway Stage 와 Lambda Alias 를 이용하면 클라이언트 수정 없이 A/B 테스트를 해볼 수 있다.
 
 ## 시작하며
@@ -217,3 +219,7 @@ CodeDeploy 로 람다를 디플로이하면 *트래픽 기준 라우팅*과 완�
 하지만 보통 A/B 테스트는 주단위로 진행하고 결과를 취합하는데, CodeDeploy 는 48시간 이내에 디플로이가 완료되어야 하기 때문에 적합하지 않은 툴이었다.
 
 위의 내용을 자동으로 진행하는 것은 StepFunctions 을 통해서 코드를 만들고 진행하는 것이 가장 좋은 방법일 것 같다.(StepFunctions 의 Execution 은 최대 1년까지 진행할 수 있다.)
+
+----
+
+[^1]: [AWS Serverless A/B Test](https://github.com/haandol/aws-serverless-abtest)
