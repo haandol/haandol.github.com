@@ -10,7 +10,7 @@ publish: true
 
 ## TL;DR
 
-코드는 여기[^1]
+코드는 여기[^1]. (deploy 하면 테스트해볼 수 있는 API Gateway 와 Lambda 함수가 Provision 된다.)
 
 API Gateway Stage 와 Lambda Alias 를 이용하면 클라이언트 수정 없이 A/B 테스트를 해볼 수 있다.
 
