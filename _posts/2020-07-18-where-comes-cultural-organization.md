@@ -5,7 +5,7 @@ excerpt: Where comes from good cultural oragnization #1
 author: vincent
 email: ldg55d@gmail.com
 tags: thoughts culture organization company series
-publish: false
+publish: true
 ---
 
 ## TL;DR
