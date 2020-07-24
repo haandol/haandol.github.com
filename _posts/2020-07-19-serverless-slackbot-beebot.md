@@ -56,7 +56,7 @@ $ npm i
 4. CDK를 설정한다
 
 ```bash
-$ npm i -g cdk
+$ npm i -g cdk@1.54.0
 $ cdk init
 $ cdk bootstrap
 ```
@@ -165,14 +165,14 @@ $ python
 'delectus aut autem'
 ```
 
-4. `libs/interfaces/constant.ts` 를 열고 `Apps` 에 `fake` 를 추가해준다.
+4. `libs/interfaces/constant.ts` 를 열고 `apps` 에 `fake` 를 추가해준다.
 
 ```bash
 $ vim constant.ts
 ```
 ```javascript
 ...
-Apps = ['helper', 'hello_world', 'fake']                                        
+const apps = ['helper', 'hello_world', 'fake']                                        
 ...
 ```
 
@@ -182,7 +182,9 @@ Apps = ['helper', 'hello_world', 'fake']
 $ cdk deploy "*" --require-approval never
 ```
 
-6. 적당한 슬랙채널에 @bee-bot 를 초대하고 !help, !fake 를 입력해본다.
+6. 적당한 슬랙채널에 @beebot 를 초대하고 !help, !fake 를 입력해본다.
+
+> 슬랙봇 이름을 beebot 이라고 지었다고 가정
 
 ## AWS SSM 파라미터 스토어 사용하기
 
@@ -210,9 +212,7 @@ hi 에 대해서 there 값을 저장해두고 잘 가져오는 것을 확인할 
 
 ## 마치며
 
-휴봇의 파이썬 버전이 필요해서 시작한 프로젝트 였는데 node 기반 회사로 옮기니 그냥 휴봇을 쓰게 되어 시간을 많이 들이지 못해서 약간 안타까운 맘이 있었다.
-
-언제든 필요한 내용들을 PR 해주면 좋겠다.
+Amazon Chime 만 썼는데, 이제 다시 Slack 을 쓰게 될 것 같아 만들어봤다.
 
 ----
 
