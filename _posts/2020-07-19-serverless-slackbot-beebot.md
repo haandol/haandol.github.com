@@ -120,10 +120,10 @@ Beebot 에서는 이러한 스크립트를 `App` 이라고 부른다.
 1. `libs/functions/slack/apps` 폴더 아래에 `fake.py` 를 추가한다.
 
 ```bash
-$ vim apps/fake.py
+$ vim libs/functions/slack/apps/fake.py
 ```
 
-2. `apps/fake.py` 에 아래내용을 입력한다.
+2. `fake.py` 에 아래내용을 입력한다.
 
 ```python
 from . import on_command
@@ -178,7 +178,7 @@ $ vim constant.ts
 ```
 ```javascript
 ...
-const apps = ['helper', 'hello_world', 'fake']                                        
+const apps = ['helper', 'hello_world', 'memo', 'fake']
 ...
 ```
 
