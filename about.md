@@ -3,7 +3,9 @@ layout: page
 title: About
 ---
 
-<a href="https://kr.linkedin.com/pub/dongkyun-lee/13/3a1/b53" target="_blank"><img src="https://static.licdn.com/scds/common/u/img/webpromo/btn_viewmy_160x25.png" width="160" height="25" border="0" alt="View DongKyun Lee's profile on LinkedIn"></a>
+<script type="text/javascript" src="https://platform.linkedin.com/badges/js/profile.js" async defer></script>
+
+<div class="LI-profile-badge"  data-version="v1" data-size="medium" data-locale="en_US" data-type="horizontal" data-theme="light" data-vanity="haandol"><a class="LI-simple-link" href='https://kr.linkedin.com/in/haandol?trk=profile-badge'>DongGyun Lee</a></div>
 
 
 나는 8년차 개발자로 아마존 코리아에서 프로토타이핑 엔지니어로 일하고 있다.
