@@ -5,7 +5,7 @@ title: About
 
 <script type="text/javascript" src="https://platform.linkedin.com/badges/js/profile.js" async defer></script>
 
-<div class="LI-profile-badge"  data-version="v1" data-size="medium" data-locale="en_US" data-type="horizontal" data-theme="light" data-vanity="haandol"><a class="LI-simple-link" href='https://kr.linkedin.com/in/haandol?trk=profile-badge'>DongGyun Lee</a></div>
+<div class="LI-profile-badge"  data-version="v1" data-size="medium" data-locale="en_US" data-type="horizontal" data-theme="dark" data-vanity="haandol"><a class="LI-simple-link" href='https://kr.linkedin.com/in/haandol?trk=profile-badge'>DongGyun Lee</a></div>
 <br/>
 
 나는 9년차 개발자로, 아마존 웹 서비스 코리아에서 프로토타이핑 엔지니어로 일하고 있다.
