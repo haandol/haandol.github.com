@@ -12,8 +12,8 @@ publish: true
 
 코드는 여기[^1].
 
-> 현재(2020-08-16) MSK 람다 이벤트 소스를 만드는 것은 아직 지원안된다.
-> MSK 람다 이벤트 소스를 만들면 `PROBLEM: Connection error, Please check your event source connection configuration.` 에러를 만나게 된다.
+> MSK 와 람다통신에는 NAT Gateway 가 필요하다. NAT Gateway 를 쓰려면 MSK가 반드시 Private Subnet 에 배포되어야 한다.[^2]
+> NAT Gateway 없이 MSK 람다 이벤트 소스를 만들면 `PROBLEM: Connection error, Please check your event source connection configuration.` 에러를 만나게 된다.
 
 ## 시작하며
 
@@ -136,8 +136,11 @@ x-amzn-RequestId: ac315665-2b02-422c-bc87-0840c89954dc
 
 ## 마치며
 
-AWS 최신 서비스는 GA 라고 해서 발표해도, 최소 6개월은 지나고 쓰는 것이 안정적인 것 같다.
+~~AWS 최신 서비스는 GA 라고 해서 발표해도, 최소 6개월은 지나고 쓰는 것이 안정적인 것 같다.~~
+
+매뉴얼과 관련 글 들을 잘 읽어보자..
 
 ----
 
 [^1]: [haandol/msk-lambda-example](https://github.com/haandol/msk-lambda-example)
+[^2]: [Using Amazon MSK as an event source for AWS Lambda](https://aws.amazon.com/jp/blogs/compute/using-amazon-msk-as-an-event-source-for-aws-lambda/)
