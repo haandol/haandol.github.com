@@ -49,7 +49,7 @@ Redis 등의 외부 스토리지를 사용하지 않으려고 하다보니, join
 
 ## 사용
 
-1. 터미널을 하나 열고 (사용자 A) wscat 을 이용하여 웹소켓을 연다. 위에 설명한 대로 invalid 한 메시지는 $default 에 의해 echo 로 동작한다.
+* 터미널을 하나 열고 (사용자 A) wscat 을 이용하여 웹소켓을 연다. 위에 설명한 대로 invalid 한 메시지는 $default 에 의해 echo 로 동작한다.
 
 ```bash
 $ wscat -c wss://xyz.execute-api.ap-northeast-2.amazonaws.com/alpha 
@@ -57,7 +57,7 @@ $ wscat -c wss://xyz.execute-api.ap-northeast-2.amazonaws.com/alpha
 < hi there
 ```
 
-2. join action 을 통해 방에 접속한다.
+* join action 을 통해 방에 접속한다.
 
 ```bash
 > {"action": "join", "room": "room1"}
@@ -66,27 +66,27 @@ $ wscat -c wss://xyz.execute-api.ap-northeast-2.amazonaws.com/alpha
 < You have already joined to room1.
 ```
 
-3. send action 을 통해 메시지를 전송해본다.
+* send action 을 통해 메시지를 전송해본다.
 
 ```bash
 > {"action": "send", "room": "room1", "msg": "this is AWS"}
 < [S_5YUerFoE0CJng=]: this is AW
 ```
 
-4. 새로운 터미널을 열고 웹소켓에 접속한다. (사용자 B)
+* 새로운 터미널을 열고 웹소켓에 접속한다. (사용자 B)
 
 ```bash
 $ wscat -c wss://xyz.execute-api.ap-northeast-2.amazonaws.com/alpha
 ```
 
-5. join action 을 통해 A 사용자가 접속해 있는 room1 방에 접속한다.
+* join action 을 통해 A 사용자가 접속해 있는 room1 방에 접속한다.
 
 ```bash
 > {"action": "join", "room": "room1"}
 < S_579fEDoE0CJng= has joined to Room room1
 ```
 
-6. send action 을 통해 메시지를 보내고, 두 터미널 모두에서 메시지가 출력되는지 확인한다.
+* send action 을 통해 메시지를 보내고, 두 터미널 모두에서 메시지가 출력되는지 확인한다.
 
 ```
 > {"action": "send", "room": "room1", "msg": "this is AWS User B"}
