@@ -26,11 +26,16 @@ Amazon API Gateway 에는 웹소켓기능이 있는데 CDK 로 된 예제가 찾
 
 설치방법은 코드[^1]의 README.md 에 나와있다.
 
+콘솔로 한번 API Gateway Websocket API 를 만들어봤다면 기능이 매우 단순하다는 사실을 알 수 있다.
+
+따라서 본 글에서 웹소켓 API 자체를 설명하지는 않고 코드 사용위주로 설명하려고 한다.
+
 ## 코드설명
 
-해당 웹소켓 예제는 사용자의 입력 메시지를 echoing 해주는 단순한 예제이다.
+해당 코드 예제는 로컬캐시를 이용한 채팅방을 구현했다.
 
 모든 메시지는 Route 기준으로 처리된다. 기본 Route는 $connect, $disconnect, $default 가 있다.
+
 내가 지정한 Route 에 해당하는 메시지가 아니라면 $default Route 가 메시지를 처리한다.
 
 본 예제에서는 *$request.body.action* 을 기준으로 *join*, *send* 가 아닌 모든 메시지는 $default Route 가 처리한다.
