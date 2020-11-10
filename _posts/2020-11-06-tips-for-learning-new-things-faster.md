@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 새로운 것을 빨리 배우고 싶을 때 유용한 팁
-excerpt: Tips from strench to learn new things faster
+excerpt: Tips from trench to learn new things faster
 author: vincent
 email: ldg55d@gmail.com
 tags: prototyping prototype learn quick-and-dirty
