@@ -30,10 +30,10 @@ CDK 의 기본 테스트 프레임워크가 jest 라서 결국 `jest + cucumber 
 
 ## 설치하기
 
-설치가 안되어 있다면 typescript, jest 를 global  로 설치해준다.
+설치가 안되어 있다면 typescript, jest, ts-jest 를 global 로 설치해준다.
 
 ```bash
-$ npm i -g typescript jest @types/node
+$ npm i -g typescript ts-jest jest @types/node
 ```
 
 npm, typescript, jest 를 각각 init 해준다.
