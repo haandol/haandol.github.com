@@ -177,4 +177,4 @@ B2B 인지 B2C 인지는 앞서 말한방법으로 대략 알아낼 수 있고, 
 회사를 정하는 과정 자체도 장기적인 관점에서 진행하는 것이 나와 좀 더 잘 맞는 회사를 다닐 수 있는 확률을 좀 더 올려줄 것이다.
 
 ----
-[^1]: [경력직 개발자 커리어 패스 정리](http://blog.haandol.com/2017/02/24/software-engineer-career.html)
+[^1]: [경력직 개발자 커리어 패스 정리](http://haandol.github.io/2017/02/24/software-engineer-career.html)

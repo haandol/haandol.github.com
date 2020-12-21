@@ -167,4 +167,4 @@ publish: true
 여기에 적은 나의 개인적인 경험이, 아무런 정보가 없는 상황에서 최악을 피하는 판단을 하는데 도움이 되었으면 좋겠다.
 
 ----
-[^1]: [면접때 회사에 물어봐야할 질문 (1/2)](http://blog.haandol.com/2020/03/08/what-you-should-ask-on-interview.html)
+[^1]: [면접때 회사에 물어봐야할 질문 (1/2)](http://haandol.github.io/2020/03/08/what-you-should-ask-on-interview.html)
