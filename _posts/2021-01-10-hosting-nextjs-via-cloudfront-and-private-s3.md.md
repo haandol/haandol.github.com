@@ -4,7 +4,7 @@ title: Nextjs 프로젝트 Cloudfront + Private S3 로 호스팅하기
 excerpt: Hosting Nextjs project via Cloudfront and private S3
 author: vincent
 email: ldg55d@gmail.com
-tags: nextjs react cloudfront s3 hosting cdk
+tags: nextjs react cloudfront s3 hosting cdk origin-access-identity oai
 publish: true
 ---
 
@@ -17,6 +17,8 @@ Origin Access Identity(OAI)[^2] 를 이용하면 S3 콘텐츠를 public open 하
 ## 시작하며
 
 최근 작업중 nextjs 를 s3 로 호스팅 해야 할 일이 생겼는데, 모든 퍼블릭 엑세스를 블록해야한다는 제약이 있었다.
+
+Origin Access Identity(OAI) 를 사용하면 S3 에 대한 퍼블릭엑세스를 허용하지 않고도 리액트 웹 호스팅이 가능하다.
 
 OAI 를 사용하는 법은 다른 링크[^3] 들에도 많이 있기 때문에 딱히 소개할 건 없고,
 
