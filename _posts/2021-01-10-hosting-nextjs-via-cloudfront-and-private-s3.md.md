@@ -50,7 +50,7 @@ nextjs-example 에 푸시할 때마다 파이프라인이 트리거 되면서 cl
 
 ----
 
-[^1]: [nextjs s3 deploy example](https://github.com/haandol/nextjs-s3-deploy-example)
+[^1]: [nextjs s3 deploy block](https://github.com/haandol/nextjs-s3-deploy-block)
 [^2]: [원본 액세스 ID를 사용하여 Amazon S3 콘텐츠에 대한 액세스 제한](https://docs.aws.amazon.com/ko_kr/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html)
 [^3]: [AWS CLI로 Amazon CloudFront OAI 설정하기](https://dev.classmethod.jp/articles/aws-cli-cloudfront-oai-kr/)
 [^4]: [nextjs-example](https://github.com/haandol/nextjs-example)
