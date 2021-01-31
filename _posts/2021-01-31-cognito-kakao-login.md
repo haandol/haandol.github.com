@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 카카오 로그인으로 Cognito 유저생성하기
+title: 카카오 로그인으로 코그니토 연동하기
 excerpt: Integrate Kakaotalk signin to Cognito Userpool
 author: vincent
 email: ldg55d@gmail.com
