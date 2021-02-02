@@ -1,10 +1,10 @@
 ---
 layout: post
-title: 카카오 로그인으로 코그니토 연동하기
-excerpt: Integrate Kakaotalk signin to Cognito Userpool
+title: 카카오 로그인으로 Amazon Cognito 연동하기
+excerpt: Integrate Kakaotalk signin to Amazon Cognito Userpool
 author: vincent
 email: ldg55d@gmail.com
-tags: kakao login signin cognito userpool serverless
+tags: kakao login signin cognito userpool serverless aws amazon
 publish: true
 ---
 
@@ -14,7 +14,7 @@ publish: true
 
 ## 시작하며
 
-카카오 로그인으로 Cognito UserPool 과 통합할 일이 있어서 작업내용을 공유한다.
+카카오 로그인으로 Amazon Cognito(이하 코그니토) 과 통합할 일이 있어서 작업내용을 공유한다.
 
 ## 설치하기
 
