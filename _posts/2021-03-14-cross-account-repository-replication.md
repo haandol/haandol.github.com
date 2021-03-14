@@ -30,6 +30,14 @@ CDK 를 이용해서 코드를 배포하면 아래와 같은 리소스가 개인
 
 ![](https://github.com/haandol/croca/raw/main/img/architecture.png)
 
+## 마치며
+
+글이 짧은 것은 이 솔루션을 쓸 사람이 국내에는 많지 않을거라고 생각되어서이다.
+
+github 를 레포로 이용하면 굳이 본 글의 코드를 쓸 필요가 없는데, 국내에는 거의 github 를 코드베이스로 많이 쓰고 있다.
+
+이 경우, 개발 계정은 main 브랜치를 기준으로 파이프라인을 구성하고, 프로덕션 계정은 release 브랜치 기준으로 파이프라인 구성하면, 굳이 어카운트간에 이벤트를 전송할 필요가 없다.
+
 ----
 
 [^1]: [Croca](https://github.com/haandol/croca)
