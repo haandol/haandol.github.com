@@ -1,6 +1,6 @@
 ---
 layout: post
-title: NextJS 앱을 로컬환경에서 https 로 서빙하기
+title: NextJS 앱을 로컬호스트에서 https 로 서빙하기
 excerpt: Serve NextJS via https on localhost using Caddy
 author: vincent
 email: ldg55d@gmail.com
