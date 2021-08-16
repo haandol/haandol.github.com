@@ -68,7 +68,7 @@ CDK 를 이용해서 코드를 배포하면 아래와 같은 리소스가 개인
 
 ### 로그인
 
-![](https://github.com/haandol/cognito-kakao-example/raw/main/img/signup.png)
+![](https://github.com/haandol/cognito-kakao-example/raw/main/img/signin.png)
 
 위에서 설명한대로 이미 가입이 된 유저이거나, 계정을 생성하고 나면 로그인 단계를 진행한다.
 
