@@ -8,7 +8,7 @@ title: About
 <div class="LI-profile-badge"  data-version="v1" data-size="medium" data-locale="en_US" data-type="horizontal" data-theme="dark" data-vanity="haandol"><a class="LI-simple-link" href='https://kr.linkedin.com/in/haandol?trk=profile-badge'>DongGyun Lee</a></div>
 <br/>
 
-나는 9년차 개발자로, 아마존 웹 서비스 코리아에서 프로토타이핑 엔지니어로 일하고 있다.
+나는 10년차 개발자로, 아마존 웹 서비스 코리아에서 프로토타이핑 엔지니어로 일하고 있다.
 
 EA 코리아의 니드포스피드 엣지, 피파 온라인4 팀에서 각각 TS, JS 를 이용하여 MSA 를 개발했으며,
 이전에는 버즈니라는 회사에서 파이썬과 머신러닝을 이용하여 풀스택 개발을 했다.
