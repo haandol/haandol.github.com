@@ -152,7 +152,7 @@ publish: true
 [^1]: [Using AWS Lambda with other services](https://docs.aws.amazon.com/lambda/latest/dg/lambda-services.html)
 [^2]: [Invoking AWS Lambda functions](https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html)
 [^3]: [Lambda function scaling](https://docs.aws.amazon.com/lambda/latest/dg/invocation-scaling.html)
-[^4]: [Rate Limiting system design | TOKEN BUCKET, Leaky Bucket, Sliding Logs](https://www.youtube.com/watch?v=mhUQe4BKZXs)
+[^4]: [Rate Limiting system design](https://www.youtube.com/watch?v=mhUQe4BKZXs)
 [^5]: [New for AWS Lambda – SQS FIFO as an event source](https://aws.amazon.com/ko/blogs/compute/new-for-aws-lambda-sqs-fifo-as-an-event-source/)
 [^6]: [Events from AWS services](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-service-event.html)
 [^7]: [Amazon SNS message delivery retries](https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html)
