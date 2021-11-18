@@ -68,13 +68,13 @@ publish: true
 
 #### EventBridge
 
-https://docs.aws.amazon.com/lambda/latest/dg/services-cloudwatchevents.html
+[Official EventBridge Doc](https://docs.aws.amazon.com/lambda/latest/dg/services-cloudwatchevents.html)
 
 * 이벤트 브릿지로 들어오는 이벤트는 이벤트소스에 따라 유실될수도 있다. 이것은 이벤트 브릿지 특성이니 링크[^6]를 참조하자.
 
 #### SNS
 
-https://docs.aws.amazon.com/lambda/latest/dg/with-sns.html
+[Official SNS Doc](https://docs.aws.amazon.com/lambda/latest/dg/with-sns.html)
 
 * SNS 는 많이 쓰니깐 혹시나해서 섹션을 넣어둔다.
 * 하지만 글에서 다루지 않은 다른 비동기 호출들과 마찬가지로 이벤트당 람다함수가 호출된다. (비동기 호출의 기본동작방식)
@@ -82,7 +82,7 @@ https://docs.aws.amazon.com/lambda/latest/dg/with-sns.html
 
 #### S3
 
-https://docs.aws.amazon.com/lambda/latest/dg/with-s3.html
+[Official S3 Doc](https://docs.aws.amazon.com/lambda/latest/dg/with-s3.html)
 
 * S3 도 많이 쓰니깐 혹시나해서 섹션을 넣어둔다.
 * 다른 비동기 호출 서비스들과 동일하다.
@@ -95,7 +95,7 @@ https://docs.aws.amazon.com/lambda/latest/dg/with-s3.html
 
 #### SQS
 
-https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html#events-sqs-scaling
+[Official SQS Doc](https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html#events-sqs-scaling)
 
 * 스탠다드는 한번에 5개까지 배치를 읽는다. 즉, 메시지가 50개이상 쌓여있으면 한번에 동시성이 5까지 늘어난다.
 * 그리고 분당 최대 60개까지 람다 인스턴스가 늘어난다.
@@ -105,7 +105,7 @@ https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html#events-sqs-scaling
 
 #### Kinesis Streams
 
-https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html
+[Official Kinesis Docs](https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html)
 
 * 키네시스 스트림의 컨슈머를 설정할 때 각각 standard 모드와 enhanced fan-out(EFO) 모드로 설정할 수 있다.
   * standard 는 HTTP, EFO 는 HTTP/2 를 사용한다.
@@ -120,7 +120,7 @@ https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html
 
 #### DynamoDB Streams 
 
-https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html
+[Official DDB Stream Doc](https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html)
 
 * 람다는 초당 네번 샤드를 폴링한다.
 * 한 스트림에 2개의 람다 함수까지 붙을 수 있다. (컨슈머가 최대 2개)
@@ -130,7 +130,7 @@ https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html
 
 #### Managed Service Kafka(MSK)
 
-https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html
+[Official MSK Doc](https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html)
 
 * 이벤트 소스 설정상 람다와 토픽이 1:1 매핑 된다.
 * 스케일링을 설정할 수 있는 방법이 따로 없다.
@@ -138,7 +138,7 @@ https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html
 
 #### AmazonMQ
 
-https://docs.aws.amazon.com/lambda/latest/dg/with-mq.html
+[Official AmazonMQ Doc](https://docs.aws.amazon.com/lambda/latest/dg/with-mq.html)
 
 * 스케일링에 대해 아무런 정보가 없다.
 * 대략 MSK랑 비슷할 것으로 생각된다. (내부에 정의된 폴리시에 따라 자동으로 스케일링을 처리해주는 방식)
