@@ -171,10 +171,6 @@ MTTR을 줄이는 것은 개발자의 경험도 중요하지만, 시스템적으
 
 다만 로깅을 할 땐, 메트릭을 쌓을때 RED, USE, CASE 같은 방법론(?) 들을 참조해서 적절히 쌓고 확인하는 것을 추천한다.
 
-## 마치며
-
-아는 것을 적는 것은 쉬운데, 공부하면서 정리하면서 적는 것은 꽤나 어려운 것 같다.
-
 ----
 
 [^1]: [Using Mean Time to Identify (MTTI) as a Service Desk Metric](https://www.bmc.com/blogs/mtti-mean-time-to-identify/)
