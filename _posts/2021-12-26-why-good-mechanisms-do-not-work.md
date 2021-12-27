@@ -18,7 +18,7 @@ publish: true
 
 ## 시작하며
 
-<img src="https://play.google.com/store/movies/details/The_Founder?id=Rnhip81Rgow&hl=ko&gl=US" />
+<img src="https://m.media-amazon.com/images/M/MV5BMzExNDg0MDk1M15BMl5BanBnXkFtZTgwNzE1Mjg0MDI@._V1_.jpg" />
 
 `더 파운더`라는 영화를 보면 맥도널드 프랜차이즈의 성공요인은 매장 내의 최적화된 동선(업무 프로세스)과 최적의 비율로 세팅된 일관된 맛을 미국 전역 규모로 스케일링 할 수 있느냐 없느냐의 싸움이었다고 표현한다.
 
