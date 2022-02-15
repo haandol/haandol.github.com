@@ -11,8 +11,11 @@ publish: true
 ## TL;DR
 
 Ports: 인터페이스, DI(Dependency Inversion) 를 위한 추상화
+
 Adapters: 포트를 통해 인프라와 실제로 연결하는 부분만 담당하는 구현체
+
 Domain Model: 실제 핵심 비즈니스 로직을 처리하는 부분
+
 Domain Service(클린 아키텍쳐에서의 UseCase): 도메인 모델과 어댑터를 이용해서 비즈니스 로직과 인프라를 오케스트레이션 하는 dumb한 레이어
 
 > 도메인 모델이 빈약(amnemic) 하다면, 그냥 레이어드 아키텍쳐에 SOLID 를 잘 지켜서 개발하기만 해도 충분하다.
