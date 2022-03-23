@@ -172,6 +172,6 @@ DDD 가 그렇고 서버리스가 그렇다. 인프라를 비즈니스 로직과
 ----
 
 [^1]: [CryptoZombies](https://cryptozombies.io/)
-[^2]: [NFT/ERC-721/Collectible](https://www.youtube.com/watch?v=p36tXHX1JD8&t=2759)
+[^2]: [NFT_ERC-721_Collectible](https://www.youtube.com/watch?v=p36tXHX1JD8)
 [^3]: [SmartContract](https://www.youtube.com/watch?v=ZE2HxTmxfrI)
 [^4]: [간단하게_설명하는_IPFS](https://www.youtube.com/watch?v=5Uj6uR3fp-U)
