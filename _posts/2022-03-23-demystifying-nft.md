@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 대충 설명한 NFT - 1/2
+title: 쉽게 설명한 NFT - 1/2
 excerpt: Demystifying NFT(ERC721) - 1/2
 author: vincent
 email: ldg55d@gmail.com
