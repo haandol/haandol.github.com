@@ -110,7 +110,7 @@ publish: true
 
 ---
 
-[^1]: [The Lean Startup | Eric Ries | Talks at Google](https://www.youtube.com/watch?v=fEvKo90qBns&t=20s&ab_channel=TalksatGoogle)
+[^1]: [The Lean Startup](https://www.youtube.com/watch?v=fEvKo90qBns)
 [^2]: [린스타트업의 이해와 Case Study](https://www.slideshare.net/MatthewLee/case-study-51449865)
 [^3]: [린 경영의 재조명, 린 스타트업](http://www.bondweb.co.kr/data/menu01/%B8%B0%28lean%29%B0%E6%BF%B5%C0%C7%20%C0%E7%C1%B6%B8%ED.pdf)
 [^4]: [스타트업이 일하는법, 린 프로세스 도입하기](https://yozm.wishket.com/magazine/detail/1084/)
