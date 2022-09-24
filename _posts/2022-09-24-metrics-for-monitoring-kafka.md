@@ -12,18 +12,20 @@ publish: true
 
 코드는 여기[^1]
 
+별도의 연동 없이도, 클라우드워치로 대부분의 모니터링이 가능하다.
+
 ## MSK Configuration
 
-https://docs.aws.amazon.com/msk/latest/developerguide/metrics-details.html
+클라우드 워치를 통한 MSK 메트릭 전체 목록[^2]
 
-- MSK 는 4 단계의 모니터링 설정을 제공하고 있으며 기본 메트릭은 무료로 제공되나 상세 메트릭들은 비용 발생
-  - DEFAULT
+- MSK 는 아래 4 단계의 모니터링 설정을 제공하고 있으며 기본 메트릭은 무료로 제공되나 상세 메트릭들은 비용 발생
+  - **DEFAULT**
     - 클러스터 및 브로커 단위의 기본 메트릭 제공(CPU 사용량, 디스크 사용량, 네트워크 사용량 등)
-  - PER_BROKER
+  - **PER_BROKER**
     - 브로커단위 상세한 모니터링 제공
-  - PER_TOPIC_PER_BROKER
+  - **PER_TOPIC_PER_BROKER**
     - 토픽 단위 모니터링 제공
-  - PER_TOPIC_PER_PARTITION
+  - **PER_TOPIC_PER_PARTITION**
     - 파티션 단위 모니터링
 - MSK 의 설정화면에서 언제든 변경 가능하다.
   - 일부 모니터링 메트릭은 카프카 버전 2.2.1 이상 필요
@@ -32,21 +34,21 @@ https://docs.aws.amazon.com/msk/latest/developerguide/metrics-details.html
 
 ## Key metrics to watch
 
-https://docs.aws.amazon.com/msk/latest/developerguide/bestpractices.html
-https://www.datadoghq.com/blog/monitoring-kafka-performance-metrics/
-https://www.youtube.com/watch?v=R6OKibnXpBs
+[AWS MSK BestPractices](https://docs.aws.amazon.com/msk/latest/developerguide/bestpractices.html)
+[Monitoring Kafka performance metrics](https://www.datadoghq.com/blog/monitoring-kafka-performance-metrics/)
+[Best Practices for Monitoring and Improving Kafka Performance](https://www.youtube.com/watch?v=R6OKibnXpBs)
 
 - 브로커 사이드(인프라)의 모니터링, 컨슈머/프로듀서(어플리케이션) 사이드의 모니터링이 필요
 - 각 매트릭은 모두 클라우드워치에 쌓이게 되며, 알람을 설정해서 모니터링 할 수 있다.
 
 ### Infrastructure metric
 
-- Number of active controller [1] - `ActiveControllerCount`
+- Number of active controller (1) - `ActiveControllerCount`
   - 클러스터에 액티브 컨트롤러는 반드시 1개여야 한다.
   - 브로커중의 한개가 주키퍼를 통해 액티브 컨트롤러로 지정된다.
-- Number of under-replicated partitions [0] - `UnderReplicatedPartitions`
+- Number of under-replicated partitions (0) - `UnderReplicatedPartitions`
   - 노드의 CPU, 메모리 혹은 디스크 공간이 부족하여 파티션 리더로부터 데이터 싱크가 이뤄지지 않고 있는 파티션 개수
-- Number of offline partitions [0] - `OfflinePartitionsCount`
+- Number of offline partitions (0) - `OfflinePartitionsCount`
   - CPU, 메모리 혹은 디스크 공간이 부족하여 파티션 리더가 데이터를 더이상 적재하지 못하는 경우 0 이상이 된다.
 - Number of partitions per broker (< 4000) - `PartitionCount`
   - 브로커가 커버할 수 있는 파티션개수는 브로커의 종류에 따라 다르다. 최대 4000개 까지 권장되며,
@@ -73,7 +75,7 @@ https://www.youtube.com/watch?v=R6OKibnXpBs
 
 ## Datadog / Prometheus
 
-https://docs.datadoghq.com/integrations/amazon_msk/#installationhttps://quip-amazon.com/hgaOA3QTzbrm
+[Amazon Managed Streaming for Apache Kafka](https://docs.datadoghq.com/integrations/amazon_msk/#installation)
 
 - 카프카에서 제공하는 메트릭은 대부분 클라우드워치에서 제공된다.
 - MSK 에서 제공하는 모니터링 및 메트릭을 쓰지 않고 데이터독이나 프로메테우스로 직접 모니터링 시스템을 구축할 경우 open monitoring 을 옵션을 켜고 모니터링 환경을 직접 구성할 수 있다.
@@ -85,3 +87,4 @@ https://docs.datadoghq.com/integrations/amazon_msk/#installationhttps://quip-ama
 ---
 
 [^1]: [MSK Observability Demo](https://github.com/haandol/msk-observability)
+[^2]: [Amazon MSK metrics for monitoring with CloudWatch](https://docs.aws.amazon.com/msk/latest/developerguide/metrics-details.html)
