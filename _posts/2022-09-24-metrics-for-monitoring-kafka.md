@@ -29,7 +29,7 @@ publish: true
     - 파티션 단위 모니터링
 - MSK 의 설정화면에서 언제든 변경 가능하다.
   - 일부 모니터링 메트릭은 카프카 버전 2.2.1 이상 필요
-  - 기본 권장 버전은 2.8.1
+  - 기본 권장 버전은 2.6.2[^3]
 - 해당 설정을 마치고 나면 클라우드워치에서 각 메트릭을 확인할 수 있다.
 
 ## Key metrics to watch
@@ -88,3 +88,4 @@ publish: true
 
 [^1]: [MSK Observability Demo](https://github.com/haandol/msk-observability)
 [^2]: [Amazon MSK metrics for monitoring with CloudWatch](https://docs.aws.amazon.com/msk/latest/developerguide/metrics-details.html)
+[^3]: [Why is there a recommended version for MSK](https://repost.aws/questions/QU9tEfiVXLQ3qFYdUGmOtH4A/why-is-there-a-recommended-version-for-msk)
