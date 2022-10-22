@@ -61,7 +61,12 @@ EXPOSE 80
 
 위의 명령어는 ECS 에이전트가 사이드카에서 확인하기 때문에 포트를 따로 매핑해주거나 시큐리티 그룹을 열어줄 필요는 없다.
 
+## 마치며
+
+그 외에 일반적인 헬스체크 문제들은 여기[^3] 에 있다.
+
 ---
 
 [^1]: [Dockerfile reference - HealthCheck](https://docs.docker.com/engine/reference/builder/#healthcheck)
 [^2]: [ECS HealthCheck](https://docs.aws.amazon.com/ko_kr/AmazonECS/latest/developerguide/task_definition_parameters.html#container_definition_healthcheck)
+[^3]: [Fargate에서 Amazon ECS 작업에 대한 상태 확인 실패 문제를 해결하려면 어떻게 해야 합니까?](https://aws.amazon.com/ko/premiumsupport/knowledge-center/ecs-fargate-health-check-failures/)
