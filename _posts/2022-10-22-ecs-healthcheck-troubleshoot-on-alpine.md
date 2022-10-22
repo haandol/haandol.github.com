@@ -49,7 +49,17 @@ FROM golang:1.19.2-alpine AS server
 RUN apk --no-cache add curl
 
 ...
+EXPOSE 80
+
 ```
+
+이후 healthcheck 는 공식문서 가이드처럼 설정하면 된다. (포트가 80 이고 healthcheck endpoint 는 / 라고 가정)
+
+```bash
+[ "CMD-SHELL", "curl -f http://localhost/ || exit 1" ]
+```
+
+위의 명령어는 ECS 에이전트가 사이드카에서 확인하기 때문에 포트를 따로 매핑해주거나 시큐리티 그룹을 열어줄 필요는 없다.
 
 ---
 
