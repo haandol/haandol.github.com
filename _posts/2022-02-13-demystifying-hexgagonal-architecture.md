@@ -261,6 +261,15 @@ export interface TaskRepository {
 
 위의 그림대로 primary adapter 를 통해 어플리케이션 서비스를 생성(instantiation) 해주고 해당 서비스가 클라이언트에 대한 반환을 책임진다.
 
+<img src="https://res.cloudinary.com/practicaldev/image/fetch/s--43uphorj--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/33ru7jmqzice8bfsq8of.png"/>
+
+위의 그림에서 어플리케이션 서비스에서만 도메인 모델과 포트에 모두 대한 의존성이 있다. 의존성은 import 가 가능하다고 해석해도 틀리지 않다.
+
+따라서 어플리케이션 서비스는 어댑터들과 도메인모델의 오케스트레이션을 담당하게 된다.
+(도메인 이벤트를 이벤트 버스로 보내준다거나 하는 작업도 여기서 한다.)
+
+#### 도메인 객체는 어디서 만들지?
+
 ```typescript
 import { ITask } from '../interfaces/task';
 import { Task } from '../domain/task';
@@ -289,15 +298,6 @@ class TaskService {
 export default TaskService;
 ```
 
-<img src="https://res.cloudinary.com/practicaldev/image/fetch/s--43uphorj--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/33ru7jmqzice8bfsq8of.png"/>
-
-위의 그림에서 어플리케이션 서비스에서만 도메인 모델과 포트에 모두 대한 의존성이 있다. 의존성은 import 가 가능하다고 해석해도 틀리지 않다.
-
-따라서 어플리케이션 서비스는 어댑터들과 도메인모델의 오케스트레이션을 담당하게 된다.
-(도메인 이벤트를 이벤트 버스로 보내준다거나 하는 작업도 여기서 한다.)
-
-#### 도메인 객체는 어디서 만들지?
-
 원래 DDD 에서 레포지토리는 도메인 객체를 직접 외부에서 가져오고 저장하는 것이 자연스럽다. 그래서 많은 예제들에서도 레포지토리는 예외적으로 도메인객체를 바로 리턴한다.
 
 그래서 DDD 를 아는 사람은 서비스에서 도메인 객체를 만드는 toTask 부분이 이상하다고 볼 수도 있는데, 사실 이는 선택의 문제이다.
@@ -315,6 +315,8 @@ export default TaskService;
 아래는 예제를 위해 간단한 작업만 있지만, 실제로 엔티티에 변경이 일어나야 하는 모든 작업이 여기에 구현되어 있어야 한다.
 
 ```typescript
+// domain/model.ts
+
 import { JobRepository } from '../ports/job';
 import { TaskRepository } from '../ports/task';
 
