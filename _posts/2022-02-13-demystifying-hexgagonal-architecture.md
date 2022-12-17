@@ -261,6 +261,15 @@ export interface TaskRepository {
 
 위의 그림대로 primary adapter 를 통해 어플리케이션 서비스를 생성(instantiation) 해주고 해당 서비스가 클라이언트에 대한 반환을 책임진다.
 
+<img src="https://res.cloudinary.com/practicaldev/image/fetch/s--43uphorj--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/33ru7jmqzice8bfsq8of.png"/>
+
+위의 그림에서 어플리케이션 서비스에서만 도메인 모델과 포트에 모두 대한 의존성이 있다. 의존성은 import 가 가능하다고 해석해도 틀리지 않다.
+
+따라서 어플리케이션 서비스는 어댑터들과 도메인모델의 오케스트레이션을 담당하게 된다.
+(도메인 이벤트를 이벤트 버스로 보내준다거나 하는 작업도 여기서 한다.)
+
+#### 도메인 객체는 어디서 만들지?
+
 ```typescript
 import { ITask } from '../interfaces/task';
 import { Task } from '../domain/task';
@@ -289,15 +298,6 @@ class TaskService {
 export default TaskService;
 ```
 
-<img src="https://res.cloudinary.com/practicaldev/image/fetch/s--43uphorj--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/33ru7jmqzice8bfsq8of.png"/>
-
-위의 그림에서 어플리케이션 서비스에서만 도메인 모델과 포트에 모두 대한 의존성이 있다. 의존성은 import 가 가능하다고 해석해도 틀리지 않다.
-
-따라서 어플리케이션 서비스는 어댑터들과 도메인모델의 오케스트레이션을 담당하게 된다.
-(도메인 이벤트를 이벤트 버스로 보내준다거나 하는 작업도 여기서 한다.)
-
-#### 도메인 객체는 어디서 만들지?
-
 원래 DDD 에서 레포지토리는 도메인 객체를 직접 외부에서 가져오고 저장하는 것이 자연스럽다. 그래서 많은 예제들에서도 레포지토리는 예외적으로 도메인객체를 바로 리턴한다.
 
 그래서 DDD 를 아는 사람은 서비스에서 도메인 객체를 만드는 toTask 부분이 이상하다고 볼 수도 있는데, 사실 이는 선택의 문제이다.
@@ -315,6 +315,8 @@ export default TaskService;
 아래는 예제를 위해 간단한 작업만 있지만, 실제로 엔티티에 변경이 일어나야 하는 모든 작업이 여기에 구현되어 있어야 한다.
 
 ```typescript
+// domain/model.ts
+
 import { JobRepository } from '../ports/job';
 import { TaskRepository } from '../ports/task';
 
@@ -444,6 +446,10 @@ describe('create task and job', () => {
 
 ## 마치며
 
+헥사고날의 예제 코드는 여기[^7]. 다만 본글의 예제에 사용한 코드들과 무관한 내용이다.
+
+golang 으로 작성되었고 saga 패턴을 transational outbox[^8] 패턴으로 구현한다. 특정 목적을 가지고 만든 예제코드라 헥사고날만 보기에는 어려울 수 있지만 도커만 있으면 일단 로컬에서 돌려볼 수 있게 되어 있다. 사용한 패턴들도 시간나면 블로그에 써야겠다.
+
 모든 서비스가 마이크로 서비스 일 필요가 없듯이,
 
 내 도메인 모델이 빈약하거나, 아예 DDD 를 하지 않는 상황이라면 굳이 클린아키텍쳐 스타일을 쓸 필요가 없다.
@@ -462,3 +468,5 @@ describe('create task and job', () => {
 [^4]: [More Testable Code with the Hexagonal Architecture](https://www.youtube.com/watch?v=ujb_O6myknY)
 [^5]: [Test Pyramid](https://martinfowler.com/bliki/TestPyramid.html)
 [^6]: [Developing evolutionary architecture with AWS Lambda](https://aws.amazon.com/blogs/compute/developing-evolutionary-architecture-with-aws-lambda/)
+[^7]: [Hexagonal Saga Architecture](https://github.com/haandol/hexagonal-saga-architecture)
+[^8]: [Transational Outbox](https://microservices.io/patterns/data/transactional-outbox.html)
