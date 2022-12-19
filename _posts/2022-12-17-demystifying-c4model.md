@@ -129,15 +129,18 @@ C4Model 은 대상 시스템에 대해서, 어떤 사람이 해당 시스템을 
 
 ## Diagram as Code - C4-PlantUML
 
-일반적으로 UI 기반의 다이어그램툴들은 다이어그램의 수정이 다소 귀찮고, 무엇보다 이력추적이 쉽지 않다.
+일반적인 UI 기반 다이어그램 툴들은 WYSWYG 방식이므로 다이어그램의 수정이 다소 귀찮고(개발자 입장에서), 결과물이 이미지 파일등의 바이너리 이므로 이력추적이 쉽지 않다.
 
-다이어그램을 XML 형태로 표현하는 Diagrams[^5] 도 있지만 코드만 봐서는 바로 다이어그램을 머리속에 떠올리기 어렵기 때문에, 일반적으로 PlantUML 과 Mermaid 를 많이 사용한다.
+이러한 단점들을 극복하기 위해 다이어그램을 코드로 그리는 경우가 많다.
 
-둘 중에서도 PlantUML 은 C4Model 을 좀 더 쉽게 사용할 수 있는 확장을 제공하고 있기 때문에, C4-PlantUML[^6] 을 개인적으로 추천한다.
+다이어그램을 XML 형태로 표현하는 Diagrams[^5] 도 있지만 코드만 봐서는 바로 다이어그램을 머리속에 떠올리기 어렵기 때문에, 표준 형태는 아니지만 DSL 를 사용하는 PlantUML 과 Mermaid 를 많이 사용한다.
 
-- 아래 글을 읽어보면 대략 사용법을 익힐 수 있다.
-  - https://github.com/awslabs/aws-icons-for-plantuml/blob/master/AWSSymbols.md
-  - https://crashedmind.github.io/PlantUMLHitchhikersGuide/aws/aws.html#id1
+그 중에서도 PlantUML 은 C4Model 을 좀 더 쉽게 사용할 수 있는 확장인 C4-PlantUML[^6]을 제공하고 있기 때문에, 개인적으로 PlantUML 을 추천한다.
+
+PlantUML 은 아래 글을 읽어보면 대략 사용법을 익힐 수 있다.
+
+- https://github.com/awslabs/aws-icons-for-plantuml/blob/master/AWSSymbols.md
+- https://crashedmind.github.io/PlantUMLHitchhikersGuide/aws/aws.html#id1
 
 위에서 예제로 소개한 시스템인, 여행예약 시스템의 C4-PlantUML 예제는 여기[^7]에 있다.
 
