@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 쉽게 설명한 C4Model
-excerpt: demystifying C4Model
+excerpt: Demystifying C4Model
 author: vincent
 email: ldg55d@gmail.com
 tags: c4model plantuml c4-plantuml diagram-as-code
