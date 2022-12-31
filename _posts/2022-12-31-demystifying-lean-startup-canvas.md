@@ -83,9 +83,12 @@ publish: true
 
 캔버스를 만들고 위에 적힌 질문들을 팀 동료끼리 주고받다보면 버려야 하는 아이템을 빨리 찾을 수 있기 때문이다.
 
-문제가 명확한 경우 캔버스 만드는 시간은 1시간도 채 걸리지 않으므로, 아이템을 만들어보기 전에 캔버스를 꼭 그려보는 것을 추천한다.
+문제가 명확한 경우 캔버스 만드는 시간은 1시간도 채 걸리지 않으므로, 아이템을 만들어보기 전에 캔버스를 꼭 그려보자.
+
+개인적으로 온라인 무료 툴로 Lean Canvas[^3] 를 사용하고 있지만, Miro 의 템플릿부터 해서 다양한 툴들이 있기 때문에 편한툴로 사용하면 된다.
 
 ---
 
 [^1]: [Lean Canvas](https://railsware.com/blog/lean-canvas-a-tool-your-startup-needs-instead-of-a-business-plan)
 [^2]: [5 Lean canvas example](https://railsware.com/blog/5-lean-canvas-examples/)
+[^3]: [Lean Canvas App](https://leadcanvas.app/clcbo4vxs000108jwby73cutj)
