@@ -10,6 +10,10 @@ publish: true
 
 ## TL;DR
 
+기획서 또는 사업계획서를 만들기전에 린 스타트업 캔버스를 만들어보는 것을 추천한다.
+
+린 스타트업 캔버스는 매우 간단하므로[^2] 내가 기획한 아이템이라면 몇십분 이내에 작성이 가능하다.
+
 비즈니스모델 캔버스 - 현재 비즈니스의 강점과 약점을 파악하는 데 사용된다.
 
 린 스타트업 캔버스 - 새로운 비즈니스의 가능성을 파악하는 데 사용된다.
@@ -84,3 +88,4 @@ publish: true
 ---
 
 [^1]: [Lean Canvas](https://railsware.com/blog/lean-canvas-a-tool-your-startup-needs-instead-of-a-business-plan)
+[^2]: [5 Lean canvas example](https://railsware.com/blog/5-lean-canvas-examples/)
