@@ -36,7 +36,7 @@ publish: true
 
 <img src="https://railsware.com/blog/wp-content/uploads/2018/10/lc1-1.jpg"/>
 
-위의 그림에 있는 숫자로 생각해보면, 캔버스틑 다음과 같은 섹션들로 구성되어 있다.
+위의 그림에 있는 숫자를 기준으로 정리해보면, 캔버스는 다음과 같은 섹션들로 구성되어 있다.
 
 - Who, Whom? - 1, 3, 6
 - Why? - 2, 5, 9
