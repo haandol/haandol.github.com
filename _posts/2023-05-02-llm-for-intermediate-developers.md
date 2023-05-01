@@ -12,8 +12,8 @@ publish: true
 
 허깅페이스 문서만 잘 읽어도 쓰는데는 전혀 지장 없다.
 
-- https://www.youtube.com/@code4AI
-- https://www.youtube.com/@samwitteveenai
+- [https://www.youtube.com/@code4AI](https://www.youtube.com/@code4AI)
+- [https://www.youtube.com/@samwitteveenai](https://www.youtube.com/@samwitteveenai)
 
 ## 시작하며
 
@@ -166,8 +166,8 @@ infused adapter by inhibiting and amplifying inner activations or IA3 는 더 �
 
 개인적으로 주로 보는 채널은 아래와 같은데 colab 예제도 항상 제공하고 있어서 좋다. 본문에 코드를 딱히 넣지 않은 이유중 하나다.
 
-- https://www.youtube.com/@code4AI
-- https://www.youtube.com/@samwitteveenai
+- [https://www.youtube.com/@code4AI](https://www.youtube.com/@code4AI)
+- [https://www.youtube.com/@samwitteveenai](https://www.youtube.com/@samwitteveenai)
 
 ---
 
