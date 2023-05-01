@@ -55,13 +55,18 @@ git clone https://github.com/haandol/sagemaker-pipeline-yolov8-example
 따라서 Cloud9 이나 로컬에서 도커를 이용해서 빌드용 이미지를 만들어서 ECR 에 배포해야 한다.
 
 ```bash
+git clone https://github.com/haandol/sagemaker-pipeline-yolov8-example
 cd sagemaker-pipeline-yolov8-example/train
 ./build_and_push
 ```
 
+위의 스크립트는 실행한 AWS 계정에 `yolov8-training-gpu` 이름으로 ECR 레포지토리를 만들고 pytorch 1.13.1-gpu 기반 yolov8 학습환경 이미지를 배포한다.
+
 ### 사용한 데이터
 
 파인튜닝에 사용할 데이터는 Roboflow 의 [Pikachu dataset](https://universe.roboflow.com/oklahoma-state-university-jyn38/pikachu-detection/dataset/1) 이다.
+
+![dataset](/assets/img/2023/0501/dataset.png)
 
 코드에 포함된 노트북을 통해 다운받고 S3 에 업로드할 수 있다.
 
@@ -84,11 +89,21 @@ execution = pipeline.start()
 execution.describe()
 ```
 
-학습은 `m5.xlarge` 에서 진행되며 대략 20분정도 소요된다.
-
 ## 파이프라인 확인
 
+학습은 `m5.xlarge` 에서 진행되며 대략 20분정도 소요된다.
+
 세이지메이커 스튜디오 좌측 사이드바의 **홈버튼->Pipelines->pikachu-yolo-pipeline** 로 이동하여 파이프라인 실행 상태를 확인할 수 있다.
+
+![pipeline1](/assets/img/2023/0501/pipeline1.png)
+
+![pipeline2](/assets/img/2023/0501/pipeline2.png)
+
+학습이 완료되면 모델 레지스트리에 모델이 등록된다.
+
+모델레지스트리는 세이지메이커 스튜디오 좌측 사이드바의 **홈버튼->Model Registry** 에서 확인할 수 있다.
+
+![model registry](/assets/img/2023/0501/model-registry.png)
 
 ## 배포용 파이프라인 생성
 
@@ -100,7 +115,11 @@ execution.describe()
 1. 세이지메이커 스튜디오 좌측 사이드바의 **홈버튼->Deployments->Projects** 로 이동하여
    **Sagemaker templates** 탭에서, **Model Deployments** 템플릿을 클릭하고 **Select project template** 버튼을 클릭한다.
 
-2. **Name** 에 pikachu-deployments 를 입력하고, **Project template parameters** 에는 **PikachuYOLOv8** 을 입력해서 프로젝트를 생성한다.
+![project 1](/assets/img/2023/0501/project1.png)
+
+2. **Name** 에 **pikachu-deploy** 를 입력하고, **Project template parameters** 에는 **PikachuYOLOv8** 을 입력해서 프로젝트를 생성한다.
+
+![project 2](/assets/img/2023/0501/project2.png)
 
 생성후 사이드바의 **Deployments->Projects** 메뉴에 가보면 프로젝트가 생성되어 있을 것이다.
 
@@ -114,13 +133,31 @@ execution.describe()
 
 세이지메이커 스튜디오 좌측 사이드바의 **홈버튼->Models->Model Registry** 로 이동하여 **PikachuYOLOv8** 을 선택하고 가장 최근에 등록된 모델의 Status 를 Approved 로 변경해준다.
 
+모델 목록에서 마우스 우클릭을해서 상태업데이트를 해줘도 되고, 모델을 더블클릭해서 상세페이지로 간뒤 상단의 **Update status** 를 클릭해서 상태를 변경해줘도 된다.
+
+![model approve](/assets/img/2023/0501/model-approve.png)
+
 위에서 배포한 [배포용 코드파이프라인](https://ap-northeast-2.console.aws.amazon.com/codesuite/codepipeline/pipelines?region=ap-northeast-2)으로 가보면 코드가 자동으로 배포되는 것을 확인할 수 있다.
 
-기본 설정은 가장 최근에 생성된 모델중 Approved 상태인 모델을 배포한다.
+기본 설정은 가장 **최근에 생성된 모델중 Approved 상태인 모델**을 배포한다. 또한 파이프라인 기본 설정상 모델은 **ml.m5.large** 로 배포가 되는데, 인스턴스 타입을 변경하고 싶다면 파이프라인에서 생성해준 코드커밋 레포지토리의 코드를 수정해서 푸시해줘야 한다.
+
+![codepipeline1](/assets/img/2023/0501/codepipelin1.png)
+
+파이프라인은 스테이징 과 프로덕션으로 엔드포인트를 나눠서 배포하도록 자동 구성되어 있다. 아래 그림과 같이 스테이징 엔드포인트는 즉시 배포되고, 사용자가 수동으로 승인을 하면 프로덕션 엔드포인트가 배포된다.
+
+![codepipeline2](/assets/img/2023/0501/codepipelin2.png)
+
+본 글에서는 굳이 승인을 하지는 않겠지만 일반적으로 사용하는 프로세스를 자동으로 구성해주므로 편하게 쓸 수 있다.
 
 ## 세이지메이커 엔드포인트 테스트
 
+배포가 완료되면 **pikachu-deploy-staging** 이라는 이름으로 엔드포인트가 생성된다.
+
+![endpoint](/assets/img/2023/0501/endpoint.png)
+
 노트북 하단에 엔드포인트를 통해 테스트 하는 코드가 있다. 해당코드로 테스트 해보자.
+
+![inference](/assets/img/2023/0501/inference.png)
 
 ## 마치며
 
