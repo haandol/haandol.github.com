@@ -46,7 +46,20 @@ git clone https://github.com/haandol/sagemaker-pipeline-yolov8-example
 
 데이터 다운로드부터 시작해서 모델 훈련까지 모든 과정을 노트북에서 실행할 수 있다.
 
-## 데이터
+### 빌드용 이미지 배포
+
+세이지메이커 파이프라인을 VPC 에 붙여서 실행하는 경우 ECR 이미지만 쓸 수 있다.
+
+그리고 세이지메이커 스튜디오에는 도커가 없다.
+
+따라서 Cloud9 이나 로컬에서 도커를 이용해서 빌드용 이미지를 만들어서 ECR 에 배포해야 한다.
+
+```bash
+cd sagemaker-pipeline-yolov8-example/train
+./build_and_push
+```
+
+### 사용한 데이터
 
 파인튜닝에 사용할 데이터는 Roboflow 의 [Pikachu dataset](https://universe.roboflow.com/oklahoma-state-university-jyn38/pikachu-detection/dataset/1) 이다.
 
@@ -91,7 +104,7 @@ execution.describe()
 
 생성후 사이드바의 **Deployments->Projects** 메뉴에 가보면 프로젝트가 생성되어 있을 것이다.
 
-해당 프로젝트는 코드커밋 레포지토리 및 코드빌드 파이프라인을 생성해준다.
+해당 프로젝트는 코드커밋 레포지토리 및 [코드파이프라인](https://ap-northeast-2.console.aws.amazon.com/codesuite/codepipeline/pipelines?region=ap-northeast-2)을 생성해준다. (그렇다, 세이지메이커 파이프라인이 아니다. 배포는 코드파이프라인을 쓴다..)
 
 이렇게 생성된 배포 파이프라인은 모델레포지토리에서 모델상태를 변경하거나, 코드커밋 레포지토리에 변경이 발생하면 자동으로 실행된다.
 
@@ -101,7 +114,7 @@ execution.describe()
 
 세이지메이커 스튜디오 좌측 사이드바의 **홈버튼->Models->Model Registry** 로 이동하여 **PikachuYOLOv8** 을 선택하고 가장 최근에 등록된 모델의 Status 를 Approved 로 변경해준다.
 
-위에서 배포한 배포파이프라인으로 가보면 코드가 자동으로 배포되는 것을 확인할 수 있다.
+위에서 배포한 [배포용 코드파이프라인](https://ap-northeast-2.console.aws.amazon.com/codesuite/codepipeline/pipelines?region=ap-northeast-2)으로 가보면 코드가 자동으로 배포되는 것을 확인할 수 있다.
 
 기본 설정은 가장 최근에 생성된 모델중 Approved 상태인 모델을 배포한다.
 
@@ -111,7 +124,11 @@ execution.describe()
 
 ## 마치며
 
-세이지메이커 파이프라인을 쓰면 MLOps 생성과 관리를 쉽게 할 수 있다.
+모델 레지스트리에 등록하는 부분까지는 세이지메이커 스튜디오 및 세이지메이커 파이프라인에서 진행하고,
+
+모델 레지스트리에 등록된 모델을 배포하는 부분은 코드파이프라인을 통해 진행한다는 점이 약간 헷갈릴 수 있지만
+
+그래도, 해당 내용을 직접 만드는거에 비해서 세이지메이커 파이프라인을 쓰면 MLOps 프로세스를 쉽게 만들고 관리할 수 있다.
 
 ---
 
