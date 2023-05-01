@@ -12,6 +12,9 @@ publish: true
 
 허깅페이스 문서만 잘 읽어도 쓰는데는 전혀 지장 없다.
 
+- https://www.youtube.com/@code4AI
+- https://www.youtube.com/@samwitteveenai
+
 ## 시작하며
 
 최근 몇 주동안 LLM 모델로 프로토타이핑을 진행하게 되었는데, 그 몇 주동안 너무 많은 모델들이 쏟아져나와서 굉장히 고생을 한 것 같다.
