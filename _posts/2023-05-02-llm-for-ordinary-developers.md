@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 개발자로서 LLM 사용을 위해 알아두면 좋은 내용들
-excerpt: Large Language Model for intermediate developers
+excerpt: Large Language Model for ordinary developers
 author: vincent
 email: ldg55d@gmail.com
 tags: llm large-language-model gpt lora peft
