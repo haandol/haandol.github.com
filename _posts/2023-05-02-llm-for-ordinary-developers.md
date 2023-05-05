@@ -115,6 +115,8 @@ quantization 은 float16 의 공간을 8bit int 공간으로 사상해서 메모
 
 현재 잘 알려진 PEFT 방식은 adapter tuning, prefix tuning, prompt tuning, LoRA, IA3 가 있으며 각 방식의 공통점은 백본 모델의 파라미터를 건드리지 않고, 추가적인 파라미터를 학습하는 방식이라고 볼 수 있다.
 
+![LoRA](https://huggingface.co/datasets/trl-internal-testing/example-images/resolve/main/blog/stackllama/lora-animated.gif)
+
 그리고 이중에 현재 가장 많이 쓰이는 방식은 low-rank adaptation 또는 LoRA[^8] 라고 불리는 방식이다. 어느 트랜스포머에서나 적용할 수 있기 때문에, 스테이블디퓨전에서도 이미 많이 쓰이고 있었다.
 
 대충 LoRA 보다 앞서 나온 방법들은 추론시 속도에 영향을 주거나(adapter), 학습시 모델의 제약을 걸게 되는데(prefix) LoRA 는 그런 단점을 다 우회하고 적은 파라미터로 빠르게 학습할 수 있다는 장점이 있다. (매트릭스 Rank 에 대한 내용은 여기[^9]를 참조하자.)
