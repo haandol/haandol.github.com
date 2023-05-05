@@ -109,7 +109,9 @@ quantization 은 float16 의 공간을 8bit int 공간으로 사상해서 메모
 
 알파카가 7B 라마 모델에 52k 데이터를 3에폭만큼 파인튜닝 하는데 A100 8 GPU 로 3시간 걸렸다고 한다. (AWS 로 치면 p3.24xlarge 정도인데, 비용은 대략 100불정도 들었다고 한다)
 
-LLM 은 52k 정도로 작은 데이터도 학습하는데 들어가는 비용과 시간이 생각했던 것보다 크기 때문에, 비용효율적으로 학습하는 여러 방법들이 나왔고 이런 방법들을 PEFT (Parameter Efficient Fine Tuning) 이라고 부른다.
+사실 GPU 개수만큼 GPU 메모리도 중요한데, 7B 학습시 최소 70GB 의 메모리가 필요하므로 (bfloat16 기준) GPU 를 몇개 쓰느냐와 무관하게 메모리때문에 강제로 높은 사양의 GPU 인스턴스를 써야하기도 한다.
+
+여튼 LLM 은 52k 정도의 작은 데이터를 7B 정도의 크지 않은 모델에 학습하는데 들어가는 비용과 시간도 크기 때문에, 비용효율적으로 학습하는 여러 방법들이 나왔고 이런 방법들을 PEFT (Parameter Efficient Fine Tuning) 이라고 부른다.
 
 현재 잘 알려진 PEFT 방식은 adapter tuning, prefix tuning, prompt tuning, LoRA, IA3 가 있으며 각 방식의 공통점은 백본 모델의 파라미터를 건드리지 않고, 추가적인 파라미터를 학습하는 방식이라고 볼 수 있다.
 
@@ -139,6 +141,12 @@ infused adapter by inhibiting and amplifying inner activations or IA3 는 더 �
 
 따라서 메모리를 좀 더 쓰더라도 다양한 생성결과를 원한다면 해당 파라미터를 활용하면 좋다.
 
+### repetition_penalty or no_repeat_ngram_size
+
+반복되는 문장을 제거하기 위해 repetition_penalty 또는 no_repeat_ngram_size 파라미터를 설정할 수 있는데, repetition_penalty 는 반복되는 토큰에 패널티를 주는 방식이고, no_repeat_ngram_size 는 ngram 을 설정해서 해당 ngram 이 반복되지 않도록 하는 방식이다.
+
+reptition_penalty 는 명확하게 반복을 막는것이 아니며 경우에 따라 반복 자체는 나쁘지 않은 경우도 많기 때문에(e.g. Amazon 서비스에 대한 설명을 하는 봇의 경우 AWS, Amazon 이라는 단어를 서비스 앞에 계속 붙여줘야 한다.), no_repeat_ngram_size 를 사용하는 것이 긴 문장 생성시 더 좋은 결과를 얻을 수 있는 것 같다.
+
 ### 스트리밍
 
 챗UI 를 위해 보통 Gradio[^12] 를 쓰는거 같지만 이 툴은 모델을 빠르게 테스트 하라고 만든 툴이지 실제 사용자한테 서빙하라고 만든 툴은 아니다. (vicuna 는 fastchat 이라는 툴을 직접 만들어서 제공한다.)
@@ -146,6 +154,8 @@ infused adapter by inhibiting and amplifying inner activations or IA3 는 더 �
 결국 서버는 FastAPI 를 기반으로 직접 만들어야 하는데 7B 모델을 512 길이로 GPU 로 추론시 보통 20초 정도가 걸리기 때문에 스트리밍이 없이 그냥 요청을 받아서 처리하면 사용자 경험이 너무 안좋다.
 
 다행히 최근에 huggingface 모델의 generate 함수에서 streamer 파라미터를 지원해주고 있어서 (preview 라 아직 불안정 하지만) 이걸로 스트리밍을 구현할 수 있다.
+
+채팅이긴 하지만 서버측의 레이턴시가 굉장히 길기 때문에 웹소켓 보다는 그냥 SSE 정도만 해줘도 된다.
 
 ## 프롬프트 엔지니어링
 
