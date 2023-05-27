@@ -46,7 +46,9 @@ GPT2 는 파라미터수가 백만(M) 단위이지만 gpt3 부터는 십억(B) �
 
 ### ChatGPT
 
-LLM 의 민주화에 대한 시작은 ChatGPT 라고 볼 수 있다. ChatGPT 는 GPT3 에 RLHF (Reinforcement Learning with Human Feedback) 라는 기법과 기타 여러가지 방식을 적용하여 채팅을 하듯이 사용할 수 있는 모델이다.
+LLM 의 민주화에 대한 시작은 ChatGPT 라고 볼 수 있다. ChatGPT 는 GPT3.5 기반으로 턴바이턴 생성을 할 수 있는 LLM 플랫폼 이다.
+
+GPT3 에 인스트럭션 파인튜닝 기법(FLAN)과 RLHF (Reinforcement Learning with Human Feedback) 라는 학습 방법을 적용하여 사람이 좀 더 선호할만한 답변을 생성하도록 학습시킨 모델이다.
 
 ChatGPT 가 학습되고 동작하는 방식은 아래에서 잘 설명하고 있다.
 
@@ -58,19 +60,19 @@ ChatGPT 가 학습되고 동작하는 방식은 아래에서 잘 설명하고 �
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/qu-vXAFUpLE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-개인적으로 최신 모델은 크게 2갈래로 나뉘고 있는 것 같은데, GPT-J 기반의 모델들과 라마기반의 모델들이다. (bloom, t5 등 다른 모델들은 위의 두 모델에 비해 성능이 좀 떨어지는 것 같다.)
+개인적으로 최신 모델은 크게 2갈래로 나뉘고 있는 것 같은데, GPT-J 기반의 모델들과 라마기반의 모델들이다. (둘다 디코더 기반의 모델이며, seq2seq 인 t5 등 다른 모델들은 위의 두 모델에 비해 메리트가 좀 떨어지는 것 같다.)
 
-올해 초에 메타에서 Llama[^3] 를 공개하고나서 (정확히는 모델의 코드와 파라미터가 유출되어 풀리고 나서) 다양한 모델들이 나오기 시작했다. 스탠포드 대학에서 만든 Alpaca 도 라마를 기반으로 instruction learning 기법을 적용한 모델이다.
+2023년 3월에 메타에서 Llama[^3] 를 공개하고나서 (정확히는 모델의 코드와 파라미터가 유출되어 풀리고 나서) 다양한 모델들이 나오기 시작했다. 스탠포드 대학에서 만든 Alpaca 도 라마를 기반으로 instruction learning (self-instruct) 기법을 적용한 모델이다.
 
 라마는 3B 부터 65B 까지 크기가 다양하게 공개되어 있으며, KoAlpaca 같이 한국어를 데이터를 보강한 모델들도 있다.(최신 KoAlpaca 는 백본을 라마 모델이 아니라 polyglot 을 쓰는거 같고, 해당 모델은 이름대로 여러 언어를 지원하지만 일반적인 인스트럭션 기반으로 동작하는 성능 자체는 라마보다 떨어지는 것 같다.)
 
-라마 기반으로 가장 각광받는 모델들은 Alpaca[^4], Vicuna[^5], StableLM/StableVicuna (스테이블 디퓨전 만든 곳에서 만든 건데 생각보다 성능이 좋지는 않은듯) 가 있다.
+라마 기반으로 가장 각광받는 모델들은 Alpaca[^4], Vicuna[^5], StableLM/StableVicuna, WizardLM 이 있다.
 
 GPT-J 는 6B 정도의 상대적으로 크지 않은 모델이지만, 파인튜닝을 적절히 해주면 175B 의 GPT3 보다 성능이 잘 나온다고 알려져 있다.
 
 GPT-J 기반으로 최근 각광받는 모델들은 nomic-ai 의 GPT4ALL-J[^6], databrics 의 Dolly[^7] 가 있다.
 
-위의 모델들이 인기있는 이유는 모델크기가 작더라도(그래도 3B 정도) 데이터를 충분히 학습시키면 생각보다 성능이 잘나온다는 것이 검증되었기 때문이고, 이러한 특성 때문에 LoRA 같은 아이디어가 나온거 같다.
+위의 모델들이 인기있는 이유는 모델크기가 작더라도 좋은 데이터를(특히 인스트럭션) 충분히 학습시키면 생각보다 성능이 잘나온다는 것이 검증되었기 때문이고, 이러한 특성 때문에 LoRA 같은 아이디어가 나온거 같다.
 
 ### 라이센스
 
@@ -92,17 +94,19 @@ LightiningAI 에서 만든 Lit-Llama 같은 게 있지만, 코드에 대해서�
 
 하지만 상용으로 팔린 모델들의 GPU 메모리 크기가 보통 8~12GB 이므로 단순 float16 으로는 개인 컴퓨터에 모델을 올리기 어렵다. 따라서 다소 속도를 희생하더라도 이 안에 모델을 구겨넣는 방법들이 많이 나오고 있다.
 
-대표적으로 4bit/8bit quantization 이 있고, cpu offload 방식이 있다.
+대표적으로 4bit/8bit quantization 이 있고, cpu offload(주로 스테이블 디퓨전에서 쓰는) 방식이 있다.
 
 quantization 은 float16 의 공간을 8bit int 공간으로 사상해서 메모리를 절약하는 방식인데, 대신 모델 추론 시에는 다시 float16 으로 변환해서 사용하므로 추론 속도가 느려진다는 단점이 있다. (마찬가지로 서비스를 하기에는 속도가 걸린다.)
 
-참고로 AWS 의 G4DN 이나 P3 인스턴스들은 16GB GPU 메모리를 가지고 있는데, float16 으로 7B 모델을 실행하더라도 동시에 여러개의 추론을 실행하면 메모리 문제 때문에 한두개의 추론만 실행할 수 있다. 따라서 7B 모델을 여러 사용자에게 서비스하려면 속도를 다소 희생하고 quantization 을 사용하거나 cpu offload 방식을 사용해야 하거나, 여러 GPU 에 분산해서 올리고 generation 하는 방식을 써야한다.
+참고로 AWS 의 G4DN 이나 P3 인스턴스들은 16GB GPU 메모리를 가지고 있는데, float16 으로 7B 모델을 실행하더라도 동시에 여러개의 추론을 실행하면 메모리 문제 때문에 한두개의 추론만 실행할 수 있다. 따라서 7B 모델을 여러 사용자에게 서비스하려면 속도를 다소 희생하고 quantization 을 사용하거나, 하나의 모델을 여러 GPU 에 분산해서 올리고 generation 하는 방식을 써야한다.
 
 ### 데이터
 
-요새 모델들은 대부분 the pile 데이터를 기반으로, 다양한 데이터를 합쳐서 학습을 한다.
+요새 모델들은 대부분 the Pile 데이터를 기반으로, 다양한 추가 데이터를 합쳐서 학습을 한다.
 
-대표적인 추가 데이터는 Alpaca, Dolly 15k 가 있고 필요하면 알파카에서 사용한 self-instruction 방식으로 ChatGPT 의 GPT4 모델을 통해 데이터를 만들어서 사용한다.
+대부분의 추가 데이터 인스트럭션 데이터들이며, 사람이 직접 만들어내거나 LLM(ChatGPT, GPT4 등) 을 이용해서 자동으로 만들어 낸다.
+
+대표적으로 Alpaca, Dolly 15k, Evo-instruct 가 잘 알려져 있지만, 별의 별 곳에서 다양한 인스트럭션을 만들어내고 있다.
 
 ## 파인튜닝, PEFT
 
