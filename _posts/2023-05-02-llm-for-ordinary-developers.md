@@ -114,6 +114,8 @@ quantization 은 float16 의 공간을 8bit int 공간으로 사상해서 메모
 
 현재 잘 알려진 PEFT 방식은 adapter tuning, prefix tuning, prompt tuning, LoRA, IA3 가 있으며 각 방식의 공통점은 백본 모델의 파라미터를 건드리지 않고, 추가적인 파라미터를 학습하는 방식이라고 볼 수 있다.
 
+### LoRA (Low-rank Adaptation)
+
 ![LoRA](https://huggingface.co/datasets/trl-internal-testing/example-images/resolve/main/blog/stackllama/lora-animated.gif)
 
 그리고 이중에 현재 가장 많이 쓰이는 방식은 low-rank adaptation 또는 LoRA[^8] 라고 불리는 방식이다. 어느 트랜스포머에서나 적용할 수 있기 때문에, 스테이블디퓨전에서도 이미 많이 쓰이고 있었다.
@@ -123,6 +125,38 @@ quantization 은 float16 의 공간을 8bit int 공간으로 사상해서 메모
 LoRA 의 아이디어는 대충 GPT3 175B 있지만 실제로 파라미터의 랭크는 낮을 것이라는 가정이고, 파라미터의 랭크가 낮다면 백프로퍼게이션시 파라미터 델타값도 랭크가 낮을 것이기 때문에, 파라미터 델타값을 계수가 높은 더 작은 행렬로 근사시켜서 학습하면 된다는 것이다. (이 때 어텐션의 키와 밸류에 LoRA 를 적용한다.)
 
 infused adapter by inhibiting and amplifying inner activations or IA3 는 더 최근에 나온 방식인데 어텐션의 키와 밸류 매트릭스, FF 레이어 를 스케일링 하는 어댑터(?) 를 추가하는 방식인데, 얘는 내가 공부를 제대로 안해서 잘 모르겠지만, 여튼 LoRA 보다 다소 복잡한 대신 LoRA 의 1/10 파라미터인데 성능은 더 좋은 것 같다.(파라미터가 적으니 속도도 더 빠르고.. 약간 사기?)
+
+### RAG (Retrieval Augmented Generation)
+
+일반적으로 LLM 에 요청해서 답변을 받는 것은 closed-book query 라고 볼 수 있다. LLM 이 사전학습을 통해 가지고 있는 정보에 의존하기 때문이다.
+
+그런데 closed-book query 방식은 할루시네이션(hallucination) 이 잘 일어난다. 최신의 데이터를 요청하면 최신의 답변을 내놓아야 하는데, closed-book query 방식은 이미 학습 된 데이터를 기반으로 최대한 근접한 답변을 내놓기 때문이다. (이런 현상을 할루시네이션 이라고 한다.)
+
+이런 할루시네이션을 해결하는 대표적인 방법으로 위에 살펴본 fine-tuning 방식과 RAG 방식이 있다.
+
+파인튜닝은 모델이 너무 큰 경우 PEFT 를 쓰더라도 학습이 오래 걸리고, 데이터의 추가가 빈번할 경우 파인튜닝 주기를 짧게 해야하기 때문에 잦은 배포에 대한 부담도 동반된다. 또한 LLM이 새로 학습 시킨 데이터를 반드시 사용한다는 보장을 할 수 없다는 점도 문제이다.
+
+<img src="https://jalammar.github.io/images/retro/Large-GPT-vs-Retro-transformer-world-knowledge-information.png" />
+
+이런 문제를 해결하기 위해 외부 저장소를 open-book query 모델로 전환하는 방식이 RAG 이다.
+
+방법은 대략 아래와 같다.
+
+<img src="https://nextbigfuture.s3.amazonaws.com/uploads/2023/04/Screen-Shot-2023-04-05-at-8.58.22-AM-1024x588.jpg" />
+
+1. 필요한 문서들을 모두 임베딩해서 저장해둔다. (보통 OpenAI text-embedding-ada-002, SentenceBERT 등을 쓴다)
+2. 쿼리에 근접한 문서 상위 k 를 가져온다.
+3. 프롬프트 컨텍스트에 추가해서 제너레이션을 한다.
+
+### Vector database
+
+RAG 에서 임베딩 데이터를 저장해두는 곳을 vector database 라고 한다.
+
+해당 서비스의 특성에 대해서 잘 설명한 글[^18] 을 참고하면 직접 구현할 때도 도움이 될 것 이다.
+
+여튼 vector database 는 임베딩 데이터를 저장하고 쿼리할 수 있는 저장소이며, 예전에 이미지 검색을 위해 사용했던 방식과 완전히 동일하다.
+
+위의 글에 나온대로 LSH, Elasticsearch(or Opensearch) 등을 이용하면 직접 구현할 수 있지만, 테스트나 연구용으로는 Pinecone 이나 ChromaDB 등의 서비스를 많이 쓰고 있다.
 
 ## 추론
 
@@ -174,6 +208,14 @@ reptition_penalty 는 명확하게 반복을 막는것이 아니며 경우에 �
 
 따라서 좀 더 정형화되어서 모든 모델에 적용할 수 있는 방식이 나와서 프롬프트 엔지니어링을 더이상 안해도 되는 상황이 왔으면 좋겠다.
 
+## 왜 7B 이 인기인가?
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ORYQU0RYn_M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+위의 영상에서 현재 7B 가 가장 활발히 연구되는 이유로 연구비용 대비 성능의 균형을 들고 있다.
+
+실제로 대부분의 온프레미시 연구장비 및 클라우드가 16GB vram 을 제공하고 있고, 7B 를 fp16 으로 로드하면 vram 을 14GB 정도 사용하게 되므로, 생성에 필요한 메모리 등을 고려하면 7B 가 가성비상 가장 좋은 모델이 된다.
+
 ## 마치며
 
 최근 공부한 내용중 일부를 정리겸 적은거라 다소 두서가 없지만 이 글에 나온 단어들만 대략 이해하고 있어도 최근 나온 모델을 실행하고 테스트하는 데는 전혀 문제가 없을 것이다.
@@ -202,3 +244,4 @@ reptition_penalty 는 명확하게 반복을 막는것이 아니며 경우에 �
 [^15]: [LangChain](https://python.langchain.com/en/latest/index.html)
 [^16]: [AutoGPT](https://github.com/Significant-Gravitas/Auto-GPT)
 [^17]: [LLM Examples](https://github.com/haandol/LLM-Examples)
+[^18]: [Vector Database](https://www.pinecone.io/learn/vector-database/)
