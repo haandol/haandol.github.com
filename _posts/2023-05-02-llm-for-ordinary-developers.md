@@ -10,10 +10,9 @@ publish: true
 
 ## TL;DR
 
-허깅페이스 문서만 잘 읽어도 쓰는데는 전혀 지장 없다.
+코드는 여기[^17].
 
-- [https://www.youtube.com/@code4AI](https://www.youtube.com/@code4AI)
-- [https://www.youtube.com/@samwitteveenai](https://www.youtube.com/@samwitteveenai)
+notebook 폴더 아래에 있는 노트북들을 세이지메이커 gpu 인스턴스에서 실행하면 된다.
 
 ## 시작하며
 
@@ -173,7 +172,7 @@ reptition_penalty 는 명확하게 반복을 막는것이 아니며 경우에 �
 
 물론 모델 성능은 앞으로 계속 우상향하면서 올라가겠지만 사내에서 한두가지의 작업을 하기 위해 작은 모델을 여러개 운영을 하려고 하면 해당 툴이 사용하는 일반적인 방식은 동작하지 않을 가능성이 높다. (그럼 결국 그냥 손으로 프롬프트 엔지니어링 하는거랑 큰 차이가 없다.)
 
-따라서 좀 더 정형화되어서 모든 모델에 적용할 수 있는 방식이 나와서 프롬프트 엔지니어링을 더이상 안해도 되는 상황이 왔으면 좋겠다. (개인적으로 toolformer 같은게 모델별로 잘 나왔으면 좋겠다.)
+따라서 좀 더 정형화되어서 모든 모델에 적용할 수 있는 방식이 나와서 프롬프트 엔지니어링을 더이상 안해도 되는 상황이 왔으면 좋겠다.
 
 ## 마치며
 
@@ -202,3 +201,4 @@ reptition_penalty 는 명확하게 반복을 막는것이 아니며 경우에 �
 [^14]: [ReAct](https://www.promptingguide.ai/techniques/react)
 [^15]: [LangChain](https://python.langchain.com/en/latest/index.html)
 [^16]: [AutoGPT](https://github.com/Significant-Gravitas/Auto-GPT)
+[^17]: [LLM Examples](https://github.com/haandol/LLM-Examples)
