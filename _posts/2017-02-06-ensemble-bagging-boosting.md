@@ -14,8 +14,7 @@ publish: true
 
 배깅(Bootstrap AGGregatING, Bagging) 이란 테스트 데이터 샘플링(Bootstrap) 통해 여러개의 테스트 데이터를 만들고, 각 테스트 데이터를 이용해 여러개의 weak learner 를 만든다. 최종적으로 각 learner 의 예측결과를 평균내서 종합(aggregate)한다.
 
-부스팅이란(Boosting) 이란 부스트래핑된 테스트 데이터로 여러개의 weak learner 들을 순차적으로(iterative) 만드는데, i번째 learner 는 i-1 번째 learner 가 잘못 예측한 데이터에 가중치를 좀 더 주어서(boosting) 학습한다. 최종적으로 마지막에 생성된 learner 를 이용하여 예측한다.
-
+부스팅이란(Boosting) 이란 부트스트래핑된 테스트 데이터로 여러개의 weak learner 들을 순차적으로(iterative) 만드는데, i번째 learner 는 i-1 번째 learner 가 잘못 예측한 데이터에 가중치를 좀 더 주어서(boosting) 학습한다. 최종적으로 마지막에 생성된 learner 를 이용하여 예측한다.
 
 ## 시작하며
 
@@ -30,7 +29,6 @@ XGBoost와 Random Forest 를 찾아봤더니 앙상블 기법을 쓴다고 한�
 앙상블 기법을 찾아보니 배깅, 부스팅의 두가지 방법을 대표적인 예로 들고 있었다. ~~사실 xgboost 와 random forest 는 두가지와 좀 다르다~~
 
 대체 배깅과 부스팅은 무엇인가?
-
 
 ## 개념 설명엔 유튜브가 최고인듯
 
@@ -64,7 +62,7 @@ XGBoost와 Random Forest 를 찾아봤더니 앙상블 기법을 쓴다고 한�
 
 요즘 라이브러리들은 파라미터와 모델과의 관계만 알아도, 미적분 문제도 못푸는 사람이 ~~내가~~ 튜닝을 할 수 있게 잘 만들어져있기 때문이다.
 
-----
+---
 
 [^1]: Learner 란 특정한 데이터를 이용해 인스턴스화 한 모델을 말한다. Weak learner 는 최종적인 결과물보다 상대적으로 정확하지 않은 결과를 보이는 learner 이다.
 [^2]: [모델링 그리고 부스팅](http://freesearch.pe.kr/archives/4349)
