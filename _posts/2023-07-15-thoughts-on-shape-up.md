@@ -33,11 +33,11 @@ publish: true
 
 글로 된 것은 이 글[^3]과 이 글[^4]을 추천한다.
 
-<img src="https://www.prodify.group/hs-fs/hubfs/Basecamp%20Shape%20Up%20dual%20track%20process.png?width=3032&name=Basecamp%20Shape%20Up%20dual%20track%20process.png" />
-
 쉐이프 업은 애자일을 쓰고 있는 스타트업에서 초기 스타트업의 역동성을 회복하기 위한 방법으로 나왔다.
 
 초기 스타트업은 소수의 인원이 문제에 대해 완전한 컨텍스트를 공유한 상태로 프로세스 없이도 빠른 시간안에 빌드가 가능했다. 이를 가능하게 하는 것은 완전한 컨텍스트 공유를 기반으로 한 높은 자유도 이다.
+
+<img src="https://www.prodify.group/hs-fs/hubfs/Basecamp%20Shape%20Up%20dual%20track%20process.png?width=3032&name=Basecamp%20Shape%20Up%20dual%20track%20process.png" />
 
 쉐이프 업은 `fixed time, variable scope` 이라는 원칙으로 프로세스를 구성하여, 높은 자유도를 기반으로 한 프로세스의 리스크를 관리하려고 한다.
 
