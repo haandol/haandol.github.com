@@ -205,6 +205,16 @@ CFG 라는 방식을 통해 디퓨전 모델에서 클래스 없이도 컨디션
 
 특히 img2img 생성시, 사용자가 입력한 이미지를 노이즈로써 사용하는 것과 동일하기 때문에 cfg 를 높은 값(15+)으로 설정하면 strength 를 낮게 주더라도 사용자 입력 이미지를 거의 무시하고 프롬프트로 주어진 텍스트를 강하게 반영하게 된다.
 
+## Evaluation
+
+파인튜닝을 할 때 wandb 를 이용해서 눈으로 보면서 학습하는 것이 가장 확실하겠지만, 실제로 HPO (Hyperparameter Optimization) 을 위해서 수십개의 작업을 돌리려면 한계가 있다. (그리고 세이지메이커에서 HPO 를 하려면 메트릭을 설정해줘야 한다.)
+
+GAN 모델들은 성능을 평가할 때 보통 FID[^17] 를 사용한다. 드림부스 논문에서도 FID 를 사용하고 있다. (논문의 예제에는 프롬프트가 몇개 없는데 실제로는 훨씬 많은 프롬프트가 있어야 한다.)
+
+이 FID (Frechet Inception distance) 는 IS (Inception Score)[^18] 의 문제점을 보완하기 위해서 만든 방법이다.
+
+허깅페이스를 통해 스테이블 디퓨전을 학습하려면 FID 부분을 직접 구현해야하지만 크게 어려운 내용은 아니며, 실험해보면 FID 으로 평가해도 큰 무리 없는 것 같다. (프롬프트를 많이 넣어줘야한다..)
+
 ## Versions (1.5 vs 2.1)
 
 현재 civitai 같은 곳에 올라온 모델들은 대부분 1.5 인데 최신버전은 2.1 이다.
@@ -241,3 +251,5 @@ CFG 라는 방식을 통해 디퓨전 모델에서 클래스 없이도 컨디션
 [^14]: [Conditional Diffusion Model](https://youtu.be/c4y5Hvrza-k?t=1401)
 [^15]: [Cross-Attention in Transformer Architecture Can Merge Images with Text](https://www.youtube.com/watch?v=NXjvcNVkX9o)
 [^16]: [Stable Diffusion Samplers](https://stable-diffusion-art.com/samplers/)
+[^17]: [프레쳇 인셉션 거리](https://wandb.ai/wandb_fc/korean/reports/-Frechet-Inception-distance-FID-GANs---Vmlldzo0MzQ3Mzc)
+[^18]: [A simple explanation of the Inception Score](https://medium.com/octavian-ai/a-simple-explanation-of-the-inception-score-372dff6a8c7a)
