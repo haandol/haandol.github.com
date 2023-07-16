@@ -10,9 +10,9 @@ publish: true
 
 ## TL;DR
 
-프로세스와 조직구조도 콘웨이의 법칙[^1]을 고려해야 한다.
+큰 자유도는 큰 책임을 수반하며, 현실적으로 일반적인 스타트업은 그것을 감당할 능력이 없다.
 
-쉐이프 업은 조직의 구성에 따라 애자일을 대체할 수도 있다.
+일반적인 스타트업이라면 린 스타트업에 스크럼이나 칸반 정도를 섞어서 시작하자.
 
 ## 시작하며
 
@@ -34,6 +34,8 @@ publish: true
 <iframe width="560" height="315" src="https://www.youtube.com/embed/ns_i03epYD8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 개인적으로 라이언 싱어의 원래 영상[^2] 보다 위의 영상이 좀 더 쉽게 설명한거 같다.
+
+글로 된 것은 이 글[^3]과 이 글[^4]을 추천한다.
 
 <img src="https://www.prodify.group/hs-fs/hubfs/Basecamp%20Shape%20Up%20dual%20track%20process.png?width=3032&name=Basecamp%20Shape%20Up%20dual%20track%20process.png" />
 
@@ -112,7 +114,13 @@ publish: true
 
 항상 트래픽을 보고 막힌 트래픽을 제어하기 위해 적절히 관리해줘야하는 신호등, 경찰 같은 사람들이 제역할을 못하거나 오히려 트래픽을 방해하는 경우에, 신호등도 있음에도 불구하고 신호체계가 없다는 평가를 듣게 된다.
 
+프로세스는 어떠한 의도를 가지고 만들어졌다. 의도를 명확히 이해하고 있으면 어떤 경우에 프로세스를 지키고 어떤 경우에 어느정도 어겨도 되는지를 이해할 수 있다.
+
+따라서 단순히 좋은 프로세스를 복붙해서 써서는 원하는 효과를 얻을 수 없다. 모든 구성원에게 특정 프로세스를 사용하는 의도를 이해시키는 것이 먼저이고, 이 의도는 회사차원에서 중요하게 여기는 가치와 부합해야만 비로소 체계가 없는 회사에서 벗어날 수 있을 것이다.
+
 ---
 
 [^1]: [Conway's Law](https://en.wikipedia.org/wiki/Conway%27s_law)
 [^2]: [Shape up in nutshell](https://www.youtube.com/watch?v=h_8M23wVjXk)
+[^3]: [Shape up 한국어 요약](https://medium.com/@slow_scale/shape-up-%ED%95%9C%EA%B5%AD%EC%96%B4-%EC%9A%94%EC%95%BD-e6436f6eba8a)
+[^4]: [B2B SaaS 스타트업 Relate 팀의 제품 개발 프로세스](https://www.relate.kr/blog/shape-up-relate/?ref=blog.deering.co)
