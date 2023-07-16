@@ -91,7 +91,7 @@ U-Net[^7] 은 원래 세그멘테이션 맵을 만들기 위한 CNN 모델이다
 
 <img src="https://jalammar.github.io/images/stable-diffusion/unet-with-text-steps-v2.png" />
 
-U-Net 에서는 텍스트 등의 컨디션 임베딩을 이용하여 컨디셔닝을 하면서 디노이징을 해줘야 한다. 스테이블 디퓨전에서는 이 부분이 노란색 박스의 크로스어텐션으로 표시가 되어 있다. 그런데 원래 U-Net 은 CNN 모델이라 크로스어텐션을 사용할 수 없다.
+U-Net 에서는 텍스트 등의 컨디션 임베딩을 이용하여 컨디셔닝을 하면서 디노이징을 해줘야 한다. 스테이블 디퓨전에서는 이 부분이 노란색 박스의 크로스어텐션[^15]으로 표시가 되어 있다. 그런데 원래 U-Net 은 CNN 모델이라 크로스어텐션을 사용할 수 없다.
 
 따라서 원래 U-Net 의 컨볼루션 레이어 사이에 어텐션 레이어를 넣어서, 크로스어텐션 방식으로 이미지 임베딩과 컨디션 임베딩을 처리할 수 있도록 구성되어 있다.
 
@@ -202,3 +202,4 @@ CFG 라는 방식을 통해 디퓨전 모델에서 클래스 없이도 컨디션
 [^12]: [Textual Inversion](https://huggingface.co/docs/diffusers/training/text_inversion)
 [^13]: [Arcane Diffusion](https://huggingface.co/nitrosocke/Arcane-Diffusion)
 [^14]: [Conditional Diffusion Model](https://youtu.be/c4y5Hvrza-k?t=1401)
+[^15]: [Cross-Attention in Transformer Architecture Can Merge Images with Text](https://www.youtube.com/watch?v=NXjvcNVkX9o)
