@@ -149,14 +149,49 @@ Text to Image 의 입력값중 `노이즈가 있는 이미지` 를 사용자가 
 
 ## Generation
 
-text2img 생성에 신경쓸만한 파라미터는 아래 2개 정도이다.
+text2img 생성에 신경쓸만한 내용은 아래 3개 정도이다.
 
 - denosing steps (steps)
+- scheduler (or sampler)
 - guidance scale (cfg)
 
 ### Denosing Steps (디노이징 스텝)
 
 스텝은 보통 20 ~ 32 정도를 기본으로 두고 생성한 뒤에, 이미지에 노이즈가 껴 있으면 늘려주면 된다.
+
+일반적으로는 아래 설명할 cfg 가 커지면 같이 커지게 된다.
+
+<img src="https://i0.wp.com/stable-diffusion-art.com/wp-content/uploads/2023/03/image-111.png?w=1062&ssl=1" />
+
+또한 위의 그림에서 볼 수 있듯이 스텝이 커진다고해서 이미지가 더 퀄리티가 좋아지는 것이 아니며, 사용하는 샘플러에 대해 적절한 스텝크기를 찾아야 한다.
+
+### Scheduler (혹은 샘플러)
+
+스케쥴러 또는 샘플러[^16]는 지정된 매 스텝 마다 노이즈를 얼마나 있다고 예측할 것인가를 결정하는, 노이즈의 분포도라고 볼 수 있다.
+
+<img src="https://i0.wp.com/stable-diffusion-art.com/wp-content/uploads/2023/03/image-104.png?w=1048&ssl=1" />
+
+위의 그림을 기준으로 설명하면, 디노이징 스텝이 30 일 경우 U-Net 은 각 스텝별로 해당 비율 만큼의 노이즈가 포함되어 있다고 예측한다.
+
+샘플러에서 알아둬야할 키워드는 크게 2가지 이다.
+
+- Ancestral samplers
+- Karras
+
+Ancestral sampler 는 각 스텝별로 노이즈를 추가한다. 따라서 스텝을 아무리 올려도 **수렴하지 않는다**. ancestral sampler 들은 다음과 같이 이름 뒤에 a 가 붙는다.
+
+- Euler a
+- DPM2 a
+- DPM++ 2S a
+- DPM++ 2S a Karras
+
+Karras 는 nvidia 직원이름인데, 마지막 스텝에서 노이즈가 0 이 되게끔 설계된 분포도보다 마지막에 약간의 노이즈가 있게끔 설계한 분포도가 더 성능이 좋다는 내용의 논문을 썼다.
+
+<img src="https://i0.wp.com/stable-diffusion-art.com/wp-content/uploads/2023/03/image-102.png?w=1048&ssl=1" />
+
+즉, 위와 같은 분포가 Karras 분포이고, karras 분포를 반영한 샘플러들은 이름 뒤에 karras 가 붙는다.
+
+허깅페이스의 경우 `use_karras_sigmas` 라는 파라미터를 주면 사용할 수 있다.
 
 ### Classifier free guidance (cfg)
 
@@ -205,3 +240,4 @@ CFG 라는 방식을 통해 디퓨전 모델에서 클래스 없이도 컨디션
 [^13]: [Arcane Diffusion](https://huggingface.co/nitrosocke/Arcane-Diffusion)
 [^14]: [Conditional Diffusion Model](https://youtu.be/c4y5Hvrza-k?t=1401)
 [^15]: [Cross-Attention in Transformer Architecture Can Merge Images with Text](https://www.youtube.com/watch?v=NXjvcNVkX9o)
+[^16]: [Stable Diffusion Samplers](https://stable-diffusion-art.com/samplers/)
