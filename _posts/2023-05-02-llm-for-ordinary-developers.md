@@ -62,7 +62,7 @@ ChatGPT 가 학습되고 동작하는 방식은 아래에서 잘 설명하고 �
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/bSvTVREwSNw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-ChatGPT 덕분에 한때 RLHF 가 각광받았었지만 최근에는 PPO 방식의 복잡성 때문에, RLHF 대신 리워드 모델 없이 사용자의 선호도를 직접 학습시키는 (DPO - Direct Preference Optimization) 방식이 많이 연구되고 있다.
+ChatGPT 덕분에 한때 RLHF 가 각광받았었지만 최근에는 PPO 방식의 복잡성 때문에, RLHF 대신 리워드 모델 없이 사용자의 선호도를 직접 학습시키는 (DPO - Direct Preference Optimization) 방식이 많이 선호되는 것 같다.
 
 ## 최신 모델들
 
