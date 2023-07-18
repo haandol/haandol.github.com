@@ -58,7 +58,7 @@ LLM 의 민주화에 대한 시작은 ChatGPT 라고 볼 수 있다.
 
 ChatGPT 는 GPT3.5-turbo 를 기반으로 턴바이턴 생성을 할 수 있는 LLM 플랫폼 이다.
 
-GPT3 에 인스트럭션 파인튜닝 기법(구글에서 FLAN T5 로 처음 소개한)과 RLHF (Reinforcement Learning with Human Feedback) 라는 학습 방법을 적용하여, 사람이 좀 더 선호할만한 답변을 생성하도록 학습시킨 모델이다.
+GPT3 에 인스트럭션 파인튜닝 기법(구글에서 FLAN 이라는 이름으로 처음 소개한)과 RLHF (Reinforcement Learning with Human Feedback) 라는 학습 방법을 적용하여, 사람이 좀 더 선호할만한 답변을 생성하도록 학습시킨 모델이다.
 
 ChatGPT 가 학습되고 동작하는 방식은 아래에서 잘 설명하고 있다.
 
