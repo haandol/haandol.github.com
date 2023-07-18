@@ -66,7 +66,7 @@ ChatGPT 덕분에 한때 RLHF 가 각광받았었지만 최근에는 PPO 방식�
 
 ## 최신 모델들
 
-아래 영상에서 최신 모델의 대충의 흐름 정도를 볼 수 있다.
+아래 영상에서 최신 모델의 흐름을 대략적으로 확인할 수 있다.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/qu-vXAFUpLE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
