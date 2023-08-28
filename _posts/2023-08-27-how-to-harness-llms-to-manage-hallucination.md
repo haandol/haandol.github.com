@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 개발자를 위한 LLM 할루시네이션 제어방법들
+title: 개발자를 위한 LLM 할루시네이션 제어 방법들 소개
 excerpt: How to harness LLMs to manage hallucination
 author: vincent
 email: ldg55d@gmail.com
