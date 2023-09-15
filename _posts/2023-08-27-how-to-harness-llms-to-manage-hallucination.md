@@ -36,9 +36,9 @@ LLM 도 다른 ML들 처럼 데이터 전처리가 매우 중요하다.
 
 LLM 에서 자연어 전처리는 기존 NLP 보다 매우 간단한 편으로, 보통 문법교정을 한 뒤 chunk 로 나누는 작업정도만 진행한다.
 
-처리해야 하는 문서가 너무 길거나 noise 가 많이 껴있는 경우 데이터를 따로 뽑아내거나, 요약을 하는 식으로 chunk 를 나누게 된다. 
+처리해야 하는 문서가 너무 길거나 noise 가 많이 껴있는 경우 데이터를 따로 뽑아내거나, 요약을 하는 식으로 chunk 를 나누게 된다.
 
-데이터를 뽑아내기 위해 큰 LLM 을 사용하는 경우, 원본 문서의 특징 키워드를 잘 유지 하도록 프롬프트 엔지니어링을 잘 해줘야 하며, 
+데이터를 뽑아내기 위해 큰 LLM 을 사용하는 경우, 원본 문서의 특징 키워드를 잘 유지 하도록 프롬프트 엔지니어링을 잘 해줘야 하며,
 또한 chunk 를 너무 잘게 자르면 중복된 단어가 많이 들어가게 되므로 chunk 와 overlay 의 크기를 잘 결정해줘야 한다.
 
 ### RAG (Retrieval Augmented Generation)
@@ -82,7 +82,7 @@ RAG 를 사용하면 일반적으로 연관된 문서를 k 개 가져와서 사�
 
 먼저 신뢰도는 프롬프트 엔지니어링을 통해 모델이 자신의 결과에 대해, 주어진 문서들와 연관이 있는지를 스스로 판단하게 한다.
 
-예를 들어, 벡테 데이터베이스에서 3개의 문서를 가져와서 추론했다면, 모델의 생성결과가 3개의 문서 모두와 관련이 있는지 각각 물어보고 (1개의 프롬프트에서) 모두 연관이 있으면 신뢰할 수 있다는 식이다.
+예를 들어, 벡터 데이터베이스에서 3개의 문서를 가져와서 추론했다면, 모델의 생성결과가 3개의 문서 모두와 관련이 있는지 각각 물어보고 (1개의 프롬프트에서) 모두 연관이 있으면 신뢰할 수 있다는 식이다.
 
 할루시네이션의 정의를 생각해보면, 사실 여부는 LLM 이 판단할 수 없다. 따라서 외부데이터를 쿼리하는 과정이 반드시 필요하다.
 
@@ -103,6 +103,8 @@ RAG 를 사용하면 일반적으로 연관된 문서를 k 개 가져와서 사�
 이후 모델이 만든 대답을 few-shot example 을 주면서 스스로 검증할 수 있도록 유도한다.
 
 검증 기준에서 설명한대로 검증은 신뢰도를 중심으로 검증하게 되고, 여력이 되면 사실성에 대한 검증도 하면 된다.
+
+이 글[^4]에서 CoT 및 RAG 를 이용한 할루시네이션 제어 방법을 소개하고 있는데, RAG 만 사용해도 그냥 CoT 보다 성능이 더 좋으며, RAG + SelfCritic 방법을 쓰는 것이 가장 성능이 좋다.
 
 ### SelfCheckGPT
 
@@ -142,3 +144,4 @@ ICL (in context learning) 의 역할은 모델에서 정답 임베딩 위치를 
 [^1]: [github]()
 [^2]: [Gentle introduction to hallucination in LLMs](https://machinelearningmastery.com/a-gentle-introduction-to-hallucinations-in-large-language-models/)
 [^3]: [SelfCheckGPT: Zero-Resource Black-Box Hallucination Detection for Generative Large Language Models](https://arxiv.org/abs/2303.08896)
+[^4]: [Fixing Hallucinations in LLMs](https://betterprogramming.pub/fixing-hallucinations-in-llms-9ff0fd438e33)
