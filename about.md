@@ -8,8 +8,6 @@ title: About
 <div class="LI-profile-badge"  data-version="v1" data-size="medium" data-locale="en_US" data-type="horizontal" data-theme="dark" data-vanity="haandol"><a class="LI-simple-link" href='https://kr.linkedin.com/in/haandol?trk=profile-badge'>DongGyun Lee</a></div>
 <br/>
 
-나는 10년차 개발자로,
-
 ML 과 데이터, 서버리스에 관심이 많고 관련된 다양한 프로젝트들을 진행했다.
 
 모든 의사결정에 비즈니스 가치와 기술적인 가치를 모두 고려하려고 노력한다.
