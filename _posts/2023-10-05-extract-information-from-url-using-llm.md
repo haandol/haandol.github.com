@@ -108,7 +108,7 @@ Make sure each step starts with four hashes as delimiter, ####.
 ####Step 2: If the text contains informative name of entities, List them.
 
 ####Step 3: Provide summary of the text in about 50 words. \
-The summary should containing as many keywords and entities in the previous step as possible. \
+The summary should use as many keywords and entities extracted in the previous steps as possible. \
 The information must not contain any code. Do not provide any sample code in the information.
 
 ####Step 4: Convert the output into a JSON object. Make sure the JSON output is enclosed braces, {}. \
