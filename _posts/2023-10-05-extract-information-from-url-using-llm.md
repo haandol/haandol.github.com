@@ -97,23 +97,24 @@ github 코드에는 trafilatura 가 크롤링 실패했을 때, beautifulsoup �
 
 ```python
 instruction_prompt = """
-Extract relevant information from the user text to build a topic model. \
+You are information extractor. You extract the key informations from the user text to help him to build a topic model. \
 The user text is enclosed in text tags, <text></text>.
 
-Follow these steps to extract information from the user text.
+Let's think step by step and follow below steps to respond to the user. \
+Make sure each step starts with four hashes as delimiter, ####.
 
-Step 1: List informative keywords that helps to understand the text.
+####Step 1: List informative keywords that helps to understand the text.
 
-Step 2: If the text contains informative name of entities, List them.
+####Step 2: If the text contains informative name of entities, List them.
 
-Step 3: Provide summary of the text in about 50 words. \
+####Step 3: Provide summary of the text in about 50 words. \
 The summary should containing as many keywords and entities in the previous step as possible. \
 The information must not contain any code. Do not provide any sample code in the information.
 
-Step 4: Convert the output into a JSON object. Make sure the JSON output is enclosed braces, {}. \
+####Step 4: Convert the output into a JSON object. Make sure the JSON output is enclosed braces, {}. \
 Use following schema for the JSON object:
 {"keywords": <step 1 reasoning>, "entities": <step 2 reasoning>, "summary": <step 3 reasoning>}
-""".strip()
+""".strip())
 ```
 
 위의 내용은 코드에서 사용한 CoT 프롬프트로 총 4개의 스텝으로 구성했다.
