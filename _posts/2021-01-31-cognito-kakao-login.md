@@ -12,7 +12,7 @@ publish: true
 
 코드는 여기[^1].
 
-> Update 2023-12-23. OIDC 방식으로 로그인을 하려면 이 코드[^4] 를 참고하면 된다.
+> Update 2023-12-23. OIDC 방식으로 로그인을 하려면 이 코드[^3] 를 참고하면 된다.
 
 ## 시작하며
 
@@ -82,11 +82,6 @@ CDK 를 이용해서 코드를 배포하면 아래와 같은 리소스가 개인
 
 코드의 web 폴더에서 `npm run dev` 등을 이용해서 리액트 웹을 실행하고 로그인을 테스트해보면 된다.
 
-버튼이 필요해서 react-kakao-button[^3] 을 간단하게 만들었는데,
-
-현재 Nextjs 가 styled-components 모듈을 제대로 핸들링 못하는 문제가 있어서 클라이언트가 화면을 렌더링을 새로 하면 버튼 스타일일 깨지는 문제가 있다.
-(클라이언트 사이드에서 만든 dom 아이디가 서버 사이드에서 만든거랑 다른 문제. CSR로 배포했을때는 문제가 없다.)
-
 ## 마치며
 
 코드니토에서 UserPool 은 Authentication 을 위해서 사용하고, IdentityPool 은 Authorization 을 위해서 사용한다.
@@ -101,5 +96,4 @@ IdentityPool 을 이용해서도 API Gateway 에 대한 접근권한을 Authoriz
 
 [^1]: [Cognito Kakao Example](https://github.com/haandol/cognito-kakao-example)
 [^2]: [Lambda 트리거를 사용하여 사용자 풀 워크플로우 사용자 지정](https://docs.aws.amazon.com/ko_kr/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
-[^3]: [react-kakao-button](https://github.com/haandol/react-kakao-button)
-[^4]: [Cognito Kakao Example OIDC](https://github.com/haandol/cognito-kakao-example/tree/oidc)
+[^3]: [Cognito Kakao Example OIDC](https://github.com/haandol/cognito-kakao-example/tree/oidc)
