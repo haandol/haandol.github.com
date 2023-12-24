@@ -12,6 +12,8 @@ publish: true
 
 코드는 여기[^1].
 
+> Update 2023-12-23. OIDC 방식으로 로그인을 하려면 이 코드[^4] 를 참고하면 된다.
+
 ## 시작하며
 
 카카오 로그인으로 Amazon Cognito(이하 코그니토) 과 통합할 일이 있어서 작업내용을 공유한다.
@@ -95,8 +97,9 @@ IdentityPool 을 이용해서도 API Gateway 에 대한 접근권한을 Authoriz
 
 따라서 개별 사용자라는 개념이 필요하면 IdentityPool 이 아니라 UserPool 을 써야한다.
 
-----
+---
 
 [^1]: [Cognito Kakao Example](https://github.com/haandol/cognito-kakao-example)
 [^2]: [Lambda 트리거를 사용하여 사용자 풀 워크플로우 사용자 지정](https://docs.aws.amazon.com/ko_kr/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html)
 [^3]: [react-kakao-button](https://github.com/haandol/react-kakao-button)
+[^4]: [Cognito Kakao Example OIDC](https://github.com/haandol/cognito-kakao-example/tree/oidc)
