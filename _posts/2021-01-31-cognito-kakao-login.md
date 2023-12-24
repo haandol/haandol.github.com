@@ -82,6 +82,14 @@ CDK 를 이용해서 코드를 배포하면 아래와 같은 리소스가 개인
 
 코드의 web 폴더에서 `npm run dev` 등을 이용해서 리액트 웹을 실행하고 로그인을 테스트해보면 된다.
 
+## OIDC
+
+카카오도 OIDC 를 지원하므로, OIDC 방식으로 로그인을 하고 싶다면, 코드[^3] 을 참고하면 된다. OIDC 코드는 username 을 기준으로 사용자를 생성하고, 이메일을 요청하지 않는다.
+
+전체적으로 OIDC 방식이 훨씬 간편하고 좋다.. 고 생각하지만, 카카오톡에서 email 을 oidc scope 에서 제공하지 않기 때문에, userinfo endpoint 를 통해 추가적으로 가져오는 과정이 필요하다.
+
+따라서 카카오톡을 OIDC 로 연결할 경우 코드니토 유저풀에 email 을 alias 로 설정할 수 없기 때문에, 유저풀을 분리해주거나 별도의 로직을 연결해주어야 하는데 (post confirmation 훅을 이용하면 될 듯) 이런 부분을 잘 고민해서 선택하면 될 것 같다.
+
 ## 마치며
 
 코드니토에서 UserPool 은 Authentication 을 위해서 사용하고, IdentityPool 은 Authorization 을 위해서 사용한다.
