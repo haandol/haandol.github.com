@@ -70,6 +70,7 @@ fp32, fp16 모델 두개가 다 등록되어 있기 때문에, 합쳐서 대략 
 ### ComfyUI 실행
 
 ```sh
+$ cd ../.. # ComfyUI 루트 폴더로 이동
 $ python main.py --force-fp16
 ```
 
