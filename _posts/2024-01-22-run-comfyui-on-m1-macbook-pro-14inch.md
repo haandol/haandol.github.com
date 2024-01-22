@@ -85,13 +85,13 @@ $ python main.py --force-fp16
 
 먼저 체크포인트를 fp16 모델로 선택한다.
 
-![](assets/img/2024/0122/checkpoint.png)
+![](/assets/img/2024/0122/checkpoint.png)
 
 다른건 딱히 설명할 게 없고 중간에 있는 KSampler 에서 `steps`, `cfg`, `sampler_name`, `scheduler` 만 아래 그림과 같이 설정해준다.
 
 값은 각각, 1, 1.0, 'euler', 'karras' 이다.
 
-![](assets/img/2024/0122/ksampler.png)
+![](/assets/img/2024/0122/ksampler.png)
 
 각 값이 무슨 의미인지는 여기[^6]에 샘플러부분에 대충 적어두었다.
 
@@ -99,7 +99,7 @@ SDXL-Turbo 모델은 1~4 스텝이면 충분하다. 논문상에 따르면 사�
 
 이렇게 해두고 Queue Prompt 를 클릭하면 이미지가 생성된다. 첫 이미지 생성은 모델 로드 시간이 좀 걸리지만, 두번째 이미지부터는 2~3초 정도 걸린다.
 
-![](assets/img/2024/0122/result.png)
+![](/assets/img/2024/0122/result.png)
 
 ## 마치며
 
