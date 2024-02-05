@@ -53,6 +53,8 @@ SDXL-Turbo 모델은 stability.ai 에서 다운로드 받을 수 있다.
 
 여기서는 3번째 방법으로 받았다. git-lfs 는 homebrew 로 설치하면 편하다. (홈페이지에 다양한 설치방법이 있음)
 
+> git 의 특성상 clone 을 하면 레포지토리의 전체 리비전에 해당 하는 파일을 모두 다 받아오기 때문에 ML 모델을 받으면 엄청 거대한 양을 받아야 한다. 이 때 git-lfs 를 사용하면 지정된 리비전에(예, HEAD) 포함되지 않은 파일은 받아오지 않고, 포인터로 처리해서 필요할 때만 받아오기 때문에 효율적이다.
+
 ```sh
 $ brew install git-lfs
 $ git lfs install # only once per user account
