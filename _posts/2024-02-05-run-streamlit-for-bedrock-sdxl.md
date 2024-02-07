@@ -16,9 +16,9 @@ publish: true
 
 얼마전에 M1 맥북에서 SDXL-Turbo 모델을 사용해서 이미지를 생성하는 방법을 소개 했었다.[^2]
 
-이 방법도 나쁘지 않지만 도커랑 이것저것 띄운 M1 16GB 맥북에게는 상당히 부담스러운 작업이었다.
+이 방법도 나쁘지 않지만, 도커랑 이것저것 띄운 M1 16GB 맥북에게는 상당히 부담스러운 작업이었다.
 
-그래서 Amazon Bedrock SDXL 을 통해 로컬에서 이미지를 생성하는 방법을 소개한다.
+좀 더 가벼운 환경을 위해, Amazon Bedrock SDXL 을 통해 로컬에서 이미지를 생성하는 방법을 소개한다.
 
 ## Streamlit
 
@@ -83,12 +83,15 @@ if not pattern.search(text):
     print('text is in English')
     return text
 else:
-  response = self.client.translate_text(
-      Text=text,
-      SourceLanguageCode="auto",
-      TargetLanguageCode=target_language,
-  )
-  return response.get("TranslatedText")
+    L = []
+    for t in text.split(', '):
+        response = self.client.translate_text(
+            Text=t.strip(),
+            SourceLanguageCode="auto",
+            TargetLanguageCode=target_language,
+        )
+        L.append(response.get("TranslatedText", ""))
+    return ', '.join(filter(None, L))
 ```
 
 ### 글로벌 네거티브 프롬프트 사용하기
@@ -154,6 +157,10 @@ translated:  Luxurious toilet with black marble walls and tiles
 ```
 
 ![](/assets/img/2024/0207/streamlit-prompt2.png)
+
+## 마치며
+
+위에 이미지들의 하단은 캡쳐하는 과정에서 잘린 것이다. 원본은 깨끗하게 바닥까지 내려가는 이미지이다.
 
 ---
 
