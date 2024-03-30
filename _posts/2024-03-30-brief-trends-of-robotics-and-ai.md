@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Robotics + AI 트렌드 대충 정리
-excerpt: Breif summary of AI application in Robotics
+excerpt: Breif trends of AI application in Robotics
 author: vincent
 email: ldg55d@gmail.com
 tags: ai agent robotics foundation-model
