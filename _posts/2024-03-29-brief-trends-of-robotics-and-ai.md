@@ -96,7 +96,7 @@ Emergent abilities 라는 논문에서는 LLM 모델이 특정크기를 넘어�
 
 Claude, GPT-4 와 같이 1.5T 이상의 파라미터 크기를 가진 모델이 가진 emergent behavior 를 로보틱스에 활용하려면 현재로서는 파인튜닝 없이 모델을 그대로 이용할 수 밖에 없다.
 
-Code as Policies[^10]], Learning to Reward[^11], SayCan[^12] 같은 실험들을 통해 거대한 모델을 활용하여 로봇의 행동 코드 또는 RL 에 사용되는 보상함수를 LLM 을 통해 만들어내는 것이 가능하다는(그리고 더 optimal 하다) 것을 보여주고 있다.
+Code as Policies[^10], Learning to Reward[^11], SayCan[^12] 같은 실험들을 통해 거대한 모델을 활용하여 로봇의 행동 코드 또는 RL 에 사용되는 보상함수를 LLM 을 통해 만들어내는 것이 가능하다는(그리고 더 optimal 하다) 것을 보여주고 있다.
 
 아직 여러가지 제약으로 메인스트림은 아닌 것 같지만, 충분히 연구해볼 만한 분야인 것 같다.
 
