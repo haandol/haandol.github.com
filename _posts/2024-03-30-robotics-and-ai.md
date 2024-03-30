@@ -86,7 +86,7 @@ Jim Fan 은 위의 내용에서 조금 더 진행된 내용을 이번 GTC 에서
 
 가장 최근에 Covariant 가 발표한 RFM-1[^7] 도 이 방식에 속한다.
 
-RFM-1 은 8B 파라미터를 가진 멀티모달(텍스트, 이미지, 비디오, 로봇동작 액션) Transformer 모델로, RT 시리즈와 모델 아키텍쳐 측면에서는 비슷한 아이디어지만 비해 훨씬 더 앞서있는 방식이다. RFM-1 모델은 SORA[^8] 와 같이 현재 씬에 대해서 액션의 수행결과를 예측하는 영상을 생성하고 해당 영상에 맞춰 액션을 취할 수 있다. (즉, Covariant 도 SORA 와 같이 intuitive physics 를 학습하여 영상을 생성하는 모델을 가지고 있고, 앞서 GTC 영상을 비춰볼 때 NVidia 도 해당 모델을 가지고 있거나 학습 중인 것 같다. Meta 도 V-JEPA 모델을 생각해볼 때 유사한 모델을 만들 수 있는 능력은 있을 것 같다.)
+RFM-1 은 8B 파라미터를 가진 멀티모달(텍스트, 이미지, 비디오, 로봇동작 액션) Transformer 모델로, RT 시리즈와 모델 아키텍쳐 측면에서는 비슷한 아이디어지만 비해 훨씬 더 앞서있는 방식이다. RFM-1 모델은 SORA[^14] 와 같이 현재 씬에 대해서 액션의 수행결과를 예측하는 영상을 생성하고 해당 영상에 맞춰 액션을 취할 수 있다. (즉, Covariant 도 SORA 와 같이 intuitive physics 를 학습하여 영상을 생성하는 모델을 가지고 있고, 앞서 GTC 영상을 비춰볼 때 NVidia 도 해당 모델을 가지고 있거나 학습 중인 것 같다. Meta 도 V-JEPA 모델을 생각해볼 때 유사한 모델을 만들 수 있는 능력은 있을 것 같다.)
 
 ### Leverage Foundation Model for Robotics
 
@@ -115,9 +115,10 @@ Code as Policies[^10]], Learning to Reward[^11], SayCan[^12] 같은 실험들을
 [^5]: [Stanford Seminar - Robot Learning in the Era of Large Pretrained Models](https://www.youtube.com/watch?v=zggAEHm8dXc)
 [^6]: [Stanford CS25: V2 I Robotics and Imitation Learning](https://www.youtube.com/watch?v=ct4tdyyNDY4)
 [^7]: [RFM-1](https://covariant.ai/insights/introducing-rfm-1-giving-robots-human-like-reasoning-capabilities/)
-[^8]: [Sora](https://openai.com/blog/sora-first-impressions)
+[^8]: [An Interactive Agent Foundation Model](https://arxiv.org/pdf/2402.05929.pdf)
 [^9]: [Toward General-Purpose Robots via Foundation Models: A Survey and Meta-Analysis](https://arxiv.org/pdf/2312.08782.pdf)
 [^10]: [Code as Polices](https://code-as-policies.github.io/)
 [^11]: [Learning to Rewards](https://language-to-reward.github.io/)
 [^12]: [SayCan](https://say-can.github.io/)
 [^13]: [Coding a Transformer from scratch on PyTorch, with full explanation, training and inference.](https://www.youtube.com/watch?v=ISNdQcPhsts)
+[^14]: [Sora](https://openai.com/blog/sora-first-impressions)
