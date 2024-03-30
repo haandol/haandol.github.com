@@ -55,7 +55,7 @@ Jim Fan 은 위의 내용에서 조금 더 진행된 내용을 이번 GTC 에서
 
 스탠포드의 강의[^5]를 보면 학계는 에이전트보다는 모델을 중심으로 연구가 진행되고 있는 것 같다. 하지만 Code as Policies, L2R 같은 방식들이 나오면서 에이전트에 대한 관심이 다시 높아지고 있는 것 같다.
 
-딥마인드 강의에서[^6] 딥마인드는 정말 다양한 분야(?)에 대한 실험을 해오고 있었는데, 최근 RT-X 데이터셋[^7] 을 봤을 땐 딥마인드도 Foundation Model for Robotics 를 만들려고 하는 것 같다. (다만 자사 제품인 everydayrobots 를 메인으로 실험하고 있어서 embodiment 적응에 대한 실험은 어느정도 인지 알 수 없다.)
+딥마인드 강의에서[^6] 딥마인드는 정말 다양한 분야(?)에 대한 실험을 해오고 있었는데, 최근 RT-X 데이터셋[^15] 을 봤을 땐 딥마인드도 Foundation Model for Robotics 를 만들려고 하는 것 같다. (다만 자사 제품인 everydayrobots 를 메인으로 실험하고 있어서 embodiment 적응에 대한 실험은 어느정도 인지 알 수 없다.)
 
 또 이와 별개로, Mobile ALOHA, DROID 와 같이 Imitation Learning + RL (Reinforcement Learning) 을 이용한 연구도 활발히 진행되고 있다.
 
@@ -122,3 +122,4 @@ Code as Policies[^10]], Learning to Reward[^11], SayCan[^12] 같은 실험들을
 [^12]: [SayCan](https://say-can.github.io/)
 [^13]: [Coding a Transformer from scratch on PyTorch](https://www.youtube.com/watch?v=ISNdQcPhsts)
 [^14]: [Sora](https://openai.com/blog/sora-first-impressions)
+[^15]: [Open X-Embodiment](https://robotics-transformer-x.github.io/)
