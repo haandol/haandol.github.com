@@ -120,5 +120,5 @@ Code as Policies[^10]], Learning to Reward[^11], SayCan[^12] 같은 실험들을
 [^10]: [Code as Polices](https://code-as-policies.github.io/)
 [^11]: [Learning to Rewards](https://language-to-reward.github.io/)
 [^12]: [SayCan](https://say-can.github.io/)
-[^13]: [Coding a Transformer from scratch on PyTorch, with full explanation, training and inference.](https://www.youtube.com/watch?v=ISNdQcPhsts)
+[^13]: [Coding a Transformer from scratch on PyTorch](https://www.youtube.com/watch?v=ISNdQcPhsts)
 [^14]: [Sora](https://openai.com/blog/sora-first-impressions)
