@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Robotics + AI 를 시작할 때 알아두면 좋은 내용
+title: Robotics + AI 트렌드 대충 정리
 excerpt: Breif summary of AI application in Robotics
 author: vincent
 email: ldg55d@gmail.com
