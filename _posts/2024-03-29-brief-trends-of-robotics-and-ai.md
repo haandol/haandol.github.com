@@ -102,7 +102,7 @@ RFM-1 은 8B 파라미터를 가진 멀티모달(텍스트, 이미지, 비디오
 
 RFM-1 모델은 SORA[^14] 와 같이 현재 씬에 대해서 액션의 수행결과를 예측하는 영상을 생성하고 해당 영상에 맞춰 액션을 취할 수 있다. 즉, Covariant 도 SORA 와 같이 intuitive physics 를 학습하여 영상을 생성하는 모델을 가지고 있고, SORA 의 첫 기술리포트에서 언급한 대로 SORA 는 물리법칙을 기계가 시뮬레이션 하게 하는 과정에서 나온 side effect 라고 볼 수 있다.
 
-(앞서 GTC 영상을 비춰볼 때 NVidia 도 해당 모델을 가지고 있거나 학습 중인 것 같다. Meta 도 V-JEPA 모델을 생각해볼 때 유사한 모델을 만들 수 있는 능력은 있을 것 같다.)
+(앞서 GTC 영상을 비춰볼 때 NVidia 도 해당 모델을 가지고 있거나 학습 중인 것 같다. 또한 Meta 도 V-JEPA[^21] 모델을 생각해볼 때 유사한 모델을 만들 수 있는 능력이 있을 것 같다.)
 
 ### Leverage Foundation Model for Robotics
 
@@ -148,3 +148,4 @@ Code as Policies[^10], Learning to Reward[^11], SayCan[^12] 같은 실험들을 
 [^18]: [Language Agent Tree Search](https://arxiv.org/abs/2310.04406)
 [^19]: [Emergent Abilities of LLM](https://arxiv.org/abs/2206.07682)
 [^20]: [A Survey of In Context Learning](https://arxiv.org/abs/2301.00234)
+[^21]: [V-JEPA](https://ai.meta.com/blog/v-jepa-yann-lecun-ai-model-video-joint-embedding-predictive-architecture/)
