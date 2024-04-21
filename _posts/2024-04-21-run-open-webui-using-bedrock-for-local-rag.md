@@ -28,16 +28,18 @@ AWS Credential 을 설정해두고, Amazon Bedrock 에서 모델 사용을 설�
 
 기본 설정은 sentence-transformers[^3] 의 all-MiniLM-v6 를 쓰고 있는데, 이 모델은 멀티링구얼 모델이 아니라 성능이 떨어진다. 또 기본 청크 사이즈도 1500 정도로 매우 작기 때문에 설정을 이것저것 바꿔가면서 적당한 설정을 찾아보자.
 
-나는 ollama 모델로 며칠전 나온 snowflake-arctic-embed 를 쓰고 있는데 나쁘지 않은 것 같다.
+나는 ollama 모델로 며칠전 나온 snowflake-arctic-embed[^4] 를 쓰고 있는데 나쁘지 않은 것 같다.
 
 ## 마치며
 
 RAG 기능이 뭔가 잘 되는듯 안되는거 같은데, 그냥 documents 로 등록해서 쓰는게 속편한 거 같기도하다.
 
-대충 쓰기에는 적당한거 같은데, RAPTOR 같은 방식으로 RAG 성능을 올리려면 결국 streamlit 으로 직접 구현해야 하는 것 같다.
+대충 쓰기에는 적당한거 같은데, RAPTOR[^5] 같은 방식으로 RAG 성능을 올리려면 결국 streamlit 으로 직접 구현해야 하는 것 같다.
 
 ---
 
 [^1]: [Open WebUI for Amazon Bedrock](https://github.com/haandol/open-webui-bedrock)
 [^2]: [AWS 블로그 Claude3 설정](https://aws.amazon.com/ko/blogs/korea/anthropics-claude-3-haiku-model-is-now-available-in-amazon-bedrock/)
 [^3]: [Sentence Transformers](https://www.sbert.net/)
+[^4]: [Snowflake arctic embed](https://ollama.com/library/snowflake-arctic-embed)
+[^5]: [RAPTOR](https://github.com/parthsarthi03/raptor)
