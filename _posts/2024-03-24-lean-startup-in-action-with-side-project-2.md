@@ -230,7 +230,7 @@ ComposeBold 는 대략 서너달 전부터 주말에 시간날때마다 진행�
 
 ---
 
-[^1][준비하기](https://haandol.github.io/2024/01/13/lean-startup-in-action-with-side-project.html)
-[^2][ComposeBold - 영어표현사전](https://www.composebold.com/)
-[^3][스타트업 캔버스](https://lean-startup-canvas-haandol.vercel.app/)
-[^4][Vertical sliced architecture](https://www.youtube.com/watch?v=L2Wnq0ChAIA)
+[^1]: [준비하기](https://haandol.github.io/2024/01/13/lean-startup-in-action-with-side-project.html)
+[^2]: [ComposeBold - 영어표현사전](https://www.composebold.com/)
+[^3]: [스타트업 캔버스](https://lean-startup-canvas-haandol.vercel.app/)
+[^4]: [Vertical sliced architecture](https://www.youtube.com/watch?v=L2Wnq0ChAIA)
