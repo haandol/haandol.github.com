@@ -1,0 +1,21 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+  "name": "Jekyll",
+  "build": {
+    "context": "..",
+    "dockerfile": "../Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "extensions.verifySignature": false
+      },
+      "extensions": []
+    }
+  },
+  "forwardPorts": [4000],
+  "mounts": [
+    "source=${env:HOME}${env:USERPROFILE}/.ssh,target=/root/.ssh,type=bind"
+  ]
+}
