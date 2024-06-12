@@ -110,6 +110,8 @@ langsmith 가 langchain 과 가장 쉽게 호환되는 툴이기 때문에 langs
 
 Devin[^12], MultiOn[^13] 과 같은 서비스를 보면서 앞으로 필요한 에이전트를 API 처럼 제공받는 에이전시(또는 OpenAPI 같은 개념으로의 OpenAgent, Meshup) 가 나오지 않을까 하는 생각이 들었다. 이런 서비스가 나오면 개발자들은 에이전트를 직접 개발하지 않고도 쉽게 에이전트를 사용할 수 있게 되어서, 더 많은 사람들이 AI 에이전트를 사용하게 될 것이다.
 
+Langgraph 에 대한 정말 좋은 강의[^14]가 DLAI 에 무료로 올라와 있으니, 에이전트에 관심있는 사람들은 반드시 들어보는 것을 권장한다.
+
 ---
 
 [^1]: [What are AI Agents?](https://aws.amazon.com/what-is/ai-agents/)
@@ -125,3 +127,4 @@ Devin[^12], MultiOn[^13] 과 같은 서비스를 보면서 앞으로 필요한 �
 [^11]: [Amazon Bedrock Agent](https://aws.amazon.com/ko/bedrock/agents/)
 [^12]: [Devin](https://www.cognition.ai/blog/introducing-devin)
 [^13]: [MultiOn](https://www.multion.ai/)
+[^14]: [DLAI Langgraph](https://learn.deeplearning.ai/courses/ai-agents-in-langgraph/)
