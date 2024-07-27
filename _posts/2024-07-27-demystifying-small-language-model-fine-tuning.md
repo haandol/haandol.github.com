@@ -39,7 +39,7 @@ SDXL 파인튜닝 같이 HuggingFace 공식 recipe 나 남들이 올려둔 코�
 
 SLM 과 LLM 의 선택의 문제는 자연스럽게 RAG 와 Fine-tuning 의 선택의 문제로 이어진다. 실제로 내부 실험결과 LLM + RAG 로는 원하는 결과가 나오지 않아서, 파인튜닝을 해야 하기 때문에 SLM 을 선택하는 경우가 많다.
 
-RAG 와 Fine-tuning 중 무엇을 도입해야 하는가에 대해서는 다양한 관점이 있다. 최근에 MS 에서 나온 논문[^2]에서는 아래와 같은 기준을 제시한다. 
+RAG 와 Fine-tuning 중 무엇을 도입해야 하는가에 대해서는 다양한 관점이 있다. 최근에 MS 에서 나온 논문[^1]에서는 아래와 같은 기준을 제시한다. 
 
 - RAG (Retrieval-Augmented Generation)가 유리한 경우:
   - 데이터가 맥락적으로 관련성이 높을 때
@@ -54,7 +54,7 @@ RAG 와 Fine-tuning 중 무엇을 도입해야 하는가에 대해서는 다양�
 
 즉, RAG 는 초기 비용이 낮아야 하거나, 외부 데이터를 실시간으로 활용해야 할 때 유리하고, Fine-tuning 은 특정 도메인에 대한 새로운 지식이나 기술을 모델에 학습시켜야 할 때 유리하다.
 
-개인적으로, SDXL 파인튜닝 경험을 비춰봤을땐 학습 비용이 너무 많이 나오지 않을까 고민했었다. 실제로 예전에는 파인튜닝을 위한 비용이 커서 부담이 되는 정도였지만, 요즘은 하드웨어 비용도 계속 내려가고 있으며, QLoRA 같은 최신 기법들의 지원으로 파인튜닝에 대한 비용과 시간이 많이 줄어드는 추세이다.
+개인적으로, SDXL 파인튜닝 경험을 비춰봤을땐 학습 비용이 너무 많이 나오지 않을까 고민했었다. 실제로 예전에는 파인튜닝을 위한 비용이 커서 부담이 되는 정도였지만, 요즘은 하드웨어 비용도 계속 내려가고 있으며, QLoRA[^2] 같은 최신 기법들의 지원으로 파인튜닝에 대한 비용과 시간이 많이 줄어드는 추세이다.
 (예로 Gemma2-9b 을 15k 정도 되는 데이터로 3 에폭 동안 파인튜닝하는데 g5.16xlarge 로 11시간정도 걸리고 비용으로는 $50 정도 든다. 그리고 p4d.24xlarge 등의 멀티 GPU 환경에서 FSDP 나 DeepSpeed 를 쓰면 시간과 비용을 줄일 수 있다.)
 
 그리고 SLM 을 쓴다고 해서, 모든 요청을 꼭 SLM 만 써야하는 것은 아니므로, RAG 와 Fine-tuning 을 혼합해서 쓰는 것도 좋은 방법이다. 예를 들면, 시멘틱 라우팅이나 RouteLLM[^3] 같은 방법을 통해 도메인 특화된 요청과 아닌 요청을 구분해서 도메인 특화된 내용은 SLM + Fine-tuning 로 처리하고 그외는 LLM + RAG 로 처리하는 방법이 있겠다.
@@ -79,11 +79,11 @@ RAG 와 Fine-tuning 중 무엇을 도입해야 하는가에 대해서는 다양�
 
 일반적으로 파인튜닝은 Supervised Fine-tuning 이며, 데이터셋은 Alpaca 스타일의 인스트럭션 데이터셋을 많이 사용한다. 이 때, 목적에 따라 인스트럭션 데이터셋을 만들어 내는 기법이 다양하게 있기 때문에 이를 참고해서 데이터셋을 만들어야 한다.
 
-대표적인 예가 Orca[^9]  데이터 셋이 있다. 이 데이터셋은 reasoning 능력을 향상시키기 위해서 GPT-4를 기반으로 만들어진 데이터 셋이다. 이 데이터 셋은 라이센스 문제로 사용할 수 없다. 그래서 커뮤니티에서는 같은 방식으로 MIT 라이센스의 OpenOrca[^10] 라는 데이터셋을 만들었고, 우리는 이를 이용하여 파인튜닝하면 복잡한 추론 문제를 풀 수 있는 모델을 만들 수 있다.
+대표적인 예가 Orca[^9] 모델과 사용된 데이터 셋이 있다. 이 데이터셋은 SLM 의 추론 능력을 향상시키기 위해서 LLM(e.g. GPT-4)의 응답을 기반으로 만들어진 데이터 셋이다. 이 데이터 셋은 라이센스 문제로 사용할 수 없다. 그래서 커뮤니티에서는 같은 방식으로 MIT 라이센스의 OpenOrca[^10] 라는 데이터셋을 만들었고, 우리는 이를 이용하여 파인튜닝하면 복잡한 추론 문제를 풀 수 있는 모델을 만들 수 있다.
 
 ## 학습환경
 
-라이브러리는 그냥 trl[^11] 을 쓰자. 가장 무난한 것 같다.
+라이브러리는 그냥 trl[^11] 을 쓰자. 이름만 봐서는 강화학습만 할 것 같지만, 현재 일반적인 LM 강화학습의 단계가 SFT(Supervised Fine-tuning), Reward Modeling, PPO(or DPO) 로 이뤄져 있어서 3 단계를 모두 다 커버하고 있다. SFT 만 하는 경우에도 사용하기 무난하다.
 
 회사내에서 학습한다면, 기존에 있던 MLOps 환경을 그대로 써야겠지만(Amazon Sagemaker 등), 초기 설정 단계라 환경 선택에 자유롭다면 Unlsoth[^12] 를 사용해보는 것을 추천한다. 최신 기법들 (Flash attention  등)을 자동 적용한 트레이너를 라이브러리로 제공하고 있어서, trl 라이브러리와 유사하게 학습하면 학습 속도를 줄이고 메모리 사용량도 줄일 수 있다. (메모리 사용량을 줄여서 배치사이즈를 키우거나 컨텍스트 길이를 늘릴 수 있다.)
 
@@ -101,7 +101,7 @@ Deepspeed 는 MS 에서 학습/추론 최적화를 위한 라이브러리로 ZeR
 
 ### QLoRA
 
-QLoRA 는 Quantization 기법을 LoRA 학습과정에 사용하는 방법으로, LoRA 에 비해 메모리 사용량을 더 줄일 수 있다. 보통 4 또는 8bit quatization 을 사용한다. huggingface 의 peft 라이브러리를 사용하면 쉽게 적용할 수 있다.
+QLoRA 는 Quantization 기법을 LoRA 학습과정에 사용하는 방법으로, LoRA 에 비해 메모리 사용량을 더 줄일 수 있다. 보통 4bit quatization 을 사용한다.[^2] huggingface 의 peft 라이브러리를 사용하면 쉽게 적용할 수 있다.
 
 ### 샤딩 전략
 
@@ -138,6 +138,16 @@ QLoRA 는 Quantization 기법을 LoRA 학습과정에 사용하는 방법으로,
 
 ---
 
-[^1]: [What are AI Agents?](https://aws.amazon.com/what-is/ai-agents/)
-[^2]: [Whast is better? RAG? Fine-tuning?](https://x.com/_philschmid/status/1751207473535393999)
-```
+[^1]: [Whast is better? RAG? Fine-tuning?](https://x.com/_philschmid/status/1751207473535393999)
+[^2]: [QLora](https://medium.com/@dillipprasad60/qlora-explained-a-deep-dive-into-parametric-efficient-fine-tuning-in-large-language-models-llms-c1a4794b1766)
+[^3]: [RouteLLM](https://github.com/lm-sys/RouteLLM)
+[^4]: [SAM](https://segment-anything.com/)
+[^5]: [SA-1B Datset](https://ai.meta.com/datasets/segment-anything/)
+[^6]: [LMSYS Chatbot Arena Leadboard](https://chat.lmsys.org/?leaderboard)
+[^7]: [EvalPlus Leaderboard](https://evalplus.github.io/leaderboard.html)
+[^8]: [Sipder2-V](https://spider2-v.github.io/)
+[^9]: [Orca](https://www.microsoft.com/en-us/research/blog/orca-2-teaching-small-language-models-how-to-reason/)
+[^10]: [OpenOrca](https://huggingface.co/datasets/Open-Orca/OpenOrca)
+[^11]: [trl](https://huggingface.co/docs/trl/index)
+[^12]: [Unlsoth](https://unsloth.ai/)
+[^13]: [fine-tune llama3 with fsdp and q-lora](https://www.philschmid.de/fsdp-qlora-llama3)
