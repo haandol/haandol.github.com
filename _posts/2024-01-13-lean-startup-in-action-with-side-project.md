@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 사이드프로젝트로 린스타트업 실천해보기 - 준비하기 (1/3)
-excerpt: Lean Startup in Action for my side project
+excerpt: Lean Startup in Action for my side project 1/3
 author: vincent
 email: ldg55d@gmail.com
 tags: lean-startup side-project startup
