@@ -112,13 +112,14 @@ AI 에이전트(AI Agent)는 특정 작업을 수행하거나 문제를 해결�
 
 이를 위한 툴들로 많이 쓰이는 것은 다음과 같다.
 
-- Langfuse[^10]
 - Langsmith[^8]
 - Weights & Biases[^9]
+- Langfuse[^10]
+- Arize Pheonix[^16]
 
 langsmith 가 langchain 과 가장 쉽게 호환되는 툴이기 때문에 langsmith 를 사용하는 것이 가장 무난한 선택이지만 약간의 코드를 추가 한다면 비용측면에서 wandb 가 더 매력적이며, 로컬에서 테스트 하거나 비용효율적인 방식을 원한다면 langfuse 가 더 나은 선택이 될 수도 있다.
 
-특히 보안이 필요한 기업환경에서 라이센스를 같이 고려했을 땐 self-hosting 이 가능하면서 아파치 라이센스를 가지고 있는 langfuse 가 유일한 선택지로 보인다. (langfuse 는 ee 라이센스가 있지만 어차피 self-hosting 에는 해당 없어보인다.)
+특히 보안이 필요한 기업환경에서 라이센스를 같이 고려했을 땐 self-hosting 이 가능하면서 MIT 라이센스를 가지고 있는 langfuse 나 Arize Pheonix 를 사용해야 한다.
 
 ## 배포
 
@@ -158,3 +159,4 @@ Langgraph 에 대한 정말 좋은 강의[^14]가 DLAI 에 무료로 올라와 �
 [^13]: [MultiOn](https://www.multion.ai/)
 [^14]: [DLAI Langgraph](https://learn.deeplearning.ai/courses/ai-agents-in-langgraph/)
 [^15]: [Llama Index](https://docs.llamaindex.ai/en/stable/getting_started/concepts/)
+[^16]: [Arize Pheonix](https://github.com/Arize-ai/phoenix)
