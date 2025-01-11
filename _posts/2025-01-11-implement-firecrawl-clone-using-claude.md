@@ -119,4 +119,4 @@ FireCrawl 의 스크레이핑 프로세스는 대략 아래처럼 동작한다.
 [^1]: [Encbird](https://www.encbird.com)
 [^2]: [FireCrwal](https://firecrawl.dev)
 [^3]: [AgentQL](https://www.agentql.com/)
-[^4]: [ClaudeCrawl](https://github.com/haandol/claudecrawl)
+[^4]: [ClaudeCrawl](https://github.com/haandol/claudecrawl/blob/main/notebooks/claude-crawl-scraper.ipynb)
