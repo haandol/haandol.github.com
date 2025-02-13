@@ -10,6 +10,7 @@ publish: true
 
 ## TL;DR
 
+- 코드는 여기[^5]
 - Plan and Solve 기반의 Agentic workflow
 
 ## 시작하며
@@ -109,3 +110,4 @@ SerpAPI 의 경우 문서의 링크들을 주지만 해당 링크의 내용은 �
 [^2]: [Langgraph highlevel](https://langchain-ai.github.io/langgraph/concepts/high_level/)
 [^3]: [Plan and Execute](https://langchain-ai.github.io/langgraph/tutorials/plan-and-execute/plan-and-execute/)
 [^4]: [StructuredPlanner](https://docs.llamaindex.ai/en/stable/examples/agent/structured_planner/)
+[^5]: [Open-Perplexity](https://github.com/haandol/open-perplexity)
