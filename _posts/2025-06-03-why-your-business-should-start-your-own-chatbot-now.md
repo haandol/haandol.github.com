@@ -79,6 +79,8 @@ publish: true
 
 #### 사례: ChatGPT의 이미지 생성 기능 
 
+![](/assets/img/2025/0603/chatgpt-image-generation-1.png)
+
 지브리 스타일 대란이 일어나기 전에도 챗GPT는 이미지를 생성할 수 있었다.
 
 그러나 챗GPT로 이미지를 만들어서 뭔가를 해보려는 생각을 하는 사람은 극소수였다.
@@ -90,7 +92,7 @@ publish: true
 그리고 다양한 시도들을 통해 해당 기능이 어디까지 가능한지를 빠르게 찾아냈고 결국 해당 기능의 수렴 정도에 맞춰서 이미지를 생성하게 되었다. 
 
 
-![](/assets/img/2025/0603/chatgpt-image-generation.jpg)
+![](/assets/img/2025/0603/chatgpt-image-generation-2.jpg)
 
 아직 consistency 문제가 있다거나, 디테일한 오브젝트들을 텍스트로 잘 이해하지 못한다거나 한계가 알려져 있지만,
 위와 같이 기존에는 불가능하다고 알려져있기 때문에 시도조차 하지 않았던 방식으로 다양한 인풋들을 주고 있다.
