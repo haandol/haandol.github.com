@@ -2,7 +2,7 @@
 layout: post
 title: 람다가 다운스트림일때 동시성 스케일링 정책
 excerpt: How Lambda scales when it is a downstream
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: aws lambda scale concurrency downstream
 publish: true

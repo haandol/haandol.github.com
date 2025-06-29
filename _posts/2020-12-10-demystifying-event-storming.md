@@ -2,7 +2,7 @@
 layout: post
 title: 쉽게 설명한 이벤트 스토밍
 excerpt: Demystifying Event Storming
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: event-storming tutorial
 publish: true

@@ -2,7 +2,7 @@
 layout: post
 title: 개인 프로젝트 시작을 위한 가이드라인
 excerpt: Simple guideline to start your own pet project
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: pet-project guideline best-practice
 publish: true

@@ -2,7 +2,7 @@
 layout: post
 title: Kafka Schema Registry 에서 Protobuf 사용하기
 excerpt: Use Kafka schema-registry with Protobuf
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: kafka schema-registry protocol-buffer protobuf
 publish: true

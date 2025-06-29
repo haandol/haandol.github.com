@@ -2,7 +2,7 @@
 layout: post
 title: RFTCR - 에이전트 주도 소프트웨어 개발을 위한 새로운 SDLC 프레임워크
 excerpt: RFTCR - A new SDLC framework, RFTCR, for agentic software development
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agent-driven-development agentic-ide cursor vibe-coding
 publish: true

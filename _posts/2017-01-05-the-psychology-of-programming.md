@@ -2,7 +2,7 @@
 layout: post
 title: 프로그래밍 심리학을 읽고 생각 정리
 excerpt: 나는 잘못살지 않았다는 위로를 받고 짧게 정리
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: book-review programmer
 publish: true

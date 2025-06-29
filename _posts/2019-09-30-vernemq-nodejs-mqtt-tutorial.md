@@ -2,7 +2,7 @@
 layout: post
 title: Node.js 를 이용한 MQTT 튜토리얼
 excerpt: MQTT tutorial using Node.js
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: mqtt nodejs k8s kubernetes docker tutorial helm mq
 publish: false

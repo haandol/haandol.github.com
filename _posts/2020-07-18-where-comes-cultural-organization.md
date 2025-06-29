@@ -2,7 +2,7 @@
 layout: post
 title: 조직문화에 대한 개인적인 생각 - (1/2)
 excerpt: Thoughts on organizational culture - 1/2
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: thoughts culture organization company series
 publish: true

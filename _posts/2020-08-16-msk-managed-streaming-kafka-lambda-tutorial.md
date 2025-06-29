@@ -2,7 +2,7 @@
 layout: post
 title: MSK(Managed Streaming for Kafka) + 람다(Lambda) 써보기
 excerpt: MSK(Managed Streaming for Kafka) Lambda tutorial
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: aws msk kafka lambda tutorial
 publish: true

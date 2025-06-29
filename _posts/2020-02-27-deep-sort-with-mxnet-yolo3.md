@@ -2,7 +2,7 @@
 layout: post
 title:  DeepSORT 로 사람 트래커 만들기
 excerpt: DeepSORT with MXNet YOLO3
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: deepsort mxnet yolo yolov3 object-tracking machine-learning
 publish: true

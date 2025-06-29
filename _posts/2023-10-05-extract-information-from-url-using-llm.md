@@ -2,7 +2,7 @@
 layout: post
 title: LLM 을 이용해서 웹에서 데이터 추출하기
 excerpt: Extract information from URL text using LLM
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: llm gen-ai web-crawler data bedrock claude2
 publish: true

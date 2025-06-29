@@ -2,7 +2,7 @@
 layout: post
 title: AWS ECS + CodePipeline(CodeDeploy) 트러블슈팅
 excerpt: ECS CodePipeline(CodeDeploy) Trouble shooting
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: aws codepipeline ecs troubleshooting bug-report bug
 publish: true

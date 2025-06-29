@@ -2,7 +2,7 @@
 layout: post
 title: Beebot - 서버리스 파이썬 슬랙봇
 excerpt: Beebot - Serverless python slack bot
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: slack scriptable plugin slackbot beebot tutorial serverless aws
 publish: true

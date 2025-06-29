@@ -2,7 +2,7 @@
 layout: post
 title: 스타트업에서 플라이 휠 작성하는 방법
 excerpt: Thoughts on Flywheel for Startup
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: startup flywheel thoughts
 publish: true

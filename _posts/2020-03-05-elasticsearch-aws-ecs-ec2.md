@@ -2,7 +2,7 @@
 layout: post
 title: 엘라스틱서치 7.6 을 ECS EC2 에서 사용해보자
 excerpt: Elasitcsearch 7.6 cluster on AWS ECS with CDK
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: elasticsearch aws ecs ec2 cluster es cdk
 publish: true

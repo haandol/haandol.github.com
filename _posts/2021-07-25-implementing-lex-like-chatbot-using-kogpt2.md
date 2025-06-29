@@ -2,7 +2,7 @@
 layout: post
 title: KoGPT2 로 Amazon Lex 같은 다이얼로그 기반의 챗봇 만들기
 excerpt: Implement close-domain chatbot using KoGPT2 
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: kogpt2 transformers huggingface lex gpt chatbot
 publish: true

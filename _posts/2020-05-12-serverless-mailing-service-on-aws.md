@@ -2,7 +2,7 @@
 layout: post
 title: AWS 로 서버리스 메일링 서비스 만들어보기
 excerpt: Making serverless mailing service on AWS
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: cdk serverless mailing tutorial aws dynamodb sqs lambda ses
 publish: true
@@ -115,7 +115,7 @@ records = [{
     'id': now + 'ldg55d',
     'event_type': 'mail',
     'email': 'ldg55d@gmail.com',
-    'first_name': 'Vincent',
+    'first_name': 'haandol',
     'last_name': 'Lee',
 }]
 

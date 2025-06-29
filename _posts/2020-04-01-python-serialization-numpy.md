@@ -2,7 +2,7 @@
 layout: post
 title: Python 에서 Numpy 배열을 효과적으로 Serialization 하는 방법
 excerpt: Serialize numpy array efficiently in Python
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: serialization python array numpy sagemaker-endpoint
 publish: true

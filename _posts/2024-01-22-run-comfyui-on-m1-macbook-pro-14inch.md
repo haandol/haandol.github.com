@@ -2,7 +2,7 @@
 layout: post
 title: M1 맥북에서 ComfyUI 로 SDXL-Turbo 로 이미지 생성하기
 excerpt: Inference SDXL-Turbo on M1 Macbook Pro using ComfyUI
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: sdxl stable-diffusion sdxl-turbo comfyui m1
 publish: true

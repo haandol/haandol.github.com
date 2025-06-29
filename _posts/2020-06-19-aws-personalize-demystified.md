@@ -2,7 +2,7 @@
 layout: post
 title: 쉽게 설명한 AWS Personalize
 excerpt: AWS Personalize Demystified
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: cdk personalize aws tutorial
 publish: true

@@ -2,7 +2,7 @@
 layout: post
 title: AI Agent 개발 할 때 고민해볼 내용
 excerpt: Demystifying AI Agent for Developers
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: ai agent llm
 publish: true

@@ -2,7 +2,7 @@
 layout: post
 title: MXNet SSD 디텍터를 AWS Elastic Inference 에 올리기
 excerpt: MXNet SSD Detector on AWS EI
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: mxnet ssd eia aws ei elastic-inference
 publish: true

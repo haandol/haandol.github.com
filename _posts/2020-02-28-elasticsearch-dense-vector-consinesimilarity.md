@@ -2,7 +2,7 @@
 layout: post
 title:  엘라스틱 서치로 이미지 검색 백엔드 만들기
 excerpt: CosineSimilarity using Elasticsearch
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: elasticsearch dense_vector cosineSimiarity dotProduct es
 publish: true

@@ -2,7 +2,7 @@
 layout: post
 title: 블로그 소개
 excerpt: 머신러닝을 한번도 배워보지 않은, 수학을 못하는 개발자를 위한 머신러닝 노트
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: start-blog machine-learning progmatic
 publish: true

@@ -2,7 +2,7 @@
 layout: post
 title: 사이드프로젝트로 린스타트업 실천해보기 - 이터레이션 (2/3)
 excerpt: Lean Startup in Action for my side project 2/3
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: lean-startup side-project startup
 publish: true

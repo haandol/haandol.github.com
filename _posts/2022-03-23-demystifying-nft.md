@@ -2,7 +2,7 @@
 layout: post
 title: 쉽게 설명한 NFT - 1/2
 excerpt: Demystifying NFT(ERC721) - 1/2
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: nft ethereum erc721 erc20 eip721 blockchain coin fraud
 publish: true

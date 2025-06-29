@@ -2,7 +2,7 @@
 layout: post
 title: 쉽게 설명한 린 스타트업 캔버스
 excerpt: Demystifying Lean Startup Canvas
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: lean-startup canvas
 publish: true

@@ -2,7 +2,7 @@
 layout: post
 title: SLM 파인튜닝 하기 전에 알아두면 좋은 내용 - 1/2
 excerpt: Demystifying Small Language Model(SLM) Fine-tuning - 1/2
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: ai llm slm fine-tuning fsdp deepspeed aws sagemaker
 publish: true

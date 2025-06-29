@@ -2,7 +2,7 @@
 layout: post
 title: Streamlit + Bedrock SDXL 로 GPU 없이 이미지 생성하기
 excerpt: Use SDXL on Sagemaker Bedrock via Streamlit
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: sdxl stable-diffusion bedrock aws streamlit
 publish: true

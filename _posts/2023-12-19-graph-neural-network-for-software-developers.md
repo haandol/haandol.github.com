@@ -2,7 +2,7 @@
 layout: post
 title: 개발자를 위한 Graph Neural Network (GNN)
 excerpt: Graph Neural Network (GNN) for Software Developers
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: graph gnn deeplearning machinelearning
 publish: true

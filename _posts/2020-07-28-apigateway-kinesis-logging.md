@@ -2,7 +2,7 @@
 layout: post
 title: API Gateway 를 이용한 클릭스트림 로깅
 excerpt: Clickstream Logging System using API Gateway and Kinesis
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: aws api-gateway kinesis firehose logging system
 publish: true

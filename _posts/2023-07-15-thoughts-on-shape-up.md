@@ -2,7 +2,7 @@
 layout: post
 title: Shape Up 프로세스에 대한 생각
 excerpt: Thoughts on Shape Up
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: shape-up process agile lean-startup
 publish: true

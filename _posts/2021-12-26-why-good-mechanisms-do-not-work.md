@@ -2,7 +2,7 @@
 layout: post
 title: 동작하는 메커니즘
 excerpt: Why good mechanisms do not work?
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: culture mechanism intetion
 publish: true

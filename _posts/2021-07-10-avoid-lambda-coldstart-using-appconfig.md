@@ -2,7 +2,7 @@
 layout: post
 title: AWS AppConfig 를 이용해서 람다 콜드스타트 우회하기
 excerpt: Avoid AWS Lambda cold start using AWS AppConfig
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: serverless lambda aws cold-start appconfig cloud extensions
 publish: true

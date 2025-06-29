@@ -2,7 +2,7 @@
 layout: post
 title: 다중 어카운트 아마존 코드커밋 레포지토리 복제하기
 excerpt: Replicate Amazon Codecommit repositories across accounts
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: codecommit replication croca repository cross-account
 publish: true

@@ -2,7 +2,7 @@
 layout: post
 title: Typescript2 서버 튜토리얼 - 1/4
 excerpt: Typescript + Node
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: typescript typescript2 nodejs tutorial
 publish: true
@@ -155,7 +155,7 @@ class Greeter {
     }
 };
 
-const greeter = new Greeter("Vincent");
+const greeter = new Greeter("haandol");
 console.log(greeter.greet());
 ```
 
@@ -184,7 +184,7 @@ $ tsc
 
 ```bash
 $ node build/index.js
-Hello world, Vincent!!
+Hello world, haandol!!
 ```
 
 잘 출력되는 것을 볼 수 있다.
@@ -249,7 +249,7 @@ class Greeter {
     }
 };
 
-const greeter = new Greeter("Vincent");
+const greeter = new Greeter("haandol");
 console.log(greeter.hugeGreet());
 ```
 
@@ -261,7 +261,7 @@ $ npm start
 > cinnamon@1.0.0 start /Users/haandol/git/cinnamon
 > tsc; node ./build/index.js
 
-HELLO WORLD, Vincent!!!!!
+HELLO WORLD, haandol!!!!!
 ```
 
 ## 마치며

@@ -2,7 +2,7 @@
 layout: post
 title: Nextjs 프로젝트 Cloudfront + Private S3 로 호스팅하기
 excerpt: Hosting Nextjs project via Cloudfront and private S3
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: nextjs react cloudfront s3 hosting cdk origin-access-identity oai
 publish: true

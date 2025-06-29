@@ -2,7 +2,7 @@
 layout: post
 title:  MXNet YOLO 파인튜닝으로 피카츄를 찾아보자
 excerpt: Finetune YOLO3
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: yolo yolov3 object-detection finetuning transfer-learning gluon mxnet pikachu machine-learning
 publish: false

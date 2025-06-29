@@ -2,7 +2,7 @@
 layout: post
 title: 채용 프로세스를 만들 때(혹은 개선할 때) 고려할 만한 내용들
 excerpt: How to setup solid hiring process
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: hiring principle lens bar process
 publish: true

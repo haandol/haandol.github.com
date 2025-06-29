@@ -2,7 +2,7 @@
 layout: post
 title: AWS SSM 배스천호스트 터널링으로 RDS(PGDB) 에 연결하기
 excerpt: Connect to RDS from localhost using AWS SSM BastionHost portforwarding
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: cdk rds portforward aws bastion-host tunneling pgdb postgresql postgres socat
 publish: true

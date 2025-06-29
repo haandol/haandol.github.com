@@ -2,7 +2,7 @@
 layout: post
 title: 경력직 개발자 커리어 패스 정리
 excerpt: 웹 개발 취준생의 커리어 패스 정리
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: career-path career job hiring hire-me
 publish: true

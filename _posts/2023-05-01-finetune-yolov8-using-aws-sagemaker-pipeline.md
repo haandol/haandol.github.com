@@ -2,7 +2,7 @@
 layout: post
 title: 세이지메이커 파이프라인으로 YOLOv8 파인튜닝 해보기
 excerpt: Fine-tune YOLOv8 using AWS Sagemaker Pipeline
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: yolov8 sagemaker-pipeline sagemaker aws fintune object-detection mot
 publish: true

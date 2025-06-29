@@ -2,7 +2,7 @@
 layout: post
 title: 쉽게 설명한 옵저버빌리티와 오픈텔레메트리 - 2/2
 excerpt: Demystifying Observability and Opentelemtry, 2 of 2
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: observability opentelemetry otel lightstep xray aws
 publish: true

@@ -2,7 +2,7 @@
 layout: post
 title: Perplexity 는 내부적으로 어떻게 동작할까?
 excerpt: How does the Perplexity works internally?
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: ai agent system architecture perplexity
 publish: true

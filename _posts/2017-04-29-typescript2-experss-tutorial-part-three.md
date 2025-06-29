@@ -2,7 +2,7 @@
 layout: post
 title: Typescript2 서버 튜토리얼 - 3/4
 excerpt: Typescript + MongoDB
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: typescript2 typescript express mongodb mongoose nodejs
 publish: true

@@ -2,7 +2,7 @@
 layout: post
 title: 쉽게 설명한 클린 / 헥사고날 아키텍쳐
 excerpt: Demystifying hexagonal(ports and adapters) architecture
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: hexagonal-architecture clean-architecture architecture ports-and-adapters onion
 publish: true

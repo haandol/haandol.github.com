@@ -2,7 +2,7 @@
 layout: post
 title: 왜 비즈니스들은 지금 자신만의 챗봇을 만들어야 하는가?
 excerpt: Why your business should start your own GenAI chatbot now
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: ai agent chatbot genai flywheel
 publish: true

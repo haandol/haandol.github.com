@@ -2,7 +2,7 @@
 layout: post
 title: 채용 프로세스를 진행할 때 고려할 내용들
 excerpt: How to conduct solid hiring process
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: hiring techinique star
 publish: true

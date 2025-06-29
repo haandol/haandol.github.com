@@ -2,7 +2,7 @@
 layout: post
 title: MXNet YOLO3 로 사람 디텍터 만들어 보기
 excerpt: Pretrained MXNet YOLO3
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: yolo yolo3 yolov3 object-detection gluon mxnet machine-learning
 publish: true

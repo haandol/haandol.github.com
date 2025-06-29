@@ -2,7 +2,7 @@
 layout: post
 title: MSK 카프카 모니터링 메트릭
 excerpt: basic metrics for monitoring MSK(Kafka)
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: msk kafka monitoring metrics cdk
 publish: true

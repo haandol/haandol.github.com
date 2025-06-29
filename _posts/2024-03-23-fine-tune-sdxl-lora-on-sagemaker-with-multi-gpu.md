@@ -2,7 +2,7 @@
 layout: post
 title: Sagemaker 에서 SDXL LoRA Multi-GPU 파인튜닝하기
 excerpt: Fine-tune SDXL LoRA on Sagemaker with Multi-GPU
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: sdxl lora stable-diffusion sagemaker multi-gpu fine-tuning
 publish: true

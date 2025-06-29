@@ -2,7 +2,7 @@
 layout: post
 title: 밸브(Valve) 탈락 메일을 받았다.
 excerpt: 밸브 같은 사람이 되고싶다.
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: dairy valve recruit reply branding
 publish: true

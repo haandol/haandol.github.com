@@ -2,7 +2,7 @@
 layout: post
 title: AWS API Gateway + Lambda 로 A/B 테스트하기
 excerpt: Use AWS API Gateway and Lambda for A/B Testing
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: aws tutorial abtest apigw api-gateway lambda version alias stage stage-variables
 publish: true

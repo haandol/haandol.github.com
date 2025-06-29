@@ -2,7 +2,7 @@
 layout: post
 title: Redis cluster 튜토리얼
 excerpt: Redis cluster + Proxy
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: redis redis-cluster proxy predixy
 publish: true

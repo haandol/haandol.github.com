@@ -2,7 +2,7 @@
 layout: post
 title: Amazon ECS 에서 헬스체크 실패시 확인할 내용
 excerpt: Amazon ECS Troubleshooting - Healthcheck on Alpine
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: troubleshoot amazon ecs healthcheck alpine curl
 publish: true

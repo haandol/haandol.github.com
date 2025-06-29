@@ -2,7 +2,7 @@
 layout: post
 title: AI 에이전트 시스템을 설계할 때 알아두면 좋은 내용
 excerpt: Architecting an agentic system
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: ai agent system architecture
 publish: true

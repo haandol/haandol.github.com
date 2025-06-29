@@ -2,7 +2,7 @@
 layout: post
 title: 쉽게 설명한 에이전트 주도 개발
 excerpt: Demystifying agent driven development process
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agent-driven-development agentic-ide cursor windsurf cline roo aider
 publish: true

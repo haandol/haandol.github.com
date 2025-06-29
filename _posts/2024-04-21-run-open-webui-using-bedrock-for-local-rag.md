@@ -2,7 +2,7 @@
 layout: post
 title: Open WebUI 와 Amazon Bedrock 으로 이용해서 로컬에서 RAG UI 돌려보기
 excerpt: Run Open WebUI using Amazon Bedrock for local RAG
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: rag ollama open-webui amazon bedrock claude3
 publish: true

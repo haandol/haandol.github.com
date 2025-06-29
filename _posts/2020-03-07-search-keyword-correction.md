@@ -2,7 +2,7 @@
 layout: post
 title: 아주 간단한 한국어 검색어 교정기 만들기
 excerpt: Simple search keyword correction tutorial
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: python pandas search keyword correction unicode
 publish: true

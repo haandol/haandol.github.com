@@ -2,7 +2,7 @@
 layout: post
 title: Amazon API Gateway 에서 웹소켓 채팅방 만들기
 excerpt: Amazon API Gateway websocket chatroom tutorial
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: aws api-gateway websocket cdk chatroom tutorial
 publish: true

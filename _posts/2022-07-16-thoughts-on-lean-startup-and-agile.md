@@ -2,7 +2,7 @@
 layout: post
 title: 린 스타트업과 애자일의 차이
 excerpt: Thoughts on Lean-Startup and Agile
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: lean-startup agile thoughts
 publish: true

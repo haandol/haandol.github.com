@@ -2,7 +2,7 @@
 layout: post
 title: Bedrock + NLI (Natural Language Inference) 로 제로샷 분류기 만들기
 excerpt: Building zero-shot classifier using NLI (Natural Language Inference) and Bedrock
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: llm gen-ai web-crawler data bedrock claude2 nli natural-language-inference classifier zero-shot
 publish: true

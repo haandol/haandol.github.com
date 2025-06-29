@@ -2,7 +2,7 @@
 layout: post
 title: 처음 DDD 를 공부할 때 알아두면 좋을 내용들
 excerpt: Thoughts for Domain Driven Design starters
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: ddd domain-drive-design thoughts
 publish: true

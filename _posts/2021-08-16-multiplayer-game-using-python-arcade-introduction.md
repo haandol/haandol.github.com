@@ -2,7 +2,7 @@
 layout: post
 title: Python arcade 를 이용해서 멀티플레이어 게임 만들기
 excerpt: Develop multiplayer game using Python arcade
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: python arcade multiplay network game
 publish: true

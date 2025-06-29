@@ -2,7 +2,7 @@
 layout: post
 title: 좋은 회의를 하는 방법
 excerpt: Result driven meeting
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: great meeting manager
 publish: true

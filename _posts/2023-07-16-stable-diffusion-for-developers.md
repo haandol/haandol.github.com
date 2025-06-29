@@ -2,7 +2,7 @@
 layout: post
 title: 개발자로서 StableDiffusion 사용을 위해 알아두면 좋은 내용들
 excerpt: Diffusion model for ordinary developers
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: stable-diffusion gen-ai diffusion-model
 publish: true

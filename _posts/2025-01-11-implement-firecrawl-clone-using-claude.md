@@ -2,7 +2,7 @@
 layout: post
 title: Claude 로 DOM 구조에 자유로운 웹 스크레이핑 기능을 만들어보기 (Firecrawl clone)
 excerpt: Implement Firecrawl clone using Claude
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: ai agent firecrawl web-scraping scraping web-crawl crawler
 publish: true

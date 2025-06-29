@@ -2,7 +2,7 @@
 layout: post
 title: Typescript2 서버 튜토리얼 - 4/4
 excerpt: Typescript + socket.io
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: typescript typescript2 nodejs socket.io chat websocket
 publish: true

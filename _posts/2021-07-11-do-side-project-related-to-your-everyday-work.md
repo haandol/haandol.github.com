@@ -2,7 +2,7 @@
 layout: post
 title: 주니어 개발자와 사이드 프로젝트
 excerpt: Is your pet project related to your daily workload?
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: pet-project blahblah culture mindset
 publish: true

@@ -2,7 +2,7 @@
 layout: post
 title: 면접때 회사에 물어봐야할 질문 (2/2)
 excerpt: ask these questions on interview (2/2)
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: cultural inteview question trivia career
 publish: true

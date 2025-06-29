@@ -2,7 +2,7 @@
 layout: post
 title: Jest+cucumber 로 BDD 환경 구축하기
 excerpt: Do BDD using jest-cucumber and typescript
-author: vincent
+author: haandol
 email: ldg55d@gmail.com
 tags: bdd jest cucumber jest-cucumber typescript ts-jest gherkin
 publish: true
