@@ -19,9 +19,11 @@ publish: true
 
 2024년 초에 고객사와 LLM만으로 로봇제어하는 프로젝트를 진행했다.
 
-나는 아예 로봇에 대한 지식이 전무했고, 고객은 AI 에 대한 지식이 전무했으며, 둘다 VLA(Vision Language Action) 에 대한 지식은 전무했기 때문에 초반에 리서치를 많이 했었다.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Wc842kGRkf4?si=3mSxB0Rla0Sg40qm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-LLM 덕분에 논문 읽는 것은 수월해져서, RT-1, RT-2, RT-X, SayCan, L2R, VoxPoser, Eureka, Diffusion Policy 등 뭐가 맞는 논문인지도 모르고 일단 집히는 대로 대충 읽었고, 결국 내린 결론은 LLM 들과는 비교도 안되게 데이터의 중요성이 크다는 점이었다.
+나는 로봇에 대한 지식이 전무했고, 고객은 AI 에 대한 지식이 전무했으며, 둘다 VLA(Vision Language Action) 에 대한 지식은 전무했기 때문에 초반에 리서치를 많이 하게 되었다.
+
+당시에도 ChatGPT 덕분에 논문 읽는 것은 수월해져서, RT-1, RT-2, RT-X, SayCan, L2R, VoxPoser, Eureka, Diffusion Policy 등 뭐가 맞는 논문인지도 모르고 일단 집히는 대로 읽었고, 결국 내린 결론은 LLM 들과는 비교도 안되게 로보틱스 데이터의 중요성이 크다는 점이었다. (RFM-1 으로 잘 알려진 Covariant 대표도 원래 OpenAI 의 소속이었으나 로봇데이터를 쌓기 위해서 독립회사를 차림)
 
 따라서 대량의 데이터를 쌓을 수 있는 환경을 만들기 위해서는 시뮬레이션 환경이 좋겠다고 생각했고, 다양한 작업에 대해서 로봇코드를 자동으로 만들기 위해서는 LLM 이 제격이었다.
 
@@ -29,7 +31,7 @@ LLM 덕분에 논문 읽는 것은 수월해져서, RT-1, RT-2, RT-X, SayCan, L2
 
 찬장에서 임의의 캔을 집어서 내려주는, 간단하다면 간단한 매니퓰레이션 태스크 였지만, 시뮬레이션 상에서는 원하는 작업들을 80% 남짓의 성공률로 처리할 수 있었고, 이후 고객의 노력으로 실제 로봇팔에도 같은 시스템을 배포하여 데모를 할 수 있었다.
 
-본 글에서는 Physical AI 를 시작하는 입장에서 알아두면 좋은 내용들을 대충 정리하고, 공부하는 순서를 간단히 정리해본다.
+본 글에서는 Physical AI 를 시작하는 입장에서 알아두면 좋은 내용들을 정리하고, 공부하는 순서를 간단히 정리해본다.
 
 ## Physical AI
 
@@ -46,6 +48,16 @@ AI 로 모터를 제어하는 방식은 크게, 아래의 3가지 방식이 있�
 <iframe width="560" height="315" src="https://www.youtube.com/embed/7fDiui8cAVQ" frameborder="0" allowfullscreen></iframe>
 
 개인적으로 nvidia 의 서비스들이 너무 이해가 안되게 구성되어 있다고 생각했었는데, 해당 영상을 보고 nvidia 가 그리는 Physical AI 의 흐름을 이해하고 나면 nvidia omniverse 의 전체 제품군이 어떻게 Physical AI 를 지원하고 있는지 쉽게 이해할 수 있게 된다.
+
+## 로보틱스 지식
+
+Physical AI 에서는 로봇제어시 대부분 엔드-이펙터(End-Effector) 라고 부르는 마지막단 관절을 기준으로 `(x, y, z, roll, pitch, yaw, gripper)` 로 구성된 7 DoF (Degree of Freedom) 표기를 많이 사용한다.
+
+따라서 (x, y, z) 를 결정하는 좌표계 개념과, (roll, pitch, yaw) 를 결정하는 축 및 쿼터니언이라고 부르는 축의 회전 개념 정도만 이해하고 있으면 된다.
+
+약간 더 나가면 (x, y, z) 로 어떻게 로봇의 각 관절 (joint angles) 을 조정하는지를 설명해주는 정기구학과, 역기구학의 기본 개념도 알아두면 좋다.
+
+앞으로 Physical AI 관련된 하드웨어 제조사들이 더 많이 생겨나게 되면서, 개발자들이 로봇제어보다 비즈니스 로직에 더 집중할 수 있도록 MPC (Model Predictive Control) 나 충돌감지등의 다양한 기능들이 내장된 로봇들이 나올것으로 예상되므로, 로봇개발자가 아닌 일반 개발자 입장에서는 당장 로보틱스에 대한 깊은 지식보다는 위에 설명한 기본 개념들만 이해하고 있으면 충분할 것 같다.
 
 ## Imitation Learning, Reinforcement Learning
 
@@ -101,6 +113,7 @@ Diffusion Policy, GR00T, π₀ 등은 디퓨전 방식을 응용해서 프레임
 
 ## 공부순서
 
+
 Physical AI 공부하려면 원래는 로봇 팔과 GPU 머신이 있어야 한다.
 
 먼저 로봇팔에 대해서는 LeRobot 이야기를 많이 들을 수 있다.
@@ -120,6 +133,9 @@ GPU 머신같은 경우에도 RTX 4090 정도는 써야하는데 해당 머신�
 이후 Isaac Sim 튜토리얼을 하고, Isaac Lab 튜토리얼을 하면 대부분의 내용을 배울 수 있다. LeRobot 도 공식 레포에서 USD 파일을 제공하고 있기 때문에 로봇을 쉽게 시뮬레이션에 임포팅할 수 있고, LeIsaac 등의 프로젝트들을 통해 로컬에서 시뮬레이션 상의 로봇을 쉽게 제어할 수 있다.
 
 이후 인스턴스에 GR00T 을 설치하여 이미 학습된 모델을 한번 돌려본 뒤에, 간단한 pick and place 작업을 학습시켜서 돌려보면 Physical AI 기본은 배운것이라고 보면 될 것 같다.
+
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/hsPQ-HluyPY?si=sEuW1UUPDSrFFTGb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 이후에는 본인의 목표에 따라 GR00T Dreams 로 데이터를 증강해서 학습해본다거나, 퀘스트나 비전프로만 사서 투핸즈, 휴머노이드 로봇을 학습해본다거나 원하는 방향으로 진행하면 된다.
 
