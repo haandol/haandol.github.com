@@ -151,7 +151,9 @@ Physical AI 공부하려면 원래는 로봇 팔과 GPU 머신이 있어야 한�
 
 먼저 비용을 대략 살펴보자.
 
-로봇팔에 대해서는 LeRobot 을 구매하는 것이 일반적인데, LeRobot 의 100 달러 이야기는 어떻게 책정된건지 모르겠지만 실제로는 60만원 정도 든다. 물론 다른 로봇들에 비하면 실제로 싸고 학습과 테스트 할 수 있는 환경도 잘 갖춰져 있지만, 60만원이면 개인이 덜컥 살 수 있는 정도로 싸지는 않다.
+로봇팔에 대해서는 LeRobot 을 구매하는 것이 일반적인데, LeRobot 의 100 달러 이야기는 어떻게 책정된건지 모르겠지만 실제로는 60만원 정도 든다. 
+
+물론 다른 로봇들에 비하면 실제로 싸고 학습과 테스트 할 수 있는 환경도 잘 갖춰져 있지만, 60만원이면 개인이 덜컥 살 수 있는 정도로 싸지는 않다.
 
 학습과 테스트를 위한 GPU 머신같은 경우에도 RTX 4090 정도는 써야하는데 해당 머신을 가지고 있는게 아니면 이걸 위해서 사기는 약간 부담스럽다.
 
@@ -159,7 +161,7 @@ Physical AI 공부하려면 원래는 로봇 팔과 GPU 머신이 있어야 한�
 
 이렇게 양팔 로봇을 해보려는 경우 총 1000만원까지도 들어간다. 따라서 개인적으로는 외팔(?)로봇이나 외팔로봇 + 이동 (lekiwi 등) 이  취미 또는 흥미를 위한 최대치라고 생각하지만, 몇년 뒤에는 휴머노이드 로봇도 취미로 만들 수 있을 것이라고 생각한다.
 
-### 시뮬레이션 먼저
+### 시뮬레이션 먼저하기
 
 여튼 나처럼 취미로 Physical AI 를 해보고 싶은 경우에는 실물 로봇을 구매하지 않고, 시뮬레이션 환경에서 로봇을 제어하는 방식으로 시작하는 것을 추천한다.
 
@@ -167,9 +169,11 @@ Physical AI 공부하려면 원래는 로봇 팔과 GPU 머신이 있어야 한�
 
 이후 Isaac Sim 튜토리얼을 하고, Isaac Lab 튜토리얼을 하면 대부분의 내용을 배울 수 있다. LeRobot 도 공식 레포에서 USD 파일을 제공하고 있기 때문에 로봇을 쉽게 시뮬레이션에 임포팅할 수 있고, LeIsaac 등의 프로젝트들을 통해 로컬에서 시뮬레이션 상의 로봇을 쉽게 제어할 수 있다.
 
-이후 인스턴스에 GR00T 을 설치하여 이미 학습된 모델을 한번 돌려본 뒤에, 간단한 pick and place 작업을 학습시켜서 돌려보면 Physical AI 기본은 배운것이라고 보면 될 것 같다.
+이후 인스턴스에 GR00T 을 설치하여 이미 학습된 모델을 한번 돌려본 뒤에, 간단한 매니퓰레이션 작업을 학습시켜서 돌려보면 Physical AI 기본은 배운 것이라고 보면 될 것 같다.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/hsPQ-HluyPY?si=sEuW1UUPDSrFFTGb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+개인적으로도, 위의 과정으로 GR00T N1.6 으로 파인튜닝하고, 맥북에 도커를 띄워서 turtle sim 으로 ROS2 를 공부했고, 아직 실물 로봇이 꼭 필요하지는 않아서 구매는 하지 않았다. (리더암 만 사고 싶은데 파는 곳이 없음)
 
 ### 목표를 설정하자
 
