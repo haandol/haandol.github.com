@@ -85,7 +85,7 @@ publish: true
 
 ### Post Structure Pattern
 
-1. **TL;DR** – Key takeaways as bullet points
+1. **TL;DR** – Key takeaways as bullet points (maximum 3 items)
 2. **시작하며 (Introduction)** – Background and personal experience leading to the topic
 3. **Body sections** – Numbered sections (`## 1. Title`, `## 2. Title`)
 4. **마치며 (Conclusion)** – Wrap-up with personal opinion
