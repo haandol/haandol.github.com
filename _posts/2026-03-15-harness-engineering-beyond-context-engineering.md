@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 하네스 엔지니어링을 쉽게 설명하기
-excerpt: Harness engineering explained simply - automatic error recovery in short execution loops to keep long-running agents on track
+title: 쉽게 설명한 하네스 엔지니어링
+excerpt: Demystifying Harness Engineering
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering context-engineering prompt-engineering agentic-development long-running-agent
