@@ -78,6 +78,8 @@ flowchart TB
 
 핵심은 이 분리가 **"에이전트=앱 엔진" 이상형에 대한 현실적 타협**이라는 점이다. 토큰 비용이 충분히 내려가고 결정성이 확보되는 날이 오면, 실행 모드가 점점 얇아지다가 결국 사라지고 생성 모드만 남게 될 것이다. 그전까지는 이 하이브리드가 가장 실용적인 형태다.
 
+이 구조를 실제로 동작하는 코드로 확인하고 싶다면, 헤드리스 클로드 코드를 게이트웨이 뒤에 두고 생성 모드와 실행 모드를 분리한 POC 구현체[^5]를 참고하기 바란다.
+
 ## 4. 유비쿼터스 개발 환경
 
 이 구조가 실제로 작동한다면, 개발자의 일상은 꽤 달라진다.
@@ -132,3 +134,4 @@ VM에서 컨테이너로, 컨테이너에서 서버리스로 내려온 추상화
 [^2]: [하네스 없는 멀티 에이전트는 그냥 컨텍스트 엔지니어링이다](/2026/03/31/multi-agent-without-harness-is-just-context-engineering/)
 [^3]: [Anthropic - Managed Agents Overview](https://platform.claude.com/docs/en/managed-agents/overview)
 [^4]: [에이전틱 개발 시대, 비즈니스를 아는 개발자의 가치](/2026/03/13/agentic-dev-business-aligned-code/)
+[^5]: [Agentic App Engine POC - 헤드리스 클로드 코드 기반 생성/실행 모드 분리 데모](https://github.com/haandol/agentic-app-engine-poc)
