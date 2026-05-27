@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "smart pipeline, dumb edge에서 dumb pipeline, smart edge로"
-excerpt: From smart pipeline / dumb edge to dumb pipeline / smart edge — the next architecture of agentic systems and physical AI
+title: "에이전트의 다음 진화는 똑똑한 도구에서 온다"
+excerpt: The next evolution of agents will come from smart edges, not smarter centers
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development orchestration vertical-agent headless-saas physical-ai humanoid
