@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <rect width="720" height="380" fill="#ffffff"/>
+
+  <!-- phase bands -->
+  <rect x="70"  y="40" width="190" height="270" fill="#eef0ff"/>
+  <rect x="260" y="40" width="190" height="270" fill="#fff3d6"/>
+  <rect x="450" y="40" width="200" height="270" fill="#cfe8cf" opacity="0.55"/>
+
+  <!-- axes -->
+  <line x1="70" y1="310" x2="650" y2="310" stroke="#888" stroke-width="1.5"/>
+  <line x1="70" y1="40"  x2="70"  y2="310" stroke="#888" stroke-width="1.5"/>
+  <text x="44" y="180" fill="#555" font-size="13" transform="rotate(-90 44,180)" text-anchor="middle">Value</text>
+  <text x="360" y="338" fill="#555" font-size="13" text-anchor="middle">Time / Maturity</text>
+
+  <!-- value curve: flat (explore) -> steep (expand) -> plateau (extract) -->
+  <path d="M70,300 C150,298 200,294 260,288
+           C320,282 380,150 450,95
+           C520,55 590,52 650,52"
+        fill="none" stroke="#3355cc" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- phase dividers -->
+  <line x1="260" y1="40" x2="260" y2="310" stroke="#bbb" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="450" y1="40" x2="450" y2="310" stroke="#bbb" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- labels -->
+  <text x="165" y="68" fill="#3355cc" font-size="17" font-weight="700" text-anchor="middle">Explore</text>
+  <text x="165" y="90" fill="#666" font-size="12" text-anchor="middle">곡선이 평평</text>
+  <text x="165" y="106" fill="#666" font-size="12" text-anchor="middle">싸고 빠른 실험</text>
+
+  <text x="355" y="68" fill="#cc8800" font-size="17" font-weight="700" text-anchor="middle">Expand</text>
+  <text x="355" y="90" fill="#666" font-size="12" text-anchor="middle">가파르게 상승</text>
+  <text x="355" y="106" fill="#666" font-size="12" text-anchor="middle">병목 제거</text>
+
+  <text x="550" y="150" fill="#2a8a2a" font-size="17" font-weight="700" text-anchor="middle">Extract</text>
+  <text x="550" y="172" fill="#666" font-size="12" text-anchor="middle">평탄화 · 마진</text>
+  <text x="550" y="188" fill="#666" font-size="12" text-anchor="middle">효율 극대화</text>
+
+  <text x="360" y="24" fill="#333" font-size="15" font-weight="700" text-anchor="middle">Kent Beck · 3X (Value over Time)</text>
+</svg>

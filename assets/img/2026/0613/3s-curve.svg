@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <rect width="720" height="380" fill="#ffffff"/>
+
+  <!-- phase bands -->
+  <rect x="70"  y="40" width="190" height="270" fill="#f5f5f5"/>
+  <rect x="260" y="40" width="190" height="270" fill="#fff3d6"/>
+  <rect x="450" y="40" width="200" height="270" fill="#cfe8cf" opacity="0.55"/>
+
+  <!-- ceiling line: gap = 0 -->
+  <line x1="70" y1="72" x2="650" y2="72" stroke="#2a8a2a" stroke-width="1" stroke-dasharray="5 4" opacity="0.7"/>
+  <text x="648" y="64" fill="#2a8a2a" font-size="11" text-anchor="end" opacity="0.85">괴리 0 (이론상 상한)</text>
+
+  <!-- zero baseline -->
+  <line x1="70" y1="250" x2="650" y2="250" stroke="#ccc" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="64" y="254" fill="#bbb" font-size="11" text-anchor="end">0</text>
+
+  <!-- axes -->
+  <line x1="70" y1="310" x2="650" y2="310" stroke="#888" stroke-width="1.5"/>
+  <line x1="70" y1="40"  x2="70"  y2="310" stroke="#888" stroke-width="1.5"/>
+  <text x="40" y="175" fill="#555" font-size="12" transform="rotate(-90 40,175)" text-anchor="middle">Business value / token</text>
+  <text x="360" y="338" fill="#555" font-size="13" text-anchor="middle">Time / Harness maturity</text>
+
+  <!-- value-per-token curve: near-flat (stream) -> immediate step up at Shape entry, then STEEP staircase -> hard plateau toward ceiling (scale) -->
+  <path d="M70,250
+           C150,249 205,247 258,245
+           C260,245 261,212 268,208
+           C288,206 298,206 308,205
+           C318,204 322,170 332,166
+           C354,164 362,164 372,163
+           C383,162 388,128 400,123
+           C460,103 548,80 592,76
+           C616,74 636,73 650,73"
+        fill="none" stroke="#2a8a2a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- phase dividers -->
+  <line x1="260" y1="40" x2="260" y2="310" stroke="#bbb" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="450" y1="40" x2="450" y2="310" stroke="#bbb" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- labels -->
+  <text x="165" y="100" fill="#777" font-size="17" font-weight="700" text-anchor="middle">Stream</text>
+  <text x="165" y="122" fill="#888" font-size="12" text-anchor="middle">거의 평평,</text>
+  <text x="165" y="138" fill="#888" font-size="12" text-anchor="middle">완만한 우상향</text>
+
+  <text x="355" y="290" fill="#cc8800" font-size="17" font-weight="700" text-anchor="middle">Shape</text>
+  <text x="355" y="270" fill="#a07000" font-size="12" text-anchor="middle">나선형 · 계단식</text>
+
+  <text x="550" y="180" fill="#2a8a2a" font-size="17" font-weight="700" text-anchor="middle">Scale</text>
+  <text x="550" y="202" fill="#666" font-size="12" text-anchor="middle">상한에 수렴</text>
+  <text x="550" y="218" fill="#666" font-size="12" text-anchor="middle">괴리 최소화</text>
+
+  <text x="360" y="24" fill="#333" font-size="15" font-weight="700" text-anchor="middle">3S (Business value per token over Time)</text>
+</svg>
