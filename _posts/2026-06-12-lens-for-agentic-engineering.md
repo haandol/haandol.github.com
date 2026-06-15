@@ -20,6 +20,7 @@ publish: true
 
 이렇게 다양한 변수를 의도에 맞게 재단하여 상수로 바꿔 해석하는 것을, 나는 **렌즈**라고 부른다.
 
+{% raw %}
 ```mermaid
 flowchart LR
     subgraph V["수많은 변수로 이뤄진 현상"]
@@ -32,6 +33,7 @@ flowchart LR
     V --> LENS{{"렌즈<br/>(설명할 것만 변수로,<br/>나머지는 상수로)"}}
     LENS --> P["이해 · 예측 가능한 모델"]
 ```
+{% endraw %}
 
 렌즈가 있고 없고는 앞을 예측하는 데 극명한 차이를 만든다. 특히 예측이 틀렸을 때 그다음 예측을 조정하는 데 도움이 된다. 렌즈가 없으면 그냥 찍기밖에 안 되지만, 렌즈가 있으면 **무엇을 상수로 두었는지가 명확하기 때문에 어디서 틀렸는지를 되짚을 수 있다.** 틀린 예측조차 렌즈를 다듬는 재료가 되는 셈이다.
 
@@ -72,6 +74,7 @@ flowchart LR
 
 개인적으로 분류해보면 OpenAI와 Anthropic이 에이전트 센터드 렌즈를 낀 대표 주자이고, Google은 다소 중립, AWS와 Cursor는 휴먼 센터드 렌즈를 낀 대표 주자처럼 보인다. 이 차이는 조직 구조로도 드러나는데, 뒤에서 다시 이야기할 **AI Deployment Engineer(이하 AI DE)**와 **Forward Deployed Engineer(이하 FDE)** 같은 롤의 유무가 대표적인 신호다.
 
+{% raw %}
 ```mermaid
 flowchart TB
     L{{"어떤 렌즈를<br/>끼는가?"}}
@@ -88,6 +91,7 @@ flowchart TB
     class A,A1,A2,A3 agent;
     class H,H1,H2,H3 human;
 ```
+{% endraw %}
 
 조직에 어떤 렌즈가 박혀 있는지는 위 갈림길의 어느 쪽 줄기를 따라가고 있는지를 보면 드러난다.
 
