@@ -74,7 +74,7 @@ bundle exec jekyll serve --watch --drafts
 ```yaml
 ---
 layout: post
-title: Post title in Korean
+title: "Post title in Korean"
 excerpt: English excerpt for the post
 author: haandol
 email: ldg55d@gmail.com
@@ -83,21 +83,46 @@ publish: true
 ---
 ```
 
+### Title
+
+- Write a **hook-oriented** title aimed at the reader who actually wants to *do* the thing — not a textbook summary. Lead with the concrete payoff or the question the reader is asking ("그래서 실제로는 어떻게?").
+- **Do NOT end titles with the declarative "~이다" copula style.** Older posts avoided it; keep titles noun- or gerund-ending (e.g. "...하기", "...과정", "...정리") or a short phrase.
+- A subtitle after an em dash (`—`) is welcome to add the practical angle (e.g. "EncBird에 하네스를 한 겹씩 씌워온 과정 — 실전 하네스 엔지니어링").
+- Ground the title in a concrete project/case when the post is a hands-on walkthrough (real service names like EncBird, PixelBank are fine to expose).
+
 ### Post Structure Pattern
 
-1. **TL;DR** – Key takeaways as bullet points (1–2 items only; do not write 3 or more)
+1. **TL;DR** – Key takeaways as **short, single-clause** bullets. Prefer several short bullets over one long sentence; do not pack multiple ideas into one bullet.
 2. **시작하며 (Introduction)** – Background and personal experience leading to the topic
-3. **Body sections** – Numbered sections (`## 1. Title`, `## 2. Title`)
+3. **Body sections** – Numbered sections (`## 1. Title`, `## 2. Title`); a `## 0.` 출발점/기준점 section is fine when you need to set up a framing before step 1
 4. **마치며 (Conclusion)** – Wrap-up with personal opinion
-5. **Footnotes** – Reference links using `[^1]` format
+5. **Footnotes** – Reference links using `[^1]` format; cross-link your own related posts liberally
 
 ### Writing Style
 
 - Written in Korean; technical terms remain in English
 - Essay style with personal experience and opinions
+- **Short paragraphs** — often one or two sentences per paragraph, separated by blank lines, rather than dense blocks. This is the current cadence; match it.
 - Explanations use analogies and real-world examples
 - **Bold** for key messages
 - Code blocks and images used where appropriate
+- Ground abstract steps in **real project examples** (e.g. EncBird/PixelBank actual AGENTS.md, hooks, skills) rather than staying purely conceptual
+
+### Diagrams
+
+- The site supports **Mermaid** (loaded in `_includes/head.html`). Prefer Mermaid over ASCII art for any diagram (flows, trees, relationships).
+- Wrap every Mermaid block in `{% raw %}` / `{% endraw %}` so Liquid does not choke on `{{ }}`-like syntax:
+
+````markdown
+{% raw %}
+```mermaid
+flowchart LR
+    A["..."] --> B["..."]
+```
+{% endraw %}
+````
+
+- Keep genuine code/config (shell, JSON, YAML) as normal fenced code blocks — only convert ASCII *diagrams* to Mermaid.
 
 ### Image Insertion
 
