@@ -144,4 +144,4 @@ OpenAI와 Anthropic이 노하우를 풀지 않는 건 복제가 쉬워서라고 
 
 [^6]: [에이전틱 개발 시대, 비즈니스를 아는 개발자의 가치](/2026/03/13/agentic-dev-business-aligned-code/)
 
-[^7]: [하네스 없는 멀티 에이전트는 그냥 컨텍스트 엔지니어링이다](/2026/03/31/multi-agent-without-harness-is-just-context-engineering/)
+[^7]: [하네스 없는 멀티 에이전트는 그냥 컨텍스트 엔지니어링](/2026/03/31/multi-agent-without-harness-is-just-context-engineering/)

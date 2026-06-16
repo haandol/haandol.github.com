@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 하네스 없는 멀티 에이전트는 그냥 컨텍스트 엔지니어링이다
+title: 하네스 없는 멀티 에이전트는 그냥 컨텍스트 엔지니어링
 excerpt: Multi-agent without harness is just large-scale context engineering
 author: haandol
 email: ldg55d@gmail.com

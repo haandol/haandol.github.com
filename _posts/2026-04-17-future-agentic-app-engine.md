@@ -131,7 +131,7 @@ VM에서 컨테이너로, 컨테이너에서 서버리스로 내려온 추상화
 ---
 
 [^1]: [쉽게 설명한 하네스 엔지니어링](/2026/03/15/harness-engineering-beyond-context-engineering/)
-[^2]: [하네스 없는 멀티 에이전트는 그냥 컨텍스트 엔지니어링이다](/2026/03/31/multi-agent-without-harness-is-just-context-engineering/)
+[^2]: [하네스 없는 멀티 에이전트는 그냥 컨텍스트 엔지니어링](/2026/03/31/multi-agent-without-harness-is-just-context-engineering/)
 [^3]: [Anthropic - Managed Agents Overview](https://platform.claude.com/docs/en/managed-agents/overview)
 [^4]: [에이전틱 개발 시대, 비즈니스를 아는 개발자의 가치](/2026/03/13/agentic-dev-business-aligned-code/)
 [^5]: [Agentic App Engine POC - 헤드리스 클로드 코드 기반 생성/실행 모드 분리 데모](https://github.com/haandol/agentic-app-engine-poc)

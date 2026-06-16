@@ -70,4 +70,4 @@ publish: true
 
 [^1]: [쉽게 설명한 하네스 엔지니어링](/2026/03/15/harness-engineering-beyond-context-engineering/)
 
-[^2]: [하네스 없는 멀티 에이전트는 그냥 컨텍스트 엔지니어링이다](/2026/03/31/multi-agent-without-harness-is-just-context-engineering/)
+[^2]: [하네스 없는 멀티 에이전트는 그냥 컨텍스트 엔지니어링](/2026/03/31/multi-agent-without-harness-is-just-context-engineering/)
