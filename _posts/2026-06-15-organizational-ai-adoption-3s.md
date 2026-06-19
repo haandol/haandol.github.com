@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "토큰 가치와 비즈니스 가치의 괴리, 그리고 조직의 AI 도입 3단계"
+title: "조직의 AI 도입 3단계: Stream, Shape, Scale과 단계별 평가법"
 excerpt: The gap between token price and business value is closed by harness engineering, and organizations should adopt AI through three S-stages — Stream, Shape, Scale
 author: haandol
 email: ldg55d@gmail.com
