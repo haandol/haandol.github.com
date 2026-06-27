@@ -92,7 +92,7 @@ publish: true
 
 ### Post Structure Pattern
 
-1. **TL;DR** – Key takeaways as **short, single-clause** bullets. Prefer several short bullets over one long sentence; do not pack multiple ideas into one bullet.
+1. **TL;DR** – Key takeaways as **short, single-clause** bullets. Prefer several short bullets over one long sentence; do not pack multiple ideas into one bullet. **Cap at 3 bullets max** — force the post down to its essential points.
 2. **시작하며 (Introduction)** – Background and personal experience leading to the topic
 3. **Body sections** – Numbered sections (`## 1. Title`, `## 2. Title`); a `## 0.` 출발점/기준점 section is fine when you need to set up a framing before step 1
 4. **마치며 (Conclusion)** – Wrap-up with personal opinion
