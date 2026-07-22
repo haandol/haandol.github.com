@@ -8,7 +8,7 @@
 
   <!-- mature operating range -->
   <line x1="450" y1="78" x2="650" y2="78" stroke="#2a8a2a" stroke-width="1" stroke-dasharray="5 4" opacity="0.7"/>
-  <text x="648" y="69" fill="#2a8a2a" font-size="11" text-anchor="end" opacity="0.85">운영 효율 안정화</text>
+  <text x="648" y="69" fill="#2a8a2a" font-size="11" text-anchor="end" opacity="0.85">요구사항 실현 효율 안정화</text>
 
   <!-- zero baseline -->
   <line x1="70" y1="250" x2="650" y2="250" stroke="#ccc" stroke-width="1" stroke-dasharray="3 3"/>
@@ -17,10 +17,10 @@
   <!-- axes -->
   <line x1="70" y1="310" x2="650" y2="310" stroke="#888" stroke-width="1.5"/>
   <line x1="70" y1="40"  x2="70"  y2="310" stroke="#888" stroke-width="1.5"/>
-  <text x="40" y="175" fill="#555" font-size="12" transform="rotate(-90 40,175)" text-anchor="middle">Accepted outcomes / total cost</text>
+  <text x="40" y="175" fill="#555" font-size="12" transform="rotate(-90 40,175)" text-anchor="middle">요구사항 실현 효율</text>
   <text x="360" y="338" fill="#555" font-size="13" text-anchor="middle">Time / Harness maturity</text>
 
-  <!-- outcome efficiency curve: investment (stream) -> staircase improvements (shape) -> stable operation (scale) -->
+  <!-- outcome efficiency curve: investment (streamlining) -> staircase improvements (shape) -> stable operation (scale) -->
   <path d="M70,250
            C150,249 205,247 258,245
            C260,245 261,212 268,208
@@ -37,17 +37,17 @@
   <line x1="450" y1="40" x2="450" y2="310" stroke="#bbb" stroke-width="1" stroke-dasharray="4 4"/>
 
   <!-- labels -->
-  <text x="165" y="100" fill="#777" font-size="17" font-weight="700" text-anchor="middle">Stream</text>
+  <text x="165" y="100" fill="#777" font-size="17" font-weight="700" text-anchor="middle">Streamlining</text>
   <text x="165" y="122" fill="#888" font-size="12" text-anchor="middle">거의 평평,</text>
   <text x="165" y="138" fill="#888" font-size="12" text-anchor="middle">완만한 우상향</text>
 
   <text x="355" y="290" fill="#cc8800" font-size="17" font-weight="700" text-anchor="middle">Shape</text>
   <text x="355" y="218" fill="#a07000" font-size="12" text-anchor="middle">AHEAD</text>
-  <text x="355" y="234" fill="#a07000" font-size="12" text-anchor="middle">수직적 성숙</text>
+  <text x="355" y="234" fill="#a07000" font-size="12" text-anchor="middle">계단식 개선</text>
 
   <text x="550" y="180" fill="#2a8a2a" font-size="17" font-weight="700" text-anchor="middle">Scale</text>
   <text x="550" y="202" fill="#666" font-size="12" text-anchor="middle">LEVER</text>
-  <text x="550" y="218" fill="#666" font-size="12" text-anchor="middle">수평적 확장</text>
+  <text x="550" y="218" fill="#666" font-size="12" text-anchor="middle">Extract</text>
 
   <text x="360" y="24" fill="#333" font-size="15" font-weight="700" text-anchor="middle">3S (Harness maturity and leverage)</text>
 </svg>
