@@ -69,6 +69,11 @@ bundle exec jekyll serve --watch --drafts
 
 ## Blog Post Conventions
 
+For drafting, revising, or reviewing blog posts, use the project skill at
+`.agents/skills/haandol-blog-writing/SKILL.md`. It contains the editorial
+workflow for logical structure, personal-opinion tone, terminology, diagrams,
+citations, and validation.
+
 ### Front Matter Format
 
 ```yaml

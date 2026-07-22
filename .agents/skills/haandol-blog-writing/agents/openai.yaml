@@ -1,0 +1,4 @@
+interface:
+  display_name: "Haandol Blog Writing"
+  short_description: "Haandol 블로그 글을 작성하고 논리·문체·도식을 다듬기"
+  default_prompt: "Use $haandol-blog-writing to draft or revise a Haandol blog post with the project voice and validation rules."
