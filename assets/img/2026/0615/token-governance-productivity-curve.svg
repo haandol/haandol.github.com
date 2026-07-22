@@ -45,8 +45,9 @@
   <text x="385" y="138" fill="#666" font-size="12" text-anchor="middle">평가 기준 · 규칙 · 도구로 축적</text>
 
   <text x="575" y="74" fill="#a54a3f" font-size="17" font-weight="700" text-anchor="middle">과도한 허용</text>
-  <text x="575" y="96" fill="#777" font-size="12" text-anchor="middle">목적 없는 탐색</text>
-  <text x="575" y="112" fill="#777" font-size="12" text-anchor="middle">불충분한 테스트 남발</text>
+  <text x="575" y="96" fill="#777" font-size="12" text-anchor="middle">비즈니스 목표와</text>
+  <text x="575" y="112" fill="#777" font-size="12" text-anchor="middle">무관한 실험</text>
+  <text x="575" y="128" fill="#777" font-size="12" text-anchor="middle">과도한 기술빚 청산</text>
 
   <text x="360" y="24" fill="#333" font-size="15" font-weight="700" text-anchor="middle">가용 토큰과 팀 생산성 (개념도)</text>
 </svg>
