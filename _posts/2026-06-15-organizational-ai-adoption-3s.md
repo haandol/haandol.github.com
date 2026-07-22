@@ -107,6 +107,30 @@ AWS와 Google에서는 여러 팀이 내부 시스템에 접근하는 MCP를 직
 
 반대로 개발 조직이 이런 방식으로 자율적으로 움직이기 어렵다면, 자연 발생을 기다리기보다 조직 차원의 Streamlining TFT가 필요하다고 생각한다. 이 팀은 여러 부서의 업무 흐름을 기준으로 필요한 데이터와 도구를 찾고, 권한·데이터 계약·감사 기준과 공통 registry를 함께 마련해야 한다. 개별 MCP를 대신 만드는 중앙 개발팀이라기보다, 도메인팀이 안전하게 만들고 공유할 수 있는 경로를 여는 역할에 가깝다.
 
+{% raw %}
+```mermaid
+flowchart LR
+    subgraph B["자율적 개발 조직"]
+        direction TB
+        D["도메인팀"] --> M["내부 시스템 MCP"]
+    end
+    subgraph T["조직 주도"]
+        direction TB
+        TF["Streamlining TFT"] --> P["데이터 · 도구 · 권한 정비"]
+        P --> C["공통 MCP · 데이터 계약"]
+    end
+    M --> R["공통 registry<br/>검색 · 권한 · 감사"]
+    C --> R
+    R --> S["Shape<br/>하네스 구축"]
+    classDef route fill:#f5f5f5,stroke:#bbb;
+    classDef asset fill:#fff3d6,stroke:#e8a;
+    classDef next fill:#cfe8cf,stroke:#3a3;
+    class D,TF,P route;
+    class M,C,R asset;
+    class S next;
+```
+{% endraw %}
+
 먼저 end-to-end 워크플로우를 파악하고, 필요한 데이터만 최소권한으로 노출한다. DDD의 도메인과 bounded context는 이 경계를 찾는 렌즈로 활용할 수 있다.
 
 ### 2단계 — Shape (Harness Engineering)
@@ -152,6 +176,30 @@ flowchart TB
 
 이 협업은 영구 상주보다 부트스트랩에 가깝다. 도메인팀이 하네스를 운영할 수 있게 되면 AHE는 다음 도메인으로 이동한다. 잘 구축된 eval은 이후 더 저렴한 모델로 전환하거나 작업별로 모델을 라우팅하는 기준도 된다.[^7]
 
+{% raw %}
+```mermaid
+flowchart LR
+    subgraph S1["1 · 핵심 하네스 공동 구축"]
+        AHE["AHE<br/>공통 기반 · 구현"]
+        CH["도메인 챔피언<br/>품질 기준 · 예외"]
+        AHE <--> CH
+    end
+    subgraph S2["2 · 운영 지식 이전"]
+        H["검증된 하네스"] --> DT["도메인팀<br/>운영 · 개선"]
+    end
+    subgraph S3["3 · 계단식 개선 지속"]
+        F["실패 관찰"] --> U["eval · rule · tool 갱신"]
+        U --> F
+    end
+    S1 --> S2 --> S3
+    AHE -. "부트스트랩 후" .-> N["다음 도메인"]
+    classDef a fill:#fff3d6,stroke:#e8a;
+    classDef d fill:#cfe8cf,stroke:#3a3;
+    class AHE,H a;
+    class CH,DT,F,U,N d;
+```
+{% endraw %}
+
 **넷째, 도메인팀은 처음부터 평가 시스템을 만든다.** 도입 전 baseline을 잡고, Shape에서는 AHEAD로 하네스의 계단식 개선을, Scale에서는 LEVER로 가치 회수와 비즈니스 성과를 본다. 평가 결과는 다시 하네스 개선으로 이어져야 한다.[^9]
 
 ## 4. 어떻게 도입하고, 단계별로 무엇을 평가할 것인가
@@ -193,6 +241,27 @@ AHEAD는 실패와 피드백이 하네스에 반영될 때마다 사람의 반�
 
 Scale에서는 평가 초점이 바뀐다. AHEAD가 실패를 하네스에 반영하며 현재 워크플로우를 계단식으로 개선하는지 묻는다면, LEVER는 축적된 도메인 지식과 완성된 하네스를 재사용해 다음 워크로드의 비용과 시간을 얼마나 낮추고 비즈니스 가치를 추출하는지 묻는다.
 
+{% raw %}
+```mermaid
+flowchart LR
+    D["축적된<br/>도메인 지식"] --> H["검증된 하네스<br/>context · eval · rule<br/>guardrail · connector"]
+    H --> R["새 워크로드에 재사용"]
+    I["워크로드별 추가 투입<br/>토큰 · 문서 작업 · 검증 시간"] -. "최소화" .-> R
+    R --> W1["워크로드 A"]
+    R --> W2["워크로드 B"]
+    R --> W3["워크로드 C"]
+    W1 --> V["비즈니스 가치<br/>비용 절감 · capacity<br/>매출 기여 · 위험 감소"]
+    W2 --> V
+    W3 --> V
+    classDef asset fill:#fff3d6,stroke:#e8a;
+    classDef work fill:#f5f5f5,stroke:#bbb;
+    classDef value fill:#cfe8cf,stroke:#3a3;
+    class D,H asset;
+    class R,I,W1,W2,W3 work;
+    class V value;
+```
+{% endraw %}
+
 | 관점 | 판단할 질문 | 비즈니스 리더에게 번역하면 |
 | --- | --- | --- |
 | **L — Lead Time** | 새로운 워크로드와 비즈니스 요구사항을 운영 가능한 기능으로 만드는 시간이 줄어드는가? | 요구사항이 실제 가치로 이어지는 시간이 짧아지는가? |
@@ -212,6 +281,26 @@ LEVER의 핵심은 기능 개수보다 **도메인 지식과 하네스를 재사
 실험 결과도 업무와 환경에 따라 엇갈린다. 고객 지원 현장에서는 AI가 시간당 해결 건수를 평균 14% 높였고, 특히 저숙련·초보 직원에게 효과가 컸다.[^11] 반면 숙련된 오픈소스 개발자를 대상으로 한 METR의 2025년 실험에서는 당시 AI 도구를 허용했을 때 작업 시간이 19% 늘었다.[^14] HBS의 실험에서도 AI capability frontier 안의 업무는 빨라지고 품질이 높아졌지만, frontier 밖의 업무에서는 정답률이 낮아졌다.[^12]
 
 따라서 **모델, 업무, 사용자, 하네스의 조합을 실제 환경에서 평가할 필요가 있다.** 모델이 충분한 업무는 Streamlining과 Shape를 시작하고, 하네스와 HITL을 더해도 기준을 충족하지 못하는 업무는 범위를 줄이거나 도입을 보류할 수 있다.
+
+{% raw %}
+```mermaid
+flowchart TD
+    A["업무와 품질 · 위험 기준 정의"] --> B{"현재 모델로<br/>수행 가능한가?"}
+    B -- "예" --> D["Streamlining · Shape"]
+    B -- "아니오" --> C["범위 축소 · 도입 보류"]
+    D --> E{"하네스와 필요한 HITL을 더해<br/>eval 기준을 통과하는가?"}
+    E -- "예" --> F["Scale"]
+    E -- "아니오" --> G{"반복 실패를 하네스로<br/>개선할 수 있는가?"}
+    G -- "예" --> D
+    G -- "아니오" --> C
+    classDef work fill:#f5f5f5,stroke:#bbb;
+    classDef invest fill:#fff3d6,stroke:#e8a;
+    classDef scale fill:#cfe8cf,stroke:#3a3;
+    class A,B,C,E,G work;
+    class D invest;
+    class F scale;
+```
+{% endraw %}
 
 ## 6. 여러 코딩 에이전트를 자유롭게 쓰는 전략은 어떨까?
 
