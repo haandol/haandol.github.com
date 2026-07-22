@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <rect width="720" height="380" fill="#ffffff"/>
+
+  <!-- constraint bands -->
+  <rect x="70" y="40" width="200" height="270" fill="#fff3d6"/>
+  <rect x="270" y="40" width="230" height="270" fill="#cfe8cf" opacity="0.55"/>
+  <rect x="500" y="40" width="150" height="270" fill="#fde8e7"/>
+
+  <!-- axes -->
+  <line x1="70" y1="310" x2="650" y2="310" stroke="#888" stroke-width="1.5"/>
+  <line x1="70" y1="40" x2="70" y2="310" stroke="#888" stroke-width="1.5"/>
+  <text x="42" y="175" fill="#555" font-size="13" transform="rotate(-90 42,175)" text-anchor="middle">팀 단위 생산성</text>
+  <text x="360" y="342" fill="#555" font-size="13" text-anchor="middle">가용 토큰</text>
+  <text x="70" y="328" fill="#888" font-size="11" text-anchor="start">낮음</text>
+  <text x="650" y="328" fill="#888" font-size="11" text-anchor="end">높음</text>
+
+  <!-- conceptual threshold curve: low productivity below a minimum, rise, then decline after over-allocation -->
+  <path d="M70,278
+           C135,277 198,275 235,266
+           C255,258 264,220 278,175
+           C295,118 320,78 355,68
+           C395,56 445,67 480,92
+           C520,122 562,195 650,270"
+        fill="none" stroke="#3355cc" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- minimum viable token threshold -->
+  <line x1="270" y1="40" x2="270" y2="310" stroke="#3355cc" stroke-width="1" stroke-dasharray="5 4" opacity="0.75"/>
+  <circle cx="270" cy="200" r="4" fill="#3355cc"/>
+  <text x="280" y="294" fill="#3355cc" font-size="11">최소 가용량</text>
+
+  <!-- sweet spot marker -->
+  <line x1="385" y1="62" x2="385" y2="310" stroke="#2a8a2a" stroke-width="1" stroke-dasharray="5 4" opacity="0.7"/>
+  <circle cx="385" cy="62" r="5" fill="#2a8a2a"/>
+
+  <!-- phase dividers -->
+  <line x1="500" y1="40" x2="500" y2="310" stroke="#bbb" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- labels -->
+  <text x="165" y="74" fill="#b47500" font-size="17" font-weight="700" text-anchor="middle">가용 토큰 부족</text>
+  <text x="165" y="96" fill="#777" font-size="12" text-anchor="middle">탐색 · 검증 범위 제한</text>
+  <text x="165" y="112" fill="#777" font-size="12" text-anchor="middle">팀 생산성 확보 어려움</text>
+
+  <text x="385" y="100" fill="#2a8a2a" font-size="17" font-weight="700" text-anchor="middle">스윗스팟</text>
+  <text x="385" y="122" fill="#666" font-size="12" text-anchor="middle">필요한 탐색 허용</text>
+  <text x="385" y="138" fill="#666" font-size="12" text-anchor="middle">평가 기준 · 규칙 · 도구로 축적</text>
+
+  <text x="575" y="74" fill="#a54a3f" font-size="17" font-weight="700" text-anchor="middle">과도한 허용</text>
+  <text x="575" y="96" fill="#777" font-size="12" text-anchor="middle">목적 없는 탐색</text>
+  <text x="575" y="112" fill="#777" font-size="12" text-anchor="middle">불충분한 테스트 남발</text>
+
+  <text x="360" y="24" fill="#333" font-size="15" font-weight="700" text-anchor="middle">가용 토큰과 팀 생산성 (개념도)</text>
+</svg>
