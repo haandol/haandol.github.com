@@ -385,8 +385,8 @@ Mitchell Hashimoto가 2026년 2월 5일 자신의 AI 도입 여정을 공유하�
 
 ---
 
-[^1]: [컨텍스트 엔지니어링 - 정적 컨텍스트와 동적 컨텍스트](/2026/03/11/context-engineering-static-vs-dynamic/)
-[^2]: [에이전틱 개발 시대, 비즈니스를 아는 개발자의 가치](/2026/03/13/agentic-dev-business-aligned-code/)
+[^1]: [컨텍스트 엔지니어링 - 정적 컨텍스트와 동적 컨텍스트](/2026/03/11/context-engineering-static-vs-dynamic.html)
+[^2]: [에이전틱 개발 시대, 비즈니스를 아는 개발자의 가치](/2026/03/13/agentic-dev-business-aligned-code.html)
 [^3]: [Mitchell Hashimoto - My AI Adoption Journey](https://mitchellh.com/writing/my-ai-adoption-journey) (2026.02.05)
 [^4]: [OpenAI - Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/) (2026.02.11)
 [^5]: [Martin Fowler - Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html) (2026.02.17)

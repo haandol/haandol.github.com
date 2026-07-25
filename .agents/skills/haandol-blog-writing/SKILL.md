@@ -93,10 +93,25 @@ Inspect the rendered PNG for clipping, overlap, axis direction, and semantic con
 
 Run the relevant checks before reporting completion:
 
+Substitute the real path for `$POST` in each command. Every line below is copy-paste runnable — do not add extra backslash escaping, which silently turns `\b` into a literal and makes `rg` fail to parse or fail to match.
+
 ```bash
+POST=_posts/YYYY-MM-DD-slug.md
+
 git diff --check
-rg -n '^\\{% raw %\\}$|^\\{% endraw %\\}$|^```mermaid$|^```$' path/to/post.md
-rg -n 'eval|\\bgate\\b|TODO|TBD' path/to/post.md
+
+# Liquid/fence balance — raw must equal endraw, and total fences must be even
+echo "raw=$(rg -c '^\{% raw %\}$' "$POST") endraw=$(rg -c '^\{% endraw %\}$' "$POST") mermaid=$(rg -c '^```mermaid$' "$POST") fences=$(rg -c '^```' "$POST")"
+
+# Leftover jargon / placeholders — exit 1 means clean
+rg -n 'eval|\bgate\b|TODO|TBD' "$POST"
+
+# Internal links must use the .html form — must print 0
+rg -oN --no-filename '\]\(/20[0-9]{2}/[0-9]{2}/[0-9]{2}/[a-z0-9-]+/\)' "$POST" | wc -l
+
+# Footnote refs vs definitions — the two lists must correspond
+rg -oP '\[\^[0-9]+\](?!:)' "$POST" | sort -u
+rg -o '^\[\^[0-9]+\]:' "$POST"
 ```
 
 Also verify:
@@ -104,10 +119,11 @@ Also verify:
 - required front matter exists and `excerpt` is English;
 - TL;DR has at most three short, single-clause bullets;
 - section headings and their contents agree;
-- Mermaid/raw and code-fence counts balance;
-- footnote references and definitions match;
+- Mermaid/raw and code-fence counts balance (`raw == endraw`, `fences` even);
+- every footnote definition is actually referenced in the body, and vice versa;
+- internal post links end in `.html` (see AGENTS.md "Internal Post Links") — the slash form 404s;
 - referenced images exist;
 - SVGs render correctly;
-- Jekyll builds when the required Bundler version is available.
+- Jekyll builds when the required Bundler version is available. This repo's `Gemfile.lock` pins Bundler 2.6.8, which is absent under the system Ruby 2.6 — when `bundle exec jekyll build` cannot run, say so explicitly rather than implying the build passed, and lean on the checks above.
 
 Do not commit or push unless the user explicitly asks.

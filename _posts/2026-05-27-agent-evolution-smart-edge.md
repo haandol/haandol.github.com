@@ -94,4 +94,4 @@ SOA(Service-Oriented Architecture) 시절의 ESB(Enterprise Service Bus)를 기�
 
 ---
 
-[^1]: [에이전틱 엔지니어링과 과도기적 기술들](/2026/05/11/direction-of-agentic-engineering/)
+[^1]: [에이전틱 엔지니어링과 과도기적 기술들](/2026/05/11/direction-of-agentic-engineering.html)

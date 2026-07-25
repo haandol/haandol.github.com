@@ -103,6 +103,26 @@ publish: true
 4. **마치며 (Conclusion)** – Wrap-up with personal opinion
 5. **Footnotes** – Reference links using `[^1]` format; cross-link your own related posts liberally
 
+### Internal Post Links
+
+This site has **no `permalink` setting** in `_config.yml`, so Jekyll's default `date` permalink applies and every post URL ends in `.html`:
+
+```
+/YYYY/MM/DD/slug.html      ← correct, resolves 200
+/YYYY/MM/DD/slug/          ← WRONG, returns 404
+```
+
+Always link internal posts with the trailing `.html`. The directory-with-slash form looks natural but 404s, and the failure is invisible locally because the site is normally not built before publishing.
+
+Verify every internal link before finishing:
+
+```bash
+# must print 0 — any hit is a broken link
+rg -oN --no-filename '\]\(/20[0-9]{2}/[0-9]{2}/[0-9]{2}/[a-z0-9-]+/\)' _posts/*.md | wc -l
+```
+
+Do not "fix" this by adding a `permalink` to `_config.yml`: 123 URLs are already indexed in `sitemap.xml` and the atom feed in `.html` form, and changing the permalink would break all of them.
+
 ### Writing Style
 
 - Written in Korean; technical terms remain in English

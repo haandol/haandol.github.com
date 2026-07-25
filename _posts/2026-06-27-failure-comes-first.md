@@ -156,10 +156,10 @@ AI가 더 빨리 좋아져서, 내가 찾은 문제들에 대해 더 많은 실�
 
 [^2]: [토스 PO SESSION](https://www.youtube.com/watch?v=tcrr2QiXt9M&list=PL1DJtS1Hv1Piv_MQIHgA_CdNsXyDM9UDM)
 
-[^3]: [사이드프로젝트로 린스타트업 실천해보기 - 준비하기](/2024/01/13/lean-startup-in-action-with-side-project/)
+[^3]: [사이드프로젝트로 린스타트업 실천해보기 - 준비하기](/2024/01/13/lean-startup-in-action-with-side-project.html)
 
-[^4]: [사이드프로젝트로 린스타트업 실천해보기 - 이터레이션](/2024/03/24/lean-startup-in-action-with-side-project-2/)
+[^4]: [사이드프로젝트로 린스타트업 실천해보기 - 이터레이션](/2024/03/24/lean-startup-in-action-with-side-project-2.html)
 
-[^5]: [EncBird에 하네스를 한 겹씩 씌워온 과정](/2026/06/16/harness-engineering-in-practice/)
+[^5]: [EncBird에 하네스를 한 겹씩 씌워온 과정](/2026/06/16/harness-engineering-in-practice.html)
 
-[^6]: [하나의 잘 만든 GenAI 플라이휠이 비즈니스 전체를 견인한다](/2026/03/12/genai-flywheel-for-business/)
+[^6]: [하나의 잘 만든 GenAI 플라이휠이 비즈니스 전체를 견인한다](/2026/03/12/genai-flywheel-for-business.html)

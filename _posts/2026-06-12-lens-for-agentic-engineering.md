@@ -204,14 +204,14 @@ LLM이 지금 수준에서 발전을 멈춰서 결국 소프트웨어 엔지니�
 
 ---
 
-[^1]: [에이전틱 엔지니어링과 과도기적 기술들](/2026/05/11/direction-of-agentic-engineering/)
+[^1]: [에이전틱 엔지니어링과 과도기적 기술들](/2026/05/11/direction-of-agentic-engineering.html)
 
-[^2]: [에이전트의 다음 진화는 똑똑한 도구에서 온다](/2026/05/27/agent-evolution-smart-edge/)
+[^2]: [에이전트의 다음 진화는 똑똑한 도구에서 온다](/2026/05/27/agent-evolution-smart-edge.html)
 
-[^3]: [쉽게 설명한 하네스 엔지니어링](/2026/03/15/harness-engineering-beyond-context-engineering/)
+[^3]: [쉽게 설명한 하네스 엔지니어링](/2026/03/15/harness-engineering-beyond-context-engineering.html)
 
-[^4]: [미래의 에이전틱 앱 엔진](/2026/04/17/future-agentic-app-engine/)
+[^4]: [미래의 에이전틱 앱 엔진](/2026/04/17/future-agentic-app-engine.html)
 
 [^5]: 켄트 벡, [The Product Development Triathlon](https://medium.com/@kentbeck_7670/the-product-development-triathlon-6464e2763c46) (2016). 3X 모델(Explore, Expand, Extract)의 원본 글이다.
 
-[^6]: [조직의 AI 도입 3단계: Stream, Shape, Scale과 단계별 평가법](/2026/06/15/organizational-ai-adoption-3s/)
+[^6]: [조직의 AI 도입 3단계: Stream, Shape, Scale과 단계별 평가법](/2026/06/15/organizational-ai-adoption-3s.html)
