@@ -5,7 +5,7 @@ excerpt: Why the PRD/ADR layer of a harness collapses in a running production sy
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering prd adr alps agentic-development clean-architecture
-publish: false
+publish: true
 ---
 
 ## TL;DR
