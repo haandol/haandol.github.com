@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <rect width="760" height="430" fill="#ffffff"/>
+
+  <defs>
+    <marker id="solid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,1 L9,5 L0,9 z" fill="#444"/>
+    </marker>
+    <marker id="dash" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,1 L9,5 L0,9 z" fill="#2a6f9e"/>
+    </marker>
+  </defs>
+
+  <!-- concentric rings: outermost changes fastest -->
+  <circle cx="250" cy="196" r="168" fill="#f5f5f5" stroke="#c9c9c9" stroke-width="1.5"/>
+  <circle cx="250" cy="196" r="114" fill="#fff3d6" stroke="#dcb95e" stroke-width="1.5"/>
+  <circle cx="250" cy="196" r="68"  fill="#cfe8cf" stroke="#6aa96a" stroke-width="1.5"/>
+
+  <!-- ring labels -->
+  <text x="250" y="56"  fill="#333" font-size="14" font-weight="600" text-anchor="middle">코드</text>
+  <text x="250" y="74"  fill="#777" font-size="10.5" text-anchor="middle">지금 어떻게 동작하나 · 매일 바뀜</text>
+
+  <text x="250" y="112" fill="#8a6a10" font-size="14" font-weight="600" text-anchor="middle">ADR</text>
+  <text x="250" y="130" fill="#9a7c2a" font-size="10.5" text-anchor="middle">기능 하나의 요구사항 · 몇 주</text>
+
+  <text x="250" y="188" fill="#2f6b2f" font-size="13.5" font-weight="600" text-anchor="middle">ALPS (PRD)</text>
+  <text x="250" y="206" fill="#3f7a3f" font-size="10.5" text-anchor="middle">제품 전체의 가설</text>
+  <text x="250" y="221" fill="#3f7a3f" font-size="10.5" text-anchor="middle">몇 달</text>
+
+  <!-- inward dependency arrow -->
+  <line x1="250" y1="352" x2="250" y2="276" stroke="#444" stroke-width="1.8" marker-end="url(#solid)"/>
+  <text x="262" y="322" fill="#555" font-size="11">의존은 안쪽으로만</text>
+
+  <!-- forbidden outward reference -->
+  <line x1="196" y1="276" x2="196" y2="352" stroke="#c05a5a" stroke-width="1.6" stroke-dasharray="5 4" opacity="0.75"/>
+  <line x1="180" y1="300" x2="212" y2="328" stroke="#c05a5a" stroke-width="2"/>
+  <line x1="212" y1="300" x2="180" y2="328" stroke="#c05a5a" stroke-width="2"/>
+  <text x="188" y="368" fill="#c05a5a" font-size="11" text-anchor="middle">역참조 금지</text>
+
+  <!-- coding agent -->
+  <rect x="462" y="136" width="272" height="116" rx="10" fill="#eaf2f8" stroke="#2a6f9e" stroke-width="1.6"/>
+  <text x="598" y="164" fill="#1f5a80" font-size="13.5" font-weight="600" text-anchor="middle">코딩 에이전트</text>
+  <text x="598" y="188" fill="#33607d" font-size="11" text-anchor="middle">두 레이어를 함께 읽고</text>
+  <text x="598" y="206" fill="#33607d" font-size="11" text-anchor="middle">매핑을 그때그때 복원한다</text>
+  <text x="598" y="230" fill="#7a8fa0" font-size="10.5" text-anchor="middle">복원한 매핑은 저장하지 않는다</text>
+
+  <!-- agent reads both layers -->
+  <line x1="462" y1="168" x2="344" y2="162" stroke="#2a6f9e" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#dash)"/>
+  <text x="404" y="150" fill="#2a6f9e" font-size="10.5" text-anchor="middle">요구사항을 읽는다</text>
+
+  <line x1="462" y1="232" x2="382" y2="250" stroke="#2a6f9e" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#dash)"/>
+  <text x="430" y="276" fill="#2a6f9e" font-size="10.5" text-anchor="middle">코드를 읽는다</text>
+
+  <!-- footer note -->
+  <text x="462" y="330" fill="#666" font-size="11">코드는 ADR 번호를, ADR은 PRD를 인용하지 않는다.</text>
+  <text x="462" y="350" fill="#666" font-size="11">추적은 git blame → 커밋 메시지가 대신한다.</text>
+  <text x="462" y="378" fill="#999" font-size="10.5">바깥 레이어일수록 빨리 바뀐다 — 클린 아키텍처와</text>
+  <text x="462" y="394" fill="#999" font-size="10.5">같은 이유로 화살표를 안쪽으로만 향하게 만든다.</text>
+</svg>

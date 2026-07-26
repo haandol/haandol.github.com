@@ -259,7 +259,7 @@ response = ses.send_email(
 
 코드[^1] 의 서비스는 메일 뿐만 아니라 SNS 를 통한 모바일 푸시 등으로 쉽게 확장가능하며 애초에 아래와 같은 아키텍쳐로 설계되었다.
 
-![](/assets/architecture_extent.png)
+![](/assets/img/20200512/architecture_extent.png)
 
 만약 더 많은 동시성이 필요하거나 하다면, 아키텍쳐 변경없이 각 서비스의 옵션질을 통해서 충분히 해결 가능하다.
 

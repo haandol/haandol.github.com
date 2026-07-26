@@ -11,8 +11,7 @@ publish: true
 ## TL;DR
 
 - 피지컬 AI 란 AI 를 이용해서 모터를 제어하는 방법
-- AI 는 Foundation Model 기반과 IL + RL 기반의 방식으로 나눌 수 있음
-- 모터제어는 Diffusion 방식이 현재 대세
+- Foundation Model 기반과 IL + RL 기반으로 나뉘고, 모터제어는 Diffusion 방식이 대세
 - 결국은 데이터 싸움
 
 ## 시작하며

@@ -91,7 +91,19 @@ Inspect the rendered PNG for clipping, overlap, axis direction, and semantic con
 
 ## Validate
 
-Run the relevant checks before reporting completion:
+Most mechanical checks are scripted. Run the script first — it covers the TL;DR bullet cap,
+Mermaid `{% raw %}` wrapping, fence balance, internal link form, footnote correspondence,
+required front matter, and image existence:
+
+```bash
+.agents/scripts/post-lint.sh _posts/YYYY-MM-DD-slug.md
+```
+
+A `PostToolUse` hook runs the same script on every `_posts/`/`_drafts/` edit, so a violation
+surfaces immediately rather than at review time. Do not treat a passing script as a substitute
+for the judgment checks listed after the commands below.
+
+Then run the remaining checks that the script does not cover:
 
 Substitute the real path for `$POST` in each command. Every line below is copy-paste runnable — do not add extra backslash escaping, which silently turns `\b` into a literal and makes `rg` fail to parse or fail to match.
 
