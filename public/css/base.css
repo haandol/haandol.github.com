@@ -1,0 +1,288 @@
+/*
+ * Base — 문서 기본값과 본문 타이포그래피
+ *
+ * 값은 모두 tokens.css를 참조한다. 의도는 DESIGN.md 참고.
+ * 브레이크포인트는 미디어 쿼리 조건이라 리터럴로 남는다.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-root-sm);
+  line-height: var(--line-height);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (min-width: 48em) {
+  html {
+    font-size: var(--font-size-root-lg);
+  }
+}
+
+body {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  font-weight: var(--weight-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-slow), color var(--transition-slow);
+}
+
+/* 링크 — 밑줄은 hover에서만. 본문에 밑줄이 많으면 한글 받침과 부딪힌다. */
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+a strong {
+  color: inherit;
+}
+
+/* 키보드 포커스는 항상 보이게 */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── 제목 ──────────────────────────────────────────────────── */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 var(--space-sm);
+  color: var(--color-heading);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--tracking-tight);
+  text-rendering: optimizeLegibility;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+}
+
+h2 {
+  margin-top: var(--space-2xl);
+  font-size: var(--font-size-h2);
+}
+
+h3 {
+  margin-top: var(--space-xl);
+  font-size: var(--font-size-h3);
+}
+
+h4,
+h5,
+h6 {
+  margin-top: var(--space-lg);
+  font-size: var(--font-size-body);
+}
+
+/* ── 본문 ──────────────────────────────────────────────────── */
+
+p {
+  margin: 0 0 var(--space-md);
+}
+
+strong {
+  color: var(--color-text-strong);
+  font-weight: var(--weight-bold);
+}
+
+ul,
+ol,
+dl {
+  margin: 0 0 var(--space-md);
+  padding-left: var(--space-lg);
+}
+
+li + li {
+  margin-top: var(--space-xxs);
+}
+
+dt {
+  font-weight: var(--weight-bold);
+}
+
+dd {
+  margin: 0 0 var(--space-xs);
+}
+
+hr {
+  margin: var(--space-2xl) 0;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+del {
+  color: var(--color-text-muted);
+}
+
+abbr[title] {
+  cursor: help;
+  border-bottom: 1px dotted var(--color-border-strong);
+  text-decoration: none;
+}
+
+/* ── 코드 ──────────────────────────────────────────────────── */
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-code);
+}
+
+code {
+  padding: var(--space-code-y) var(--space-code-x);
+  color: var(--color-code);
+  background-color: var(--color-surface-subtle);
+  border-radius: var(--radius-sm);
+  word-break: break-word;
+}
+
+pre {
+  margin: 0 0 var(--space-md);
+  padding: var(--space-md);
+  overflow-x: auto;
+  line-height: var(--line-height-code);
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  white-space: pre;
+  tab-size: 2;
+}
+
+pre code {
+  padding: 0;
+  color: inherit;
+  background: none;
+  font-size: inherit;
+  white-space: pre;
+  word-break: normal;
+}
+
+.highlight {
+  margin: 0 0 var(--space-md);
+}
+
+.highlight pre {
+  margin: 0;
+}
+
+/* ── 인용 ──────────────────────────────────────────────────── */
+
+blockquote {
+  margin: var(--space-lg) 0;
+  padding: 0 0 0 var(--space-md);
+  color: var(--color-text-muted);
+  border-left: 2px solid var(--color-border-strong);
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* ── 이미지 ────────────────────────────────────────────────── */
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+img {
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+}
+
+/* Mermaid는 배경이 흰색으로 고정되므로 다크에서도 읽히도록 흰 패널에 얹는다 */
+.mermaid {
+  margin: 0 0 var(--space-md);
+  padding: var(--space-md);
+  overflow-x: auto;
+  background-color: #ffffff;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+/* ── 표 ────────────────────────────────────────────────────── */
+
+table {
+  display: block;
+  width: 100%;
+  margin: 0 0 var(--space-md);
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+th,
+td {
+  padding: var(--space-xs) var(--space-sm);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-border);
+}
+
+thead th {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-meta);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+tbody tr:last-child th,
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ── 각주 ──────────────────────────────────────────────────── */
+
+.footnotes {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.footnotes ol {
+  padding-left: var(--space-md);
+}
+
+a.footnote,
+sup a {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-meta);
+  font-variant-numeric: tabular-nums;
+}

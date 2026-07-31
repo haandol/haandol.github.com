@@ -1,0 +1,210 @@
+---
+---
+
+/*
+ * Components — 글 목록, 포스트 헤더, 태그, 페이지네이션, 관련 글
+ *
+ * 값은 tokens.css를 참조한다. 의도는 DESIGN.md 참고.
+ * 이 파일만 SCSS다(중첩을 쓰는 유일한 자리).
+ */
+
+/* ── 글 목록 ───────────────────────────────────────────────── */
+
+.posts {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        margin: 0;
+        padding: var(--space-lg) 0;
+        border-bottom: 1px solid var(--color-border-subtle);
+
+        &:first-child {
+            padding-top: 0;
+        }
+
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+
+    .post-title {
+        margin: 0 0 var(--space-xxs);
+        font-size: var(--font-size-h3);
+
+        a {
+            color: var(--color-heading);
+
+            &:hover {
+                color: var(--color-link);
+                text-decoration: none;
+            }
+        }
+    }
+
+    .post-excerpt {
+        margin: 0 0 var(--space-xs);
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+    }
+
+    /* 날짜는 모노 + tabular-nums — 목록에서 세로로 정렬된다 */
+    .post-date {
+        display: block;
+        margin: 0;
+        color: var(--color-text-faint);
+        font-family: var(--font-mono);
+        font-size: var(--font-size-meta);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: var(--tracking-meta);
+    }
+}
+
+/* ── 포스트 ────────────────────────────────────────────────── */
+
+.post,
+.page {
+    margin-bottom: var(--space-3xl);
+}
+
+.post-title,
+.page-title {
+    margin: 0 0 var(--space-sm);
+    color: var(--color-heading);
+    font-size: var(--font-size-display);
+    line-height: 1.2;
+    letter-spacing: var(--tracking-tight);
+}
+
+/* 포스트 상단 메타 — 날짜, 모노 */
+.post > .post-date {
+    display: block;
+    margin: 0 0 var(--space-xl);
+    color: var(--color-text-faint);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-meta);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--tracking-meta);
+}
+
+/* 본문의 번호 매긴 섹션 제목 — 이 블로그의 글은 실제로 순차적 논증이라
+ * 번호가 정보를 담는다. 그래서 번호를 모노로 두드러지게 한다. */
+.post {
+    h2,
+    h3 {
+        scroll-margin-top: var(--space-lg);
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xxs);
+        margin: var(--space-xl) 0 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+            margin: 0;
+            padding: 2px var(--space-xs);
+            color: var(--color-text-muted);
+            background-color: var(--color-surface-subtle);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: var(--font-size-meta);
+        }
+    }
+}
+
+/* ── 관련 글 ───────────────────────────────────────────────── */
+
+.related {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+
+    h3 {
+        margin: 0 0 var(--space-sm);
+        color: var(--color-text-muted);
+        font-family: var(--font-mono);
+        font-size: var(--font-size-meta);
+        font-weight: var(--weight-medium);
+        letter-spacing: var(--tracking-meta);
+        text-transform: uppercase;
+    }
+}
+
+.related-posts {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        margin: 0 0 var(--space-xxs);
+    }
+
+    a {
+        color: var(--color-text);
+
+        &:hover {
+            color: var(--color-link);
+            text-decoration: none;
+        }
+    }
+
+    small {
+        margin-right: var(--space-xs);
+        color: var(--color-text-faint);
+        font-family: var(--font-mono);
+        font-size: var(--font-size-meta);
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+/* ── 페이지네이션 ──────────────────────────────────────────── */
+
+.pagination {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+
+    ol {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xxs);
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    li {
+        margin: 0;
+    }
+
+    a,
+    .current-page {
+        display: block;
+        min-width: 2rem;
+        padding: var(--space-xxs) var(--space-xs);
+        color: var(--color-text-muted);
+        border-radius: var(--radius-sm);
+        font-family: var(--font-mono);
+        font-size: var(--font-size-meta);
+        font-variant-numeric: tabular-nums;
+        transition: background-color var(--transition), color var(--transition);
+    }
+
+    a:hover {
+        color: var(--color-text-strong);
+        background-color: var(--color-surface-hover);
+        text-decoration: none;
+    }
+
+    .current-page {
+        color: var(--color-text-strong);
+        background-color: var(--color-surface-active);
+        font-weight: var(--weight-medium);
+    }
+}

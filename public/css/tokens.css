@@ -1,0 +1,164 @@
+/*
+ * Design tokens
+ *
+ * 이 파일이 사이트의 색·타이포·간격·레이아웃 값의 단일 출처다.
+ * 나머지 스타일시트는 리터럴 대신 var(--token)을 참조한다.
+ *
+ * 값의 의도와 사용처는 저장소 루트의 DESIGN.md에 정리되어 있다.
+ * 값을 바꿀 때는 이 파일과 DESIGN.md를 함께 고친다.
+ *
+ * 색은 라이트/다크 2세트다. 시맨틱 이름(--color-surface 등)은 두 테마에서
+ * 같고 값만 달라지므로, 다른 스타일시트는 테마를 몰라도 된다.
+ *
+ * 주의: 브레이크포인트(30/38/48/58/64em)는 CSS custom property로
+ * 미디어 쿼리 조건에 쓸 수 없어 여기 없다. 각 스타일시트의 리터럴로 남아 있다.
+ */
+
+:root {
+  /* ── 색: 라이트 ───────────────────────────────────────────── */
+
+  /* 표면 — 본문 배경, 사이드바 배경, 알약형 hover/active */
+  --color-surface: #ffffff;
+  --color-surface-sidebar: #f7f7f5;
+  --color-surface-raised: #ffffff;
+  --color-surface-subtle: #f4f4f2;
+  --color-surface-hover: #ececea;
+  --color-surface-active: #e4e4e1;
+
+  /* 텍스트 */
+  --color-text: #35352f;
+  --color-text-strong: #16160f;
+  --color-heading: #16160f;
+  /* muted/faint는 본문 배경 대비 4.5:1 이상을 유지한다 — 날짜·라벨이
+   * 읽히지 않으면 메타 정보를 모노로 둔 의미가 없다. */
+  --color-text-muted: #63635a;
+  --color-text-faint: #6e6e65;
+
+  /* 링크·강조 */
+  --color-link: #1f6f5c;
+  --color-link-hover: #175647;
+  --color-accent: #1f6f5c;
+  --color-code: #b0533f;
+
+  /* 경계 */
+  --color-border: #e2e2dd;
+  --color-border-subtle: #ececE7;
+  --color-border-strong: #d3d3cc;
+
+  /* 코드 블록 */
+  --color-code-bg: #f7f7f5;
+
+  /* ── 타이포: 서체 ─────────────────────────────────────────── */
+
+  /* 본문 — 한글 글리프를 갖춘 가변 서체. PT Sans에는 한글이 없어
+   * 한국어 본문이 OS 기본 폰트로 떨어지던 문제를 해결한다. */
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+
+  /* 유틸리티 — 날짜·태그·섹션 번호·코드. 이 블로그의 글은 번호가 매겨진
+   * 순차적 논증이고 주제가 코드라서, 메타 정보에 모노를 쓴다. */
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    "Courier New", monospace;
+
+  /* ── 타이포: 행간 ─────────────────────────────────────────── */
+  --line-height: 1.75;
+  --line-height-tight: 1.3;
+  --line-height-code: 1.6;
+
+  /* ── 타이포: 루트 크기 ────────────────────────────────────── */
+  --font-size-root-sm: 16px;
+  --font-size-root-lg: 17px;
+
+  /* ── 타이포: 크기 ─────────────────────────────────────────── */
+  --font-size-display: 2.25rem;
+  --font-size-h1: 1.75rem;
+  --font-size-h2: 1.375rem;
+  --font-size-h3: 1.125rem;
+  --font-size-body: 1rem;
+  --font-size-sm: 0.875rem;
+  --font-size-meta: 0.75rem;
+  --font-size-code: 0.8125rem;
+
+  /* ── 타이포: 자간·굵기 ───────────────────────────────────── */
+  --tracking-tight: -0.02em;
+  --tracking-meta: 0.06em;
+  --weight-body: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+
+  /* ── 간격: em 기반 (부모 글자 크기에 비례해야 하는 자리) ──── */
+  --space-code-y: .2em;
+  --space-code-x: .4em;
+
+  /* ── 간격: rem 기반 ──────────────────────────────────────── */
+  --space-xxs: .25rem;
+  --space-xs: .5rem;
+  --space-sm: .75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* ── 레이아웃 ────────────────────────────────────────────── */
+  --sidebar-width: 16rem;
+  --content-max-width: 42rem;
+  --content-offset: 16rem;
+
+  /* ── 레이아웃: 사이드바 내부 ──────────────────────────────── */
+  --sidebar-pad: .75rem;
+  --nav-item-pad-y: .4rem;
+  --nav-item-pad-x: .625rem;
+
+  /* ── 레이아웃: 아이콘 버튼 ───────────────────────────────── */
+  --icon-btn-size: 1.75rem;
+  --icon-size: 1rem;
+
+  /* ── 모서리 ──────────────────────────────────────────────── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  /* ── 전환 ────────────────────────────────────────────────── */
+  --transition: .18s ease;
+  --transition-slow: .24s ease;
+
+  color-scheme: light;
+}
+
+/*
+ * 다크 테마
+ *
+ * `<html data-theme="dark">`로 적용된다. 시맨틱 이름은 그대로 두고 값만 바꾼다.
+ * 다크에서 본문 배경보다 사이드바를 더 어둡게 해 라이트와 위계를 맞춘다.
+ */
+:root[data-theme="dark"] {
+  --color-surface: #1a1a18;
+  --color-surface-sidebar: #141413;
+  --color-surface-raised: #232320;
+  --color-surface-subtle: #232320;
+  --color-surface-hover: #2b2b27;
+  --color-surface-active: #34342f;
+
+  --color-text: #d6d6cf;
+  --color-text-strong: #f2f2ec;
+  --color-heading: #f2f2ec;
+  /* muted/faint는 본문 배경 대비 4.5:1 이상을 유지한다 — 날짜·라벨이
+   * 읽히지 않으면 메타 정보를 모노로 둔 의미가 없다. */
+  --color-text-muted: #b0b0a6;
+  --color-text-faint: #a1a198;
+
+  --color-link: #6fc0a6;
+  --color-link-hover: #8ed3bc;
+  --color-accent: #6fc0a6;
+  --color-code: #e0937d;
+
+  --color-border: #302f2b;
+  --color-border-subtle: #262622;
+  --color-border-strong: #3d3c37;
+
+  --color-code-bg: #1f1f1c;
+
+  color-scheme: dark;
+}

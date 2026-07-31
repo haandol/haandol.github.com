@@ -2,31 +2,34 @@
 layout: default
 ---
 
-<div class="post">
+<article class="post">
   <h1 class="post-title">{{ page.title }}</h1>
-  <ul class="tags">
-      {% for tag in page.tags %}
-          <li>#{{tag}}</li>
-      {% endfor %}
-  </ul>
-  <span class="post-date">{{ page.date | date: "%Y년 %m월 %d일"}} 작성</span>
-  {{ content }}
-</div>
+  <time class="post-date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y.%m.%d" }}</time>
 
-<div class="related">
-  <h2>Related Posts</h2>
+  {{ content }}
+
+  {% if page.tags.size > 0 %}
+  <ul class="tags">
+    {% for tag in page.tags %}
+      <li>#{{ tag }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</article>
+
+{% if site.related_posts.size > 0 %}
+<nav class="related" aria-label="관련 글">
+  <h3>관련 글</h3>
   <ul class="related-posts">
     {% for post in site.related_posts limit:3 %}
       <li>
-        <h3>
-          <a href="{{ post.url }}">
-            {{ post.title }}
-            <small>{{post.date | date: "%Y년 %m월 %d일"}}</small>
-          </a>
-        </h3>
+        <a href="{{ post.url }}">
+          <small>{{ post.date | date: "%Y.%m.%d" }}</small>{{ post.title }}
+        </a>
       </li>
     {% endfor %}
   </ul>
-</div>
+</nav>
+{% endif %}
 
 {% include comments.html %}

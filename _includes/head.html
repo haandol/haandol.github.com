@@ -14,8 +14,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-  <!-- Enable responsiveness on mobile devices-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <!-- Enable responsiveness on mobile devices. maximum-scale은 확대를 막아
+       접근성을 해치므로 두지 않는다. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141413" media="(prefers-color-scheme: dark)">
 
   <title>
   {% if page.title == "Home" %}
@@ -37,12 +40,39 @@
 {% endif %}
   <meta name="author" content="haandol">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="/public/css/poole.css">
+  <!-- 테마와 사이드바 상태 복원 — 페인트 전에 실행해야 깜빡임이 없다.
+       저장된 값이 없으면 OS 설정을 따른다. -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      try {
+        var theme = localStorage.getItem('theme');
+        if (!theme) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        root.setAttribute('data-theme', theme);
+        if (localStorage.getItem('sidebarHidden') === '1') {
+          root.classList.add('sidebar-hidden');
+        }
+      } catch (e) {
+        root.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+
+  <!-- Fonts — Pretendard는 한글 글리프를 갖춘 본문 서체, JetBrains Mono는
+       날짜·태그·코드용 유틸리티 서체다. -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+
+  <!-- CSS — tokens.css가 먼저 와야 나머지 스타일시트의 var() 참조가 해석된다 -->
+  <link rel="stylesheet" href="/public/css/tokens.css">
+  <link rel="stylesheet" href="/public/css/base.css">
+  <link rel="stylesheet" href="/public/css/layout.css">
   <link rel="stylesheet" href="/public/css/syntax.css">
-  <link rel="stylesheet" href="/public/css/hyde.css">
-  <link rel="stylesheet" href="/public/css/vincent.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="/public/css/components.css">
 
   <!-- Icons -->
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
@@ -51,7 +81,8 @@
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
 
-  <!-- Mermaid -->
+  <!-- Mermaid — 다이어그램은 흰 패널에 얹으므로 테마와 무관하게 default를 쓴다.
+       원본 텍스트를 남겨둬야 나중에 다시 렌더할 수 있다. -->
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     mermaid.initialize({ startOnLoad: false, theme: 'default' });

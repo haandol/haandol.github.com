@@ -4,3 +4,4 @@ _site
 vendor/
 .bundle/config
 .claude/settings.local.json
+.playwright-mcp/

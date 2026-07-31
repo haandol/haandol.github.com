@@ -1,27 +1,78 @@
-<div class="sidebar">
-  <div class="container sidebar-sticky">
-    <div class="sidebar-about">
-      <h1>
-        <a href="/">
-          {{ site.title }}
-        </a>
-      </h1>
-      <p class="lead">{{ site.tagline }}</p>
+{%- comment -%}
+사이드바 셸. `.sidebar`는 transform으로 밀려나므로, 접힌 상태에서 다시 열기 위한
+버튼은 사이드바 밖(형제)에 둔다 — transform이 걸린 조상 안에서는 position:fixed
+자식도 함께 이동하기 때문이다.
+{%- endcomment -%}
+
+<button type="button" class="icon-btn sidebar-reveal" data-sidebar-toggle
+        aria-label="사이드바 열기" aria-controls="sidebar" aria-expanded="false">
+  <svg viewBox="0 0 20 20" aria-hidden="true">
+    <path d="M3 5h14M3 10h14M3 15h14"/>
+  </svg>
+</button>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-head">
+    <p class="sidebar-brand">
+      <a href="/">{{ site.title }}</a>
+      <span class="sidebar-tagline">{{ site.tagline }}</span>
+    </p>
+
+    <div class="sidebar-actions">
+      <button type="button" class="icon-btn" data-theme-toggle aria-label="테마 바꾸기">
+        <svg class="icon-moon" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"/>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 20 20" aria-hidden="true">
+          <circle cx="10" cy="10" r="3.6"/>
+          <path d="M10 2.2v1.6M10 16.2v1.6M2.2 10h1.6M16.2 10h1.6M4.5 4.5l1.1 1.1M14.4 14.4l1.1 1.1M15.5 4.5l-1.1 1.1M5.6 14.4l-1.1 1.1"/>
+        </svg>
+      </button>
+
+      <button type="button" class="icon-btn" data-sidebar-toggle
+              aria-label="사이드바 닫기" aria-controls="sidebar" aria-expanded="true">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <rect x="2.8" y="3.5" width="14.4" height="13" rx="2.2"/>
+          <path d="M7.8 3.5v13"/>
+        </svg>
+      </button>
     </div>
+  </div>
 
-    <nav class="sidebar-nav">
-      <a class="sidebar-nav-item{% if page.url == '/' %} active{% endif %}" href="/">Home</a>
-      {% assign pages_list = site.pages %}
-      {% for node in pages_list %}
-        {% if node.title != null %}
-          {% if node.layout == "page" %}
-            <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{ node.url }}">{{ node.title }}</a>
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-      <a class="sidebar-nav-item" href="{{ site.issueurl }}" target="_blank">Q&A</a>
-    </nav>
+  <div class="sidebar-body">
+    <ul class="sidebar-nav">
+      <li>
+        <a class="nav-item" href="/"{% if page.url == '/' %} aria-current="page"{% endif %}>Home</a>
+      </li>
+      {%- for node in site.pages -%}
+        {%- if node.title and node.layout == "page" -%}
+          <li>
+            <a class="nav-item" href="{{ node.url }}"{% if page.url == node.url %} aria-current="page"{% endif %}>{{ node.title }}</a>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+      <li>
+        <a class="nav-item" href="{{ site.issueurl }}" target="_blank" rel="noopener">Q&amp;A</a>
+      </li>
+    </ul>
 
-    <p class="sidebar-copy">&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>
+    <p class="sidebar-label">지난 글</p>
+    <ul class="sidebar-nav">
+      {%- assign recent = site.posts | where: "publish", true -%}
+      {%- for post in recent limit: 8 -%}
+        <li>
+          <a class="nav-item nav-item-post" href="{{ post.url }}"
+             {% if page.url == post.url %}aria-current="page"{% endif %}
+             title="{{ post.title }}">{{ post.title }}</a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  <div class="sidebar-foot">
+    <a class="sidebar-profile" href="/about.html">
+      <span class="sidebar-avatar" aria-hidden="true">DL</span>
+      <span class="sidebar-profile-name">{{ site.author.name }}</span>
+    </a>
   </div>
 </div>

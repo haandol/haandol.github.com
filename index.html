@@ -3,25 +3,23 @@ layout: default
 title : Home
 ---
 
-<div class="container">
-    <ul class="posts">
-        {% for post in paginator.posts %}
-            {% if post.publish %}
-                <li class="post-item clearfix">
-                    <h2 class="post-title"><a href="{{post.url}}"><span class="post-title-words">{{ post.title }}</span></a></h2>
-                    <p class="post-excerpt">{{ post.excerpt }}</p>
-                    <span class="post-date">{{ post.date | date: "%Y년 %m월 %d일" }} 작성</span>
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-</div>
+<ul class="posts">
+    {% for post in paginator.posts %}
+        {% if post.publish %}
+            <li>
+                <h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
+                <p class="post-excerpt">{{ post.excerpt }}</p>
+                <time class="post-date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y.%m.%d" }}</time>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
 
-<div id="post-pagination" class="pagination clearfix">
+<nav id="post-pagination" class="pagination" aria-label="페이지 목록">
     <ol class="pages">
         <li class="page">
             {% if paginator.page == 1 %}
-                <span class="current-page">1</span>
+                <span class="current-page" aria-current="page">1</span>
             {% else %}
                 <a href="/">1</a>
             {% endif %}
@@ -30,11 +28,11 @@ title : Home
         {% for count in (2..paginator.total_pages) %}
             <li class="page">
                 {% if count == paginator.page %}
-                    <span class="current-page">{{count}}</span>
+                    <span class="current-page" aria-current="page">{{ count }}</span>
                 {% else %}
-                    <a href="/page{{count}}">{{count}}</a>
+                    <a href="/page{{ count }}">{{ count }}</a>
                 {% endif %}
             </li>
         {% endfor %}
     </ol>
-</div>
+</nav>

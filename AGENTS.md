@@ -10,7 +10,7 @@ Topics include AI/ML, AWS, software engineering, startup/lean startup, and more.
 
 - **Site URL**: https://haandol.github.io
 - **Author**: DongGyun Lee (haandol)
-- **Theme**: Hyde (based on Poole)
+- **Theme**: Custom (token-based; see DESIGN.md). Light/dark toggle.
 
 ## Repository Structure
 
@@ -28,10 +28,13 @@ Topics include AI/ML, AWS, software engineering, startup/lean startup, and more.
   - `head.html` – HTML head tag
   - `sidebar.html` – Sidebar navigation
   - `comments.html` – Comment system
-- **`public/css/`** – Stylesheets
-  - `poole.css` – Base styles
-  - `hyde.css` – Hyde theme styles
-  - `syntax.css` – Code highlighting
+- **`public/css/`** – Stylesheets. Every value comes from `tokens.css`; see
+  [DESIGN.md](./DESIGN.md) for the design system and its rationale.
+  - `tokens.css` – Single source of truth for color/type/space (light + dark sets)
+  - `base.css` – Document defaults and body typography
+  - `layout.css` – Sidebar shell, content column, toggle states
+  - `components.scss` – Post list, post header, tags, pagination, related posts
+  - `syntax.css` – Code highlighting (light + dark sets)
 - **`assets/img/`** – Image assets
   - Directory convention: `assets/img/YYYY/MMDD/` (e.g., `assets/img/2026/0205/`)
   - Older posts may use `assets/img/YYYYMMDD/` format
@@ -75,7 +78,7 @@ bundle exec jekyll serve --watch --drafts
 ## Technology Stack
 
 - **Static Site Generator**: Jekyll (GitHub Pages)
-- **Theme**: Hyde (based on Poole)
+- **Theme**: Custom (token-based; see DESIGN.md). Light/dark toggle.
 - **Markdown Engine**: kramdown
 - **Syntax Highlighter**: rouge
 - **Plugins**: jekyll-sitemap, jekyll-feed, jekyll-paginate
