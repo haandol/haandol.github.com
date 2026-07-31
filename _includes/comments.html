@@ -1,9 +1,60 @@
-<div id="comments">
-  <script src="https://utteranc.es/client.js"
-          repo="haandol/page.issue"
-          issue-term="pathname"
-          theme="github-light"
-          crossorigin="anonymous"
-          async>
-  </script>
-</div>
+<div id="comments"></div>
+
+{%- comment -%}
+utteranc.es는 테마를 script 태그의 속성으로 받고, 로드된 뒤에는 cross-origin
+iframe이라 CSS가 닿지 않는다. 그래서 두 갈래로 처리한다.
+
+1. 최초 로드: 현재 테마에 맞는 theme 값으로 script를 주입한다.
+2. 이후 토글: iframe에 postMessage로 테마 변경을 알린다.
+
+<html data-theme>의 변화를 MutationObserver로 감시하므로, 토글 버튼이 어디에
+있든 이 파일은 알 필요가 없다.
+
+iframe은 비동기로 생기고, 그 전에 테마를 바꿀 수 있다. 그 변경을 흘리지 않도록
+iframe이 나타나면 현재 테마를 한 번 밀어준다.
+{%- endcomment -%}
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var mount = document.getElementById('comments');
+    var ORIGIN = 'https://utteranc.es';
+
+    function currentTheme() {
+      return root.getAttribute('data-theme') === 'dark' ? 'github-dark' : 'github-light';
+    }
+
+    function frame() {
+      return mount.querySelector('iframe.utterances-frame');
+    }
+
+    function pushTheme() {
+      var f = frame();
+      if (!f || !f.contentWindow) return;
+      f.contentWindow.postMessage({ type: 'set-theme', theme: currentTheme() }, ORIGIN);
+    }
+
+    var script = document.createElement('script');
+    script.src = ORIGIN + '/client.js';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    script.setAttribute('repo', 'haandol/page.issue');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('theme', currentTheme());
+    mount.appendChild(script);
+
+    /* 위젯이 늦게 붙으므로, iframe이 나타난 뒤 현재 테마를 한 번 맞춰준다.
+       그 사이에 사용자가 테마를 바꿨더라도 반영된다. */
+    var waitForFrame = new MutationObserver(function () {
+      if (!frame()) return;
+      waitForFrame.disconnect();
+      pushTheme();
+    });
+    waitForFrame.observe(mount, { childList: true, subtree: true });
+
+    new MutationObserver(pushTheme).observe(root, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+  })();
+</script>

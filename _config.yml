@@ -3,7 +3,6 @@ title:          Haandol
 tagline:        TL;DR
 url:            "https://haandol.github.io"
 baseurl:        /
-issueurl:       "https://github.com/haandol/haandol.github.com/issues"
 
 sass:
   style:        compressed
@@ -13,9 +12,14 @@ plugins:
   - jekyll-feed
   - jekyll-paginate
 
+# 저장소 문서는 사이트로 발행하지 않는다. github-pages의 기본 테마가 front matter
+# 없는 .md에도 `layout: page`와 H1 기반 title을 붙여버려서, 빼두지 않으면
+# 사이드바 네비에 페이지로 올라온다.
 exclude:
   - CLAUDE.md
   - AGENTS.md
+  - DESIGN.md
+  - README.md
 
 # Build settinga
 markdown:       kramdown

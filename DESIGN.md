@@ -144,7 +144,6 @@
 ├────────────────────┤
 │ ▬ Home             │  sidebar-body — 알약형 네비
 │   About            │
-│   Q&A              │
 │                    │
 │ 지난 글            │  sidebar-label — 모노 대문자
 │   ALPS와 ADR로...  │  최근 8개, 2줄까지
@@ -152,8 +151,13 @@
 └────────────────────┘
 ```
 
-하단에 프로필 행을 두지 않는다. 저자 정보는 About 페이지가 담당하고, 사이드바는
-글 사이를 이동하는 일만 한다.
+사이드바는 글 사이를 이동하는 일만 한다. 프로필 행과 외부 링크(Q&A)를 두지 않고,
+저자 정보는 About 페이지가 담당한다.
+
+네비 항목은 `layout: page`인 페이지에서 자동으로 나온다. 그래서 **저장소 문서는
+`_config.yml`의 `exclude`에 넣어야 한다** — `github-pages`의 기본 테마가 front matter
+없는 `.md`에도 `layout: page`와 H1 기반 `title`을 붙여서, 빼두지 않으면 이 문서
+(`DESIGN.md`)까지 네비에 페이지로 올라온다.
 
 현재 위치는 `aria-current` 속성으로 표시하고 CSS가 그걸 선택자로 쓴다
 (`.nav-item[aria-current]`). 클래스를 따로 두지 않아 마크업과 스타일이 어긋날 수 없다.
@@ -229,6 +233,18 @@ CSS custom property는 미디어 쿼리 조건에 쓸 수 없다. 따라서 아�
 Mermaid는 흰 배경을 전제로 렌더링하므로 다크 테마에서 그대로 두면 읽을 수 없다.
 그래서 `.mermaid`를 **항상 흰 패널에 얹는다** (`base.css`). 테마별로 다이어그램을
 두 벌 렌더하는 것보다 단순하고, 다이어그램이 문서 안의 삽화처럼 보인다.
+
+## 댓글 위젯 (utteranc.es)
+
+댓글은 cross-origin iframe이라 CSS가 닿지 않는다. `_includes/comments.html`이
+두 갈래로 처리한다.
+
+1. **최초 로드** — 현재 테마에 맞는 `theme` 속성으로 script를 주입한다.
+2. **이후 토글** — iframe에 `postMessage({type:'set-theme'})`를 보낸다.
+
+`<html data-theme>` 변화를 `MutationObserver`로 감시하므로 토글 버튼이 어디에 있는지
+알 필요가 없다. 위젯은 비동기로 붙기 때문에 **iframe이 나타난 시점에 현재 테마를 한 번
+더 밀어준다** — 그 사이에 사용자가 테마를 바꿨으면 그 변경이 유실되기 때문이다.
 
 ## syntax.css
 
