@@ -53,6 +53,11 @@
       {%- endfor -%}
     </ul>
 
+    {%- comment -%}
+      제목은 두 줄로 자른다. 자르는 대상은 안쪽 span이다 — 클램프된 상자는 패딩
+      박스에서 잘리므로, 패딩을 가진 링크에 직접 걸면 세 번째 줄이 아래 패딩
+      영역에 얇게 비친다. 자세한 내용은 layout.css의 .nav-item-clamp 참고.
+    {%- endcomment -%}
     <p class="sidebar-label">지난 글</p>
     <ul class="sidebar-nav">
       {%- assign recent = site.posts | where: "publish", true -%}
@@ -60,7 +65,7 @@
         <li>
           <a class="nav-item nav-item-post" href="{{ post.url }}"
              {% if page.url == post.url %}aria-current="page"{% endif %}
-             title="{{ post.title }}">{{ post.title }}</a>
+             title="{{ post.title }}"><span class="nav-item-clamp">{{ post.title }}</span></a>
         </li>
       {%- endfor -%}
     </ul>

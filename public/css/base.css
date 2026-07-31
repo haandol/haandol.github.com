@@ -23,6 +23,14 @@ html {
   line-height: var(--line-height);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* 목차 이동을 부드럽게. 모션 축소 설정에서는 아래에서 되돌린다. */
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 @media (min-width: 48em) {

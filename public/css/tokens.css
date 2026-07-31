@@ -20,6 +20,7 @@
   /* 표면 — 본문 배경, 사이드바 배경, 알약형 hover/active */
   --color-surface: #ffffff;
   --color-surface-sidebar: #f7f7f5;
+  /* 떠 있는 패널 — 배경보다 밝아야 위로 떠 보인다 */
   --color-surface-raised: #ffffff;
   --color-surface-subtle: #f4f4f2;
   --color-surface-hover: #ececea;
@@ -114,11 +115,25 @@
   --icon-btn-size: 1.75rem;
   --icon-size: 1rem;
 
+  /* ── 레이아웃: 목차 ──────────────────────────────────────── */
+  /* 번호가 들어가는 고정 폭 거터. `## 6.`까지 두 자리를 감당하고,
+   * 번호 없는 섹션(TL;DR·시작하며·마치며)은 이 폭을 비워둔다.
+   * 그래서 제목의 왼쪽 끝이 번호 유무와 무관하게 한 줄로 맞는다. */
+  --toc-num-width: 1.5rem;
+  /* 떠 있는 목차 메뉴의 폭. 사이드바(16rem)보다 좁게 둬서 같은 레일이
+   * 아니라 본문 위에 얹힌 별개의 패널로 읽히게 한다. */
+  --outline-panel-width: 14rem;
+
   /* ── 모서리 ──────────────────────────────────────────────── */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-pill: 999px;
+
+  /* ── 그림자 ──────────────────────────────────────────────── */
+  /* 떠 있는 패널 하나에만 쓴다. 이 사이트에서 그림자는 "이 요소는 문서 위에
+   * 떠 있다"는 신호이고, 그 신호가 필요한 자리는 목차 메뉴뿐이다. */
+  --shadow-panel: 0 1px 2px rgba(22, 22, 15, .04), 0 8px 24px rgba(22, 22, 15, .10);
 
   /* ── 전환 ────────────────────────────────────────────────── */
   --transition: .18s ease;
@@ -136,6 +151,7 @@
 :root[data-theme="dark"] {
   --color-surface: #1a1a18;
   --color-surface-sidebar: #141413;
+  /* 떠 있는 패널 — 다크에서는 배경보다 밝은 쪽이 위로 떠 보인다 */
   --color-surface-raised: #232320;
   --color-surface-subtle: #232320;
   --color-surface-hover: #2b2b27;
@@ -159,6 +175,10 @@
   --color-border-strong: #3d3c37;
 
   --color-code-bg: #1f1f1c;
+
+  /* 다크에서는 그림자만으로 뜬 느낌이 안 난다 — 더 짙게 깔고 위쪽에
+   * 밝은 테두리를 한 줄 얹어 패널의 윗면을 만든다. */
+  --shadow-panel: 0 1px 2px rgba(0, 0, 0, .5), 0 10px 28px rgba(0, 0, 0, .55);
 
   color-scheme: dark;
 }

@@ -153,14 +153,29 @@
   text-transform: uppercase;
 }
 
-/* 최근 글 목록 — 두 줄까지 보여준다 */
+/* 최근 글 목록 — 제목을 두 줄까지 보여준다.
+ *
+ * `.nav-item`은 한 줄 전제(nowrap + ellipsis)라서 여기서 되돌린다. */
 .nav-item-post {
   white-space: normal;
-  overflow: visible;
   text-overflow: clip;
+}
+
+/* 클램프는 <a>가 아니라 패딩 없는 안쪽 span에 건다.
+ *
+ * 클램프된 상자는 **패딩 박스**에서 잘린다. 패딩을 가진 <a>에 직접 걸면 세 번째
+ * 줄이 아래 패딩 영역에 얇게 비쳐서, 다음 항목과 겹쳐 보인다. 안쪽 span은
+ * 패딩이 없어 잘리는 경계가 텍스트 끝과 같다.
+ *
+ * `-webkit-box`를 `flow-root`로 블록화하는 엔진에서도 `max-height`가 같은
+ * 두 줄 높이를 보장하므로, 클램프가 무시되더라도 결과가 같다. */
+.nav-item-clamp {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* .nav-item의 line-height와 같은 값이어야 두 줄이 정확히 맞는다 */
+  max-height: calc(2 * 1.45em);
 }
 
 /* ── 아이콘 버튼 ───────────────────────────────────────────── */
@@ -220,6 +235,158 @@
   background-color: var(--color-surface);
 }
 
+/* ── 글 목차 ───────────────────────────────────────────────── */
+
+/*
+ * 사이드바를 접으면 같은 레일에 이 글의 절 목록이 들어온다. 그래서 왼쪽 열은
+ * 항상 무언가를 안내한다 — 사이트 아니면 지금 읽는 글. 폭이 사이드바와 같아
+ * 두 상태를 오가도 본문이 다시 흐르지 않는다.
+ *
+ * 기본값은 숨김이다. 데스크톱에서 사이드바가 접혔을 때, 그리고 모바일에서
+ * 글 흐름 안에 얹힐 때만 드러난다.
+ */
+.outline {
+  display: none;
+}
+
+.outline-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: var(--space-xxs) var(--nav-item-pad-x) var(--space-sm);
+}
+
+.outline-label {
+  margin: 0;
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-meta);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+}
+
+/* 접기 버튼은 모바일 전용이다 — 데스크톱 레일에서는 목차가 늘 펼쳐져 있다 */
+.outline-toggle {
+  display: none;
+}
+
+.outline-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.outline-body:hover {
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+.outline-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.outline-body::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: var(--radius-pill);
+}
+
+.outline-body:hover::-webkit-scrollbar-thumb {
+  background-color: var(--color-border-strong);
+}
+
+.outline-list,
+.outline-sub {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.outline-list > li + li {
+  margin-top: 0;
+}
+
+/* 항목 — 번호는 고정 폭 거터에, 제목은 그 오른쪽에.
+ * 번호 없는 절(TL;DR·시작하며·마치며)은 거터를 비워두므로 제목의 왼쪽 끝이
+ * 번호 유무와 무관하게 한 줄로 맞는다. */
+.outline-link {
+  display: grid;
+  grid-template-columns: var(--toc-num-width) 1fr;
+  padding: var(--nav-item-pad-y) var(--nav-item-pad-x);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: 1.45;
+  border-radius: var(--radius-md);
+  transition: color var(--transition), background-color var(--transition);
+}
+
+.outline-link:hover,
+.outline-link:focus-visible {
+  color: var(--color-text-strong);
+  background-color: var(--color-surface-hover);
+  text-decoration: none;
+}
+
+.outline-num {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-meta);
+  font-variant-numeric: tabular-nums;
+  /* 모노 숫자는 본문보다 작아서 baseline이 어긋난다 — 한 줄 안에서 맞춘다 */
+  line-height: 1.7;
+}
+
+.outline-text {
+  min-width: 0;
+}
+
+/* 현재 읽는 절 */
+.outline-link[aria-current] {
+  color: var(--color-text-strong);
+  font-weight: var(--weight-medium);
+}
+
+/* 소절을 읽는 동안에도 그 소절이 속한 절의 번호는 켜둔다. 번호가 이 글의
+ * 논증 순서라서, 지금 몇 번째 절에 있는지가 목차의 핵심 정보다. */
+.outline-item[data-open] > .outline-link .outline-num {
+  color: var(--color-accent);
+}
+
+.outline-item[data-open] > .outline-link {
+  color: var(--color-text-strong);
+  font-weight: var(--weight-medium);
+}
+
+/* h3는 읽고 있는 절 아래에서만 펼친다. 19줄짜리 목차를 레일에 밀어넣는 대신,
+ * 지금 있는 자리의 주변만 보여준다. */
+.outline-sub {
+  display: none;
+  /* 소절은 부모 절의 제목 열에 맞춰 들여쓴다 */
+  margin-left: calc(var(--toc-num-width) + var(--nav-item-pad-x));
+  border-left: 1px solid var(--color-border-subtle);
+}
+
+.outline-item[data-open] > .outline-sub {
+  display: block;
+}
+
+.outline-item-sub .outline-link {
+  grid-template-columns: 1fr;
+  padding-top: var(--space-xxs);
+  padding-bottom: var(--space-xxs);
+  color: var(--color-text-faint);
+  font-size: var(--font-size-meta);
+}
+
+.outline-item-sub .outline-link:hover,
+.outline-item-sub .outline-link:focus-visible,
+.outline-item-sub .outline-link[aria-current] {
+  color: var(--color-text-strong);
+}
+
 /* ── 본문 ──────────────────────────────────────────────────── */
 
 /* 본문 컬럼은 margin-left로 사이드바를 피하고, 안쪽에서 읽기 폭을 잡는다.
@@ -256,6 +423,34 @@
   .sidebar-hidden .content {
     margin-left: 0;
   }
+
+  /* 사이드바를 접으면 사이드바는 완전히 사라지고, 목차가 화면 좌측 수직
+   * 중앙에 **떠 있는 메뉴**로 나타난다. 레일을 그대로 채우면 사이드바와
+   * 구분되지 않아서, 높이를 내용만큼만 갖고 여백 위에 얹는 쪽을 택했다. */
+  .sidebar-hidden.has-outline .outline {
+    position: fixed;
+    top: 50%;
+    left: var(--space-lg);
+    transform: translateY(-50%);
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    width: var(--outline-panel-width);
+    /* 긴 글에서도 화면을 넘지 않게 — 넘치면 안쪽이 스크롤된다 */
+    max-height: calc(100vh - 2 * var(--space-xl));
+    padding: var(--space-xs);
+    background-color: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-panel);
+  }
+
+  /* 떠 있는 메뉴에서는 머리 라벨을 두지 않는다. 카드 자체가 이미 "본문과
+   * 다른 것"으로 읽히고, 항목이 9개뿐이라 무엇인지 바로 보인다.
+   * 사이드바로 돌아가는 버튼은 화면 좌상단의 햄버거가 담당한다. */
+  .sidebar-hidden.has-outline .outline-head {
+    display: none;
+  }
 }
 
 /* ── 모바일 — 사이드바는 오버레이 ──────────────────────────── */
@@ -285,6 +480,82 @@
 
   .content {
     padding-top: var(--space-3xl);
+  }
+
+  /* 모바일에는 레일이 없다. 목차를 글 맨 위 흐름 안에 얹되, 기본은 접어
+   * 한 줄로 둔다 — 19줄짜리 목차를 펼쳐두면 글이 화면 밖으로 밀려난다.
+   * 데스크톱의 "사이드바로 되돌리기" 버튼은 여기서 할 일이 없다. */
+  .outline {
+    display: block;
+    margin: 0 0 var(--space-xl);
+    border-top: 1px solid var(--color-border-subtle);
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  /* 머리 부분의 데스크톱 노드 — 라벨은 접기 버튼 안에 자기 것이 있고,
+   * 되돌리기 버튼은 모바일에서 할 일이 없다. */
+  .outline-head > .outline-label,
+  .outline-restore {
+    display: none;
+  }
+
+  .outline-head {
+    padding: 0;
+  }
+
+  /* 접힌 상태의 한 줄 — 라벨, 절 개수, 열림 표시 */
+  .outline-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    width: 100%;
+    padding: var(--space-sm) var(--nav-item-pad-x);
+    color: var(--color-text-muted);
+    background: none;
+    border: 0;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .outline-count {
+    flex: 1;
+    color: var(--color-text-faint);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-meta);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .outline-chevron {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    flex-shrink: 0;
+    margin: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform var(--transition);
+  }
+
+  .outline[data-open] .outline-chevron {
+    transform: rotate(180deg);
+  }
+
+  .outline-body {
+    display: none;
+    padding-bottom: var(--space-sm);
+  }
+
+  .outline[data-open] .outline-body {
+    display: block;
+  }
+
+  /* 펼쳤을 때는 절 전체를 보여준다 — 스크롤 위치에 따라 접히면
+   * 목록을 훑는 중에 항목이 움직인다. */
+  .outline-sub {
+    display: block;
   }
 }
 

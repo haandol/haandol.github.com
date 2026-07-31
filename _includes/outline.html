@@ -1,0 +1,185 @@
+{%- comment -%}
+글 목차 — 데스크톱에서 사이드바를 접으면 같은 레일에 이 글의 섹션 목록이 들어온다.
+모바일에서는 레일 자체가 오버레이라, 같은 패널을 글 맨 위 흐름 안에 얹는다.
+DOM은 한 벌이고 배치만 CSS가 가른다.
+
+목차는 Liquid이 아니라 렌더된 DOM에서 만든다. kramdown이 이미 모든 h2/h3에
+`id`를 붙이므로 그 id를 읽으면 앵커의 출처가 하나로 유지된다. Liquid로 본문을
+다시 파싱하면 같은 제목 목록이 두 벌이 되어 어긋날 수 있다.
+
+패널을 `.post` 안(날짜 다음)에 넣는 이유는 모바일 배치다. 데스크톱에서는
+`position: fixed`로 레일에 붙는데, `.post`에는 transform이 걸려 있지 않으므로
+조상 때문에 fixed가 깨지지 않는다.
+{%- endcomment -%}
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var post = document.querySelector('.post');
+    if (!post) return;
+
+    var headings = Array.prototype.filter.call(
+      post.querySelectorAll('h2[id], h3[id]'),
+      function (h) { return h.textContent.trim() !== ''; }
+    );
+
+    /* 절이 하나뿐인 글에서 목차는 정보를 더하지 않는다 */
+    if (headings.filter(function (h) { return h.tagName === 'H2'; }).length < 2) return;
+
+    /* ── 패널 ─────────────────────────────────────────────── */
+
+    var panel = document.createElement('nav');
+    panel.className = 'outline';
+    panel.id = 'outline';
+    panel.setAttribute('aria-label', '이 글의 목차');
+
+    var sections = headings.filter(function (h) { return h.tagName === 'H2'; }).length;
+
+    /* 머리 부분은 데스크톱과 모바일이 다른 일을 한다.
+     * - 데스크톱: 레일이 목차를 담고 있으니 라벨과 "사이드바로 되돌리기" 버튼.
+     * - 모바일: 목차가 글 위에 얹히므로 기본은 접힘. 여는 버튼이 필요하다.
+     * 둘을 한 노드로 겸하면 데스크톱에서 아무 일도 하지 않는 버튼이 포커스를
+     * 받게 된다. 그래서 노드를 나누고 CSS가 한쪽만 보여준다. */
+    panel.innerHTML =
+      '<div class="outline-head">' +
+        '<p class="outline-label">이 글</p>' +
+        '<button type="button" class="icon-btn outline-restore" data-sidebar-toggle' +
+        ' aria-label="사이드바 열기" aria-controls="sidebar" aria-expanded="false">' +
+        '<svg viewBox="0 0 20 20" aria-hidden="true">' +
+        '<path d="M3 5h14M3 10h14M3 15h14"/></svg></button>' +
+        '<button type="button" class="outline-toggle" aria-expanded="false"' +
+        ' aria-controls="outline-body">' +
+          '<span class="outline-label">이 글</span>' +
+          '<span class="outline-count">' + sections + '개 절</span>' +
+          '<svg class="outline-chevron" viewBox="0 0 20 20" aria-hidden="true">' +
+          '<path d="M6 8l4 4 4-4"/></svg>' +
+        '</button>' +
+      '</div>' +
+      '<div class="outline-body" id="outline-body"><ul class="outline-list"></ul></div>';
+
+    var list = panel.querySelector('.outline-list');
+
+    /* h3는 h2 아래로 접어둔다. 6개 절에 h3까지 모두 펼치면 19줄이 되어
+       레일에 담기지 않는다. 읽고 있는 절만 펼친다. */
+    var links = [];
+    var groups = [];
+
+    headings.forEach(function (h) {
+      var text = h.textContent.trim();
+      /* `## 1.`처럼 번호가 붙은 절은 번호를 거터로 뺀다. 번호는 이 글의
+         순차적 논증에서 실제 정보라 남기고, 없는 절은 거터를 비워둔다. */
+      var num = text.match(/^(\d+)\.\s*/);
+
+      var li = document.createElement('li');
+      li.className = 'outline-item';
+
+      var a = document.createElement('a');
+      a.className = 'outline-link';
+      a.href = '#' + h.id;
+      a.innerHTML =
+        '<span class="outline-num" aria-hidden="true">' + (num ? num[1] : '') + '</span>' +
+        '<span class="outline-text"></span>';
+      a.querySelector('.outline-text').textContent = num ? text.slice(num[0].length) : text;
+      li.appendChild(a);
+
+      links.push({ heading: h, link: a });
+
+      if (h.tagName === 'H2') {
+        list.appendChild(li);
+        groups.push({ item: li, sub: null, headings: [h] });
+      } else if (groups.length) {
+        var group = groups[groups.length - 1];
+        if (!group.sub) {
+          group.sub = document.createElement('ul');
+          group.sub.className = 'outline-sub';
+          group.item.appendChild(group.sub);
+        }
+        li.classList.add('outline-item-sub');
+        group.sub.appendChild(li);
+        group.headings.push(h);
+      }
+    });
+
+    /* 모바일 배치를 위해 글 흐름 안(날짜 다음)에 넣는다 */
+    var date = post.querySelector('.post-date');
+    if (date && date.nextSibling) {
+      post.insertBefore(panel, date.nextSibling);
+    } else {
+      post.insertBefore(panel, post.firstChild);
+    }
+    root.classList.add('has-outline');
+
+    /* ── 현재 위치 ────────────────────────────────────────── */
+
+    /* 제목이 화면 상단 이 지점을 지나면 그 절을 읽고 있다고 본다 */
+    var OFFSET = 120;
+    var active = null;
+
+    function mark() {
+      var y = window.scrollY + OFFSET;
+      var found = links[0];
+
+      for (var i = 0; i < links.length; i++) {
+        if (links[i].heading.getBoundingClientRect().top + window.scrollY <= y) {
+          found = links[i];
+        }
+      }
+
+      /* 문서 끝에서는 마지막 절을 활성으로 둔다 — 짧은 마지막 절이 기준선에
+         닿지 못해 활성 표시가 앞 절에 머무는 것을 막는다. */
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+        found = links[links.length - 1];
+      }
+
+      if (found === active) return;
+      active = found;
+
+      links.forEach(function (l) { l.link.removeAttribute('aria-current'); });
+      groups.forEach(function (g) { g.item.removeAttribute('data-open'); });
+
+      found.link.setAttribute('aria-current', 'location');
+
+      /* 활성 제목이 속한 절을 펼친다 (h3가 활성이면 그 부모 절) */
+      groups.forEach(function (g) {
+        if (g.headings.indexOf(found.heading) !== -1) g.item.setAttribute('data-open', '');
+      });
+    }
+
+    var queued = false;
+    function onScroll() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function () {
+        queued = false;
+        mark();
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    mark();
+
+    /* ── 모바일 접기 ──────────────────────────────────────── */
+
+    /* 모바일에서는 19줄짜리 목차가 글을 화면 밖으로 밀어낸다. 기본은 접고
+       한 줄로 두되, 열면 전체를 보여준다. */
+    var toggle = panel.querySelector('.outline-toggle');
+
+    toggle.addEventListener('click', function () {
+      var open = panel.hasAttribute('data-open');
+      if (open) {
+        panel.removeAttribute('data-open');
+      } else {
+        panel.setAttribute('data-open', '');
+      }
+      toggle.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+
+    /* 항목을 누르면 목차를 접는다 — 이동한 자리가 바로 보여야 한다 */
+    list.addEventListener('click', function (e) {
+      if (!e.target.closest('.outline-link')) return;
+      panel.removeAttribute('data-open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  })();
+</script>
