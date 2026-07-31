@@ -410,6 +410,9 @@
 .content-inner {
   max-width: var(--content-max-width);
   margin: 0 auto;
+  /* 읽기 컬럼 한쪽에 남는 여백. 다이어그램·코드·표가 이 값만큼 빠져나온다
+   * (components.scss의 --bleed). 기본값은 0이라 좁은 화면에서는 넓어지지 않는다. */
+  --figure-room: 0px;
 }
 
 @media (min-width: 48em) {
@@ -417,6 +420,25 @@
     margin-left: var(--content-offset);
     padding-left: var(--space-xl);
     padding-right: var(--space-xl);
+  }
+
+  /*
+   * 빠져나갈 수 있는 양은 상태마다 다르다. 좌우 대칭으로 빠져나오므로
+   * **왼쪽에 무엇이 있는지**가 한계를 정한다.
+   *
+   * 1) 사이드바가 열려 있으면 사이드바 안으로 들어가면 안 된다.
+   */
+  .content-inner {
+    --figure-room: max(0px, calc(
+      (100vw - var(--content-max-width)) / 2 - var(--content-offset)
+    ));
+  }
+
+  /* 2) 사이드바가 접혔고 목차도 없으면 화면 끝(좌우 패딩)까지 쓸 수 있다. */
+  .sidebar-hidden .content-inner {
+    --figure-room: max(0px, calc(
+      (100vw - var(--content-max-width)) / 2 - var(--space-xl)
+    ));
   }
 
   .content-inner {
@@ -494,6 +516,17 @@
    * 사이드바로 돌아가는 버튼은 화면 좌상단의 햄버거가 담당한다. */
   .sidebar-hidden.has-outline .outline-head {
     display: none;
+  }
+
+  /* 3) 목차가 떠 있으면 다이어그램이 그 위로 올라가면 안 된다.
+   * 메뉴의 오른쪽 끝까지가 한계고, 간격을 하나 더 둔다.
+   * (메뉴는 여백의 가운데에 있으므로 오른쪽 끝 = left + 폭) */
+  .sidebar-hidden.has-outline .content-inner {
+    --figure-room: max(0px, calc(
+      (100vw - var(--content-max-width)) / 2
+      - ((100vw - var(--content-max-width)) / 2 + var(--outline-panel-width)) / 2
+      - var(--space-lg)
+    ));
   }
 }
 
