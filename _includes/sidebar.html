@@ -19,6 +19,15 @@
     </p>
 
     <div class="sidebar-actions">
+      {%- comment -%}
+        단축키는 눌러볼 자리가 없으면 아무도 모른다. 키캡 하나를 버튼으로 둬서
+        도움말의 존재를 알린다. 물리 키보드가 없는 기기에서는 CSS가 감춘다.
+      {%- endcomment -%}
+      <button type="button" class="icon-btn keyhelp-open" data-keyhelp-open
+              aria-label="키보드 단축키 보기" title="키보드 단축키 (?)">
+        <span class="kbd" aria-hidden="true">?</span>
+      </button>
+
       <button type="button" class="icon-btn" data-theme-toggle aria-label="테마 바꾸기">
         <svg class="icon-moon" viewBox="0 0 20 20" aria-hidden="true">
           <path d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"/>

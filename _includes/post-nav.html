@@ -1,0 +1,45 @@
+{%- comment -%}
+이전·다음 글 — 이 글의 시간 축 이웃.
+
+`page.previous`/`page.next`를 쓰지 않는 이유는 그 둘이 `publish: false`인 글도
+집어오기 때문이다. 사이드바와 목록이 감춘 글로 넘어가면 목록에서 닿을 수 없는
+글에 도달하게 된다. 그래서 발행된 글만 남긴 목록에서 이 글의 자리를 찾는다.
+
+`site.posts`는 최신순이라 **한 칸 앞이 다음 글(더 최근), 한 칸 뒤가 이전 글**이다.
+
+앵커의 `rel`은 장식이 아니다 — `keys.html`의 `[`·`]` 핸들러가 이 속성으로
+대상을 찾는다. 링크를 여기 한 벌만 두고 키보드가 그것을 읽으면, 눌러서 가는 곳과
+키로 가는 곳이 어긋날 수 없다.
+
+발행 목록에 없는 글(초안·비공개)에서는 자리를 못 찾아 이 블록 전체가 빈다.
+{%- endcomment -%}
+
+{%- assign published = site.posts | where: "publish", true -%}
+{%- assign at = nil -%}
+{%- for p in published -%}
+  {%- if p.url == page.url -%}{%- assign at = forloop.index0 -%}{%- endif -%}
+{%- endfor -%}
+
+{%- if at -%}
+  {%- assign newer_at = at | minus: 1 -%}
+  {%- assign older_at = at | plus: 1 -%}
+  {%- if at > 0 -%}{%- assign newer = published[newer_at] -%}{%- endif -%}
+  {%- assign older = published[older_at] -%}
+
+  {%- if newer or older -%}
+<nav class="post-nav" aria-label="이전·다음 글">
+  {%- if older %}
+  <a class="post-nav-item post-nav-prev" rel="prev" href="{{ older.url }}">
+    <span class="post-nav-label">이전 글</span>
+    <span class="post-nav-title">{{ older.title }}</span>
+  </a>
+  {%- endif %}
+  {%- if newer %}
+  <a class="post-nav-item post-nav-next" rel="next" href="{{ newer.url }}">
+    <span class="post-nav-label">다음 글</span>
+    <span class="post-nav-title">{{ newer.title }}</span>
+  </a>
+  {%- endif %}
+</nav>
+  {%- endif -%}
+{%- endif -%}

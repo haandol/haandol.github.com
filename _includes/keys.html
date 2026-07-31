@@ -1,0 +1,640 @@
+{%- comment -%}
+키보드 레이어 — 이동 팔레트(Cmd/Ctrl+K)와 단축키 도움말(?).
+
+이 파일이 사이트의 **단축키 단일 소스**다. 키 바인딩은 아래 스크립트의 핸들러가
+갖고, 도움말 표는 같은 파일 안의 `SHORTCUTS` 배열이 갖는다. 둘을 한 파일에 둔 이유는
+어긋나지 않게 하려는 것이다 — 표를 다른 파일로 빼면 키를 고치고 표를 안 고치는 일이
+생긴다.
+
+**팔레트의 목적지 목록은 Liquid이 심는다.** 목차(`outline.html`)는 렌더된 DOM에서
+제목을 읽지만, 여기서는 그럴 수 없다 — 다른 글의 제목은 이 페이지의 DOM에 없다.
+정적 사이트라 빌드 시점에 JSON으로 심어두는 것이 유일한 방법이다. 최근 24개로
+자르는 건 111개 글의 제목을 모든 페이지에 심으면 HTML이 그만큼 무거워지기 때문이다.
+
+Cmd/Ctrl+K는 브라우저 기본(파이어폭스의 검색창 포커스 등)을 가로챈다. 사이트 안
+이동이 그 자리에서 더 자주 필요하다고 보고 `preventDefault`한다.
+{%- endcomment -%}
+
+<script id="key-destinations" type="application/json">
+{%- assign nav_pages = site.pages | where: "layout", "page" -%}
+{%- assign recent = site.posts | where: "publish", true -%}
+[
+  {"label":"Home","url":"/","group":"페이지"}
+  {%- for node in nav_pages -%}
+    {%- if node.title -%}
+  ,{"label":{{ node.title | jsonify }},"url":{{ node.url | jsonify }},"group":"페이지"}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- for post in recent limit: 24 -%}
+  ,{"label":{{ post.title | jsonify }},"url":{{ post.url | jsonify }},"group":"지난 글","date":{{ post.date | date: "%Y.%m.%d" | jsonify }}}
+  {%- endfor -%}
+]
+</script>
+
+<div class="key-overlay" id="key-palette" hidden>
+  <div class="key-panel key-panel-palette" role="dialog" aria-modal="true"
+       aria-label="이동" id="key-palette-panel">
+    <div class="key-search">
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <circle cx="9" cy="9" r="5.5"/>
+        <path d="M13.2 13.2 17 17"/>
+      </svg>
+      <input type="text" id="key-palette-input" placeholder="어디로 갈까요…"
+             autocomplete="off" spellcheck="false"
+             role="combobox" aria-expanded="true" aria-autocomplete="list"
+             aria-controls="key-palette-results">
+    </div>
+    <ul class="key-results" id="key-palette-results" role="listbox" aria-label="이동할 곳"></ul>
+    <p class="key-foot">
+      <span><span class="kbd">↑</span> <span class="kbd">↓</span> 이동</span>
+      <span><span class="kbd">↵</span> 열기</span>
+      <span><span class="kbd">Esc</span> 닫기</span>
+    </p>
+  </div>
+</div>
+
+<div class="key-overlay" id="key-help" hidden>
+  <div class="key-panel key-panel-help" role="dialog" aria-modal="true"
+       aria-labelledby="key-help-title" id="key-help-panel">
+    <div class="key-help-head">
+      <h2 class="key-help-title" id="key-help-title">키보드 단축키</h2>
+      <button type="button" class="icon-btn" id="key-help-close" aria-label="닫기">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M5 5l10 10M15 5L5 15"/>
+        </svg>
+      </button>
+    </div>
+    <div class="key-help-body" id="key-help-body"></div>
+    <p class="key-foot">
+      <span class="kbd">?</span> 로 열고 <span class="kbd">Esc</span> 로 닫아요
+    </p>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+    var CMD = isMac ? '⌘' : 'Ctrl';
+
+    /* ── 단축키 카탈로그 ──────────────────────────────────────
+     *
+     * `?` 도움말이 읽는 표. 실제 바인딩은 아래 핸들러가 갖고 있어서 이 표는
+     * "안내"다 — 둘이 어긋나면 핸들러가 정답이다. 그래도 같은 파일에 뒀으니
+     * 키를 고치면서 표를 지나칠 일은 없다. */
+    var SHORTCUTS = [
+      {
+        title: '전역',
+        rows: [
+          { keys: [CMD, 'K'], label: '이동 메뉴 열기' },
+          { keys: ['?'], label: '이 도움말' },
+          { keys: ['t'], label: '라이트 · 다크 전환' },
+          { keys: ['s'], label: '사이드바 접기 · 펴기' },
+          { keys: ['Esc'], label: '오버레이 닫기' },
+        ],
+      },
+      {
+        title: '이동',
+        rows: [
+          { keys: ['g', 'h'], then: true, label: '홈' },
+          { keys: ['g', 'a'], then: true, label: 'About' },
+          { keys: ['g', 'g'], then: true, label: '맨 위로' },
+          { keys: ['G'], label: '맨 아래로' },
+        ],
+      },
+      {
+        title: '이동 메뉴',
+        context: CMD + '+K 로 열었을 때',
+        rows: [
+          { keys: ['↑', '↓'], label: '항목 옮기기' },
+          { keys: ['↵'], label: '열기' },
+          { keys: ['1', '9'], range: true, label: '번호로 바로 열기' },
+        ],
+      },
+      {
+        title: '글 목록',
+        context: '홈 · 목록 페이지',
+        rows: [
+          { keys: ['j', 'k'], label: '다음 · 이전 글' },
+          { keys: ['↵'], label: '고른 글 열기' },
+          { keys: ['[', ']'], label: '이전 · 다음 페이지' },
+        ],
+      },
+      {
+        title: '글',
+        context: '글을 읽을 때',
+        rows: [
+          { keys: ['j', 'k'], label: '다음 · 이전 절' },
+          { keys: ['[', ']'], label: '이전 · 다음 글' },
+          { keys: ['o'], label: '목차 접기 · 펴기' },
+        ],
+      },
+    ];
+
+    /* ── 공통: 오버레이 ───────────────────────────────────────
+     *
+     * 두 오버레이(팔레트·도움말)가 같은 여닫기 규칙을 쓴다. 열면 배경 스크롤을
+     * 잠그고 포커스를 안으로 가둔다. 닫으면 열기 전에 포커스가 있던 곳으로
+     * 되돌린다 — 키보드로 열었다면 그 자리에서 다시 이어 읽어야 한다. */
+    var openOverlay = null;
+    var lastFocus = null;
+
+    function trapFocus(panel, e) {
+      var items = panel.querySelectorAll(
+        'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!items.length) return;
+      var first = items[0];
+      var last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function makeOverlay(id, opts) {
+      var el = document.getElementById(id);
+      var panel = el.firstElementChild;
+      var api = {};
+
+      api.isOpen = function () {
+        return !el.hidden;
+      };
+
+      api.open = function () {
+        if (openOverlay) openOverlay.close();
+        lastFocus = document.activeElement;
+        el.hidden = false;
+        /* 배경이 스크롤되면 오버레이 뒤에서 글이 흘러간다 */
+        document.body.style.overflow = 'hidden';
+        openOverlay = api;
+        if (opts.onOpen) opts.onOpen();
+      };
+
+      api.close = function () {
+        if (el.hidden) return;
+        el.hidden = true;
+        document.body.style.overflow = '';
+        if (openOverlay === api) openOverlay = null;
+        if (opts.onClose) opts.onClose();
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      };
+
+      /* 패널 밖(어두운 여백)을 누르면 닫는다 */
+      el.addEventListener('mousedown', function (e) {
+        if (!panel.contains(e.target)) api.close();
+      });
+
+      /* 오버레이 안의 키는 여기서 먼저 처리한다 — Esc로 닫고 Tab을 가둔다.
+         나머지는 각 오버레이의 onKey가 받는다. */
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          api.close();
+          return;
+        }
+        if (e.key === 'Tab') {
+          trapFocus(panel, e);
+          return;
+        }
+        if (opts.onKey) opts.onKey(e);
+      });
+
+      return api;
+    }
+
+    /* ── 이동 팔레트 ──────────────────────────────────────────
+     *
+     * 목적지는 빌드 시점에 심긴 JSON에서 읽는다. 검색은 부분 문자열 하나로
+     * 충분하다 — 목록이 30개 남짓이라 퍼지 매칭을 얹을 만한 규모가 아니다. */
+    var input = document.getElementById('key-palette-input');
+    var results = document.getElementById('key-palette-results');
+    var destinations = [];
+    var matches = [];
+    var cursor = 0;
+
+    try {
+      destinations = JSON.parse(document.getElementById('key-destinations').textContent);
+    } catch (e) {
+      destinations = [];
+    }
+
+    function normalize(s) {
+      return s.toLowerCase().replace(/\s+/g, '');
+    }
+
+    function filter(query) {
+      var q = normalize(query);
+      if (!q) return destinations;
+      return destinations.filter(function (d) {
+        return normalize(d.label).indexOf(q) !== -1;
+      });
+    }
+
+    function render() {
+      results.innerHTML = '';
+
+      if (!matches.length) {
+        var empty = document.createElement('li');
+        empty.className = 'key-empty';
+        empty.textContent = '찾는 글이 없어요';
+        results.appendChild(empty);
+        return;
+      }
+
+      /* 번호(1~9)로 바로 열 수 있는 건 검색어가 비었을 때뿐이다. 검색 중에는
+         목록이 계속 바뀌어서 번호가 가리키는 대상이 안정적이지 않다. */
+      var numbered = !input.value.trim();
+      var group = null;
+
+      matches.forEach(function (d, i) {
+        if (d.group !== group) {
+          group = d.group;
+          var label = document.createElement('li');
+          label.className = 'key-group';
+          label.setAttribute('role', 'presentation');
+          label.textContent = group;
+          results.appendChild(label);
+        }
+
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.className = 'key-result';
+        a.href = d.url;
+        a.id = 'key-result-' + i;
+        a.setAttribute('role', 'option');
+        a.setAttribute('aria-selected', i === cursor ? 'true' : 'false');
+        /* 포커스는 입력창에 머문다 — 타이핑을 이어가면서 방향키로 고르기 때문에
+           항목 자체는 탭 순서에서 뺀다. */
+        a.tabIndex = -1;
+
+        var num = document.createElement('span');
+        num.className = 'key-result-num';
+        num.setAttribute('aria-hidden', 'true');
+        num.textContent = numbered && i < 9 ? String(i + 1) : '';
+
+        var label2 = document.createElement('span');
+        label2.className = 'key-result-label';
+        label2.textContent = d.label;
+
+        var date = document.createElement('span');
+        date.className = 'key-result-date';
+        date.textContent = d.date || '';
+
+        a.appendChild(num);
+        a.appendChild(label2);
+        a.appendChild(date);
+        li.appendChild(a);
+        results.appendChild(li);
+      });
+
+      var active = results.querySelector('[aria-selected="true"]');
+      if (active) {
+        input.setAttribute('aria-activedescendant', active.id);
+        /* 커서가 목록 밖으로 나가면 따라 스크롤한다 */
+        if (active.scrollIntoView) active.scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    function moveCursor(delta) {
+      if (!matches.length) return;
+      /* 양끝에서 감싼다 — 목록이 짧아서 끝에서 멈추면 되돌아가는 손이 번거롭다 */
+      cursor = (cursor + delta + matches.length) % matches.length;
+      render();
+    }
+
+    function go(i) {
+      var target = matches[i];
+      if (!target) return;
+      window.location.href = target.url;
+    }
+
+    var palette = makeOverlay('key-palette', {
+      onOpen: function () {
+        input.value = '';
+        matches = destinations;
+        cursor = 0;
+        render();
+        input.focus();
+      },
+      onKey: function (e) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          moveCursor(1);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          moveCursor(-1);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          go(cursor);
+        } else if (!input.value.trim() && /^[1-9]$/.test(e.key)) {
+          /* 번호 바로 열기 — 검색을 시작하면 숫자는 검색어의 일부가 되어야 한다 */
+          e.preventDefault();
+          go(parseInt(e.key, 10) - 1);
+        }
+      },
+    });
+
+    input.addEventListener('input', function () {
+      matches = filter(input.value);
+      cursor = 0;
+      render();
+    });
+
+    /* 항목을 눌러도 열린다 — 링크라 기본 동작이 이미 이동이다 */
+
+    /* ── 단축키 도움말 ────────────────────────────────────────
+     *
+     * 표는 SHORTCUTS에서 만든다. 마크업을 손으로 쓰지 않으므로 키를 고칠 때
+     * 배열 한 곳만 손대면 된다. */
+    function buildHelp() {
+      var body = document.getElementById('key-help-body');
+      if (body.childElementCount) return;
+
+      SHORTCUTS.forEach(function (group) {
+        var section = document.createElement('section');
+        section.className = 'key-help-group';
+
+        var h3 = document.createElement('h3');
+        h3.textContent = group.title;
+        /* 맥락을 붙인다. `j`/`k`가 목록에서는 글을, 글에서는 절을 옮기므로
+           같은 키가 두 번 나온다 — 어디서 유효한지가 실제 정보다. */
+        if (group.context) {
+          var ctx = document.createElement('span');
+          ctx.className = 'key-help-context';
+          ctx.textContent = group.context;
+          h3.appendChild(ctx);
+        }
+        section.appendChild(h3);
+
+        var ul = document.createElement('ul');
+        ul.className = 'key-help-rows';
+
+        group.rows.forEach(function (row) {
+          var li = document.createElement('li');
+
+          var label = document.createElement('span');
+          label.textContent = row.label;
+
+          var keys = document.createElement('span');
+          keys.className = 'key-help-keys';
+
+          row.keys.forEach(function (key, i) {
+            if (i > 0) {
+              /* `g` 다음 `h`처럼 이어 누르는 조합은 화살표로, `1`~`9`처럼
+                 범위인 것은 물결로 잇는다. 그 외에는 나란히 둔다. */
+              if (row.then || row.range) {
+                var sep = document.createElement('span');
+                sep.className = 'key-help-then';
+                sep.textContent = row.then ? '→' : '~';
+                keys.appendChild(sep);
+              }
+            }
+            var kbd = document.createElement('span');
+            kbd.className = 'kbd';
+            kbd.textContent = key;
+            keys.appendChild(kbd);
+          });
+
+          li.appendChild(label);
+          li.appendChild(keys);
+          ul.appendChild(li);
+        });
+
+        section.appendChild(ul);
+        body.appendChild(section);
+      });
+    }
+
+    var help = makeOverlay('key-help', {
+      onOpen: function () {
+        buildHelp();
+        document.getElementById('key-help-close').focus();
+      },
+    });
+
+    document.getElementById('key-help-close').addEventListener('click', help.close);
+
+    document.querySelectorAll('[data-keyhelp-open]').forEach(function (btn) {
+      btn.addEventListener('click', help.open);
+    });
+
+    /* ── 이동 대상 ────────────────────────────────────────────
+     *
+     * 글 목록에서는 목록의 글, 글 페이지에서는 이 글의 절이 대상이다. 두 경우
+     * 모두 `j`/`k`가 "다음·이전"을 뜻하고, 무엇의 다음인지만 페이지가 정한다. */
+    var postLinks = Array.prototype.slice.call(
+      document.querySelectorAll('.posts .post-title a')
+    );
+    var article = document.querySelector('.post');
+    var headings = article
+      ? Array.prototype.filter.call(article.querySelectorAll('h2[id], h3[id]'), function (h) {
+          return h.textContent.trim() !== '';
+        })
+      : [];
+
+    /* 목록에서 고른 글 — 포커스로 표시한다. 별도 커서 상태를 두면 브라우저가
+       이미 갖고 있는 포커스와 두 벌이 되어 어긋난다. */
+    function moveInList(delta) {
+      if (!postLinks.length) return;
+      var at = postLinks.indexOf(document.activeElement);
+      var next = at === -1 ? (delta > 0 ? 0 : postLinks.length - 1) : at + delta;
+      if (next < 0 || next >= postLinks.length) return;
+      postLinks[next].focus();
+    }
+
+    /* 글에서 다음·이전 절 — 지금 화면 상단을 지난 마지막 제목이 기준이다.
+       목차(outline.html)의 활성 판정과 같은 기준선(120px)을 쓴다. */
+    var HEADING_OFFSET = 120;
+
+    function moveInPost(delta) {
+      if (!headings.length) return;
+      var y = window.scrollY + HEADING_OFFSET;
+      var at = -1;
+      for (var i = 0; i < headings.length; i++) {
+        if (headings[i].getBoundingClientRect().top + window.scrollY <= y) at = i;
+      }
+      var next = at + delta;
+      if (next < 0 || next >= headings.length) return;
+      headings[next].scrollIntoView();
+    }
+
+    /* 이전·다음 글 — 글 하단 네비게이션의 링크를 그대로 읽는다. 여기서 URL을
+       따로 계산하면 눌러서 가는 곳과 키로 가는 곳이 어긋날 수 있다. */
+    function siblingPost(rel) {
+      var link = document.querySelector('.post-nav-item[rel="' + rel + '"]');
+      return link ? link.getAttribute('href') : null;
+    }
+
+    /* ── 입력 중 가드 ─────────────────────────────────────────
+     *
+     * 단축키가 한 글자라서, 입력창에 포커스가 있으면 타이핑을 가로챈다.
+     * 댓글(utteranc.es)은 cross-origin iframe이라 keydown이 이 문서에 오지
+     * 않지만, iframe에 포커스가 있는 동안 document가 받는 키는 막아야 한다. */
+    function isTyping() {
+      var el = document.activeElement;
+      if (!el) return false;
+      if (el.isContentEditable) return true;
+      var tag = el.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'IFRAME';
+    }
+
+    /* ── 전역 키 ─────────────────────────────────────────────
+     *
+     * `g`로 시작하는 조합은 두 번째 키를 기다린다(`g h` = 홈). 기다리는 창을
+     * 두는 이유는 `g`만으로 하는 일이 없어서다 — 창이 지나면 그냥 흘린다.
+     *
+     * 1초는 넉넉한 편이다. 짧게 잡으면 `g`를 누르고 무엇을 누를지 잠깐 생각하는
+     * 사이에 창이 닫히는데, 그때 두 번째 키가 단독 단축키로 발동해버린다 —
+     * `g` 다음 `h`가 늦으면 아무 일도 안 하는 게 아니라 엉뚱한 일을 한다. */
+    var GO_WINDOW_MS = 1000;
+    var goArmed = false;
+    var goTimer = null;
+
+    function disarm() {
+      goArmed = false;
+      if (goTimer) {
+        clearTimeout(goTimer);
+        goTimer = null;
+      }
+    }
+
+    document.addEventListener('keydown', function (e) {
+      /* Cmd/Ctrl+K는 입력 중에도 열린다 — 조합키라 타이핑을 가로채지 않는다 */
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        if (palette.isOpen()) palette.close();
+        else palette.open();
+        return;
+      }
+
+      /* 오버레이가 열려 있으면 그 안의 핸들러가 키를 갖는다 */
+      if (openOverlay) return;
+      if (isTyping()) return;
+      /* 나머지 조합키(브라우저·OS 단축키)는 건드리지 않는다 */
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      /* `g` 대기 중 — 두 번째 키로 목적지를 정한다 */
+      if (goArmed) {
+        disarm();
+        if (e.key === 'h') {
+          e.preventDefault();
+          window.location.href = '/';
+        } else if (e.key === 'a') {
+          e.preventDefault();
+          window.location.href = '/about.html';
+        } else if (e.key === 'g') {
+          e.preventDefault();
+          window.scrollTo({ top: 0 });
+        }
+        return;
+      }
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          help.open();
+          break;
+
+        case 'g':
+          e.preventDefault();
+          goArmed = true;
+          goTimer = setTimeout(disarm, GO_WINDOW_MS);
+          break;
+
+        case 'G':
+          e.preventDefault();
+          window.scrollTo({ top: document.documentElement.scrollHeight });
+          break;
+
+        case 't':
+          e.preventDefault();
+          /* 토글의 실제 동작은 default.html이 갖고 있다 — 버튼을 누르는 것으로
+             테마 저장·아이콘 전환·댓글 위젯 통보가 한 번에 따라온다. */
+          clickFirst('[data-theme-toggle]');
+          break;
+
+        case 's':
+          e.preventDefault();
+          clickFirst('[data-sidebar-toggle]');
+          break;
+
+        case 'o':
+          /* 목차 접기 버튼은 좁은 폭에서만 화면에 있다 — 데스크톱 레일에서는
+             목차가 늘 펼쳐져 있어 누를 것이 없다. */
+          if (clickFirst('.outline-toggle')) e.preventDefault();
+          break;
+
+        case 'j':
+          e.preventDefault();
+          if (postLinks.length) moveInList(1);
+          else moveInPost(1);
+          break;
+
+        case 'k':
+          e.preventDefault();
+          if (postLinks.length) moveInList(-1);
+          else moveInPost(-1);
+          break;
+
+        case '[':
+          e.preventDefault();
+          navigate(postLinks.length ? pageLink('prev') : siblingPost('prev'));
+          break;
+
+        case ']':
+          e.preventDefault();
+          navigate(postLinks.length ? pageLink('next') : siblingPost('next'));
+          break;
+      }
+    });
+
+    /* 화면 안에 실제로 보이는 버튼 중 첫 번째를 누르고, 눌렀는지를 알려준다.
+     *
+     * 같은 일을 하는 버튼이 여러 벌이라 고르는 일이 필요하다 — 사이드바 토글은
+     * 열림·닫힘에 따라, 목차 접기는 화면 폭에 따라 한쪽만 뜬다. 숨은 쪽을 누르면
+     * CSS가 감춘 상태를 무시하고 엉뚱한 상태가 된다.
+     *
+     * **`offsetParent`로는 판정할 수 없다.** 두 가지 이유로 둘 다 틀린다.
+     * `position: fixed`인 요소는 보여도 `offsetParent`가 `null`이고(햄버거가
+     * 여기 해당한다), 모바일 사이드바는 `transform`으로 화면 밖에 밀려나 있을
+     * 뿐이라 감춰져도 `null`이 아니다. 실제로 이 조합이 뒤집혀서, 모바일에서
+     * `s`가 화면 밖 버튼을 누르는 버그가 있었다.
+     *
+     * 그래서 좌표로 본다 — 크기가 있고(display:none이 아니고) 뷰포트 안에 겹치는
+     * 것만 고른다. */
+    function clickFirst(selector) {
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      var found = Array.prototype.filter.call(
+        document.querySelectorAll(selector),
+        function (el) {
+          var r = el.getBoundingClientRect();
+          if (!r.width || !r.height) return false;
+          return r.right > 0 && r.left < w && r.bottom > 0 && r.top < h;
+        }
+      );
+      if (!found.length) return false;
+      found[0].click();
+      return true;
+    }
+
+    function navigate(url) {
+      if (url) window.location.href = url;
+    }
+
+    /* 목록 페이지의 이전·다음 페이지 — 페이지네이션이 이미 그 링크를 갖고 있다 */
+    function pageLink(rel) {
+      var current = document.querySelector('.pages .current-page');
+      if (!current) return null;
+      var li = current.closest('.page');
+      var sibling = rel === 'prev' ? li.previousElementSibling : li.nextElementSibling;
+      var a = sibling && sibling.querySelector('a');
+      return a ? a.getAttribute('href') : null;
+    }
+  })();
+</script>
+</script>

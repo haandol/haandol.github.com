@@ -27,13 +27,17 @@ Topics include AI/ML, AWS, software engineering, startup/lean startup, and more.
 - **`_includes/`** – Reusable HTML components
   - `head.html` – HTML head tag
   - `sidebar.html` – Sidebar navigation
+  - `outline.html` – Per-post table of contents (built from the rendered DOM)
+  - `post-nav.html` – Previous/next post links (skips `publish: false` posts)
+  - `keys.html` – Keyboard layer: shortcut catalog, `Cmd/Ctrl+K` palette, `?` help
   - `comments.html` – Comment system
 - **`public/css/`** – Stylesheets. Every value comes from `tokens.css`; see
   [DESIGN.md](./DESIGN.md) for the design system and its rationale.
   - `tokens.css` – Single source of truth for color/type/space (light + dark sets)
   - `base.css` – Document defaults and body typography
   - `layout.css` – Sidebar shell, content column, toggle states
-  - `components.scss` – Post list, post header, tags, pagination, related posts
+  - `components.scss` – Post list, post header, tags, pagination, post nav, related posts
+  - `keys.css` – Keyboard overlays (nav palette, shortcut help) and keycaps
   - `syntax.css` – Code highlighting (light + dark sets)
 - **`assets/img/`** – Image assets
   - Directory convention: `assets/img/YYYY/MMDD/` (e.g., `assets/img/2026/0205/`)
@@ -173,6 +177,22 @@ flowchart LR
 ```
 
 ## Agent-specific Instructions
+
+### Keyboard Shortcuts
+
+The site is fully keyboard-navigable. `_includes/keys.html` holds both the key handlers
+and the `?` cheat-sheet table — **they live in one file on purpose**, so a key change
+cannot silently skip the table. Rationale and the full key list are in
+[DESIGN.md](./DESIGN.md#키보드-단축키).
+
+When touching this file, keep two invariants:
+
+- **Single-key shortcuts must stay guarded.** They are one character, so they are
+  suppressed while an `input`/`textarea`/`select`/`contenteditable`/`iframe` has focus.
+  Drop the guard and readers cannot type `s` into the comment box.
+- **Never pick a button with `offsetParent`.** It is wrong in both directions here —
+  `position: fixed` buttons read as hidden while visible, and the mobile sidebar reads
+  as visible while translated off-screen. Use `getBoundingClientRect()`.
 
 ### Safe to Modify
 

@@ -119,6 +119,103 @@
     }
 }
 
+/* ── 이전·다음 글 ─────────────────────────────────────────── */
+
+/*
+ * 시간 축의 이웃 두 칸. 관련 글(주제가 가까운 글)보다 위에 둔다 — 글을 끝까지
+ * 읽은 독자가 가장 자주 하는 일이 연재를 이어 읽는 것이다.
+ *
+ * 한쪽만 있을 때(첫 글·마지막 글)도 자기 자리를 지켜야 한다. 그래서 `auto` 두
+ * 칸이 아니라 `1fr` 두 칸으로 나누고, 다음 글은 오른쪽 끝으로 붙인다.
+ */
+.post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+
+    /* 이전 글이 없으면 다음 글은 두 번째 칸에 남는다 — 좌우가 뒤바뀌면
+     * 어느 쪽이 과거인지 읽는 순간 흔들린다. */
+    .post-nav-next:first-child {
+        grid-column: 2;
+    }
+}
+
+.post-nav-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xxs);
+    padding: var(--space-sm) var(--space-md);
+    color: var(--color-text);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition), border-color var(--transition);
+
+    &:hover,
+    &:focus-visible {
+        background-color: var(--color-surface-hover);
+        border-color: var(--color-border-strong);
+        text-decoration: none;
+    }
+}
+
+.post-nav-next {
+    text-align: right;
+}
+
+/* 라벨은 화살표를 붙여 방향을 보여준다. 모노 대문자는 사이트의 메타 정보 관용구다. */
+.post-nav-label {
+    color: var(--color-text-faint);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-meta);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-meta);
+    text-transform: uppercase;
+}
+
+.post-nav-prev .post-nav-label::before {
+    content: "← ";
+}
+
+.post-nav-next .post-nav-label::after {
+    content: " →";
+}
+
+/* 제목은 두 줄까지. 사이드바의 최근 글과 같은 이유로 안쪽 요소에 클램프를 건다
+ * (`.nav-item-clamp` 주석 참고) — 여기서는 span 자체에 패딩이 없어 바로 걸린다. */
+.post-nav-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: var(--color-heading);
+    font-size: var(--font-size-sm);
+    font-weight: var(--weight-medium);
+    line-height: 1.45;
+    max-height: calc(2 * 1.45em);
+}
+
+.post-nav-item:hover .post-nav-title {
+    color: var(--color-link);
+}
+
+/* 좁은 화면에서는 두 칸이 나란히 서면 제목이 다 잘린다 — 위아래로 쌓는다 */
+@media (max-width: 38em) {
+    .post-nav {
+        grid-template-columns: 1fr;
+    }
+
+    .post-nav-next {
+        text-align: left;
+    }
+
+    .post-nav-next:first-child {
+        grid-column: 1;
+    }
+}
+
 /* ── 관련 글 ───────────────────────────────────────────────── */
 
 .related {

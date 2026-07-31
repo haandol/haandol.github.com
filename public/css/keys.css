@@ -1,0 +1,317 @@
+/*
+ * Keys — 키보드 오버레이 (이동 팔레트, 단축키 도움말)
+ *
+ * 값은 모두 tokens.css를 참조한다. 의도는 DESIGN.md 참고.
+ *
+ * 두 오버레이는 같은 껍데기(`.key-overlay` + `.key-panel`)를 쓰고 폭만 다르다.
+ * 사이트에서 문서 위로 뜨는 표면은 목차 메뉴와 이 둘뿐이라, 셋 다
+ * `--color-surface-raised` + `--shadow-panel`을 공유한다.
+ */
+
+.key-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-3xl) var(--space-lg);
+  overflow-y: auto;
+  background-color: var(--color-overlay);
+}
+
+/* `hidden` 속성만으로는 위 `display: flex`를 못 이긴다 — 속성 선택자로 되돌린다 */
+.key-overlay[hidden] {
+  display: none;
+}
+
+.key-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: calc(100vh - 2 * var(--space-3xl));
+  overflow: hidden;
+  background-color: var(--color-surface-raised);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+}
+
+.key-panel-palette {
+  max-width: var(--palette-width);
+}
+
+.key-panel-help {
+  max-width: var(--keyhelp-width);
+  padding: var(--space-lg);
+}
+
+/* 패널 바닥의 안내 줄 — 어떤 키를 쓸 수 있는지 오버레이 안에서 다시 알려준다 */
+.key-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: var(--space-xs) var(--space-sm);
+  color: var(--color-text-faint);
+  font-size: var(--font-size-meta);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+/* ── 키캡 ──────────────────────────────────────────────────── */
+
+/* 모노를 유틸리티 서체로 쓰는 사이트 규칙을 그대로 따른다 — 키 이름은 메타 정보다 */
+.kbd {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 1px var(--space-xxs);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-meta);
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── 이동 팔레트 ───────────────────────────────────────────── */
+
+.key-search {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+  flex-shrink: 0;
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.key-search svg {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  flex-shrink: 0;
+  margin: 0;
+  color: var(--color-text-faint);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.key-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  color: var(--color-text-strong);
+  background: none;
+  border: 0;
+  font-family: inherit;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+}
+
+.key-search input:focus {
+  outline: none;
+}
+
+.key-search input::placeholder {
+  color: var(--color-text-faint);
+}
+
+.key-results {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: var(--space-xs);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+}
+
+.key-results li + li {
+  margin-top: 0;
+}
+
+/* 항목 — 번호 거터, 제목, 날짜. 목차와 같은 그리드 관용구를 쓴다. */
+.key-result {
+  display: grid;
+  grid-template-columns: var(--toc-num-width) 1fr auto;
+  gap: var(--space-xs);
+  align-items: baseline;
+  padding: var(--nav-item-pad-y) var(--nav-item-pad-x);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  line-height: 1.45;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.key-result:hover,
+.key-result:focus-visible {
+  color: var(--color-text-strong);
+  background-color: var(--color-surface-hover);
+  text-decoration: none;
+}
+
+/* 선택된 항목 — 방향키로 옮겨 다니는 커서다. hover와 달리 한 번에 하나만 켜진다. */
+.key-result[aria-selected="true"] {
+  color: var(--color-text-strong);
+  background-color: var(--color-surface-active);
+  font-weight: var(--weight-medium);
+}
+
+/* 번호 거터는 검색어가 비었을 때만 채워진다 — 그때만 1~9로 바로 열 수 있다 */
+.key-result-num {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+.key-result-label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.key-result-date {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 그룹 라벨 — 사이드바의 `지난 글`과 같은 모노 대문자 */
+.key-group {
+  margin: var(--space-sm) 0 var(--space-xxs);
+  padding: 0 var(--nav-item-pad-x);
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-meta);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+}
+
+.key-group:first-child {
+  margin-top: 0;
+}
+
+.key-empty {
+  margin: 0;
+  padding: var(--space-md) var(--nav-item-pad-x);
+  color: var(--color-text-faint);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+/* ── 단축키 도움말 ─────────────────────────────────────────── */
+
+.key-help-head {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.key-help-title {
+  margin: 0;
+  font-size: var(--font-size-h3);
+}
+
+/* 두 컬럼 — 그룹이 6개라 한 줄로 세우면 패널이 화면을 넘는다.
+ * 좁은 화면에서는 한 컬럼으로 떨어진다(아래 미디어 쿼리). */
+.key-help-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  columns: 2;
+  column-gap: var(--space-xl);
+}
+
+.key-help-group {
+  /* 그룹이 컬럼 경계에서 쪼개지면 제목과 표가 갈라진다 */
+  break-inside: avoid;
+  margin-bottom: var(--space-lg);
+}
+
+.key-help-group h3 {
+  margin: 0 0 var(--space-xxs);
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-meta);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+}
+
+/* 맥락은 그룹 제목 옆에 작게 붙는다 — 대문자·자간을 물려받으면 문장이 아니라
+ * 라벨처럼 보여서 읽히지 않는다. */
+.key-help-context {
+  margin-left: var(--space-xs);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-body);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.key-help-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.key-help-rows li {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0;
+  padding: 2px 0;
+  font-size: var(--font-size-sm);
+}
+
+.key-help-keys {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-xxs);
+  align-items: baseline;
+  justify-content: flex-end;
+  min-width: var(--kbd-col-width);
+}
+
+/* 키캡 사이의 구분자(`g` 다음 `h`처럼 이어 누르는 조합) */
+.key-help-then {
+  color: var(--color-text-faint);
+  font-size: var(--font-size-meta);
+}
+
+@media (max-width: 38em) {
+  .key-overlay {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .key-panel {
+    max-height: calc(100vh - 2 * var(--space-lg));
+  }
+
+  .key-help-body {
+    columns: 1;
+  }
+}
+
+/* 터치 기기에는 물리 키보드가 없다 — 사이드바의 도움말 버튼을 감춘다.
+ * 키 핸들러 자체는 남겨둔다(태블릿에 키보드를 붙이는 경우가 있다). */
+@media (hover: none) and (pointer: coarse) {
+  .keyhelp-open {
+    display: none;
+  }
+}
