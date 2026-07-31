@@ -410,9 +410,6 @@
 .content-inner {
   max-width: var(--content-max-width);
   margin: 0 auto;
-  /* 읽기 컬럼 한쪽에 남는 여백. 다이어그램·코드·표가 이 값만큼 빠져나온다
-   * (components.scss의 --bleed). 기본값은 0이라 좁은 화면에서는 넓어지지 않는다. */
-  --figure-room: 0px;
 }
 
 @media (min-width: 48em) {
@@ -420,25 +417,6 @@
     margin-left: var(--content-offset);
     padding-left: var(--space-xl);
     padding-right: var(--space-xl);
-  }
-
-  /*
-   * 빠져나갈 수 있는 양은 상태마다 다르다. 좌우 대칭으로 빠져나오므로
-   * **왼쪽에 무엇이 있는지**가 한계를 정한다.
-   *
-   * 1) 사이드바가 열려 있으면 사이드바 안으로 들어가면 안 된다.
-   */
-  .content-inner {
-    --figure-room: max(0px, calc(
-      (100vw - var(--content-max-width)) / 2 - var(--content-offset)
-    ));
-  }
-
-  /* 2) 사이드바가 접혔고 목차도 없으면 화면 끝(좌우 패딩)까지 쓸 수 있다. */
-  .sidebar-hidden .content-inner {
-    --figure-room: max(0px, calc(
-      (100vw - var(--content-max-width)) / 2 - var(--space-xl)
-    ));
   }
 
   .content-inner {
@@ -482,14 +460,20 @@
 /*
  * 떠 있는 목차 메뉴 — 사이드바를 접었을 때만, 그리고 옆에 자리가 있을 때만.
  *
- * 경계(`76em` = 1216px)는 계산에서 나왔다. 읽기 폭 42rem 양쪽에 메뉴 폭 14rem이
- * 들어가고 최소 간격이 남는 지점이다. 이보다 좁으면 메뉴가 본문 위로 겹치므로
- * 흐름 안 배치(아래 `max-width: 75.99em`)로 떨어진다.
+ * 경계(`94em`)는 계산에서 나왔다. 메뉴는 본문 왼쪽 여백의 가운데에 놓이므로,
+ * 여백이 `메뉴 폭 + 2 × 최소 간격`(238 + 52 = 290px)보다 넓어야 본문에 닿지 않는다.
+ * 그 여백이 양쪽에 필요해서 필요한 화면 폭은 `918 + 2 × 290 = 1496px`이다.
+ * 이보다 좁으면 흐름 안 배치(아래 `max-width: 93.99em`)로 떨어진다.
  *
- * 이 값은 미디어 쿼리 조건이라 토큰으로 뺄 수 없다 — `--content-max-width`와
- * `--outline-panel-width`를 바꾸면 이 리터럴도 함께 계산해서 고친다.
+ * **주의: 미디어 쿼리의 `em`은 루트 폰트 크기(16px)로 평가된다.** 48em 이상에서
+ * 루트가 17px이지만 그건 쿼리 조건에 반영되지 않는다. 그래서 1496px을 17로 나눈
+ * `88em`을 쓰면 실제로는 1408px에서 켜져 간격이 3.5px밖에 남지 않는다.
+ * 16으로 나눈 `93.5em`을 올림해 `94em`(= 1504px)으로 둔다.
+ *
+ * 이 값은 미디어 쿼리 조건이라 토큰으로 뺄 수 없다 — `--content-max-width`나
+ * `--outline-panel-width`를 바꾸면 이 리터럴도 **16px 기준으로** 다시 계산한다.
  */
-@media (min-width: 76em) {
+@media (min-width: 94em) {
   .sidebar-hidden.has-outline .outline {
     position: fixed;
     top: 50%;
@@ -516,17 +500,6 @@
    * 사이드바로 돌아가는 버튼은 화면 좌상단의 햄버거가 담당한다. */
   .sidebar-hidden.has-outline .outline-head {
     display: none;
-  }
-
-  /* 3) 목차가 떠 있으면 다이어그램이 그 위로 올라가면 안 된다.
-   * 메뉴의 오른쪽 끝까지가 한계고, 간격을 하나 더 둔다.
-   * (메뉴는 여백의 가운데에 있으므로 오른쪽 끝 = left + 폭) */
-  .sidebar-hidden.has-outline .content-inner {
-    --figure-room: max(0px, calc(
-      (100vw - var(--content-max-width)) / 2
-      - ((100vw - var(--content-max-width)) / 2 + var(--outline-panel-width)) / 2
-      - var(--space-lg)
-    ));
   }
 }
 
@@ -563,11 +536,11 @@
 /*
  * 흐름 안 목차 — 떠 있을 자리가 없는 모든 폭.
  *
- * 모바일(레일이 아예 없다)과 중간 폭(1216px 미만, 옆에 자리가 없다)이 같은
+ * 모바일(레일이 아예 없다)과 중간 폭(1504px 미만, 옆에 자리가 없다)이 같은
  * 문제를 갖는다. 목차를 글 맨 위에 얹되 기본은 접어 한 줄로 둔다 — 19줄짜리
  * 목차를 펼쳐두면 글이 화면 밖으로 밀려난다.
  */
-@media (max-width: 75.99em) {
+@media (max-width: 93.99em) {
   .outline {
     margin: 0 0 var(--space-xl);
     border-top: 1px solid var(--color-border-subtle);
@@ -641,10 +614,10 @@
   }
 }
 
-/* 중간 폭(48~76em) — 사이드바가 화면에 붙어 있으므로, 데스크톱과 같은 규칙으로
+/* 중간 폭(48~94em) — 사이드바가 화면에 붙어 있으므로, 데스크톱과 같은 규칙으로
  * 사이드바를 접었을 때만 목차가 나온다. 둘 다 보이면 같은 열에 이동 수단이
  * 두 벌 생긴다. */
-@media (min-width: 48em) and (max-width: 75.99em) {
+@media (min-width: 48em) and (max-width: 93.99em) {
   .sidebar-hidden.has-outline .outline {
     display: block;
   }
