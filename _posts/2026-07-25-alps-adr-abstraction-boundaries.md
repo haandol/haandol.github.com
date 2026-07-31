@@ -153,7 +153,7 @@ const questionPool = ref<RaidQuestion[]>([])
 {% raw %}
 
 ```mermaid
-flowchart LR
+flowchart TD
     subgraph 문서["PRD (한 번 쓰고 안 고침)"]
         P["621줄<br/>게임 규칙 + 변수 선언<br/>+ 파일 경로 + 12단계 태스크"]
     end
@@ -260,7 +260,7 @@ ALPS는 MVP 하나를 기술하는 데 필요한 것을 9개 섹션으로 고정
 {% raw %}
 
 ```mermaid
-flowchart LR
+flowchart TD
     O["1. Overview<br/>사용자 · 문제"] --> G["2. Goals<br/>목표 · 성공 기준"]
     G --> S["3. Demo Scenario<br/>성공 장면"]
     S --> R["6. Requirements<br/>기능 · 비기능 요구사항"]

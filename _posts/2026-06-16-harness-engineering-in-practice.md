@@ -72,7 +72,7 @@ flowchart LR
 
 {% raw %}
 ```mermaid
-flowchart LR
+flowchart TD
     P1["① PRD · ADR<br/>방향과 기준"] --> P2["② AGENTS.md<br/>컨텍스트"]
     P2 --> P3["③ CLI · Skill · MCP<br/>도구"]
     P3 --> P4["④ 린터 · 테스트 · 차단형 Hook<br/>검증"]
@@ -458,11 +458,11 @@ flowchart LR
 flowchart TB
     subgraph CTX["컨텍스트 업데이트 — 장기적 방향성 유지"]
         C1["에이전트가 프로젝트의 큰 방향·요구사항에서<br/>벗어나지 않도록 지속적으로 업데이트"]
-        C2["PRD · 코드베이스 · API 문서 · 테스트 결과 · ADR · AGENTS.md"]
+        C2["PRD · 코드베이스 · API 문서<br/>테스트 결과 · ADR · AGENTS.md"]
     end
     subgraph HRN["실행 하네스 업데이트 — 단기 오류 감지·복구"]
         H1["피드백 루프로 스스로 개선하고<br/>가드레일로 결정적 검증을 자동화"]
-        H2["도구 · 피드백 루프(Skills·MCP) · 가드레일(차단형 Hooks·린터·테스트)"]
+        H2["도구 · 피드백 루프(Skills·MCP)<br/>가드레일(차단형 Hooks·린터·테스트)"]
     end
     CTX --> ALL["자율화된 개발 환경"]
     HRN --> ALL

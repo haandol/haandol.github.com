@@ -216,11 +216,11 @@ flowchart TB
 ```mermaid
 flowchart TB
     subgraph WO["하네스 없음 — 실수가 누적된다"]
-        direction LR
+        direction TB
         W5["5분<br/>린트 위반 1건"] --> W10["10분<br/>그 위에 코드 누적"] --> W20["20분<br/>아키텍처로 번짐"] --> W30["30분<br/>❌ 못 쓰는 코드"]
     end
     subgraph WH["하네스 있음 — 매 주기 복구된다"]
-        direction LR
+        direction TB
         H5["5분<br/>위반 발생"] --> H5F["즉시 감지 · 수정"] --> H10["10분<br/>깨끗한 상태에서 진행"] --> H30["30분<br/>✅ 완주"]
     end
     classDef bad fill:#ffd9d9,stroke:#d44;
