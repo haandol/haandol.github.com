@@ -506,7 +506,7 @@
 /* ── 모바일 — 사이드바는 오버레이 ──────────────────────────── */
 
 @media (max-width: 47.99em) {
-  .sidebar {
+  .sidebar-open .sidebar {
     box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.32);
     clip-path: inset(0 -100vmax 0 0);
   }
