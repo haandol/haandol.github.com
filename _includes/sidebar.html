@@ -19,25 +19,6 @@
     </p>
 
     <div class="sidebar-actions">
-      {%- comment -%}
-        단축키는 눌러볼 자리가 없으면 아무도 모른다. 키캡 하나를 버튼으로 둬서
-        도움말의 존재를 알린다. 물리 키보드가 없는 기기에서는 CSS가 감춘다.
-      {%- endcomment -%}
-      <button type="button" class="icon-btn keyhelp-open" data-keyhelp-open
-              aria-label="키보드 단축키 보기" title="키보드 단축키 (?)">
-        <span class="kbd" aria-hidden="true">?</span>
-      </button>
-
-      <button type="button" class="icon-btn" data-theme-toggle aria-label="테마 바꾸기">
-        <svg class="icon-moon" viewBox="0 0 20 20" aria-hidden="true">
-          <path d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"/>
-        </svg>
-        <svg class="icon-sun" viewBox="0 0 20 20" aria-hidden="true">
-          <circle cx="10" cy="10" r="3.6"/>
-          <path d="M10 2.2v1.6M10 16.2v1.6M2.2 10h1.6M16.2 10h1.6M4.5 4.5l1.1 1.1M14.4 14.4l1.1 1.1M15.5 4.5l-1.1 1.1M5.6 14.4l-1.1 1.1"/>
-        </svg>
-      </button>
-
       <button type="button" class="icon-btn" data-sidebar-toggle
               aria-label="사이드바 닫기" aria-controls="sidebar" aria-expanded="true">
         <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -49,19 +30,6 @@
   </div>
 
   <div class="sidebar-body">
-    <ul class="sidebar-nav">
-      <li>
-        <a class="nav-item" href="/"{% if page.url == '/' %} aria-current="page"{% endif %}>Home</a>
-      </li>
-      {%- for node in site.pages -%}
-        {%- if node.title and node.layout == "page" -%}
-          <li>
-            <a class="nav-item" href="{{ node.url }}"{% if page.url == node.url %} aria-current="page"{% endif %}>{{ node.title }}</a>
-          </li>
-        {%- endif -%}
-      {%- endfor -%}
-    </ul>
-
     {%- comment -%}
       제목은 두 줄로 자른다. 자르는 대상은 안쪽 span이다 — 클램프된 상자는 패딩
       박스에서 잘리므로, 패딩을 가진 링크에 직접 걸면 세 번째 줄이 아래 패딩
@@ -78,5 +46,47 @@
         </li>
       {%- endfor -%}
     </ul>
+
+    <div class="sidebar-footer">
+      <nav class="sidebar-footer-group" aria-label="외부 링크">
+        <a class="icon-btn" href="https://kr.linkedin.com/in/haandol"
+           target="_blank" rel="me noopener"
+           aria-label="LinkedIn 프로필 열기" title="LinkedIn">
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <rect x="3" y="3" width="14" height="14" rx="2"/>
+            <path d="M6.2 8.3v5.2M6.2 6.3h.01M9.4 13.5V8.3M9.4 10.6a2.5 2.5 0 0 1 5 0v2.9"/>
+          </svg>
+        </a>
+
+        <a class="icon-btn" href="/atom.xml"
+           aria-label="RSS 피드 열기" title="RSS">
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <circle cx="5" cy="15" r="1"/>
+            <path d="M4 9.5A6.5 6.5 0 0 1 10.5 16M4 5A11 11 0 0 1 15 16"/>
+          </svg>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer-group">
+        {%- comment -%}
+          단축키는 눌러볼 자리가 없으면 아무도 모른다. 키캡 하나를 버튼으로 둬서
+          도움말의 존재를 알린다. 물리 키보드가 없는 기기에서는 CSS가 감춘다.
+        {%- endcomment -%}
+        <button type="button" class="icon-btn keyhelp-open" data-keyhelp-open
+                aria-label="키보드 단축키 보기" title="키보드 단축키 (?)">
+          <span class="kbd" aria-hidden="true">?</span>
+        </button>
+
+        <button type="button" class="icon-btn" data-theme-toggle aria-label="테마 바꾸기">
+          <svg class="icon-moon" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"/>
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 20 20" aria-hidden="true">
+            <circle cx="10" cy="10" r="3.6"/>
+            <path d="M10 2.2v1.6M10 16.2v1.6M2.2 10h1.6M16.2 10h1.6M4.5 4.5l1.1 1.1M14.4 14.4l1.1 1.1M15.5 4.5l-1.1 1.1M5.6 14.4l-1.1 1.1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </div>

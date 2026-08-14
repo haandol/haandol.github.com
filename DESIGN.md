@@ -192,25 +192,25 @@ margin-left: max(0px, (100vw - 읽기폭) / 2 - offset - 좌우패딩)
 
 ```
 ┌────────────────────┐
-│ Haandol      ☾ ▣  │  sidebar-head — 워드마크 + 아이콘 버튼
+│ Haandol          ▣ │  sidebar-head — 워드마크 + 닫기 버튼
 │ TL;DR              │
 ├────────────────────┤
-│ ▬ Home             │  sidebar-body — 알약형 네비
-│   About            │
-│                    │
 │ 지난 글            │  sidebar-label — 모노 대문자
 │   ALPS와 ADR로...  │  최근 8개, 2줄까지
 │   ...              │
+│ in RSS          ? ☾│  sidebar-footer — 외부 링크 + 읽기 도구
 └────────────────────┘
 ```
 
-사이드바는 글 사이를 이동하는 일만 한다. 프로필 행과 외부 링크(Q&A)를 두지 않고,
-저자 정보는 About 페이지가 담당한다.
+사이드바 본체는 최근 글 사이를 이동하는 일만 한다. Home은 워드마크로 이동하고,
+LinkedIn과 RSS는 지난 글 아래의 보조 링크로 제공한다. 단축키 도움말과 테마도 같은
+행의 반대쪽에 두고, 상단에는 사이드바 닫기만 남긴다. About 페이지는 직접 URL과
+이동 팔레트·단축키에서 접근할 수 있다.
 
-네비 항목은 `layout: page`인 페이지에서 자동으로 나온다. 그래서 **저장소 문서는
-`_config.yml`의 `exclude`에 넣어야 한다** — `github-pages`의 기본 테마가 front matter
-없는 `.md`에도 `layout: page`와 H1 기반 `title`을 붙여서, 빼두지 않으면 이 문서
-(`DESIGN.md`)까지 네비에 페이지로 올라온다.
+사이드바에는 `layout: page`인 페이지를 노출하지 않지만 이동 팔레트에는 자동으로
+포함한다. 그래서 **저장소 문서는 `_config.yml`의 `exclude`에 넣어야 한다** —
+`github-pages`의 기본 테마가 front matter 없는 `.md`에도 `layout: page`와 H1 기반
+`title`을 붙여서, 빼두지 않으면 이 문서(`DESIGN.md`)까지 이동 목적지로 올라온다.
 
 현재 위치는 `aria-current` 속성으로 표시하고 CSS가 그걸 선택자로 쓴다
 (`.nav-item[aria-current]`). 클래스를 따로 두지 않아 마크업과 스타일이 어긋날 수 없다.

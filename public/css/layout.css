@@ -26,7 +26,7 @@
   transition: transform var(--transition-slow), background-color var(--transition-slow);
 }
 
-/* 사이드바 상단 — 워드마크와 아이콘 버튼 행 */
+/* 사이드바 상단 — 워드마크와 닫기 버튼 */
 .sidebar-head {
   display: flex;
   align-items: center;
@@ -176,6 +176,22 @@
   overflow: hidden;
   /* .nav-item의 line-height와 같은 값이어야 두 줄이 정확히 맞는다 */
   max-height: calc(2 * 1.45em);
+}
+
+/* 지난 글 다음의 보조 동작. 외부 링크는 왼쪽, 읽기 도구는 오른쪽에 둬
+ * 상단 워드마크 주변을 조용하게 유지한다. */
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: var(--space-md) var(--nav-item-pad-x) 0;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.sidebar-footer-group {
+  display: flex;
+  gap: 2px;
 }
 
 /* ── 아이콘 버튼 ───────────────────────────────────────────── */
