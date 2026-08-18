@@ -35,6 +35,8 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 - Avoid `나는 ... 본다` when `...라고 생각한다` reads more naturally.
 - Avoid aggressive or universal claims unless a cited source establishes them or the user explicitly confirms firsthand knowledge.
 - Allow a deliberate logical leap when it follows the post's stated vision. Mark it as a hypothesis, conceptual model, or assumption rather than a measured result.
+- Avoid `모르겠다`, `잘 모르겠다`, `판단하기 이르다`, or similar expressions that evade the author's position. State what the author currently thinks, even when it is provisional.
+- Put uncertainty after the opinion and tie it to a specific limitation. Prefer `지금은 A가 더 낫다고 생각한다. 다만 B에서는 아직 확인이 필요하다` over generic statements about experimenting, insufficient evidence, or withholding judgment.
 - Separate observation, inference, and proposal:
   - observation: cite evidence;
   - inference: explain the causal link;
@@ -74,7 +76,7 @@ Prefer the author's established habits:
 After editing, run a dedicated prose pass. Search for likely patterns, read each hit in context, and either revise it or consciously keep it:
 
 ```bash
-rg -n '단순히|그저|핵심은|중요한 것은|이 관점에서|첫째|둘째|셋째|결국|방향은 분명|[A-Z][A-Za-z]+ (Surface|Bandwidth|Package|Framework)' "$POST"
+rg -n '단순히|그저|핵심은|중요한 것은|이 관점에서|첫째|둘째|셋째|결국|방향은 분명|모르겠다|잘 모르|[A-Z][A-Za-z]+ (Surface|Bandwidth|Package|Framework)' "$POST"
 ```
 
 Do not optimize for zero matches. The goal is to remove repetitive, ornamental usage while preserving phrases that are natural and necessary.
