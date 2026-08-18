@@ -41,6 +41,38 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
   - proposal: state that it is the author's lens or suggestion.
 - Preserve direct wording for facts the user explicitly says can be stated without qualification.
 
+## Remove AI Slop
+
+Before finishing a draft or revision, compare it with at least two older posts by the author, not only recent AI-related posts. Remove prose that is polished in isolation but does not sound like the author.
+
+Treat the following as review signals, not automatic errors:
+
+- repeated contrast templates such as `단순히 A가 아니라 B다`, `A가 아니다. B다`, or `이것은 X 이상의 의미다`;
+- ornamental English labels for ideas that are used only once, especially title-cased names such as `Human Decision Surface`, `Comprehension Bandwidth`, or `Evidence Package`;
+- symmetrical `첫째/둘째/셋째` manifestos when a concrete experience or causal sequence would explain the point more naturally;
+- introductions that define a framework before showing the personal problem that made it useful;
+- tables, diagrams, blockquotes, or bold sentences that merely repeat the adjacent prose;
+- generic bridge phrases repeated across sections, such as `핵심은`, `중요한 것은`, `이 관점에서`, `결국`, and `방향은 분명하다`;
+- a conclusion that sounds more certain than the evidence developed in the body;
+- personal anecdotes, project details, measurements, or outcomes inferred by the model rather than supplied by the user or verified in the repository.
+
+Prefer the author's established habits:
+
+- start from an experience, annoyance, failed attempt, or concrete project situation;
+- keep useful rough edges, parenthetical qualifications, and honest uncertainty instead of making every paragraph aphoristic;
+- explain one real example far enough that the reader can follow the reasoning;
+- use Korean descriptions first and retain English only when it is an established technical term;
+- keep a coined term only when it is reused to carry the argument, not merely to make the prose sound authoritative;
+- let only the few most important claims use bold emphasis.
+
+After editing, run a dedicated prose pass. Search for likely patterns, read each hit in context, and either revise it or consciously keep it:
+
+```bash
+rg -n '단순히|그저|핵심은|중요한 것은|이 관점에서|첫째|둘째|셋째|결국|방향은 분명|[A-Z][A-Za-z]+ (Surface|Bandwidth|Package|Framework)' "$POST"
+```
+
+Do not optimize for zero matches. The goal is to remove repetitive, ornamental usage while preserving phrases that are natural and necessary.
+
 ## Choose Natural Terminology
 
 - Keep established framework names and technical terms in English when translation would reduce precision.
