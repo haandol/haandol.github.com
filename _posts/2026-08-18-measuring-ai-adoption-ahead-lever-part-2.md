@@ -16,7 +16,7 @@ publish: true
 
 ## 시작하며
 
-[1/2 글](/2026/08/18/organizational-ai-adoption-3s-part-1.html)에서 설명한 3S를 처음 정리했을 때 AHEAD에는 Efficiency를, LEVER에는 Extraction Efficiency를 넣었다.
+[1/2 글](/2026/06/15/organizational-ai-adoption-3s.html)에서 설명한 3S를 처음 정리했을 때 AHEAD에는 Efficiency를, LEVER에는 Extraction Efficiency를 넣었다.
 
 두 항목 모두 비용을 보려다 보니 Shape와 Scale의 차이가 흐려졌다. 코드 생성에서 줄어든 비용이 리뷰, CI와 운영으로 이동하는 문제도 충분히 드러나지 않았다.
 
