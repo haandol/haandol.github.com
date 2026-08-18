@@ -65,6 +65,12 @@ Prefer the author's established habits:
 - keep a coined term only when it is reused to carry the argument, not merely to make the prose sound authoritative;
 - let only the few most important claims use bold emphasis.
 
+## Write Concise Front Matter
+
+- Keep `excerpt` in English, but treat it as a short subtitle for post lists rather than an abstract.
+- Prefer one clause of roughly 6-12 words. If it starts listing the argument, methods, and conclusion, keep only the central question or payoff.
+- Avoid repeating the Korean title word for word. Let the title provide the hook and the excerpt clarify the thesis.
+
 After editing, run a dedicated prose pass. Search for likely patterns, read each hit in context, and either revise it or consciously keep it:
 
 ```bash
@@ -161,6 +167,7 @@ rg -o '^\[\^[0-9]+\]:' "$POST"
 Also verify:
 
 - required front matter exists and `excerpt` is English;
+- `excerpt` is a concise subtitle, normally one clause of roughly 6-12 words;
 - TL;DR has at most three short, single-clause bullets;
 - section headings and their contents agree;
 - Mermaid/raw and code-fence counts balance (`raw == endraw`, `fences` even);

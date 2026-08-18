@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "AI 코딩 도구가 정말 개발 비용을 줄였을까 — CTS-SW 시작하기"
-excerpt: How CTS-SW measures software delivery efficiency and how to introduce it without turning it into a harmful productivity score
+excerpt: Using CTS-SW without turning it into a productivity score
 author: haandol
 email: ldg55d@gmail.com
 tags: ai engineering-productivity cts-sw developer-experience organization
