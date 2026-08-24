@@ -95,6 +95,12 @@ For drafting, revising, or reviewing blog posts, use the project skill at
 workflow for logical structure, personal-opinion tone, terminology, diagrams,
 citations, and validation.
 
+For drafting, revising, or reviewing LinkedIn posts based on a blog article or
+firsthand engineering experience, use
+`.agents/skills/haandol-linkedin-writing/SKILL.md`. It keeps the anecdote as a
+short hook, states the insight without relying on link clicks, and places an
+optional URL alone on the final line.
+
 ### Front Matter Format
 
 ```yaml

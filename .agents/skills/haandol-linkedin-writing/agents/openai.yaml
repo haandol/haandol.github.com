@@ -1,0 +1,4 @@
+interface:
+  display_name: "Haandol LinkedIn Writing"
+  short_description: "기술 경험을 독립적으로 읽히는 한국어 LinkedIn 글로 작성"
+  default_prompt: "Use $haandol-linkedin-writing to turn this blog post or firsthand engineering experience into a concise, self-contained Korean LinkedIn post."
