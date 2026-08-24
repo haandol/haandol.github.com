@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 430" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <rect width="720" height="430" fill="#ffffff"/>
+
+  <text x="360" y="24" fill="#333" font-size="14" font-weight="700" text-anchor="middle">큰 AI 사이클을 같은 모양의 작은 사이클로 분해한다</text>
+  <text x="360" y="43" fill="#777" font-size="10.5" text-anchor="middle">각 색은 의도 · 제약 → Agent 구현 → 이해 · 검증 · 커밋으로 닫히는 하나의 사이클</text>
+
+  <!-- panel backgrounds -->
+  <rect x="140" y="60" width="540" height="120" fill="#f5f6f8"/>
+  <rect x="140" y="220" width="540" height="130" fill="#fafafa"/>
+
+  <!-- baselines and divider -->
+  <line x1="140" y1="180" x2="680" y2="180" stroke="#aab0ba" stroke-width="1"/>
+  <line x1="140" y1="350" x2="680" y2="350" stroke="#aab0ba" stroke-width="1"/>
+  <line x1="20" y1="205" x2="680" y2="205" stroke="#e2e4e8" stroke-width="1"/>
+
+  <!-- individual cognitive capacity -->
+  <line x1="140" y1="110" x2="680" y2="110" stroke="#c2413b" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <line x1="140" y1="275" x2="680" y2="275" stroke="#c2413b" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="676" y="103" fill="#a93732" font-size="10" text-anchor="end">개인의 현재 인지 용량</text>
+  <text x="676" y="268" fill="#a93732" font-size="10" text-anchor="end">개인의 현재 인지 용량</text>
+
+  <!-- one large AI cycle: load concentrated at both ends -->
+  <path d="M140,169
+           C151,137 168,88 205,77
+           C245,66 276,111 298,151
+           C318,178 377,180 432,176
+           C480,173 505,136 528,96
+           C551,57 592,55 622,82
+           C650,106 670,145 680,169
+           L680,180 L140,180 Z"
+        fill="#667085" opacity="0.22"/>
+  <path d="M140,169
+           C151,137 168,88 205,77
+           C245,66 276,111 298,151
+           C318,178 377,180 432,176
+           C480,173 505,136 528,96
+           C551,57 592,55 622,82
+           C650,106 670,145 680,169"
+        fill="none" stroke="#667085" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- cycle 1 -->
+  <path d="M140,344
+           C148,326 157,294 178,288
+           C199,282 214,313 225,334
+           C238,351 258,351 270,334
+           C282,315 289,290 299,288
+           C307,287 310,326 310,344
+           L310,350 L140,350 Z"
+        fill="#3355cc" opacity="0.2"/>
+  <path d="M140,344
+           C148,326 157,294 178,288
+           C199,282 214,313 225,334
+           C238,351 258,351 270,334
+           C282,315 289,290 299,288
+           C307,287 310,326 310,344"
+        fill="none" stroke="#3355cc" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- cycle 2 -->
+  <path d="M325,344
+           C333,326 342,294 363,288
+           C384,282 399,313 410,334
+           C423,351 443,351 455,334
+           C467,315 474,290 484,288
+           C492,287 495,326 495,344
+           L495,350 L325,350 Z"
+        fill="#2a8a5b" opacity="0.2"/>
+  <path d="M325,344
+           C333,326 342,294 363,288
+           C384,282 399,313 410,334
+           C423,351 443,351 455,334
+           C467,315 474,290 484,288
+           C492,287 495,326 495,344"
+        fill="none" stroke="#2a8a5b" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- cycle 3 -->
+  <path d="M510,344
+           C518,326 527,294 548,288
+           C569,282 584,313 595,334
+           C608,351 628,351 640,334
+           C652,315 659,290 669,288
+           C677,287 680,326 680,344
+           L680,350 L510,350 Z"
+        fill="#c97a00" opacity="0.2"/>
+  <path d="M510,344
+           C518,326 527,294 548,288
+           C569,282 584,313 595,334
+           C608,351 628,351 640,334
+           C652,315 659,290 669,288
+           C677,287 680,326 680,344"
+        fill="none" stroke="#c97a00" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- row labels -->
+  <text x="20" y="101" fill="#4b5563" font-size="14" font-weight="700">큰 AI 사이클</text>
+  <text x="20" y="121" fill="#777" font-size="11">한 번에 크게 닫기</text>
+
+  <text x="20" y="259" fill="#3355cc" font-size="14" font-weight="700">작은 AI 사이클</text>
+  <text x="20" y="279" fill="#777" font-size="11">세 번 나눠 닫기</text>
+
+  <!-- qualitative y-axis labels -->
+  <text x="131" y="72" fill="#999" font-size="10" text-anchor="end">높음</text>
+  <text x="131" y="179" fill="#999" font-size="10" text-anchor="end">낮음</text>
+  <text x="131" y="232" fill="#999" font-size="10" text-anchor="end">높음</text>
+  <text x="131" y="349" fill="#999" font-size="10" text-anchor="end">낮음</text>
+
+  <!-- large-cycle stage labels -->
+  <text x="205" y="195" fill="#596273" font-size="10" font-weight="700" text-anchor="middle">의도 · 제약</text>
+  <text x="408" y="195" fill="#596273" font-size="10" font-weight="700" text-anchor="middle">Agent 구현</text>
+  <text x="610" y="195" fill="#596273" font-size="10" font-weight="700" text-anchor="middle">이해 · 검증 · 커밋</text>
+
+  <!-- small-cycle labels -->
+  <text x="225" y="238" fill="#3355cc" font-size="11" font-weight="700" text-anchor="middle">사이클 1</text>
+  <text x="410" y="238" fill="#2a8a5b" font-size="11" font-weight="700" text-anchor="middle">사이클 2</text>
+  <text x="595" y="238" fill="#c97a00" font-size="11" font-weight="700" text-anchor="middle">사이클 3</text>
+
+  <text x="225" y="371" fill="#3355cc" font-size="9" text-anchor="middle">의도 → Agent → 리뷰 · 커밋</text>
+  <text x="410" y="371" fill="#2a8a5b" font-size="9" text-anchor="middle">의도 → Agent → 리뷰 · 커밋</text>
+  <text x="595" y="371" fill="#c97a00" font-size="9" text-anchor="middle">의도 → Agent → 리뷰 · 커밋</text>
+
+  <line x1="140" y1="401" x2="680" y2="401" stroke="#888" stroke-width="1.2"/>
+  <path d="M680,401 L672,397 L672,405 Z" fill="#888"/>
+  <text x="410" y="424" fill="#555" font-size="12" text-anchor="middle">작업 시간</text>
+</svg>

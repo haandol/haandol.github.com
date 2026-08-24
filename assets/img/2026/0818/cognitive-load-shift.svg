@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <rect width="720" height="400" fill="#ffffff"/>
+
+  <text x="360" y="24" fill="#333" font-size="15" font-weight="700" text-anchor="middle">AI 도입 전후, 인지부하가 놓이는 위치</text>
+  <text x="360" y="43" fill="#777" font-size="11" text-anchor="middle">실측값이 아니라 시간축상의 분포를 단순화한 개념도</text>
+
+  <!-- phase bands -->
+  <rect x="128" y="60" width="140" height="270" fill="#eef0ff"/>
+  <rect x="268" y="60" width="260" height="270" fill="#f5f6f8"/>
+  <rect x="528" y="60" width="152" height="270" fill="#fff3d6"/>
+
+  <!-- row baselines and divider -->
+  <line x1="128" y1="174" x2="680" y2="174" stroke="#aab0ba" stroke-width="1"/>
+  <line x1="128" y1="326" x2="680" y2="326" stroke="#aab0ba" stroke-width="1"/>
+  <line x1="20" y1="198" x2="680" y2="198" stroke="#e2e4e8" stroke-width="1"/>
+
+  <!-- phase dividers -->
+  <line x1="268" y1="60" x2="268" y2="330" stroke="#c7cad0" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="528" y1="60" x2="528" y2="330" stroke="#c7cad0" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- traditional development: load spread across the implementation -->
+  <path d="M128,158
+           C150,145 174,121 208,116
+           C274,107 358,111 430,113
+           C500,115 557,119 606,132
+           C638,140 662,151 680,160
+           L680,174 L128,174 Z"
+        fill="#667085" opacity="0.2"/>
+  <path d="M128,158
+           C150,145 174,121 208,116
+           C274,107 358,111 430,113
+           C500,115 557,119 606,132
+           C638,140 662,151 680,160"
+        fill="none" stroke="#667085" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- AI development: load concentrated at the beginning and end -->
+  <path d="M128,313
+           C140,286 151,233 181,220
+           C211,207 239,241 260,281
+           C277,311 304,319 340,319
+           C404,321 470,319 510,313
+           C534,309 547,278 562,244
+           C577,211 600,200 621,205
+           C649,212 666,259 680,299
+           L680,326 L128,326 Z"
+        fill="#3355cc" opacity="0.2"/>
+  <path d="M128,313
+           C140,286 151,233 181,220
+           C211,207 239,241 260,281
+           C277,311 304,319 340,319
+           C404,321 470,319 510,313
+           C534,309 547,278 562,244
+           C577,211 600,200 621,205
+           C649,212 666,259 680,299"
+        fill="none" stroke="#3355cc" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- row labels -->
+  <text x="20" y="104" fill="#4b5563" font-size="14" font-weight="700">기존 개발</text>
+  <text x="20" y="124" fill="#777" font-size="11">구현 전반에 분산</text>
+
+  <text x="20" y="256" fill="#3355cc" font-size="14" font-weight="700">AI 개발</text>
+  <text x="20" y="276" fill="#777" font-size="11">앞과 뒤에 집중</text>
+
+  <!-- qualitative y-axis labels -->
+  <text x="119" y="72" fill="#999" font-size="10" text-anchor="end">높음</text>
+  <text x="119" y="173" fill="#999" font-size="10" text-anchor="end">낮음</text>
+  <text x="119" y="224" fill="#999" font-size="10" text-anchor="end">높음</text>
+  <text x="119" y="325" fill="#999" font-size="10" text-anchor="end">낮음</text>
+
+  <!-- explanatory labels -->
+  <text x="403" y="143" fill="#596273" font-size="11" text-anchor="middle">읽기 · 판단 · 작성 · 테스트가 이어짐</text>
+  <text x="398" y="304" fill="#596273" font-size="11" text-anchor="middle">Agent가 코딩하는 동안 크게 낮아짐</text>
+
+  <!-- phase labels -->
+  <text x="198" y="352" fill="#4f5faf" font-size="12" font-weight="700" text-anchor="middle">의도 · 제약 정의</text>
+  <text x="398" y="352" fill="#666" font-size="12" font-weight="700" text-anchor="middle">코딩 · 테스트</text>
+  <text x="604" y="352" fill="#a06c00" font-size="12" font-weight="700" text-anchor="middle">검토 · 승인</text>
+
+  <line x1="128" y1="374" x2="680" y2="374" stroke="#888" stroke-width="1.2"/>
+  <path d="M680,374 L672,370 L672,378 Z" fill="#888"/>
+  <text x="404" y="394" fill="#555" font-size="12" text-anchor="middle">작업 시간</text>
+</svg>
