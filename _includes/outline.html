@@ -17,6 +17,7 @@ DOM은 한 벌이고 배치만 CSS가 가른다.
     var root = document.documentElement;
     var post = document.querySelector('.post');
     if (!post) return;
+    var english = root.getAttribute('lang').toLowerCase().indexOf('en') === 0;
 
     var headings = Array.prototype.filter.call(
       post.querySelectorAll('h2[id], h3[id]'),
@@ -31,7 +32,7 @@ DOM은 한 벌이고 배치만 CSS가 가른다.
     var panel = document.createElement('nav');
     panel.className = 'outline';
     panel.id = 'outline';
-    panel.setAttribute('aria-label', '이 글의 목차');
+    panel.setAttribute('aria-label', english ? 'Table of contents' : '이 글의 목차');
 
     var sections = headings.filter(function (h) { return h.tagName === 'H2'; }).length;
 
@@ -42,15 +43,16 @@ DOM은 한 벌이고 배치만 CSS가 가른다.
      * 받게 된다. 그래서 노드를 나누고 CSS가 한쪽만 보여준다. */
     panel.innerHTML =
       '<div class="outline-head">' +
-        '<p class="outline-label">이 글</p>' +
+        '<p class="outline-label">' + (english ? 'On this page' : '이 글') + '</p>' +
         '<button type="button" class="icon-btn outline-restore" data-sidebar-toggle' +
-        ' aria-label="사이드바 열기" aria-controls="sidebar" aria-expanded="false">' +
+        ' aria-label="' + (english ? 'Open sidebar' : '사이드바 열기') + '"' +
+        ' aria-controls="sidebar" aria-expanded="false">' +
         '<svg viewBox="0 0 20 20" aria-hidden="true">' +
         '<path d="M3 5h14M3 10h14M3 15h14"/></svg></button>' +
         '<button type="button" class="outline-toggle" aria-expanded="false"' +
         ' aria-controls="outline-body">' +
-          '<span class="outline-label">이 글</span>' +
-          '<span class="outline-count">' + sections + '개 절</span>' +
+          '<span class="outline-label">' + (english ? 'On this page' : '이 글') + '</span>' +
+          '<span class="outline-count">' + sections + (english ? ' sections' : '개 절') + '</span>' +
           '<svg class="outline-chevron" viewBox="0 0 20 20" aria-hidden="true">' +
           '<path d="M6 8l4 4 4-4"/></svg>' +
         '</button>' +

@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: business startup lean-startup pmf experiment ai
 publish: true
+lang: ko
+translation_key: failure-comes-first
+english_url: /en/2026/06/27/failure-comes-first.html
 ---
 
 ## TL;DR

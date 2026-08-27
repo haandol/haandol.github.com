@@ -1,0 +1,30 @@
+{%- assign page_lang = page.lang | default: "ko" -%}
+{%- if page.title == "Home" -%}
+<nav class="locale-switch" aria-label="Language">
+  <span class="locale-switch-label">Language</span>
+  <button type="button" class="locale-option" data-locale-select="en" aria-pressed="true">
+    English
+  </button>
+  <button type="button" class="locale-option" data-locale-select="ko" aria-pressed="false">
+    한국어
+  </button>
+</nav>
+{%- elsif page.layout == "post" -%}
+<nav class="locale-switch" aria-label="{% if page_lang == 'en' %}Article language{% else %}글 언어{% endif %}">
+  <span class="locale-switch-label">{% if page_lang == "en" %}Language{% else %}언어{% endif %}</span>
+  {%- if page_lang == "en" -%}
+  <a class="locale-option" href="{{ page.url }}" hreflang="en" lang="en"
+     data-locale-link="en" aria-current="page">English</a>
+  <a class="locale-option" href="{{ page.korean_url }}" hreflang="ko" lang="ko"
+     data-locale-link="ko">한국어</a>
+  {%- elsif page.english_url -%}
+  <a class="locale-option" href="{{ page.english_url }}" hreflang="en" lang="en"
+     data-locale-link="en">English</a>
+  <a class="locale-option" href="{{ page.url }}" hreflang="ko" lang="ko"
+     data-locale-link="ko" aria-current="page">한국어</a>
+  {%- else -%}
+  <span class="locale-option locale-option-disabled" aria-disabled="true" title="English translation is not available">English</span>
+  <a class="locale-option" href="{{ page.url }}" hreflang="ko" lang="ko" aria-current="page">한국어</a>
+  {%- endif -%}
+</nav>
+{%- endif -%}

@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agent-driven-development agentic-ide cursor windsurf cline roo aider
 publish: true
+lang: ko
+translation_key: demystifying-agent-driven-development-process
+english_url: /en/2025/02/10/demystifying-agent-driven-development-process.html
 ---
 
 ## TL;DR

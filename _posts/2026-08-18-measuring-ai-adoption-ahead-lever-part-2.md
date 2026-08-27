@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development harness-engineering organization developer-experience cts-sw
 publish: true
+lang: ko
+translation_key: measuring-ai-adoption-ahead-lever-part-2
+english_url: /en/2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html
 ---
 
 ## TL;DR

@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: genai chatbot flywheel personalization data user-insight
 publish: true
+lang: ko
+translation_key: genai-flywheel-for-business
+english_url: /en/2026/03/12/genai-flywheel-for-business.html
 ---
 
 ## TL;DR

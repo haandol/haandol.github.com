@@ -40,6 +40,17 @@
 {% endif %}
   <meta name="author" content="haandol">
 
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+{% if page.lang == "en" and page.korean_url %}
+  <link rel="alternate" hreflang="en" href="{{ page.url | absolute_url }}">
+  <link rel="alternate" hreflang="ko" href="{{ page.korean_url | absolute_url }}">
+  <link rel="alternate" hreflang="x-default" href="{{ page.url | absolute_url }}">
+{% elsif page.english_url %}
+  <link rel="alternate" hreflang="en" href="{{ page.english_url | absolute_url }}">
+  <link rel="alternate" hreflang="ko" href="{{ page.url | absolute_url }}">
+  <link rel="alternate" hreflang="x-default" href="{{ page.english_url | absolute_url }}">
+{% endif %}
+
   <!-- 테마와 사이드바 상태 복원 — 페인트 전에 실행해야 깜빡임이 없다.
        저장된 값이 없으면 OS 설정을 따른다. -->
   <script>
@@ -54,8 +65,23 @@
         if (localStorage.getItem('sidebarHidden') === '1') {
           root.classList.add('sidebar-hidden');
         }
+
+        var localeContext = root.getAttribute('data-locale-context');
+        var locale = localeContext === 'chooser'
+          ? (localStorage.getItem('locale') || 'en')
+          : localeContext;
+        root.setAttribute('data-locale', locale === 'en' ? 'en' : 'ko');
+        if (localeContext === 'chooser') {
+          root.setAttribute('lang', locale === 'en' ? 'en' : 'ko-KR');
+        }
       } catch (e) {
         root.setAttribute('data-theme', 'light');
+        var fallbackContext = root.getAttribute('data-locale-context');
+        var fallbackLocale = fallbackContext === 'en' || fallbackContext === 'chooser'
+          ? 'en'
+          : 'ko';
+        root.setAttribute('data-locale', fallbackLocale);
+        if (fallbackContext === 'chooser') root.setAttribute('lang', 'en');
       }
     })();
   </script>

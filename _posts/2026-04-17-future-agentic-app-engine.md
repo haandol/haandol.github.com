@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering agentic-development claude-code managed-agents serverless
 publish: true
+lang: ko
+translation_key: future-agentic-app-engine
+english_url: /en/2026/04/17/future-agentic-app-engine.html
 ---
 
 ## TL;DR

@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent multi-agent harness-engineering context-engineering agentic-development
 publish: true
+lang: ko
+translation_key: multi-agent-without-harness-is-just-context-engineering
+english_url: /en/2026/03/31/multi-agent-without-harness-is-just-context-engineering.html
 ---
 
 ## TL;DR

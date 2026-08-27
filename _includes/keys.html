@@ -26,7 +26,17 @@ Cmd/Ctrl+K는 브라우저 기본(파이어폭스의 검색창 포커스 등)을
     {%- endif -%}
   {%- endfor -%}
   {%- for post in recent limit: 24 -%}
-  ,{"label":{{ post.title | jsonify }},"url":{{ post.url | jsonify }},"group":"지난 글","date":{{ post.date | date: "%Y.%m.%d" | jsonify }}}
+    {%- assign translation = nil -%}
+    {%- if post.translation_key -%}
+      {%- assign translation = site.en | where: "translation_key", post.translation_key | first -%}
+    {%- endif -%}
+    {%- if translation -%}
+  ,{"label":{{ translation.title | jsonify }},"url":{{ translation.url | jsonify }},"group":"Recent posts","date":{{ translation.date | date: "%Y.%m.%d" | jsonify }},"locale":"en"}
+  ,{"label":{{ post.title | jsonify }},"url":{{ post.url | jsonify }},"group":"지난 글","date":{{ post.date | date: "%Y.%m.%d" | jsonify }},"locale":"ko"}
+    {%- else -%}
+  ,{"label":{{ post.title | jsonify }},"url":{{ post.url | jsonify }},"group":"Recent posts","date":{{ post.date | date: "%Y.%m.%d" | jsonify }},"locale":"en"}
+  ,{"label":{{ post.title | jsonify }},"url":{{ post.url | jsonify }},"group":"지난 글","date":{{ post.date | date: "%Y.%m.%d" | jsonify }},"locale":"ko"}
+    {%- endif -%}
   {%- endfor -%}
 ]
 </script>
@@ -212,15 +222,25 @@ Cmd/Ctrl+K는 브라우저 기본(파이어폭스의 검색창 포커스 등)을
      * 충분하다 — 목록이 30개 남짓이라 퍼지 매칭을 얹을 만한 규모가 아니다. */
     var input = document.getElementById('key-palette-input');
     var results = document.getElementById('key-palette-results');
+    var allDestinations = [];
     var destinations = [];
     var matches = [];
     var cursor = 0;
 
     try {
-      destinations = JSON.parse(document.getElementById('key-destinations').textContent);
+      allDestinations = JSON.parse(document.getElementById('key-destinations').textContent);
     } catch (e) {
-      destinations = [];
+      allDestinations = [];
     }
+
+    function localizedDestinations() {
+      var locale = root.getAttribute('data-locale') || 'en';
+      return allDestinations.filter(function (d) {
+        return !d.locale || d.locale === locale;
+      });
+    }
+
+    destinations = localizedDestinations();
 
     function normalize(s) {
       return s.toLowerCase().replace(/\s+/g, '');
@@ -315,6 +335,7 @@ Cmd/Ctrl+K는 브라우저 기본(파이어폭스의 검색창 포커스 등)을
     var palette = makeOverlay('key-palette', {
       onOpen: function () {
         input.value = '';
+        destinations = localizedDestinations();
         matches = destinations;
         cursor = 0;
         render();
@@ -426,9 +447,21 @@ Cmd/Ctrl+K는 브라우저 기본(파이어폭스의 검색창 포커스 등)을
      *
      * 글 목록에서는 목록의 글, 글 페이지에서는 이 글의 절이 대상이다. 두 경우
      * 모두 `j`/`k`가 "다음·이전"을 뜻하고, 무엇의 다음인지만 페이지가 정한다. */
-    var postLinks = Array.prototype.slice.call(
-      document.querySelectorAll('.posts .post-title a')
-    );
+    function visiblePostLinks() {
+      return Array.prototype.filter.call(
+        document.querySelectorAll('.posts .post-title a'),
+        function (link) { return link.getClientRects().length > 0; }
+      );
+    }
+
+    var postLinks = visiblePostLinks();
+    new MutationObserver(function () {
+      postLinks = visiblePostLinks();
+      destinations = localizedDestinations();
+    }).observe(root, {
+      attributes: true,
+      attributeFilter: ['data-locale'],
+    });
     var article = document.querySelector('.post');
     var headings = article
       ? Array.prototype.filter.call(article.querySelectorAll('h2[id], h3[id]'), function (h) {

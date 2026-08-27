@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: mcp model-context-protocol mcp-server ai agent skills
 publish: true
+lang: ko
+translation_key: considerations-before-developing-mcp-server
+english_url: /en/2026/03/02/considerations-before-developing-mcp-server.html
 ---
 
 ## TL;DR

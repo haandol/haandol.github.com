@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering context-engineering prompt-engineering agentic-development long-running-agent
 publish: true
+lang: ko
+translation_key: harness-engineering-beyond-context-engineering
+english_url: /en/2026/03/15/harness-engineering-beyond-context-engineering.html
 ---
 
 ## TL;DR

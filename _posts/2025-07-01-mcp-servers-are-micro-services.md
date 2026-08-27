@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: mcp msa observability llm efficiency agent
 publish: true
+lang: ko
+translation_key: mcp-servers-are-micro-services
+english_url: /en/2025/07/01/mcp-servers-are-micro-services.html
 ---
 
 ## TL;DR

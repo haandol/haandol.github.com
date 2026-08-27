@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agent-driven-development agentic-ide cursor vibe-coding
 publish: true
+lang: ko
+translation_key: rftcr-framework-for-agentic-dev
+english_url: /en/2025/05/11/rftcr-framework-for-agentic-dev.html
 ---
 
 ## TL;DR

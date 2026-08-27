@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development harness-engineering organization token-economics
 publish: true
+lang: ko
+translation_key: organizational-ai-adoption-3s
+english_url: /en/2026/06/15/organizational-ai-adoption-3s.html
 ---
 
 ## TL;DR

@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering context-engineering agentic-development sub-agent guardrail
 publish: true
+lang: ko
+translation_key: harness-engineering-in-practice
+english_url: /en/2026/06/16/harness-engineering-in-practice.html
 ---
 
 ## TL;DR

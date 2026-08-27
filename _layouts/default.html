@@ -1,5 +1,15 @@
+{%- assign content_lang = page.lang | default: "ko" -%}
+{%- assign locale_context = content_lang -%}
+{%- assign document_lang = "ko-KR" -%}
+{%- if content_lang == "en" -%}
+  {%- assign document_lang = "en" -%}
+{%- endif -%}
+{%- if page.title == "Home" -%}
+  {%- assign locale_context = "chooser" -%}
+  {%- assign document_lang = "en" -%}
+{%- endif -%}
 <!DOCTYPE html>
-<html lang="ko-kr">
+<html lang="{{ document_lang }}" data-locale-context="{{ locale_context }}">
 
   {% include head.html %}
 
@@ -8,6 +18,7 @@
 
     <main class="content">
       <div class="content-inner">
+        {% include locale-switch.html %}
         {{ content }}
       </div>
     </main>
@@ -75,6 +86,36 @@
           });
         });
 
+        /* 언어 — 홈에서는 선택한 목록 언어를 기억한다. 글 URL은 언어별로
+           분리되어 있으므로 글 페이지에서는 URL의 언어가 항상 우선한다. */
+        function syncLocale(locale) {
+          root.setAttribute('data-locale', locale);
+          if (root.getAttribute('data-locale-context') === 'chooser') {
+            root.setAttribute('lang', locale === 'en' ? 'en' : 'ko-KR');
+          }
+          document.querySelectorAll('[data-locale-select]').forEach(function (btn) {
+            var selected = btn.getAttribute('data-locale-select') === locale;
+            btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+          });
+        }
+
+        document.querySelectorAll('[data-locale-select]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var locale = btn.getAttribute('data-locale-select');
+            syncLocale(locale);
+            try { localStorage.setItem('locale', locale); } catch (e) {}
+          });
+        });
+
+        document.querySelectorAll('[data-locale-link]').forEach(function (link) {
+          link.addEventListener('click', function () {
+            try {
+              localStorage.setItem('locale', link.getAttribute('data-locale-link'));
+            } catch (e) {}
+          });
+        });
+
+        syncLocale(root.getAttribute('data-locale') || 'en');
         syncSidebar();
       })();
     </script>

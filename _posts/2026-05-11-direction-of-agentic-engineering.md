@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering agentic-development claude-code headless
 publish: true
+lang: ko
+translation_key: direction-of-agentic-engineering
+english_url: /en/2026/05/11/direction-of-agentic-engineering.html
 ---
 
 ## TL;DR

@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent chatbot genai flywheel
 publish: true
+lang: ko
+translation_key: why-your-business-should-start-your-own-chatbot-now
+english_url: /en/2025/06/03/why-your-business-should-start-your-own-chatbot-now.html
 ---
 
 ## TL;DR

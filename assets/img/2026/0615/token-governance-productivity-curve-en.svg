@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <rect width="720" height="380" fill="#ffffff"/>
+
+  <!-- constraint bands -->
+  <rect x="70" y="40" width="200" height="270" fill="#fff3d6"/>
+  <rect x="270" y="40" width="230" height="270" fill="#cfe8cf" opacity="0.55"/>
+  <rect x="500" y="40" width="150" height="270" fill="#fde8e7"/>
+
+  <!-- axes -->
+  <line x1="70" y1="310" x2="650" y2="310" stroke="#888" stroke-width="1.5"/>
+  <line x1="70" y1="40" x2="70" y2="310" stroke="#888" stroke-width="1.5"/>
+  <text x="42" y="175" fill="#555" font-size="13" transform="rotate(-90 42,175)" text-anchor="middle">Team productivity</text>
+  <text x="360" y="342" fill="#555" font-size="13" text-anchor="middle">Available tokens</text>
+  <text x="70" y="328" fill="#888" font-size="11" text-anchor="start">Low</text>
+  <text x="650" y="328" fill="#888" font-size="11" text-anchor="end">High</text>
+
+  <!-- conceptual threshold curve: low productivity below a minimum, rise, then decline after over-allocation -->
+  <path d="M70,278
+           C135,277 198,275 235,266
+           C255,258 264,220 278,175
+           C295,118 320,78 355,68
+           C395,56 445,67 480,92
+           C520,122 562,195 650,270"
+        fill="none" stroke="#3355cc" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- minimum viable token threshold -->
+  <line x1="270" y1="40" x2="270" y2="310" stroke="#3355cc" stroke-width="1" stroke-dasharray="5 4" opacity="0.75"/>
+  <circle cx="270" cy="200" r="4" fill="#3355cc"/>
+  <text x="280" y="294" fill="#3355cc" font-size="11">Minimum available tokens</text>
+
+  <!-- sweet spot marker -->
+  <line x1="385" y1="62" x2="385" y2="310" stroke="#2a8a2a" stroke-width="1" stroke-dasharray="5 4" opacity="0.7"/>
+  <circle cx="385" cy="62" r="5" fill="#2a8a2a"/>
+
+  <!-- phase dividers -->
+  <line x1="500" y1="40" x2="500" y2="310" stroke="#bbb" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- labels -->
+  <text x="165" y="74" fill="#b47500" font-size="17" font-weight="700" text-anchor="middle">Insufficient tokens</text>
+  <text x="165" y="96" fill="#777" font-size="12" text-anchor="middle">Exploration and validation</text>
+  <text x="165" y="112" fill="#777" font-size="12" text-anchor="middle">remain constrained</text>
+  <text x="165" y="128" fill="#777" font-size="12" text-anchor="middle">Team learning stalls</text>
+
+  <text x="395" y="100" fill="#2a8a2a" font-size="17" font-weight="700" text-anchor="start">Sweet spot</text>
+  <text x="395" y="122" fill="#666" font-size="12" text-anchor="start">Needed exploration</text>
+  <text x="395" y="138" fill="#666" font-size="12" text-anchor="start">is allowed</text>
+  <text x="395" y="160" fill="#666" font-size="12" text-anchor="start">Learning becomes</text>
+  <text x="395" y="176" fill="#666" font-size="12" text-anchor="start">evaluations, rules,</text>
+  <text x="395" y="192" fill="#666" font-size="12" text-anchor="start">and tools</text>
+
+  <text x="575" y="74" fill="#a54a3f" font-size="17" font-weight="700" text-anchor="middle">Over-allocation</text>
+  <text x="575" y="96" fill="#777" font-size="12" text-anchor="middle">Experiments unrelated</text>
+  <text x="575" y="112" fill="#777" font-size="12" text-anchor="middle">to business goals</text>
+  <text x="575" y="128" fill="#777" font-size="12" text-anchor="middle">Unnecessary debt cleanup</text>
+
+  <text x="360" y="24" fill="#333" font-size="15" font-weight="700" text-anchor="middle">Available Tokens and Team Productivity (Conceptual)</text>
+</svg>

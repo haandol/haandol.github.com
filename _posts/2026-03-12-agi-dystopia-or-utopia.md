@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agi asi dystopia utopia competition
 publish: true
+lang: ko
+translation_key: agi-dystopia-or-utopia
+english_url: /en/2026/03/12/agi-dystopia-or-utopia.html
 ---
 
 ## TL;DR

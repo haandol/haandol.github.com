@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <rect width="720" height="400" fill="#ffffff"/>
+
+  <text x="360" y="24" fill="#333" font-size="14" font-weight="700" text-anchor="middle">Stacked PRs split review peaks, not context</text>
+  <text x="360" y="43" fill="#777" font-size="11" text-anchor="middle">Actual review scope is wider than each PR diff</text>
+
+  <rect x="128" y="60" width="132" height="270" fill="#eef0ff"/>
+  <rect x="260" y="60" width="210" height="270" fill="#f5f6f8"/>
+  <rect x="470" y="60" width="210" height="270" fill="#fff3d6"/>
+
+  <line x1="128" y1="174" x2="680" y2="174" stroke="#aab0ba" stroke-width="1"/>
+  <line x1="128" y1="326" x2="680" y2="326" stroke="#aab0ba" stroke-width="1"/>
+  <line x1="20" y1="198" x2="680" y2="198" stroke="#e2e4e8" stroke-width="1"/>
+
+  <line x1="260" y1="60" x2="260" y2="330" stroke="#c7cad0" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="470" y1="60" x2="470" y2="330" stroke="#b88a24" stroke-width="1.2" stroke-dasharray="4 4"/>
+  <text x="478" y="75" fill="#9a6b00" font-size="10">First PR ready</text>
+
+  <path d="M128,162
+           C142,134 154,90 183,82
+           C214,73 240,112 258,150
+           C276,170 315,173 360,173
+           C410,173 445,172 475,167
+           C510,160 530,115 548,88
+           C570,58 610,63 635,86
+           C661,110 672,146 680,162
+           L680,174 L128,174 Z"
+        fill="#667085" opacity="0.2"/>
+  <path d="M128,162
+           C142,134 154,90 183,82
+           C214,73 240,112 258,150
+           C276,170 315,173 360,173
+           C410,173 445,172 475,167
+           C510,160 530,115 548,88
+           C570,58 610,63 635,86
+           C661,110 672,146 680,162"
+        fill="none" stroke="#667085" stroke-width="3" stroke-linecap="round"/>
+
+  <path d="M470,326
+           L470,313
+           C520,309 570,303 620,297
+           C645,294 663,290 680,286
+           L680,326 Z"
+        fill="#d69e2e" opacity="0.2"/>
+  <path d="M470,313
+           C520,309 570,303 620,297
+           C645,294 663,290 680,286"
+        fill="none" stroke="#c18400" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+  <path d="M128,314
+           C142,286 154,242 183,234
+           C214,225 240,264 258,302
+           C276,322 318,325 370,325
+           C416,325 438,324 455,320
+           C463,316 468,286 478,277
+           C489,269 499,299 508,307
+           C516,314 522,308 528,300
+           C535,291 541,269 551,266
+           C562,263 572,291 580,299
+           C588,306 594,299 600,291
+           C607,282 613,260 623,258
+           C634,255 644,282 651,291
+           C657,297 661,290 665,280
+           C669,270 673,250 674,258
+           C679,266 680,278 680,286
+           L680,326 L128,326 Z"
+        fill="#3355cc" opacity="0.2"/>
+  <path d="M128,314
+           C142,286 154,242 183,234
+           C214,225 240,264 258,302
+           C276,322 318,325 370,325
+           C416,325 438,324 455,320
+           C463,316 468,286 478,277
+           C489,269 499,299 508,307
+           C516,314 522,308 528,300
+           C535,291 541,269 551,266
+           C562,263 572,291 580,299
+           C588,306 594,299 600,291
+           C607,282 613,260 623,258
+           C634,255 644,282 651,291
+           C657,297 661,290 665,280
+           C669,270 673,250 674,258
+           C679,266 680,278 680,286"
+        fill="none" stroke="#3355cc" stroke-width="3.5" stroke-linecap="round"/>
+
+  <text x="20" y="104" fill="#4b5563" font-size="14" font-weight="700">Large PR</text>
+  <text x="20" y="124" fill="#777" font-size="11">One peak at the end</text>
+
+  <text x="20" y="256" fill="#3355cc" font-size="14" font-weight="700">Stacked PRs</text>
+  <text x="20" y="276" fill="#777" font-size="11">Small reviews + context</text>
+
+  <text x="119" y="72" fill="#999" font-size="10" text-anchor="end">High</text>
+  <text x="119" y="173" fill="#999" font-size="10" text-anchor="end">Low</text>
+  <text x="119" y="224" fill="#999" font-size="10" text-anchor="end">High</text>
+  <text x="119" y="325" fill="#999" font-size="10" text-anchor="end">Low</text>
+
+  <text x="360" y="150" fill="#596273" font-size="10.5" text-anchor="middle">Human load stays low during agent implementation</text>
+  <text x="360" y="311" fill="#596273" font-size="11" text-anchor="middle">Understanding still arrives late</text>
+  <text x="577" y="320" fill="#986c00" font-size="9" text-anchor="middle">Baseline load from surrounding context</text>
+
+  <text x="478" y="267" fill="#3355cc" font-size="9" font-weight="700" text-anchor="middle">PR 1</text>
+  <text x="551" y="256" fill="#3355cc" font-size="9" font-weight="700" text-anchor="middle">PR 2</text>
+  <text x="623" y="248" fill="#3355cc" font-size="9" font-weight="700" text-anchor="middle">PR 3</text>
+  <text x="674" y="248" fill="#3355cc" font-size="9" font-weight="700" text-anchor="middle">PR 4</text>
+
+  <text x="194" y="352" fill="#4f5faf" font-size="12" font-weight="700" text-anchor="middle">Intent &amp; constraints</text>
+  <text x="365" y="352" fill="#666" font-size="12" font-weight="700" text-anchor="middle">Agent implementation</text>
+  <text x="575" y="352" fill="#a06c00" font-size="12" font-weight="700" text-anchor="middle">Review by change</text>
+
+  <line x1="128" y1="374" x2="680" y2="374" stroke="#888" stroke-width="1.2"/>
+  <path d="M680,374 L672,370 L672,378 Z" fill="#888"/>
+  <text x="404" y="394" fill="#555" font-size="12" text-anchor="middle">Task time</text>
+</svg>

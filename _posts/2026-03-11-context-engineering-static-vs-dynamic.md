@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent context-engineering agentic-development vibe-coding prd adr
 publish: true
+lang: ko
+translation_key: context-engineering-static-vs-dynamic
+english_url: /en/2026/03/11/context-engineering-static-vs-dynamic.html
 ---
 
 ## TL;DR

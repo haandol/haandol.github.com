@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Deterministic checks for Haandol blog posts — no judgment required.
 # Usage:
-#   .agents/scripts/post-lint.sh                    # all posts and drafts
+#   .agents/scripts/post-lint.sh                    # all Korean/English posts and drafts
 #   .agents/scripts/post-lint.sh _posts/2026-07-25-foo.md ...
 #
 # Exits 1 if any check fails. Rules come from AGENTS.md; keep both in sync.
@@ -13,6 +13,7 @@ if [ "$#" -gt 0 ]; then
   files=("$@")
 else
   files=(_posts/*.md)
+  [ -d _en ] && for e in _en/*.md; do [ -e "$e" ] && files+=("$e"); done
   [ -d _drafts ] && for d in _drafts/*.md; do [ -e "$d" ] && files+=("$d"); done
 fi
 
@@ -39,7 +40,7 @@ for f in "${files[@]}"; do
   [ $((fences % 2)) -ne 0 ] && report "$f" "odd number of code fences ($fences)"
 
   # Internal post links must end in .html — the slash form 404s
-  slash=$(grep -oE '\]\(/20[0-9]{2}/[0-9]{2}/[0-9]{2}/[a-z0-9-]+/\)' "$f" | wc -l | tr -d ' ')
+  slash=$(grep -oE '\]\((/en)?/20[0-9]{2}/[0-9]{2}/[0-9]{2}/[a-z0-9-]+/\)' "$f" | wc -l | tr -d ' ')
   [ "$slash" -gt 0 ] && report "$f" "$slash internal link(s) use the 404-ing slash form"
 
   # Footnote refs and definitions must correspond
@@ -56,6 +57,21 @@ for f in "${files[@]}"; do
   for key in layout title excerpt author tags; do
     grep -qE "^$key:" "$f" || report "$f" "front matter missing '$key'"
   done
+
+  # Bilingual metadata and language-specific URL contract
+  if [[ "$f" == _en/* ]]; then
+    grep -qE '^lang: en$' "$f" || report "$f" "English post must set 'lang: en'"
+    grep -qE '^translation_key:' "$f" || report "$f" "English post missing 'translation_key'"
+    grep -qE '^korean_url: /20[0-9]{2}/[0-9]{2}/[0-9]{2}/[a-z0-9-]+\.html$' "$f" ||
+      report "$f" "English post needs a Korean .html URL"
+    grep -qE '^permalink: /en/20[0-9]{2}/[0-9]{2}/[0-9]{2}/[a-z0-9-]+\.html$' "$f" ||
+      report "$f" "English permalink must use /en/YYYY/MM/DD/slug.html"
+  elif grep -qE '^english_url:' "$f"; then
+    grep -qE '^lang: ko$' "$f" || report "$f" "translated Korean post must set 'lang: ko'"
+    grep -qE '^translation_key:' "$f" || report "$f" "translated Korean post missing 'translation_key'"
+    grep -qE '^english_url: /en/20[0-9]{2}/[0-9]{2}/[0-9]{2}/[a-z0-9-]+\.html$' "$f" ||
+      report "$f" "English URL must use /en/YYYY/MM/DD/slug.html"
+  fi
 
   # Referenced local images must exist
   while IFS= read -r img; do

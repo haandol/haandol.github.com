@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent cognitive-load developer-experience code-review hitl
 publish: true
+lang: ko
+translation_key: ai-coding-review-cognitive-load
+english_url: /en/2026/08/18/ai-coding-review-cognitive-load.html
 ---
 
 ## TL;DR

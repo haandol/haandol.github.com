@@ -10,6 +10,66 @@
 
 /* ── 글 목록 ───────────────────────────────────────────────── */
 
+[data-locale-view] {
+    display: block;
+}
+
+:root[data-locale="en"] [data-locale-view="ko"],
+:root[data-locale="ko"] [data-locale-view="en"] {
+    display: none !important;
+}
+
+.locale-switch {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-xxs);
+    margin: 0 0 var(--space-xl);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-meta);
+}
+
+.locale-switch-label {
+    margin-right: var(--space-xxs);
+    color: var(--color-text-faint);
+    letter-spacing: var(--tracking-meta);
+    text-transform: uppercase;
+}
+
+.locale-option {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.75rem;
+    padding: var(--space-xxs) var(--space-xs);
+    color: var(--color-text-muted);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font: inherit;
+    cursor: pointer;
+}
+
+.locale-option:hover,
+.locale-option:focus-visible {
+    color: var(--color-text-strong);
+    background-color: var(--color-surface-hover);
+    text-decoration: none;
+}
+
+.locale-option[aria-current="page"],
+.locale-option[aria-pressed="true"] {
+    color: var(--color-text-strong);
+    background-color: var(--color-surface-active);
+    border-color: var(--color-border-subtle);
+    font-weight: var(--weight-medium);
+}
+
+.locale-option-disabled {
+    color: var(--color-text-faint);
+    cursor: not-allowed;
+    opacity: .55;
+}
+
 .posts {
     margin: 0;
     padding: 0;
@@ -41,6 +101,20 @@
                 text-decoration: none;
             }
         }
+    }
+
+    .post-language {
+        display: inline-block;
+        margin-left: var(--space-xxs);
+        padding: 1px var(--space-xxs);
+        color: var(--color-text-faint);
+        background-color: var(--color-surface-subtle);
+        border-radius: var(--radius-sm);
+        font-family: var(--font-mono);
+        font-size: var(--font-size-meta);
+        font-weight: var(--weight-medium);
+        letter-spacing: var(--tracking-meta);
+        vertical-align: middle;
     }
 
     .post-excerpt {

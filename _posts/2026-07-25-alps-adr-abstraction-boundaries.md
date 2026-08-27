@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering prd adr alps agentic-development hexagonal-architecture
 publish: true
+lang: ko
+translation_key: alps-adr-abstraction-boundaries
+english_url: /en/2026/07/25/alps-adr-abstraction-boundaries.html
 ---
 
 ## TL;DR

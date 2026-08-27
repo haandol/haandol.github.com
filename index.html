@@ -6,9 +6,29 @@ title : Home
 <ul class="posts">
     {% for post in paginator.posts %}
         {% if post.publish %}
+            {%- assign translation = nil -%}
+            {%- if post.translation_key -%}
+                {%- assign translation = site.en | where: "translation_key", post.translation_key | first -%}
+            {%- endif -%}
             <li>
-                <h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
-                <p class="post-excerpt">{{ post.excerpt }}</p>
+                {% if translation %}
+                <div data-locale-view="en" lang="en">
+                    <h2 class="post-title"><a href="{{ translation.url }}">{{ translation.title }}</a></h2>
+                    <p class="post-excerpt">{{ translation.excerpt }}</p>
+                </div>
+                <div data-locale-view="ko" lang="ko">
+                    <h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
+                    <p class="post-excerpt">{{ post.excerpt }}</p>
+                </div>
+                {% else %}
+                <div lang="ko">
+                    <h2 class="post-title">
+                        <a href="{{ post.url }}">{{ post.title }}</a>
+                        <span class="post-language" title="Korean only">KO</span>
+                    </h2>
+                    <p class="post-excerpt">{{ post.excerpt }}</p>
+                </div>
+                {% endif %}
                 <time class="post-date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y.%m.%d" }}</time>
             </li>
         {% endif %}

@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai engineering-productivity cts-sw developer-experience organization
 publish: true
+lang: ko
+translation_key: cts-sw-software-delivery-cost
+english_url: /en/2026/08/14/cts-sw-software-delivery-cost.html
 ---
 
 ## TL;DR

@@ -145,10 +145,24 @@ Verify every internal link before finishing:
 
 ```bash
 # must print 0 — any hit is a broken link
-rg -oN --no-filename '\]\(/20[0-9]{2}/[0-9]{2}/[0-9]{2}/[a-z0-9-]+/\)' _posts/*.md | wc -l
+rg -oN --no-filename '\]\((/en)?/20[0-9]{2}/[0-9]{2}/[0-9]{2}/[a-z0-9-]+/\)' _posts/*.md _en/*.md | wc -l
 ```
 
 Do not "fix" this by adding a `permalink` to `_config.yml`: 123 URLs are already indexed in `sitemap.xml` and the atom feed in `.html` form, and changing the permalink would break all of them.
+
+### Korean and English Versions
+
+- Korean originals remain in `_posts/` at the existing `/YYYY/MM/DD/slug.html` URL.
+- English translations live in `_en/` and use `/en/YYYY/MM/DD/slug.html`.
+- A translated Korean post sets `lang: ko`, `translation_key`, and `english_url`.
+- Its English counterpart sets the same `translation_key`, plus `lang: en`,
+  `korean_url`, an explicit `date`, and an explicit `/en/...html` `permalink`.
+- Home, sidebar, and keyboard navigation show English first when a translation
+  exists. If it does not, they fall back to the Korean post.
+- Translate text embedded in diagrams as well as prose. English image variants
+  use the `-en` suffix before the extension.
+- Keep Korean URLs stable for existing links and LinkedIn. Use the `/en/` URL
+  when sharing the English version.
 
 ### Writing Style
 

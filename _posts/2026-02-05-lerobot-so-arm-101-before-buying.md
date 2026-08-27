@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: physical-ai lerobot so-arm-101 robotics
 publish: true
+lang: ko
+translation_key: lerobot-so-arm-101-before-buying
+english_url: /en/2026/02/05/lerobot-so-arm-101-before-buying.html
 ---
 
 ## TL;DR

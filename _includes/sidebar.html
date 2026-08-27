@@ -35,14 +35,32 @@
       박스에서 잘리므로, 패딩을 가진 링크에 직접 걸면 세 번째 줄이 아래 패딩
       영역에 얇게 비친다. 자세한 내용은 layout.css의 .nav-item-clamp 참고.
     {%- endcomment -%}
-    <p class="sidebar-label">지난 글</p>
+    <p class="sidebar-label">
+      <span data-locale-view="en">Recent posts</span>
+      <span data-locale-view="ko">지난 글</span>
+    </p>
     <ul class="sidebar-nav">
       {%- assign recent = site.posts | where: "publish", true -%}
       {%- for post in recent limit: 8 -%}
+        {%- assign translation = nil -%}
+        {%- if post.translation_key -%}
+          {%- assign translation = site.en | where: "translation_key", post.translation_key | first -%}
+        {%- endif -%}
         <li>
+          {%- if translation -%}
+          <a class="nav-item nav-item-post" data-locale-view="en" lang="en"
+             href="{{ translation.url }}"
+             {% if page.url == translation.url %}aria-current="page"{% endif %}
+             title="{{ translation.title }}"><span class="nav-item-clamp">{{ translation.title }}</span></a>
+          <a class="nav-item nav-item-post" data-locale-view="ko" lang="ko"
+             href="{{ post.url }}"
+             {% if page.url == post.url %}aria-current="page"{% endif %}
+             title="{{ post.title }}"><span class="nav-item-clamp">{{ post.title }}</span></a>
+          {%- else -%}
           <a class="nav-item nav-item-post" href="{{ post.url }}"
              {% if page.url == post.url %}aria-current="page"{% endif %}
              title="{{ post.title }}"><span class="nav-item-clamp">{{ post.title }}</span></a>
+          {%- endif -%}
         </li>
       {%- endfor -%}
     </ul>

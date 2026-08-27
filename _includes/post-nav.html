@@ -14,10 +14,15 @@
 발행 목록에 없는 글(초안·비공개)에서는 자리를 못 찾아 이 블록 전체가 빈다.
 {%- endcomment -%}
 
+{%- assign page_lang = page.lang | default: "ko" -%}
+{%- assign source_url = page.url -%}
+{%- if page_lang == "en" and page.korean_url -%}
+  {%- assign source_url = page.korean_url -%}
+{%- endif -%}
 {%- assign published = site.posts | where: "publish", true -%}
 {%- assign at = nil -%}
 {%- for p in published -%}
-  {%- if p.url == page.url -%}{%- assign at = forloop.index0 -%}{%- endif -%}
+  {%- if p.url == source_url -%}{%- assign at = forloop.index0 -%}{%- endif -%}
 {%- endfor -%}
 
 {%- if at -%}
@@ -26,18 +31,31 @@
   {%- if at > 0 -%}{%- assign newer = published[newer_at] -%}{%- endif -%}
   {%- assign older = published[older_at] -%}
 
+  {%- assign newer_target = newer -%}
+  {%- assign older_target = older -%}
+  {%- if page_lang == "en" -%}
+    {%- if newer and newer.translation_key -%}
+      {%- assign newer_translation = site.en | where: "translation_key", newer.translation_key | first -%}
+      {%- if newer_translation -%}{%- assign newer_target = newer_translation -%}{%- endif -%}
+    {%- endif -%}
+    {%- if older and older.translation_key -%}
+      {%- assign older_translation = site.en | where: "translation_key", older.translation_key | first -%}
+      {%- if older_translation -%}{%- assign older_target = older_translation -%}{%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+
   {%- if newer or older -%}
-<nav class="post-nav" aria-label="이전·다음 글">
+<nav class="post-nav" aria-label="{% if page_lang == 'en' %}Previous and next posts{% else %}이전·다음 글{% endif %}">
   {%- if older %}
-  <a class="post-nav-item post-nav-prev" rel="prev" href="{{ older.url }}">
-    <span class="post-nav-label">이전 글</span>
-    <span class="post-nav-title">{{ older.title }}</span>
+  <a class="post-nav-item post-nav-prev" rel="prev" href="{{ older_target.url }}">
+    <span class="post-nav-label">{% if page_lang == "en" %}Previous{% else %}이전 글{% endif %}</span>
+    <span class="post-nav-title">{{ older_target.title }}</span>
   </a>
   {%- endif %}
   {%- if newer %}
-  <a class="post-nav-item post-nav-next" rel="next" href="{{ newer.url }}">
-    <span class="post-nav-label">다음 글</span>
-    <span class="post-nav-title">{{ newer.title }}</span>
+  <a class="post-nav-item post-nav-next" rel="next" href="{{ newer_target.url }}">
+    <span class="post-nav-label">{% if page_lang == "en" %}Next{% else %}다음 글{% endif %}</span>
+    <span class="post-nav-title">{{ newer_target.title }}</span>
   </a>
   {%- endif %}
 </nav>

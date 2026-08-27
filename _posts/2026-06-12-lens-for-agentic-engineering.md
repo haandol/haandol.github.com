@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development hitl agent-centered forward-deployed-engineer
 publish: true
+lang: ko
+translation_key: lens-for-agentic-engineering
+english_url: /en/2026/06/12/lens-for-agentic-engineering.html
 ---
 
 ## TL;DR

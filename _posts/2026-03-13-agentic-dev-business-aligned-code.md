@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development ddd business vibe-coding claude-code
 publish: true
+lang: ko
+translation_key: agentic-dev-business-aligned-code
+english_url: /en/2026/03/13/agentic-dev-business-aligned-code.html
 ---
 
 ## TL;DR

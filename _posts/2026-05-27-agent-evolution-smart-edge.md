@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development orchestration vertical-agent headless-saas physical-ai humanoid
 publish: true
+lang: ko
+translation_key: agent-evolution-smart-edge
+english_url: /en/2026/05/27/agent-evolution-smart-edge.html
 ---
 
 ## TL;DR

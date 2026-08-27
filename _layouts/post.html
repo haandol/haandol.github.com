@@ -24,13 +24,19 @@ layout: default
 {% include post-nav.html %}
 
 {% if site.related_posts.size > 0 %}
-<nav class="related" aria-label="관련 글">
-  <h3>관련 글</h3>
+{%- assign page_lang = page.lang | default: "ko" -%}
+<nav class="related" aria-label="{% if page_lang == 'en' %}Related posts{% else %}관련 글{% endif %}">
+  <h3>{% if page_lang == "en" %}Related posts{% else %}관련 글{% endif %}</h3>
   <ul class="related-posts">
     {% for post in site.related_posts limit:3 %}
+      {%- assign related_target = post -%}
+      {%- if page_lang == "en" and post.translation_key -%}
+        {%- assign related_translation = site.en | where: "translation_key", post.translation_key | first -%}
+        {%- if related_translation -%}{%- assign related_target = related_translation -%}{%- endif -%}
+      {%- endif -%}
       <li>
-        <a href="{{ post.url }}">
-          <small>{{ post.date | date: "%Y.%m.%d" }}</small>{{ post.title }}
+        <a href="{{ related_target.url }}">
+          <small>{{ related_target.date | date: "%Y.%m.%d" }}</small>{{ related_target.title }}
         </a>
       </li>
     {% endfor %}

@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: physical ai nvidia isaac-sim
 publish: true
+lang: ko
+translation_key: physical-ai-demystifying
+english_url: /en/2026/01/02/physical-ai-demystifying.html
 ---
 
 ## TL;DR
