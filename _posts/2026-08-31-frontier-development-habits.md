@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent frontier-development harness-engineering organization developer-experience kiro
 publish: true
+lang: ko
+translation_key: frontier-development-habits
+english_url: /en/2026/08/31/frontier-development-habits.html
 ---
 
 ## TL;DR

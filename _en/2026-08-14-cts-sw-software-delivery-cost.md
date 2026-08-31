@@ -214,4 +214,4 @@ Improving individual AI skills still matters. But for those skills to become tea
 
 [^10]: [How I Built the EncBird Harness Layer by Layer](/en/2026/06/16/harness-engineering-in-practice.html) — describes how requirements, context, tools, tests, and guardrails accumulated into a project harness.
 
-[^11]: [Why Did Some Teams Get Up to 10x Faster with the Same AI Tools?](/2026/08/31/frontier-development-habits.html) (Korean) — connects Amazon's 50-team pilot and five Frontier Development habits to the team-harness argument.
+[^11]: [Why Did Some Teams Get Up to 10x Faster with the Same AI Tools? — Five Habits of Frontier Development](/en/2026/08/31/frontier-development-habits.html) — connects Amazon's 50-team pilot and five Frontier Development habits to the team-harness argument.
