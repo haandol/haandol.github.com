@@ -75,6 +75,16 @@ I therefore think AI productivity depends less on how well one person operates a
 
 One developer may produce code quickly with strong prompts and settings, but weak review criteria and tests create more work for everyone else. When the team harness automates recurring decisions, an individual's learning remains available to future tasks and other team members.
 
+Amazon's 50-team Frontier Development pilot provides a concrete example of this claim.[^11]
+
+Teams with similar seniority mixes working in existing codebases used nearly the same AI tools, yet half improved production deployment velocity by less than 3x. The other half reached a median of 4.5x, with some exceeding 10x.
+
+The difference was not mainly the tool. The faster teams changed their working practices together: context, tools, tests, and intent documents let agents validate their own work instead of waiting for continuous human input.
+
+This is useful evidence that a team harness can affect deployment velocity.
+
+It still does not prove that CTS-SW fell. The cost of building and operating the added harness, human review and incident response, and delivery quality need to be measured within the same boundary.
+
 {% raw %}
 ```mermaid
 flowchart LR
@@ -203,3 +213,5 @@ Improving individual AI skills still matters. But for those skills to become tea
 [^9]: DORA, [DORA's software delivery performance metrics](https://dora.dev/guides/dora-metrics-four-keys/) — warns against metric targets, cross-application comparisons, and competition between teams.
 
 [^10]: [How I Built the EncBird Harness Layer by Layer](/en/2026/06/16/harness-engineering-in-practice.html) — describes how requirements, context, tools, tests, and guardrails accumulated into a project harness.
+
+[^11]: [Why Did Some Teams Get Up to 10x Faster with the Same AI Tools?](/2026/08/31/frontier-development-habits.html) (Korean) — connects Amazon's 50-team pilot and five Frontier Development habits to the team-harness argument.
