@@ -99,6 +99,12 @@ Personally, I think this is the first cognitive-load bottleneck AI coding needs 
 
 We already have many ways to generate code faster. The next question is how much of the result a human must understand and which evidence should be sufficient for trust.
 
+This does not mean code understanding itself should disappear.
+
+Geoffrey Litt distinguishes understanding for correctness verification from understanding needed to participate in the next change. Even when an agent produces a correct result, a human who learns nothing from the change loses the conceptual material needed for the next idea. The talk describes the accumulation of changes no one understands as `Cognitive Debt`.[^7]
+
+I think this distinction supports contract-centered review. Instead of reading every line at the same depth, use contracts and evidence for correctness while preserving a human-readable explanation of the behavior needed for the next decision.
+
 ## 3. Two ways to reduce cognitive load
 
 At the moment, I see two practical approaches.
@@ -305,6 +311,10 @@ If a slice cannot be divided further by meaning, stacked pull requests can still
 
 Completion review connects each contract item to the implementation, code evidence, and executed tests. The agent repairs code and test defects that do not alter the contract. Humans decide only new contracts, contradictions, and important unverified risks.
 
+I recently added an implementation explanation similar to `Explain Diff` to ADR Writer. It connects the ADR's purpose and scope, the behavior before and after the change, the actual request flow, state and failure paths, and tests to concrete code evidence.
+
+The explanation does not judge whether the implementation is correct. It helps a person understand enough to participate in the next change, while contract-level evidence and executed tests determine whether the work is complete.
+
 The current tooling does not measure individual cognitive capacity or prove that a human understood every commit. It does, however, give each vertical-slice ADR a boundary for what one cycle must implement, verify, and close. That boundary directly helps create smaller development cycles.
 
 ## Conclusion
@@ -336,3 +346,5 @@ From this perspective, reducing cognitive load is not merely making review more 
 [^5]: [How I Built the EncBird Harness Layer by Layer](/en/2026/06/16/harness-engineering-in-practice.html) — describes moving recurring human decisions into rules, tools, and guardrails.
 
 [^6]: [A Lens for Agentic Engineering](/en/2026/06/12/lens-for-agentic-engineering.html) — explains the view of agentic engineering as removing human-in-the-loop steps from the normal path.
+
+[^7]: Geoffrey Litt, [Understanding is the new bottleneck](https://www.geoffreylitt.com/2026/07/02/understanding-is-the-new-bottleneck) — distinguishes understanding for correctness from understanding needed to participate in the next change and introduces `Explain Diff`. [Video with Korean and English subtitles](https://youtu.be/x3e_Yl4NNHY).
