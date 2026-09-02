@@ -37,13 +37,15 @@ The goal is to remove the human element entirely from the compilation process th
 
 In practice, people still remain throughout the pipeline. The most immediate bottleneck today is **review**. Because current agent output is not considered to fully reflect business and technical requirements, the pipeline still assumes that a person must inspect it one more time at the end. Generation speed has already surpassed human review capacity, and complaints that "code produced with a click is hard to review" come from this assumption.
 
-But I think this problem is likely to be resolved naturally as coding agents and development methods improve. We are already moving toward a structure in which the system that generates the code also owns verification. Because this progress rides on improvements in the model's baseline capabilities, it seems closer to a problem that time will solve than one that requires an entirely new engineering discipline.
+But this problem will not disappear automatically as models improve. We are moving toward a structure in which the system that generates the code also owns verification, but that structure still needs a harness that moves repeated review judgments into contracts, tests, and guardrails, escalating only new contracts, contradictions, and high-risk exceptions to people.[^3]
+
+Model progress expands the range that an agent can close on its own, but reducing the actual bottleneck remains an engineering problem in its own right.
 
 The bottleneck after review is **deployment**. A human still has to participate in the handoff from something built locally to something running in production. Packaging the code, building an image, configuring environment variables and permissions, and deciding whether to roll back after a failure all fall into this category.
 
 This point also reaches backward into the development stage. **If even one point of human intervention remains at the end of the pipeline, the stages before it are ultimately designed around that person.** If someone must inspect the code and make a judgment during deployment, the development stage must preserve code in a form that "a person can understand and review." Human dependence in deployment ends up setting the limit on automation in development.
 
-Both bottlenecks are real today, but they are **finite bottlenecks** in the sense that time can resolve them. What matters is which tools can ride the trend when these bottlenecks begin to disappear.
+Both bottlenecks are real today, but they are **finite bottlenecks** in the sense that their scope can shrink as models, harnesses, and deployment and operations automation improve. What matters is which tools can ride the trend when these bottlenecks begin to disappear.
 
 ## 3. Designs that assume coexistence and designs that assume human removal
 
@@ -65,7 +67,7 @@ From this perspective, the difference between transitional and enduring technolo
 
 ## Conclusion
 
-The direction of agentic engineering is clear: removing humans from the loop. People still occupy places in the pipeline because bottlenecks such as review and deployment remain, but those bottlenecks will gradually be dismantled as models and agents improve.
+The direction of agentic engineering is clear: removing humans from the loop. People still occupy places in the pipeline because bottlenecks such as review and deployment remain, but those bottlenecks will gradually be dismantled as repeated judgments on the normal path move into the harness and models and agents improve.
 
 In that process, **tools designed around coexistence are like lights illuminating a transitional period**. They are extremely useful for raising productivity today, but viewed along the direction of travel, they are likely to be replaced by agentic engineering itself or quietly pushed into obscurity.
 
@@ -76,3 +78,5 @@ Which tool to use today is a practical question. Which direction to bet on is a 
 [^1]: [Demystifying Harness Engineering](/en/2026/03/15/harness-engineering-beyond-context-engineering.html).
 
 [^2]: [Multi-Agent Without a Harness Is Just Context Engineering](/en/2026/03/31/multi-agent-without-harness-is-just-context-engineering.html).
+
+[^3]: [AI Made the Code Faster, So Why Is Review Harder?](/en/2026/08/18/ai-coding-review-cognitive-load.html) — moving repeated review judgments into contracts and guardrails so that people decide only new contracts and exceptions.

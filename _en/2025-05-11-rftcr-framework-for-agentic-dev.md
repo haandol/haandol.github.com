@@ -13,6 +13,8 @@ korean_url: /2025/05/11/rftcr-framework-for-agentic-dev.html
 permalink: /en/2025/05/11/rftcr-framework-for-agentic-dev.html
 ---
 
+> **September 2026 update:** This post records the proposal as I understood it in 2025. I no longer keep every Requirement, Feature, and Task document as long-lived context. Before handoff, the ALPS PRD owns product intent and feature contracts. After handoff, ADRs become the implementation authority, while plans and task lists are regenerated when needed. The current approach is described in [Why Does a More Detailed PRD Become Outdated Faster? — Separating ALPS and ADR Boundaries](/en/2026/07/25/alps-adr-abstraction-boundaries.html).
+
 ## TL;DR
 
 - The hardest part of agent-based development is **translating business requirements accurately into code**.

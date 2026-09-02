@@ -11,6 +11,8 @@ translation_key: rftcr-framework-for-agentic-dev
 english_url: /en/2025/05/11/rftcr-framework-for-agentic-dev.html
 ---
 
+> **2026년 9월 업데이트:** 이 글은 2025년에 정리한 당시의 제안이다. 지금은 Requirement·Feature·Task 문서를 모두 장기 컨텍스트로 축적하지 않는다. handoff 전에는 ALPS PRD가 제품 의도와 기능 계약을 소유하고, handoff 뒤에는 ADR이 구현의 기준이 되며, 계획과 작업 목록은 필요한 시점에 다시 만든다. 최신 관점은 [PRD를 자세히 쓸수록 왜 더 빨리 낡을까 — ALPS와 ADR로 경계 나누기](/2026/07/25/alps-adr-abstraction-boundaries.html)에 정리했다.
+
 ## TL;DR
 
 - 에이전트 기반 개발은 **비즈니스 요구사항을 코드로 정확히 변환**하는 게 가장 어려운 부분이다.
