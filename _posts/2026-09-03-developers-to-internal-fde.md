@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent fde agentic-development organization process-automation
 publish: true
+lang: ko
+translation_key: developers-to-internal-fde
+english_url: /en/2026/09/03/developers-to-internal-fde.html
 ---
 
 ## TL;DR
