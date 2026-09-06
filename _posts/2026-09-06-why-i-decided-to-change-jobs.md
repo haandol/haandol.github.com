@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "내가 믿지 않는 방향을 더는 전달할 수 없어서 — AI-DLC와 이직을 결심한 이유"
-excerpt: Why I chose ownership over a comfortable disagreement
+title: "AWS AI-DLC에 대한 단상 — 내가 믿는 에이전틱 개발의 방향"
+excerpt: Where AI-DLC diverges from my view of agentic development
 author: haandol
 email: ldg55d@gmail.com
 tags: career ai agent agentic-development ai-dlc harness-engineering hitl solutions-architect
