@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: career ai agent agentic-development ai-dlc harness-engineering hitl solutions-architect
 publish: true
+lang: ko
+translation_key: aws-ai-dlc-thoughts
+english_url: /en/2026/09/06/why-i-decided-to-change-jobs.html
 ---
 
 ## TL;DR
