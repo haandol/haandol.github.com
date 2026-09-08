@@ -299,57 +299,21 @@ There is a video from a 1992 MIT talk in which Steve Jobs discusses consultants.
 
 <iframe width="560" height="315" style="width: 100%; max-width: 560px; aspect-ratio: 16 / 9; height: auto;" src="https://www.youtube.com/embed/-c4CNB80SRc" title="Steve Jobs on consultants" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-Jobs says consultants can see broad cross-sections of many companies, but their experience can remain thin when they do not implement their recommendations, own the results for years, and accumulate scars from failure.
+Jobs argues that seeing many companies is not enough if you never implement your recommendations or own their results and failures over time. His analogy is that you may have seen many pictures of fruit without ever tasting it.[^11]
 
-His analogy is that they may have precise pictures of bananas and peaches hanging on the wall without ever having tasted the fruit.[^11]
+I do not want to turn that into a judgment of every SA. Working with customers over time and revealing recurring patterns and options across companies are real forms of expertise.
 
-I do not want to turn this video into a judgment of every SA.
+But because I began as a developer, one question remains: `Do I experience the operational consequences of my recommendation?` I operate services with roughly 200,000 and 100,000 lines of code and own their time, cost, and outcomes, but they are not official customer cases.
 
-An SA is not exactly the same as a consultant, and many SAs work with customers for years and share responsibility for what happens after implementation. Finding recurring patterns across companies and industries and presenting options that are difficult to see from inside one organization are distinct forms of expertise.
+The phenomenon I called agent-driven development became shared vocabulary much faster after Andrej Karpathy named it `Vibe Coding`. A message gains force not only from its content but also from the outcomes created by its messenger.[^12]
 
-For me, however, one question remains because I began as a developer: `Do I experience what happens in operations after giving the recommendation?`
+The breadth I gained as an SA is an asset. What I need now is the experience of owning one team and product over time and feeding my decisions, failures, and operational results into the next choice.
 
-I personally build and operate services with roughly 200,000 and 100,000 lines of code.
+Joining a product organization does not automatically create ownership either. I have seen people process assigned tickets, ignore outcomes, and collect a paycheck. **Ownership comes from participating in problem definition and staying with the operational result, not from a title.**
 
-I define the requirements, build the agent harnesses, deploy the services, observe user reactions, and revise them. At a minimum, I own the consequences in money, time, and service outcomes.
+As AI narrows individual differences in implementation ability, a team's capacity to share the problem and context, validate results, and preserve failure in the next harness becomes more important. Amazon teams using the same tools produced sharply different results for the same reason.[^5]
 
-They are personal projects, however, so I cannot present them to customers as official AWS cases.
-
-Everything I have written on this blog is ultimately one person's experience and insight. However much evidence I add, my authority to speak about agentic-development methodology remains limited if I have not changed the outcomes of a real team through the method I advocate.
-
-I had been describing this phenomenon as agent-driven development since 2024. It became shared vocabulary much faster after Andrej Karpathy named it `Vibe Coding`.[^12]
-
-A message gains meaning not only from its content but also from the authority of its messenger.
-
-An SA's authority can come from breadth across customer cases and from the experience of explaining complex choices to stakeholders and moving them to action.
-
-The kind of authority I want to build next is different.
-
-**With a developer background, what I need now is the experience of owning a single team and product for a long time and accumulating scars from the consequences of my own decisions.**
-
-Working as an SA gave me a comparative view of where customers began, which architectures and methods they chose, and which outcomes followed. That perspective will remain a substantial asset.
-
-Within the scope of my current role, however, it has been difficult to own one problem for years, live through incidents caused by my own decisions, lose or rebuild a team's trust, and feed the results into the next decision.
-
-This is not a universal limitation of the SA profession. It is the distance between my current role and the experience I want to build next.
-
-The reverse is also true: joining an organization that builds products does not automatically create this depth.
-
-I have seen more than a few people inside customer organizations who handled only assigned tickets, showed little interest in product outcomes, and collected a paycheck. Belonging to a product organization and owning product outcomes are entirely different things.
-
-**The experience of owning outcomes does not come from a company or title. It comes from participating in problem definition, observing the operational consequences of your decisions, and feeding failures into the next choice.**
-
-In the AI era, I think it is also becoming harder for an individual to create this experience alone.
-
-Individual ability still matters. But as AI rapidly narrows individual differences in implementation speed and technical exploration, performance moves toward how precisely a team defines customer problems, how well it shares context and decision criteria, and how effectively it validates and absorbs generated results into operations.
-
-Even among Amazon teams using the same AI tools, results diverged sharply. The difference came less from individual prompting technique than from how much the team changed context, tools, tests, and its way of working together.[^5]
-
-**In the AI era, having a team that learns from failure and preserves those lessons in the next execution harness may matter more than having one exceptional individual.**
-
-I sensed this four years ago. But while gaining breadth as an SA, I think I avoided looking at the possibility that the kind of depth I wanted might be diminishing.
-
-Alongside becoming better at comparing more pictures of bananas, I now want the experience of growing one, ruining it, and tasting it myself.
+What I am looking for, then, is not a particular title but **a team that owns outcomes together and turns failure into learning**.
 
 ## Conclusion
 
