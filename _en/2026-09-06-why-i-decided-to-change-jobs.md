@@ -7,7 +7,7 @@ email: ldg55d@gmail.com
 tags: career ai agent agentic-development ai-dlc harness-engineering hitl solutions-architect
 publish: true
 lang: en
-date: 2026-09-06 00:00:00 +0900
+date: 2026-09-06 09:00:00 +0900
 translation_key: aws-ai-dlc-thoughts
 korean_url: /2026/09/06/why-i-decided-to-change-jobs.html
 permalink: /en/2026/09/06/why-i-decided-to-change-jobs.html
