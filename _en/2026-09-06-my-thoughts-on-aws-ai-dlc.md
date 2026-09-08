@@ -352,7 +352,7 @@ Alongside becoming better at comparing more pictures of bananas, I now want the 
 
 ## Conclusion
 
-This post is not a final verdict on AI-DLC. It can be a practical answer for organizations adopting AI for the first time or operating under strong governance. I still believe, however, that agentic engineering will move toward removing the reasons people were required in the system rather than positioning them more effectively at its center.
+AI-DLC can be a practical answer for organizations adopting AI for the first time or operating under strong governance. I still believe, however, that agentic engineering will move toward removing the reasons people were required in the system rather than positioning them more effectively at its center.
 
 The breadth I gained as an SA is an asset. But with a developer background, the next thing I need is not more arguments or writing. It is the experience of owning a real team's product outcomes over time.
 
