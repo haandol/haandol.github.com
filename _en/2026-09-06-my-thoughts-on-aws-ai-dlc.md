@@ -368,6 +368,14 @@ With a developer background, I have concluded that the next thing I need is not 
 
 It is difficult to openly express a different view of AI-DLC inside the company. Colleagues have built it and work hard to communicate it, and it genuinely helps some customers.
 
+What exhausts me even more is that I currently have almost nowhere to work through these ideas openly.
+
+When I begin the conversation, I first have to explain and persuade people where I think AI is heading, why I use HITL removal as the criterion, and why small feedback loops matter. Before reaching the question of how to solve the customer's problem, most of the time and energy has already been spent aligning on the `why`.
+
+A team with sustained, firsthand experience of agentic engineering would not need to agree on every conclusion.
+
+It would still share enough experience of the underlying change to spend less time explaining why this direction matters and more time on the productive `how`: **how to solve the customer problem, and how to reshape the process and harness around it**.
+
 At the same time, I do not want stability to become a reason to remain while looking away from a direction I cannot believe in.
 
 My goal is therefore to change jobs by the end of the year.
@@ -381,6 +389,10 @@ A company that offers both would be ideal, though I do not expect every opportun
 Above all, I need to choose the actual team more carefully than the company name or job title.
 
 Even at a company whose AI direction aligns with mine, I will not gain the experience I want if the team merely processes assigned tickets and fails to preserve lessons for the next task. Conversely, even if the whole company is not perfectly aligned, I can learn a great deal from a team that takes customer problems seriously, shares responsibility for operational outcomes, and feeds failures into its harness.
+
+If I cannot find such a team, I am also considering building one.
+
+Starting a small AI-first company would let me experiment with Lean Startup again while owning the customer problem, concept, process, implementation, and outcomes end to end.[^13] I am considering it not because I believe success is likely, but because it would be the most direct experiment for testing the hypotheses I have developed so far.
 
 The problem is that I do not think I am fully prepared to choose such a position yet.
 
@@ -396,7 +408,7 @@ For now, before choosing a company, **I am trying to identify what is missing in
 
 The goal of changing jobs by the end of the year remains, but I do not want to move anywhere merely to escape my current company.
 
-In my next role, with a good team, I want at least one of two things: to learn from people already advancing the direction I believe in, or to take end-to-end responsibility for a real customer problem.
+In my next move, I want at least one of two things with a good team: to learn from people already advancing the direction I believe in, or to take end-to-end responsibility for a real customer problem. If I cannot find that team, the choice may include building it myself.
 
 ---
 
@@ -423,3 +435,5 @@ In my next role, with a good team, I want at least one of two things: to learn f
 [^11]: MIT Sloan, [Steve Jobs talks consultants, hiring, and leaving Apple in unearthed 1992 talk](https://mitsloan.mit.edu/ideas-made-to-matter/steve-jobs-talks-consultants-hiring-and-leaving-apple-unearthed-1992-talk) — summarizes Jobs's argument that learning can remain shallow without owning implementation and outcomes over time.
 
 [^12]: Andrej Karpathy, [“There's a new kind of coding I call ‘vibe coding’”](https://x.com/karpathy/status/1886192184808149383) (2025.02.03).
+
+[^13]: [Why Avoiding Failure Comes First](/en/2026/06/27/failure-comes-first.html) — develops my hypothesis for combining AI-first execution with Lean Startup to lower the cost of experiments that produce customer learning.
