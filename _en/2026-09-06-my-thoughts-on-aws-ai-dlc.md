@@ -352,63 +352,19 @@ Alongside becoming better at comparing more pictures of bananas, I now want the 
 
 ## Conclusion
 
-This post is not a final verdict on AWS or AI-DLC.
+This post is not a final verdict on AI-DLC. It can be a practical answer for organizations adopting AI for the first time or operating under strong governance. I still believe, however, that agentic engineering will move toward removing the reasons people were required in the system rather than positioning them more effectively at its center.
 
-It is closer to a personal decision about where I want to place the next several years.
+The breadth I gained as an SA is an asset. But with a developer background, the next thing I need is not more arguments or writing. It is the experience of owning a real team's product outcomes over time.
 
-AI-DLC can be useful for organizations adopting AI for the first time, and it may be a practical answer in industries that need strong governance. It also has public success cases.
+What exhausts me most is not disagreement itself, but having almost nowhere to discuss these ideas from a shared starting point. Before reaching the customer problem, most of the energy is spent aligning on the `why` behind HITL removal and small feedback loops.
 
-I still believe the future of agentic engineering will move less toward placing people more effectively at the center and more toward removing the reasons people were required in the system.
+A team with firsthand experience of agentic engineering would not need to agree on every conclusion. Shared experience would let us focus more on the productive `how`: **how to solve the customer problem and reshape the process and harness around it**.
 
-I cannot work indefinitely while believing in a future different from the direction I am expected to communicate as a senior employee.
+My goal is therefore to change jobs by the end of the year. More than a company name or title, I want a team that takes customer problems seriously and owns operational outcomes and failures together—or a team aligned with AI's direction where I can learn and spread advanced practices.
 
-The broad perspective I gained as an SA is clearly an asset.
+If I cannot find such a team, I am also considering creating a small AI-first company to experiment with Lean Startup.[^13] It would let me own the customer problem, concept, process, implementation, and outcomes end to end.
 
-With a developer background, I have concluded that the next thing I need is not more sophisticated arguments or more writing. It is the experience of owning the outcomes of a real team and product for a long time.
-
-It is difficult to openly express a different view of AI-DLC inside the company. Colleagues have built it and work hard to communicate it, and it genuinely helps some customers.
-
-What exhausts me even more is that I currently have almost nowhere to work through these ideas openly.
-
-When I begin the conversation, I first have to explain and persuade people where I think AI is heading, why I use HITL removal as the criterion, and why small feedback loops matter. Before reaching the question of how to solve the customer's problem, most of the time and energy has already been spent aligning on the `why`.
-
-A team with sustained, firsthand experience of agentic engineering would not need to agree on every conclusion.
-
-It would still share enough experience of the underlying change to spend less time explaining why this direction matters and more time on the productive `how`: **how to solve the customer problem, and how to reshape the process and harness around it**.
-
-At the same time, I do not want stability to become a reason to remain while looking away from a direction I cannot believe in.
-
-My goal is therefore to change jobs by the end of the year.
-
-If I can choose, I would like to join a company that takes customer problems seriously and lets people earn authority by actually solving them.
-
-Alternatively, I would like to work at a company whose view of AI's direction aligns with mine, learn the most advanced practices available there, validate them, and spread them to other teams and customers.
-
-A company that offers both would be ideal, though I do not expect every opportunity to satisfy both conditions.
-
-Above all, I need to choose the actual team more carefully than the company name or job title.
-
-Even at a company whose AI direction aligns with mine, I will not gain the experience I want if the team merely processes assigned tickets and fails to preserve lessons for the next task. Conversely, even if the whole company is not perfectly aligned, I can learn a great deal from a team that takes customer problems seriously, shares responsibility for operational outcomes, and feeds failures into its harness.
-
-If I cannot find such a team, I am also considering building one.
-
-Starting a small AI-first company would let me experiment with Lean Startup again while owning the customer problem, concept, process, implementation, and outcomes end to end.[^13] I am considering it not because I believe success is likely, but because it would be the most direct experiment for testing the hypotheses I have developed so far.
-
-The problem is that I do not think I am fully prepared to choose such a position yet.
-
-More frustratingly, I still do not know exactly what is missing.
-
-Perhaps I lack experience owning a team's production outcomes. Perhaps I lack evidence that I can turn ideas into organizational change. Perhaps I have not yet defined the role I want precisely enough. I am examining all three.
-
-I also lack a sufficiently clear standard for evaluating the team I would actually join, not only the company and job.
-
-In interviews, I need to learn how the team chooses customer problems, validates AI-generated results, and preserves failure and review feedback for the next task. I must also distinguish the direction a company advertises from how the actual team works.
-
-For now, before choosing a company, **I am trying to identify what is missing in me**.
-
-The goal of changing jobs by the end of the year remains, but I do not want to move anywhere merely to escape my current company.
-
-In my next move, I want at least one of two things with a good team: to learn from people already advancing the direction I believe in, or to take end-to-end responsibility for a real customer problem. If I cannot find that team, the choice may include building it myself.
+I still do not know exactly what I lack. Rather than move anywhere, **I am identifying the missing experience and the standards for the team I want to join**.
 
 ---
 
