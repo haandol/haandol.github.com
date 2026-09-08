@@ -8,7 +8,7 @@ tags: career ai agent agentic-development ai-dlc harness-engineering hitl soluti
 publish: true
 lang: ko
 translation_key: aws-ai-dlc-thoughts
-english_url: /en/2026/09/06/why-i-decided-to-change-jobs.html
+english_url: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
 ---
 
 ## TL;DR
