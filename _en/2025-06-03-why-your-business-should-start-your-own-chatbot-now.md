@@ -8,6 +8,7 @@ tags: ai agent chatbot genai flywheel
 publish: true
 lang: en
 date: 2025-06-03 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: why-your-business-should-start-your-own-chatbot-now
 korean_url: /2025/06/03/why-your-business-should-start-your-own-chatbot-now.html
 permalink: /en/2025/06/03/why-your-business-should-start-your-own-chatbot-now.html

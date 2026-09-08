@@ -8,6 +8,7 @@ tags: ai agi asi dystopia utopia competition
 publish: true
 lang: en
 date: 2026-03-12 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: agi-dystopia-or-utopia
 korean_url: /2026/03/12/agi-dystopia-or-utopia.html
 permalink: /en/2026/03/12/agi-dystopia-or-utopia.html

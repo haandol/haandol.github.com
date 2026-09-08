@@ -8,6 +8,7 @@ tags: mcp msa observability llm efficiency agent
 publish: true
 lang: en
 date: 2025-07-01 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: mcp-servers-are-micro-services
 korean_url: /2025/07/01/mcp-servers-are-micro-services.html
 permalink: /en/2025/07/01/mcp-servers-are-micro-services.html

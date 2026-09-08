@@ -8,6 +8,7 @@ tags: ai agent fde agentic-development organization process-automation
 publish: true
 lang: en
 date: 2026-09-03 00:00:00 +0900
+last_modified_at: 2026-09-03 11:38:06 +0900
 translation_key: developers-to-internal-fde
 korean_url: /2026/09/03/developers-to-internal-fde.html
 permalink: /en/2026/09/03/developers-to-internal-fde.html

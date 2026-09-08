@@ -8,6 +8,7 @@ tags: physical ai nvidia isaac-sim
 publish: true
 lang: en
 date: 2026-01-02 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: physical-ai-demystifying
 korean_url: /2026/01/02/physical-ai-demystifying.html
 permalink: /en/2026/01/02/physical-ai-demystifying.html

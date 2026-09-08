@@ -8,6 +8,7 @@ tags: ai agent multi-agent harness-engineering context-engineering agentic-devel
 publish: true
 lang: en
 date: 2026-03-31 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: multi-agent-without-harness-is-just-context-engineering
 korean_url: /2026/03/31/multi-agent-without-harness-is-just-context-engineering.html
 permalink: /en/2026/03/31/multi-agent-without-harness-is-just-context-engineering.html

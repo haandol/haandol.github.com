@@ -8,6 +8,7 @@ tags: ai agent harness-engineering context-engineering prompt-engineering agenti
 publish: true
 lang: en
 date: 2026-03-15 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: harness-engineering-beyond-context-engineering
 korean_url: /2026/03/15/harness-engineering-beyond-context-engineering.html
 permalink: /en/2026/03/15/harness-engineering-beyond-context-engineering.html

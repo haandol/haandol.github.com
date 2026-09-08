@@ -8,6 +8,7 @@ tags: ai agent agent-driven-development agentic-ide cursor windsurf cline roo ai
 publish: true
 lang: en
 date: 2025-02-10 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: demystifying-agent-driven-development-process
 korean_url: /2025/02/10/demystifying-agent-driven-development-process.html
 permalink: /en/2025/02/10/demystifying-agent-driven-development-process.html

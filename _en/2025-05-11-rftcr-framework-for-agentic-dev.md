@@ -8,6 +8,7 @@ tags: ai agent agent-driven-development agentic-ide cursor vibe-coding
 publish: true
 lang: en
 date: 2025-05-11 00:00:00 +0900
+last_modified_at: 2026-09-02 12:44:55 +0900
 translation_key: rftcr-framework-for-agentic-dev
 korean_url: /2025/05/11/rftcr-framework-for-agentic-dev.html
 permalink: /en/2025/05/11/rftcr-framework-for-agentic-dev.html

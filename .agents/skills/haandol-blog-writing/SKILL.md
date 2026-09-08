@@ -169,6 +169,9 @@ rg -o '^\[\^[0-9]+\]:' "$POST"
 Also verify:
 
 - required front matter exists and `excerpt` is English;
+- every `_en/` translation has `last_modified_at` set to its actual English
+  publication or meaningful revision time; update Korean `last_modified_at`
+  only for meaningful content revisions;
 - `excerpt` is a concise subtitle, normally one clause of roughly 6-12 words;
 - TL;DR has at most three short, single-clause bullets;
 - section headings and their contents agree;

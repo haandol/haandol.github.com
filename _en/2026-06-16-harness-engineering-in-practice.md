@@ -8,6 +8,7 @@ tags: ai agent harness-engineering context-engineering agentic-development sub-a
 publish: true
 lang: en
 date: 2026-06-16 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: harness-engineering-in-practice
 korean_url: /2026/06/16/harness-engineering-in-practice.html
 permalink: /en/2026/06/16/harness-engineering-in-practice.html

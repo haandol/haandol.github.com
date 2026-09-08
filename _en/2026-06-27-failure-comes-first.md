@@ -8,6 +8,7 @@ tags: business startup lean-startup pmf experiment ai
 publish: true
 lang: en
 date: 2026-06-27 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: failure-comes-first
 korean_url: /2026/06/27/failure-comes-first.html
 permalink: /en/2026/06/27/failure-comes-first.html

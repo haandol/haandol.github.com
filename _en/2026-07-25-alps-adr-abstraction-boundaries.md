@@ -8,6 +8,7 @@ tags: ai agent harness-engineering prd adr alps agentic-development hexagonal-ar
 publish: true
 lang: en
 date: 2026-07-25 00:00:00 +0900
+last_modified_at: 2026-09-03 20:06:37 +0900
 translation_key: alps-adr-abstraction-boundaries
 korean_url: /2026/07/25/alps-adr-abstraction-boundaries.html
 permalink: /en/2026/07/25/alps-adr-abstraction-boundaries.html

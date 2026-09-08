@@ -8,6 +8,7 @@ tags: physical-ai lerobot so-arm-101 robotics
 publish: true
 lang: en
 date: 2026-02-05 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: lerobot-so-arm-101-before-buying
 korean_url: /2026/02/05/lerobot-so-arm-101-before-buying.html
 permalink: /en/2026/02/05/lerobot-so-arm-101-before-buying.html

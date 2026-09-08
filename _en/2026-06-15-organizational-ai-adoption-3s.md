@@ -8,6 +8,7 @@ tags: ai agent agentic-development harness-engineering organization token-econom
 publish: true
 lang: en
 date: 2026-06-15 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: organizational-ai-adoption-3s
 korean_url: /2026/06/15/organizational-ai-adoption-3s.html
 permalink: /en/2026/06/15/organizational-ai-adoption-3s.html

@@ -156,7 +156,15 @@ Do not "fix" this by adding a `permalink` to `_config.yml`: 123 URLs are already
 - English translations live in `_en/` and use `/en/YYYY/MM/DD/slug.html`.
 - A translated Korean post sets `lang: ko`, `translation_key`, and `english_url`.
 - Its English counterpart sets the same `translation_key`, plus `lang: en`,
-  `korean_url`, an explicit `date`, and an explicit `/en/...html` `permalink`.
+  `korean_url`, an explicit `date`, `last_modified_at`, and an explicit
+  `/en/...html` `permalink`.
+- English `date` preserves the Korean article's original publication date.
+  `last_modified_at` records when the English URL was actually published or
+  materially revised, using `YYYY-MM-DD HH:MM:SS +0900`. This is required because
+  `jekyll-sitemap` otherwise emits the backdated `date` as `<lastmod>`.
+- For Korean posts, add or update `last_modified_at` only after a meaningful
+  content revision. Do not bump it for formatting-only or repository-wide
+  mechanical edits.
 - Home, sidebar, and keyboard navigation show English first when a translation
   exists. If it does not, they fall back to the Korean post.
 - Translate text embedded in diagrams as well as prose. English image variants

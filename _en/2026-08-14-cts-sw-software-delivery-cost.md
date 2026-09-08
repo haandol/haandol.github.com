@@ -8,6 +8,7 @@ tags: ai engineering-productivity cts-sw developer-experience organization
 publish: true
 lang: en
 date: 2026-08-14 00:00:00 +0900
+last_modified_at: 2026-08-31 22:09:19 +0900
 translation_key: cts-sw-software-delivery-cost
 korean_url: /2026/08/14/cts-sw-software-delivery-cost.html
 permalink: /en/2026/08/14/cts-sw-software-delivery-cost.html

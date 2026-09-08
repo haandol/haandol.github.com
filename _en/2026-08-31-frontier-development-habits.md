@@ -8,6 +8,7 @@ tags: ai agent frontier-development harness-engineering organization developer-e
 publish: true
 lang: en
 date: 2026-08-31 00:00:00 +0900
+last_modified_at: 2026-08-31 22:09:19 +0900
 translation_key: frontier-development-habits
 korean_url: /2026/08/31/frontier-development-habits.html
 permalink: /en/2026/08/31/frontier-development-habits.html

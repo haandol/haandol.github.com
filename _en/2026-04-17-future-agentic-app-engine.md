@@ -8,6 +8,7 @@ tags: ai agent harness-engineering agentic-development claude-code managed-agent
 publish: true
 lang: en
 date: 2026-04-17 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: future-agentic-app-engine
 korean_url: /2026/04/17/future-agentic-app-engine.html
 permalink: /en/2026/04/17/future-agentic-app-engine.html

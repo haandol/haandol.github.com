@@ -8,6 +8,7 @@ tags: ai agent agentic-development orchestration vertical-agent headless-saas ph
 publish: true
 lang: en
 date: 2026-05-27 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: agent-evolution-smart-edge
 korean_url: /2026/05/27/agent-evolution-smart-edge.html
 permalink: /en/2026/05/27/agent-evolution-smart-edge.html

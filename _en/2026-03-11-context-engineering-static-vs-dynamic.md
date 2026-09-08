@@ -8,6 +8,7 @@ tags: ai agent context-engineering agentic-development vibe-coding prd adr
 publish: true
 lang: en
 date: 2026-03-11 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: context-engineering-static-vs-dynamic
 korean_url: /2026/03/11/context-engineering-static-vs-dynamic.html
 permalink: /en/2026/03/11/context-engineering-static-vs-dynamic.html

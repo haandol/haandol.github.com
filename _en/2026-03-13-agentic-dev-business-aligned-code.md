@@ -8,6 +8,7 @@ tags: ai agent agentic-development ddd business vibe-coding claude-code
 publish: true
 lang: en
 date: 2026-03-13 00:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: agentic-dev-business-aligned-code
 korean_url: /2026/03/13/agentic-dev-business-aligned-code.html
 permalink: /en/2026/03/13/agentic-dev-business-aligned-code.html

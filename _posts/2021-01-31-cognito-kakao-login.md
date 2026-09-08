@@ -6,6 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: kakao login signin cognito userpool serverless aws amazon
 publish: true
+last_modified_at: 2023-12-24 17:17:10 +0900
 ---
 
 ## TL;DR

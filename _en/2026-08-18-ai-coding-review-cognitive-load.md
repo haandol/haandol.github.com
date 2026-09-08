@@ -8,6 +8,7 @@ tags: ai agent cognitive-load developer-experience code-review hitl
 publish: true
 lang: en
 date: 2026-08-18 09:00:00 +0900
+last_modified_at: 2026-09-02 12:53:15 +0900
 translation_key: ai-coding-review-cognitive-load
 korean_url: /2026/08/18/ai-coding-review-cognitive-load.html
 permalink: /en/2026/08/18/ai-coding-review-cognitive-load.html

@@ -8,6 +8,7 @@ tags: ai agent agentic-development harness-engineering organization developer-ex
 publish: true
 lang: en
 date: 2026-08-18 18:00:00 +0900
+last_modified_at: 2026-08-27 19:21:43 +0900
 translation_key: measuring-ai-adoption-ahead-lever-part-2
 korean_url: /2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html
 permalink: /en/2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html

@@ -8,6 +8,7 @@ tags: ai agent harness-engineering agentic-development claude-code headless
 publish: true
 lang: en
 date: 2026-05-11 00:00:00 +0900
+last_modified_at: 2026-09-02 12:44:55 +0900
 translation_key: direction-of-agentic-engineering
 korean_url: /2026/05/11/direction-of-agentic-engineering.html
 permalink: /en/2026/05/11/direction-of-agentic-engineering.html
