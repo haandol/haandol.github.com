@@ -6,6 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering context-engineering agentic-development sub-agent guardrail
 publish: true
+last_modified_at: 2026-09-09 23:59:22 +0900
 lang: ko
 translation_key: harness-engineering-in-practice
 english_url: /en/2026/06/16/harness-engineering-in-practice.html
@@ -120,7 +121,7 @@ PRD가 "무엇"이라면 ADR(Architecture Decision Record)은 "어떻게"의 결
 
 ALPS Writer는 `/feature-to-adr`로 PRD의 기능을 ADR 초안으로 넘겨주고, 거기서부터는 `adr-writer`가 `/adr-new`로 새 결정을 쓰고 `/adr-impl`로 구현하는 사이클을 돈다.
 
-내가 유지하는 규칙은 **PRD → ADR → 코드의 단방향 의존성**이다.
+작업은 **PRD → ADR → 코드 순서**로 진행한다. 아래 그림의 화살표는 각 결과물이 따르는 상위 계약을 가리킨다.
 
 {% raw %}
 ```mermaid
@@ -423,15 +424,7 @@ flowchart LR
 ```
 {% endraw %}
 
-코드 생성 → 디버깅 → 리팩토링을 거쳐 요구사항을 만족하는 형태에 도달한다.
-
-그다음 에이전트가 같은 실수를 반복하지 않도록 이번에 확인한 조건을 하네스에 반영한다.
-
-이번 한 번의 디버깅·리팩토링으로 알아낸 "올바른 형태"를, 규칙(AGENTS.md)이나 가드레일(린터·테스트)로 굳혀두는 것이다.
-
-이걸 안 하면 매번 같은 디버깅과 리팩토링을 반복하게 된다.
-
-반대로 이 작업을 반복하면 다음 요청에서 같은 디버깅과 리팩토링을 줄일 수 있다.
+이번 디버깅·리팩토링으로 확인한 조건을 규칙(AGENTS.md)이나 가드레일(린터·테스트)에 반영한다. 다음 요청에서 같은 원인으로 다시 고치는 일을 줄이기 위해서다.
 
 하네스 업데이트는 시간 축에 따라 두 종류로 나눌 수 있다.[^1]
 
@@ -457,8 +450,6 @@ PRD·ADR·AGENTS.md·코드베이스를 계속 최신으로 유지해서, 에이
 
 앞의 1·2단계가 여기에 해당한다. **실행 하네스 업데이트**는 짧은 호흡이다. 매 실행 주기마다 도구로 작업하고, 피드백 루프로 스스로 고치고, 가드레일로 결정적으로 검증해서 단기 오류가 누적되지 않게 한다. 3·4·5단계가 여기다.
 
-컨텍스트 업데이트는 장기적인 방향을 유지하고, 실행 하네스 업데이트는 각 실행에서 생긴 오류를 줄인다.[^1]
-
 EncBird의 AGENTS.md에는 ADR-first 피드백 루프를 이렇게 적어두었다.
 
 > 빠른 사이클을 돌리고 매 패스마다 ADR을 보강하라 — **완벽한 ADR을 처음부터 쓰려고 하지 마라.**
@@ -472,11 +463,7 @@ EncBird의 AGENTS.md에는 ADR-first 피드백 루프를 이렇게 적어두었�
 
 ## 마치며
 
-EncBird의 하네스도 최소한의 PRD·ADR과 AGENTS.md로 시작했다.
-
-에이전트가 실수할 때마다 규칙을 더하고, 필요한 작업을 못 할 때 CLI·Skill·MCP를 붙였다. 반복되는 실수는 pre-commit과 Hook으로 줄였고, 컨텍스트가 비대해진 뒤에야 서브에이전트로 쪼갰다.
-
-처음부터 이 구성을 모두 갖출 필요는 없다. 기본 방향과 검증 장치를 마련한 뒤, 실제 작업에서 반복된 문제만 다음 하네스에 남기면 된다.
+EncBird의 하네스도 최소한의 PRD·ADR과 AGENTS.md로 시작했다. 처음부터 전체 구성을 갖추기보다 실제 작업에서 반복된 문제를 하나씩 다음 하네스에 남기는 편이 도움이 됐다.
 
 반복되던 실수를 한 세션 안에서 해결했다면, 그대로 끝내지 말고 이렇게 입력하는 것으로 마무리하자.
 

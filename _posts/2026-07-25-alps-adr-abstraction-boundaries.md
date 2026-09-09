@@ -6,6 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering prd adr alps agentic-development hexagonal-architecture
 publish: true
+last_modified_at: 2026-09-09 23:59:22 +0900
 lang: ko
 translation_key: alps-adr-abstraction-boundaries
 english_url: /en/2026/07/25/alps-adr-abstraction-boundaries.html
@@ -19,17 +20,11 @@ english_url: /en/2026/07/25/alps-adr-abstraction-boundaries.html
 
 ## 시작하며
 
-ALPS Writer Plugins 저장소의 `AGENTS.md` 첫 부분에는 저장소 전체를 관통하는 설계 원칙이 하나 적혀 있다.
+ALPS Writer Plugins에서 문서와 코드가 서로 어긋나는 문제를 줄이려고, 각 문서에 무엇을 남길지 정리했다.
 
-PRD, ADR과 코드는 **같은 시스템을 서로 다른 해상도로 본 결과**라는 원칙이다.[^1]
+제품 요구사항 문서(PRD), 아키텍처 결정 기록(ADR), 코드를 **같은 시스템을 서로 다른 해상도로 본 결과**로 구분하는 방식이다. 저장소의 `AGENTS.md`에도 이 원칙을 적어뒀다.[^1]
 
-이 원칙을 실제 규칙으로 옮기면서 몇 가지 제약이 생겼다.
-
-PRD의 Architecture에는 C4 Context와 Container까지만 둔다. ADR에는 라이브러리, SDK와 파일 경로를 넣지 않는다. ADR과 코드, PRD와 ADR 사이의 경로도 문서 본문에 저장하지 않는다.
-
-처음에는 이런 규칙을 문서 drift를 막기 위한 정리 방법 정도로 생각했다.
-
-직접 적용해보니 문서 drift보다 더 크게 체감한 변화가 있었다.
+직접 적용해보니 문서 정리 외에도 체감한 변화가 있었다.
 
 Agent가 작업마다 모든 문서를 읽지 않아도 됐다. 코드 리팩터링이 상위 문서 수정으로 번지지 않았고, 구현 방법을 미리 고정하지 않으면서도 사람은 계약과 위험을 검토할 수 있었다.
 
@@ -121,7 +116,7 @@ flowchart LR
 
 저장소의 PRD Architecture ADR은 C4 Context와 Container, 그리고 재구현 뒤에도 유지할 제약만 허용한다. Component 구조, 프레임워크, SDK, ORM과 내부 배포 도구는 코드에서 다시 찾을 수 있으므로 PRD에 올리지 않는다.
 
-ADR도 `admission gate`를 통과한 결정만 만든다. 요구사항 계약, 데이터·보안 경계, 외부 provider와 fallback, 여러 구현을 계속 제약하는 trade-off가 대상이다. 같은 계약을 유지한 채 바꿀 수 있는 라이브러리, credential plumbing과 모듈 구조는 코드에 둔다.
+ADR로 남길 결정에도 기준을 둔다. 요구사항 계약, 데이터·보안 경계, 외부 서비스 제공자와 장애 시 대체 경로, 여러 구현을 계속 제약하는 선택의 장단점이 대상이다. 같은 계약을 유지한 채 바꿀 수 있는 라이브러리, 인증 정보를 연결하는 구현과 모듈 구조는 코드에 둔다.
 
 이렇게 하면 SDK 교체나 파일 이동이 ADR 수정을 끌고 가지 않는다. 프레임워크를 바꿔도 제품의 시스템 경계가 그대로라면 PRD를 고칠 이유가 없다.
 
@@ -201,17 +196,9 @@ Amazon Bedrock을 외부 model provider 경계로 채택하고 fallback 정책�
 
 ## 마치며
 
-ALPS Writer Plugins에서 추상화 계층을 나눈 뒤 체감한 변화는 실행 쪽에 있었다.
-
-Agent가 질문에 필요한 계층만 읽을 수 있게 됐다. 라이브러리와 파일 구조를 바꿔도 ADR과 PRD는 그대로 남았고, 계약을 고정하면서 구현 방법은 열어둘 수 있었다.
-
-리뷰에서도 사람이 모든 구현을 다시 구성하기보다 계약, 증거와 예외부터 확인할 수 있게 됐다.
-
-Agent는 세 계층을 오가며 작업을 오케스트레이션하지만, 어느 계층의 권위를 대신하거나 자신의 실행 상태를 다음 작업의 전제로 남기지 않는다.
-
 지금은 코드 리팩터링이 ADR 수정을 요구하면 먼저 ADR의 해상도가 너무 낮은지 확인한다. 구현을 시작할 때 PRD를 다시 읽어야 한다면 handoff에서 계약이 빠졌는지 본다. 코드의 값이 계약인지 우연한 선택인지 구분할 수 없다면 ADR에 근거가 부족한지 확인한다.
 
-추상화 계층을 잘 나누면 **한 번에 읽을 범위와 변경이 번질 범위가 줄어든다.** 그 경계 안에서 Agent와 사람이 판단할 내용도 나눌 수 있다.
+이렇게 점검하니 **한 번에 읽을 범위와 변경이 번질 범위가 줄었다.** 문서를 나눌 때도 각 문서가 혼자 답해야 할 질문부터 정하는 편이 도움이 된다고 생각한다.
 
 ---
 

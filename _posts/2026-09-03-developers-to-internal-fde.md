@@ -42,7 +42,7 @@ Maersk의 글로벌 물류 Agent 운영 발표를 보면서 FDE가 하는 일이
 
 > “The agent loop is not the system. The refining loop around the agent is the system.”[^2]
 
-Agent가 한 번 실행되는 안쪽 Loop보다, 실패를 관찰하고 현업 전문가의 수정을 SOP와 하네스에 반영하는 바깥쪽 Loop가 실제 시스템이라는 뜻이다.
+Agent가 한 번 실행되는 안쪽 Loop보다, 실패를 관찰하고 현업 전문가의 수정을 표준 업무 절차(SOP)와 하네스에 반영하는 바깥쪽 Loop가 실제 시스템이라는 뜻이다.
 
 여기서 하네스는 Agent가 사용하는 컨텍스트와 권한, 실행 환경, 평가와 가드레일을 묶은 환경을 말한다. 이전에 정리한 [하네스 엔지니어링](/2026/03/15/harness-engineering-beyond-context-engineering.html)을 기업 업무에 적용한 모습에 가깝다.
 
@@ -68,7 +68,7 @@ FDE의 작업을 단계와 산출물로 나누면 다음과 같다.
 | 범위 결정 | 첫 자동화 범위와 사람이 판단할 범위를 정한다 | 자동화 경계 |
 | 업무 표현 | 암묵지를 실행 가능한 절차로 옮긴다 | SOP와 하네스 |
 | 사전 검증 | 과거 사례를 읽기 전용으로 다시 실행한다 | 평가 사례와 실패 유형 |
-| 제한적 운영 | 실제 변경 없이 제안하는 Shadow Mode부터 시작한다 | Trace와 현업의 수정 |
+| 제한적 운영 | 실제 변경 없이 제안하는 Shadow Mode부터 시작한다 | 실행 기록(Trace)과 현업의 수정 |
 | 반복 개선 | 실패를 하네스에 반영하고 안정된 절차를 코드로 옮긴다 | Composite Tool과 조직 지식 |
 
 {% raw %}
