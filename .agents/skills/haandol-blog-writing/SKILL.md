@@ -1,6 +1,6 @@
 ---
 name: haandol-blog-writing
-description: Write, revise, or review Korean technical blog posts for the Haandol Jekyll repository. Use for `_posts/*.md` and `_drafts/*.md` work involving logical flow, section structure, personal-opinion tone, terminology, citations, Mermaid diagrams, conceptual SVG charts, or publication validation.
+description: Write, revise, or review Korean technical blog posts for the Haandol Jekyll repository. Use for `_posts/*.md` and `_drafts/*.md` work involving logical flow, author voice, AI-slop removal, terminology, citations, diagrams, or publication validation.
 ---
 
 # Haandol Blog Writing
@@ -13,7 +13,8 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 2. Read 2-4 related recent posts before changing definitions, terminology, or the author's recurring argument. Prefer internal links for ideas already established elsewhere.
 3. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it.
 4. Edit paragraphs and diagrams together so both express the same causal model.
-5. Validate Markdown, Liquid, diagrams, links, and Git diff before finishing.
+5. Run the "Remove AI Slop" prose pass across the whole post, including the title, excerpt, TL;DR, headings, and conclusion. For review-only requests, report specific passages and suggested rewrites without editing.
+6. Validate Markdown, Liquid, diagrams, links, and Git diff before finishing.
 
 ## Build The Argument
 
@@ -31,7 +32,7 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 ## Match The Author's Voice
 
 - Write short Korean paragraphs, usually one or two sentences.
-- Present personal interpretations as opinions: use `생각한다`, `가정한다`, `볼 수 있다`, or `지표로 삼아볼 수 있다`.
+- Present personal interpretations as opinions: use `생각한다`, `가정한다`, `볼 수 있다`, or `지표로 삼아볼 수 있다` where needed to establish their status. Do not append the same hedge to every sentence in an already qualified paragraph.
 - Avoid `나는 ... 본다` when `...라고 생각한다` reads more naturally.
 - Avoid aggressive or universal claims unless a cited source establishes them or the user explicitly confirms firsthand knowledge.
 - Allow a deliberate logical leap when it follows the post's stated vision. Mark it as a hypothesis, conceptual model, or assumption rather than a measured result.
@@ -45,41 +46,61 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 
 ## Remove AI Slop
 
-Before finishing a draft or revision, compare it with at least two older posts by the author, not only recent AI-related posts. Remove prose that is polished in isolation but does not sound like the author.
+Treat AI slop as an editorial problem: generic, repetitive, inflated prose that obscures the author's reasoning. Do not claim to detect AI authorship from wording.
+
+Before finishing a draft or revision, compare it with at least two older posts by the author, not only recent AI-related posts. Reuse posts already read when suitable. Match their directness, paragraph rhythm, and specificity without copying old factual claims, typos, or mannerisms.
+
+### Review Signals
 
 Treat the following as review signals, not automatic errors:
 
-- repeated contrast templates such as `단순히 A가 아니라 B다`, `A가 아니다. B다`, or `이것은 X 이상의 의미다`;
+- repeated contrast templates such as `단순히 A가 아니라 B다`, `A가 아니다. B다`, or `이것은 X 이상의 의미다`, especially when A was never a plausible claim in the discussion;
+- stock openings and reader-address filler such as `빠르게 변화하는 시대에`, `오늘날 그 어느 때보다`, `함께 살펴보자`, or `여러분도 경험해 보았을 것이다`;
+- unsupported significance claims such as `혁신적인`, `획기적인`, `패러다임을 바꾼다`, or `새로운 가능성을 열어준다`;
+- abstract noun chains such as `효율성 극대화를 통한 가치 창출`, and padded constructions such as `개선을 수행한다` or `중요하다고 할 수 있을 것이다`;
 - ornamental English labels for ideas that are used only once, especially title-cased names such as `Human Decision Surface`, `Comprehension Bandwidth`, or `Evidence Package`;
-- symmetrical `첫째/둘째/셋째` manifestos when a concrete experience or causal sequence would explain the point more naturally;
+- symmetrical `첫째/둘째/셋째` manifestos, question-and-answer hooks, or identical problem/solution/lesson templates repeated in every section;
 - introductions that define a framework before showing the personal problem that made it useful;
 - tables, diagrams, blockquotes, or bold sentences that merely repeat the adjacent prose;
 - generic bridge phrases repeated across sections, such as `핵심은`, `중요한 것은`, `이 관점에서`, `결국`, and `방향은 분명하다`;
-- a conclusion that sounds more certain than the evidence developed in the body;
+- conclusions that replay every section, add a generic call to action, or sound more certain than the evidence developed in the body;
 - personal anecdotes, project details, measurements, or outcomes inferred by the model rather than supplied by the user or verified in the repository.
 
-Prefer the author's established habits:
+### Revise In Context
 
-- start from an experience, annoyance, failed attempt, or concrete project situation;
-- keep useful rough edges, parenthetical qualifications, and honest uncertainty instead of making every paragraph aphoristic;
-- explain one real example far enough that the reader can follow the reasoning;
-- use Korean descriptions first and retain English only when it is an established technical term;
-- keep a coined term only when it is reused to carry the argument, not merely to make the prose sound authoritative;
-- let only the few most important claims use bold emphasis.
+1. Check each paragraph's contribution. Delete or merge it if it adds no fact, causal explanation, useful example, or author judgment. Preserve the required TL;DR and conclusion, but let the conclusion state the author's resulting position rather than recap the outline.
+2. Replace vague claims with the actor, action, affected object, and consequence supported by the material. If a sentence could appear unchanged in an unrelated technical post, make its connection to this case explicit or remove it.
+3. State the intended claim directly. Keep a contrast when it resolves an actual misconception or explains a technical tradeoff; otherwise remove the invented opposing claim. Use transitions that explain why one paragraph follows another.
+4. Read neighboring paragraphs together for repeated openings, endings, rhetorical questions, and punchlines. Let explanation length follow the reasoning. Keep short paragraphs, but do not turn every sentence into a standalone slogan or force every section into the same shape.
+5. Check factual strength after rewriting. Preserve negation, conditions, quantities, citations, established technical terms, and the distinction between observation, inference, and proposal. Do not invent a personal experience, failure, measurement, or project detail to make the prose sound human. Label hypothetical examples as hypothetical.
+
+Start from a supplied experience, annoyance, failed attempt, or concrete project situation when available. Otherwise introduce the concrete problem without pretending the author experienced it. Explain one useful example far enough that the reader can follow the reasoning.
+
+Keep useful parenthetical qualifications and specific uncertainty. Do not add slang, typos, forced humor, or artificial roughness. Use Korean descriptions first; retain established technical terms and coined terms that actually carry a reused distinction. Reserve bold emphasis for the few claims the reader needs to remember.
+
+These examples show editing decisions, not replacement templates. The concrete details in a rewrite must already be supported by the target material:
+
+| Before | After / decision |
+| --- | --- |
+| `이제 이 혁신적인 접근법의 핵심을 함께 살펴보자.` | Delete the preview and begin the explanation. |
+| `단순히 테스트를 추가하는 것이 아니다. 신뢰를 설계하는 것이다.` | `배포 전에 같은 입력으로 테스트를 반복해 회귀 오류를 확인한다.` — only if this is the actual process. |
+| `운영 효율성 극대화를 통한 개발자 경험 개선을 도모한다.` | `배포 스크립트를 하나로 묶어 개발자가 실행할 명령을 줄인다.` — only if the source describes this change. |
+| `캐시는 원본 데이터가 아니다. 만료되거나 삭제될 수 있다.` | Keep when this distinction explains the failure being discussed. |
+
+Use search to find candidates, then read the full post to catch structural repetition that search misses:
+
+```bash
+POST=_posts/YYYY-MM-DD-slug.md
+rg -n '단순히|그저|핵심은|중요한 것은|이 관점에서|첫째|둘째|셋째|결국|방향은 분명|함께 살펴|여러분도|빠르게 변화|그 어느 때보다|혁신적|획기적|패러다임|가능성을 열|극대화|가치 창출|도모|할 수 있을 것이다|모르겠다|잘 모르|[A-Z][A-Za-z]+ (Surface|Bandwidth|Package|Framework)' "$POST"
+```
+
+Substitute the actual post path. A search exit code of 1 means no candidates were found, not that the prose passed review. Do not optimize for zero matches or add these signals as hard failures in `post-lint.sh`; judge their purpose in context.
 
 ## Write Concise Front Matter
 
 - Keep `excerpt` in English, but treat it as a short subtitle for post lists rather than an abstract.
 - Prefer one clause of roughly 6-12 words. If it starts listing the argument, methods, and conclusion, keep only the central question or payoff.
 - Avoid repeating the Korean title word for word. Let the title provide the hook and the excerpt clarify the thesis.
-
-After editing, run a dedicated prose pass. Search for likely patterns, read each hit in context, and either revise it or consciously keep it:
-
-```bash
-rg -n '단순히|그저|핵심은|중요한 것은|이 관점에서|첫째|둘째|셋째|결국|방향은 분명|모르겠다|잘 모르|[A-Z][A-Za-z]+ (Surface|Bandwidth|Package|Framework)' "$POST"
-```
-
-Do not optimize for zero matches. The goal is to remove repetitive, ornamental usage while preserving phrases that are natural and necessary.
 
 ## Choose Natural Terminology
 
@@ -168,6 +189,7 @@ rg -o '^\[\^[0-9]+\]:' "$POST"
 
 Also verify:
 
+- the AI-slop prose pass is complete; rewrites preserve factual meaning and the author's position without fabricated detail;
 - required front matter exists and `excerpt` is English;
 - every `_en/` translation has `last_modified_at` set to its actual English
   publication or meaningful revision time; update Korean `last_modified_at`
