@@ -13,7 +13,7 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 2. Read 2-4 related recent posts before changing definitions, terminology, or the author's recurring argument. Prefer internal links for ideas already established elsewhere.
 3. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it.
 4. Edit paragraphs and diagrams together so both express the same causal model.
-5. Run the "Remove AI Slop" prose pass across the whole post, including the title, excerpt, TL;DR, headings, and conclusion. For review-only requests, report specific passages and suggested rewrites without editing.
+5. Run the "Write for Junior Developers and Interested Non-Developers" and "Remove AI Slop" passes across the whole post, including the title, excerpt, TL;DR, headings, diagrams, and conclusion. Apply the same reading level to an accompanying English translation. For review-only requests, report specific passages and suggested rewrites without editing.
 6. Validate Markdown, Liquid, diagrams, links, and Git diff before finishing.
 
 ## Build The Argument
@@ -102,6 +102,26 @@ Substitute the actual post path. A search exit code of 1 means no candidates wer
 - Prefer one clause of roughly 6-12 words. If it starts listing the argument, methods, and conclusion, keep only the central question or payoff.
 - Avoid repeating the Korean title word for word. Let the title provide the hook and the excerpt clarify the thesis.
 
+## Write for Junior Developers and Interested Non-Developers
+
+The author does not normally use academic or grand language. Assume the reader is a junior developer or someone interested in software development who does not work as a developer. They should understand the argument without following links to learn the vocabulary.
+
+- Prefer familiar words and a visible actor doing something: who checks what, why, and what happens next. Replace abstract noun chains with actions rather than exchanging one difficult noun for another.
+- Keep one main claim per sentence. Split long modifiers, lists of abstract concepts, and nested explanations into short sentences. Keep the causal link between them; do not reduce the argument to disconnected slogans.
+- Explain an unfamiliar term or acronym briefly on first use, in the sentence where it matters. Expanding the English acronym alone is not an explanation. Retain a technical name when it is needed later or helps readers find the source; omit incidental jargon when ordinary words carry the meaning.
+- Explain metaphors such as `경계`, `계약`, `부채`, and `루프` through the actual behavior in that passage. A familiar word used as specialist shorthand still needs context.
+- Paraphrase sources in the author's plain voice. Do not carry over expressions such as `신뢰의 초석`, `협업형 승인 사이클`, `기본 형태로 수렴`, or `인과적 효과` merely because they sound authoritative. Preserve the source's reason, scope, conditions, and strength of claim. Keep literal quotations visibly distinct from paraphrases.
+- Check headings, tables, diagram labels, and footnote descriptions as well as prose. A simplified paragraph does not help if its diagram introduces unexplained jargon again. English translations should read naturally at the same level, not reproduce Korean noun chains.
+- Read the result as a newcomer: can the reader say what is happening and why? If not, name the missing actor or action, define the necessary term, or use a concrete example already supported by the article. This requires editorial judgment, not a banned-word list or a fixed sentence-length limit.
+
+Examples show the intended reading level, not mandatory replacements:
+
+| Before | Plain-language version |
+| --- | --- |
+| `공식 글도 HITL을 신뢰, 책임과 정확성의 초석으로 두고 모든 단계에 협업형 승인 사이클을 요구한다.` | `공식 글도 AI의 결과를 믿고 쓸 수 있는지, 누가 책임지는지, 결과가 정확한지를 확인하려면 사람이 필요하다고 설명한다. 그래서 모든 단계에서 팀이 함께 결과를 검토하고 승인하도록 한다.` |
+| `앞으로 프로덕션 개발이 수렴할 기본 형태` | `앞으로 실제 서비스를 개발하는 방식` |
+| `전체 방법론의 인과적 효과를 증명하지는 않는다` | `그 성과가 방법론 전체 덕분이라고 단정할 수는 없다` |
+
 ## Choose Natural Terminology
 
 - Keep established framework names and technical terms in English when translation would reduce precision.
@@ -110,7 +130,7 @@ Substitute the actual post path. A search exit code of 1 means no candidates wer
   - stage `gate` -> `다음 단계로 넘어가는 기준`;
   - preserve exact English only inside source quotations such as `Start with evals`.
 - Do not mix English and Korean merely for novelty. Keep terminology consistent across prose, tables, and diagrams.
-- Prefer concrete business language such as `비즈니스 요구사항에 필요한 데이터를 조회·조작한다` over abstract cost or outcome jargon.
+- Prefer concrete business language such as `업무에 필요한 데이터를 찾아 읽거나 바꾼다` over abstract cost or outcome jargon.
 
 ## Design Diagrams
 
@@ -189,6 +209,7 @@ rg -o '^\[\^[0-9]+\]:' "$POST"
 
 Also verify:
 
+- a junior developer or interested non-developer can follow the argument without looking up unexplained terminology; source paraphrases and English translations use the same plain reading level;
 - the AI-slop prose pass is complete; rewrites preserve factual meaning and the author's position without fabricated detail;
 - required front matter exists and `excerpt` is English;
 - every `_en/` translation has `last_modified_at` set to its actual English
