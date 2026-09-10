@@ -8,7 +8,7 @@ tags: career ai agent agentic-development ai-dlc harness-engineering hitl soluti
 publish: true
 lang: en
 date: 2026-09-06 09:00:00 +0900
-last_modified_at: 2026-09-10 14:54:41 +0900
+last_modified_at: 2026-09-10 21:52:40 +0900
 translation_key: aws-ai-dlc-thoughts
 korean_url: /2026/09/06/my-thoughts-on-aws-ai-dlc.html
 permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -17,7 +17,6 @@ permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
 ## TL;DR
 
 - AWS AI-DLC differs substantially from my view of agentic development across concept, process, and implementation.
-- With so many data points suggesting it works, I need to go out and see for myself whether I am wrong.
 
 ## Introduction
 

@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: career ai agent agentic-development ai-dlc harness-engineering hitl solutions-architect
 publish: true
-last_modified_at: 2026-09-10 14:54:41 +0900
+last_modified_at: 2026-09-10 21:52:40 +0900
 lang: ko
 translation_key: aws-ai-dlc-thoughts
 english_url: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -15,7 +15,6 @@ english_url: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
 ## TL;DR
 
 - AWS AI-DLC는 컨셉·프로세스·구현 전반에서 내가 믿는 에이전틱 개발과 크게 다르다.
-- 된다고 하는 데이터 포인트가 많아서 진짜 내가 잘못 생각하는 건지 확인하러 나갈 필요가 있어졌다.
 
 ## 시작하며
 
