@@ -8,7 +8,7 @@ tags: career ai agent agentic-development ai-dlc harness-engineering hitl soluti
 publish: true
 lang: en
 date: 2026-09-06 09:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-10 14:15:02 +0900
 translation_key: aws-ai-dlc-thoughts
 korean_url: /2026/09/06/my-thoughts-on-aws-ai-dlc.html
 permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -16,12 +16,12 @@ permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
 
 ## TL;DR
 
-- AI-DLC differs substantially from my view of agentic development across concept, process, and implementation.
-- With a developer background, I need a team that owns product outcomes and learns together.
+- AWS AI-DLC differs substantially from my view of agentic development across concept, process, and implementation.
+- With so many data points suggesting it works, I need to go out and see for myself whether I am wrong.
 
 ## Introduction
 
-Recently, I have spent a great deal of time thinking about the distance between my current role and the direction I believe in.
+I have long been thinking about how my current role differs from the direction I believe in.
 
 The people I work with are still exceptionally capable and kind, and the company offers substantial stability and opportunity.
 
@@ -41,7 +41,7 @@ Staying for title and stability while lacking confidence in the direction—doub
 
 I want to explain where AI-DLC and my own view diverge, and why that difference has led me to reconsider my current role. These are my personal views, based on public material and my experience, not an official AWS position.
 
-I began as a developer. Even after becoming a Solutions Architect (SA), I continued to build, deploy, and operate my own services. I tend to feel a stronger need to own one product over time and live with the consequences of my decisions than to observe a broad range of customer problems.
+I began as a developer. Even after becoming a Solutions Architect (SA), I continued to build, deploy, and operate my own services. I tend to feel a stronger need to run one product over time and live with the consequences of my decisions than to observe a broad range of customer problems.
 
 An SA with a different background and set of strengths may interpret the same role very differently.
 
@@ -243,7 +243,7 @@ Within those boundaries, the model should choose how to solve the problem whenev
 
 The adaptive AI-DLC workflow substantially reduces the problem of forcing one fixed workflow.
 
-Even so, placing the stage library, artifacts, approval points, and collaboration rituals deeply in the execution layer remains closer to cognitive scaffolding than to the future I expect.
+Even so, I think embedding stage procedures, required artifacts, approval points, and collaboration practices into the tools' execution flow is a form of cognitive scaffolding.
 
 As models improve, I think we should revisit the work sequences and solution strategies prescribed by the harness, and delegate more of those decisions to the model.
 
@@ -273,7 +273,7 @@ I do not want to decide which approach works better under which conditions from 
 
 I want to choose a real customer problem, lead a team, deploy to production, and live through incidents and organizational reactions before reaching a conclusion.
 
-Rather than accumulate more arguments for my hypothesis, **I think I need to own the outcome in an environment that can reveal the limits of my perspective**.
+**I think I need to run a product with a real team and live with the consequences of my decisions to find the limits of my perspective**.
 
 ## 5. Breadth Alone Has Not Satisfied My Need for Depth
 
@@ -281,37 +281,33 @@ There is a video from a 1992 MIT talk in which Steve Jobs discusses consultants.
 
 <iframe width="560" height="315" style="width: 100%; max-width: 560px; aspect-ratio: 16 / 9; height: auto;" src="https://www.youtube.com/embed/-c4CNB80SRc" title="Steve Jobs on consultants" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-Jobs argues that seeing many companies is not enough if you never implement your recommendations or own their results and failures over time. His analogy is that you may have seen many pictures of fruit without ever tasting it.[^11]
+Jobs argues that seeing many companies is not enough if you never implement your recommendations or live with their results and failures over time. His analogy is that you may have seen many pictures of fruit without ever tasting it.[^11]
 
 I do not want to turn that into a judgment of every SA. Working with customers over time and revealing recurring patterns and options across companies are real forms of expertise.
 
-But because I began as a developer, one question remains: `Do I experience the operational consequences of my recommendation?` I operate services with roughly 200,000 and 100,000 lines of code and own their time, cost, and outcomes, but they are not official customer cases.
+But one question remains for me: `Do I experience the operational consequences of my recommendation?` I invest my own time and money in services with roughly 200,000 and 100,000 lines of code and take responsibility for their operations, but they are not official customer cases.
 
-The phenomenon I called agent-driven development became shared vocabulary much faster after Andrej Karpathy named it `Vibe Coding`. A message gains force not only from its content but also from the outcomes created by its messenger.[^12]
-
-The breadth I gained as an SA is an asset. What I need now is the experience of owning one team and product over time and feeding my decisions, failures, and operational results into the next choice.
+Working on a range of customer problems as an SA has been valuable. What I need now is the experience of leading a team and running a product over time, then using the failures and operational results to inform my next decisions.
 
 I have also seen people in product organizations who only complete assigned tickets and collect a paycheck without caring about the outcome. **Owning an outcome requires staying involved from problem definition through operation.**
 
-As AI narrows individual differences in implementation ability, a team's capacity to share the problem and context, validate results, and preserve failure in the next harness becomes more important. Amazon teams using the same tools produced sharply different results for the same reason.[^5]
+As AI narrows individual differences in implementation ability, a team's capacity to share the problem and context, validate results, and improve the harness to prevent the same failures becomes more important. Amazon teams using the same tools produced sharply different results for the same reason.[^5]
 
-What I am looking for, then, is not a particular title but **a team that owns outcomes together and turns failure into learning**.
+I want to work with **a team that runs a product together and uses what went wrong to inform its next decisions**.
 
 ## Conclusion
 
 AI-DLC can be a practical answer for organizations adopting AI for the first time or operating under strong governance. I still believe, however, that agentic engineering will move toward removing the reasons people were required in the system rather than positioning them more effectively at its center.
 
-The breadth I gained as an SA is an asset. But with a developer background, the next thing I need is not more arguments or writing. It is the experience of owning a real team's product outcomes over time.
-
 What exhausts me most is not disagreement itself, but having almost nowhere to discuss these ideas from a shared starting point. Before reaching the customer problem, most of the energy is spent aligning on the `why` behind HITL removal and small feedback loops.
 
 A team with firsthand experience of agentic engineering would not need to agree on every conclusion. Shared experience would let us focus more on the productive `how`: **how to solve the customer problem and reshape the process and harness around it**.
 
-My goal is therefore to change jobs by the end of the year. More than a company name or title, I want a team that takes customer problems seriously and owns operational outcomes and failures together—or a team aligned with AI's direction where I can learn and spread advanced practices.
+My goal is therefore to change jobs by the end of the year. More than a company name or title, I want a team that takes customer problems seriously and shares responsibility for operations—or a team aligned with AI's direction where I can learn and spread advanced practices.
 
-If I cannot find such a team, I am also considering creating a small AI-first company to experiment with Lean Startup.[^13] It would let me own the customer problem, concept, process, implementation, and outcomes end to end.
+If I cannot find such a team, I am also considering creating a small AI-first company to experiment with Lean Startup.[^12] It would let me test my hypothesis by taking responsibility for everything from choosing the customer problem to deciding how to develop, build, and operate the product.
 
-I still do not know exactly what I lack. Rather than move anywhere, **I am identifying the missing experience and the standards for the team I want to join**.
+**I want to find out whether my ideas hold up with a real team working on real customer problems.** I am now looking for a team where I can gain that experience.
 
 ---
 
@@ -335,8 +331,6 @@ I still do not know exactly what I lack. Rather than move anywhere, **I am ident
 
 [^10]: AWS, [AI-Driven Development Lifecycle for Financial Services](https://aws.amazon.com/blogs/industries/ai-driven-development-lifecycle-for-financial-services/) (2026.05.26) — presents the Bedrock Mantle case and an early European financial-services adoption case.
 
-[^11]: MIT Sloan, [Steve Jobs talks consultants, hiring, and leaving Apple in unearthed 1992 talk](https://mitsloan.mit.edu/ideas-made-to-matter/steve-jobs-talks-consultants-hiring-and-leaving-apple-unearthed-1992-talk) — summarizes Jobs's argument that learning can remain shallow without owning implementation and outcomes over time.
+[^11]: MIT Sloan, [Steve Jobs talks consultants, hiring, and leaving Apple in unearthed 1992 talk](https://mitsloan.mit.edu/ideas-made-to-matter/steve-jobs-talks-consultants-hiring-and-leaving-apple-unearthed-1992-talk) — summarizes Jobs's argument that learning can remain shallow without implementing recommendations and living with their consequences over time.
 
-[^12]: Andrej Karpathy, [“There's a new kind of coding I call ‘vibe coding’”](https://x.com/karpathy/status/1886192184808149383) (2025.02.03).
-
-[^13]: [Why Avoiding Failure Comes First](/en/2026/06/27/failure-comes-first.html) — develops my hypothesis for combining AI-first execution with Lean Startup to lower the cost of experiments that produce customer learning.
+[^12]: [Why Avoiding Failure Comes First](/en/2026/06/27/failure-comes-first.html) — develops my hypothesis for combining AI-first execution with Lean Startup to lower the cost of experiments that produce customer learning.
