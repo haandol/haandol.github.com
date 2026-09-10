@@ -31,7 +31,7 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 
 ## Match The Author's Voice
 
-- Write short Korean paragraphs, usually one or two sentences.
+- Keep paragraphs focused, with sentence length and breaks following the thought. A compact paragraph can contain a naturally connected sentence; do not chop it into short declarations to meet a sentence-length or sentence-count target.
 - Present personal interpretations as opinions: use `생각한다`, `가정한다`, `볼 수 있다`, or `지표로 삼아볼 수 있다` where needed to establish their status. Do not append the same hedge to every sentence in an already qualified paragraph.
 - Avoid `나는 ... 본다` when `...라고 생각한다` reads more naturally.
 - Avoid aggressive or universal claims unless a cited source establishes them or the user explicitly confirms firsthand knowledge.
@@ -60,6 +60,7 @@ Treat the following as review signals, not automatic errors:
 - abstract noun chains such as `효율성 극대화를 통한 가치 창출`, and padded constructions such as `개선을 수행한다` or `중요하다고 할 수 있을 것이다`;
 - ornamental English labels for ideas that are used only once, especially title-cased names such as `Human Decision Surface`, `Comprehension Bandwidth`, or `Evidence Package`;
 - symmetrical `첫째/둘째/셋째` manifestos, question-and-answer hooks, or identical problem/solution/lesson templates repeated in every section;
+- consecutive definitions such as `A는 …다. B는 …다. C는 …다.`, or a connected explanation broken into tiny statements followed by another sentence that repeats their relationship;
 - introductions that define a framework before showing the personal problem that made it useful;
 - tables, diagrams, blockquotes, or bold sentences that merely repeat the adjacent prose;
 - generic bridge phrases repeated across sections, such as `핵심은`, `중요한 것은`, `이 관점에서`, `결국`, and `방향은 분명하다`;
@@ -107,7 +108,8 @@ Substitute the actual post path. A search exit code of 1 means no candidates wer
 The author does not normally use academic or grand language. Assume the reader is a junior developer or someone interested in software development who does not work as a developer. They should understand the argument without following links to learn the vocabulary.
 
 - Prefer familiar words and a visible actor doing something: who checks what, why, and what happens next. Replace abstract noun chains with actions rather than exchanging one difficult noun for another.
-- Keep one main claim per sentence. Split long modifiers, lists of abstract concepts, and nested explanations into short sentences. Keep the causal link between them; do not reduce the argument to disconnected slogans.
+- Easy language does not mean short sentences. Keep a cause and its consequence, a condition and its action, or a point and its immediate explanation together when they read naturally. Split only when the subject changes, the idea turns, or the reader would otherwise lose the thread; do not mechanically join every sentence either.
+- Explain the relationship between concepts in the article's context instead of producing a row of dictionary definitions. Do not repeat that relationship again in a summary sentence. Read neighboring sentences aloud and repair repeated endings, isolated setup lines, and stop-start rhythm while keeping the vocabulary accessible.
 - Explain an unfamiliar term or acronym briefly on first use, in the sentence where it matters. Expanding the English acronym alone is not an explanation. Retain a technical name when it is needed later or helps readers find the source; omit incidental jargon when ordinary words carry the meaning.
 - Explain metaphors such as `경계`, `계약`, `부채`, and `루프` through the actual behavior in that passage. A familiar word used as specialist shorthand still needs context.
 - Paraphrase sources in the author's plain voice. Do not carry over expressions such as `신뢰의 초석`, `협업형 승인 사이클`, `기본 형태로 수렴`, or `인과적 효과` merely because they sound authoritative. Preserve the source's reason, scope, conditions, and strength of claim. Keep literal quotations visibly distinct from paraphrases.
@@ -121,6 +123,7 @@ Examples show the intended reading level, not mandatory replacements:
 | `공식 글도 HITL을 신뢰, 책임과 정확성의 초석으로 두고 모든 단계에 협업형 승인 사이클을 요구한다.` | `공식 글도 AI의 결과를 믿고 쓸 수 있는지, 누가 책임지는지, 결과가 정확한지를 확인하려면 사람이 필요하다고 설명한다. 그래서 모든 단계에서 팀이 함께 결과를 검토하고 승인하도록 한다.` |
 | `앞으로 프로덕션 개발이 수렴할 기본 형태` | `앞으로 실제 서비스를 개발하는 방식` |
 | `전체 방법론의 인과적 효과를 증명하지는 않는다` | `그 성과가 방법론 전체 덕분이라고 단정할 수는 없다` |
+| `컨셉은 어떤 미래를 목표로 하는지다. 프로세스는 그 목표를 향해 일을 어떻게 나누고 반복하는지다. 구현은 그 일하는 방식을 실제 도구와 실행 환경에 어떻게 담는지다.` | `어떤 미래를 목표로 하느냐에 따라 일을 나누고 반복하는 방식이 달라지고, 그 차이는 실제 도구와 실행 환경을 만드는 방식에도 이어진다.` |
 
 ## Choose Natural Terminology
 
@@ -209,7 +212,7 @@ rg -o '^\[\^[0-9]+\]:' "$POST"
 
 Also verify:
 
-- a junior developer or interested non-developer can follow the argument without looking up unexplained terminology; source paraphrases and English translations use the same plain reading level;
+- a junior developer or interested non-developer can follow the argument without looking up unexplained terminology; source paraphrases and English translations use the same plain reading level and natural sentence flow, rather than chopping explanations into short statements;
 - the AI-slop prose pass is complete; rewrites preserve factual meaning and the author's position without fabricated detail;
 - required front matter exists and `excerpt` is English;
 - every `_en/` translation has `last_modified_at` set to its actual English

@@ -8,7 +8,7 @@ tags: career ai agent agentic-development ai-dlc harness-engineering hitl soluti
 publish: true
 lang: en
 date: 2026-09-06 09:00:00 +0900
-last_modified_at: 2026-09-10 14:34:42 +0900
+last_modified_at: 2026-09-10 14:54:41 +0900
 translation_key: aws-ai-dlc-thoughts
 korean_url: /2026/09/06/my-thoughts-on-aws-ai-dlc.html
 permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -23,9 +23,7 @@ permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
 
 I have long been thinking about how my current role differs from the direction I believe in.
 
-The people I work with are still exceptionally capable and kind, and the company offers substantial stability and opportunity.
-
-That is precisely why I have thought about it for so long.
+The people I work with are still exceptionally capable and kind, and the company offers substantial stability and opportunity, which is precisely why I have thought about it for so long.
 
 For the past year, I managed to avoid taking the lead in communicating ideas far from my own perspective. I chose other topics, explained only the parts I agreed with, or shared my different view only with a few people close to me.
 
@@ -47,9 +45,7 @@ An SA with a different background and set of strengths may interpret the same ro
 
 My view differs from AI-DLC in three areas: **Concept → Process → Implementation**.
 
-Concept means the future we aim for. Process means how we divide and repeat work to get there. Implementation means how we put that way of working into tools and the environment they run in.
-
-The future we aim for shapes how we work, and that way of working shapes the implementation.
+The future we aim for shapes how we divide and repeat work, and those choices carry through to the tools and environments we build.
 
 {% raw %}
 ```mermaid
@@ -70,19 +66,17 @@ flowchart TB
 
 ## 1. The Conceptual Difference — Keeping Humans at the Center
 
-An AI agent uses tools to carry out tasks. Agentic engineering means giving development work to these agents. In an earlier post, I chose a way to judge where this approach is heading.
+In an earlier post, I chose a way to judge the direction of agentic engineering: giving development work to AI agents that use tools to carry out tasks.
 
 **I think the long-term direction of agentic engineering is to remove the human in the loop, or HITL—the need for people to keep stepping in while the agent works.**[^3]
 
-That does not mean removing every person immediately.
-
-It means asking why people still have to step in. Is the agent unable to reach the data, missing permission to act, or unable to check its results? Does it need help from another team? The goal is to resolve these problems one by one so the agent can finish the work on its own.
+That does not mean removing every person immediately, but resolving the work people have to handle because the agent lacks data access, permission to act, or a way to check its results. Looking at tasks that need help from another team in the same way can expand what the agent can finish on its own.
 
 AI-DLC begins from a different premise.
 
 In the official introduction, AI plans and executes while people make important decisions. The team meets to check AI-generated requirements and designs as they are produced, in sessions called `Mob Elaboration` and `Mob Construction`.[^1]
 
-The more recent adaptive workflow changes the procedure to fit the task. A simple bug fix and a new system do not have to follow the same steps. It chooses which stages are needed and how much detail each requires. This is a clear improvement over the initial version.
+The more recent adaptive workflow chooses which stages are needed and how much detail each requires for the task, so a simple bug fix and a new system do not have to follow the same procedure. This is a clear improvement over the initial version.
 
 Even so, human approval remains central rather than exceptional.
 
@@ -90,13 +84,11 @@ The official article also says people are needed to check whether AI's results c
 
 This approach can be useful for a team running its first workshop with AI, or for an organization that must make clear who is responsible for what to meet regulatory and audit requirements.
 
-However, I have a different view of **how teams will build real services in the future**.
-
-An organization aligned with my view removes the reasons a person is currently required, one by one.
+However, I think **teams building real services in the future will remove the reasons a person is currently required, one by one**.
 
 If data is scattered and a person has to find it, connect it so the agent can find what it needs. If a person has to act because the agent lacks permission, build a tool with only the permissions it needs.
 
-If a person must read every result because it cannot be trusted, define what the result must satisfy and check it with tests. Record logs and measurements so the team can also see how the system actually behaved.
+If a person must read every result because it cannot be trusted, define what the result must satisfy, check it with tests, and use logs and measurements to see how the system actually behaved.
 
 Assuming a person will always check the work makes it easier to leave data access and permission problems unresolved, with people continuing to handle them.
 
@@ -120,7 +112,7 @@ flowchart LR
 
 Suppose that three years from now it has been sufficiently proven that agents can take over major tasks.
 
-Starting only then to connect data held separately by teams, give agents the permissions they need, and provide ways to check their results may be too late. Models change quickly. How a company manages data and assigns responsibility does not.
+Starting only then to connect data held separately by teams, give agents the permissions they need, and provide ways to check their results may be too late. Models change quickly, but how a company manages data and assigns responsibility does not change at the same pace.
 
 This is where the future I expect and the concept behind AI-DLC diverge.
 
@@ -138,7 +130,7 @@ Requirements are collected, the system is designed, development and testing foll
 
 My model of agentic development looks more like stacking ten-meter circles into a spring.
 
-Each circle is a small feature that a user can try from start to finish. Building the screen and the processing behind it together is called a vertical slice. The size of each circle can become smaller or larger depending on the problem.
+Each circle is a small feature built from the screen through to the processing behind it so a user can try it from start to finish, a unit called a vertical slice. The circle can be smaller or larger depending on the problem.
 
 {% raw %}
 ```mermaid
@@ -157,7 +149,7 @@ flowchart TB
 ```
 {% endraw %}
 
-A team does not have to list requirements in a meeting room for a product nobody has ever seen. People can try the product, become familiar with it, and decide what they need next. This reduces cognitive load: the mental effort of imagining the whole product and making decisions about it.
+Because people can try the product, become familiar with it, and decide what they need next, they do not have to list requirements in a meeting room for something nobody has ever seen. This reduces cognitive load: the mental effort of imagining the whole product and making decisions about it.
 
 Reviewers can also inspect one newly added behavior and its evidence instead of reconstructing the whole product at once.[^4]
 
@@ -167,19 +159,15 @@ The process I prefer instead repeatedly closes small loops of requirements, work
 
 The official methodology does use short work periods called `bolts` and divides the work into small Units of Work. The adaptive workflow also skips unnecessary stages.
 
-Yet the people involved still meet at each stage to build a shared understanding of the problem and its background. They review AI-generated plans and results, then approve moving to the next stage.
+Yet the people involved still meet at each stage to build a shared understanding of the problem and its background, review AI-generated plans and results, and approve moving to the next stage.
 
-The total duration can fall.
-
-But when the same volume of requirements, design decisions, and review is compressed into less time, human cognitive load can rise.
+The total duration can fall, but compressing the same volume of requirements, design decisions, and review into less time can increase human cognitive load.
 
 When AI sharply reduces implementation time, coding becomes a small part of the schedule, exposing product decisions, review, and launch approval as the next bottlenecks. I observed the same shift while examining Amazon's internal Frontier Development cases.[^5]
 
 Participants in AI-DLC workshops often said that bringing stakeholders together reduced communication overhead.
 
-That effect matters.
-
-It may, however, come as much from Amazon's team culture as from AI-DLC itself. The Two-Pizza Team approach keeps teams small so they can decide quickly. DevOps has teams share responsibility for both building and operating the software.[^5]
+That effect matters, but it may come as much from Amazon's team culture as from AI-DLC itself: the Two-Pizza Team approach keeps teams small so they can decide quickly, while DevOps has teams share responsibility for building and operating the software.[^5]
 
 If good collaboration culture and the effect of the methodology are treated as the same thing, it becomes difficult to know what another organization must reproduce.
 
@@ -187,26 +175,24 @@ If good collaboration culture and the effect of the methodology are treated as t
 
 These differences also show up when the way of working is built into tools and their execution environment.
 
-A model needs background information, tools, access permissions, a place to run code, and ways to check the results. Here, I call all of these together a harness.[^6]
+Here, a harness means all the things a model needs to do its work: background information, tools, access permissions, a place to run code, and ways to check the results.[^6]
 
-The longer an agent works without a person, the more it needs a good harness.
-
-I do, however, think it is useful to divide harnesses into two categories.
+The longer an agent works without a person, the more it needs a good harness, but I think it is useful to distinguish two roles a harness can play.
 
 | Type | Role | As models grow stronger |
 | --- | --- | --- |
 | Rules for thinking and work order (cognitive scaffolding) | Forces how the model should think and in which order it should work | Likely to shrink |
 | An environment for doing the work (execution infrastructure) | Provides tools, permissions, an isolated space to run code, tests, and records of what happened | Remains necessary |
 
-One approach assigns different roles to agents: a Planner makes plans, a Critic finds problems, a Reviewer checks results, and a Reflection Agent looks back over the work. People also prescribe how work should be broken down. These procedures were attempts to help models that struggled to solve problems on their own.
+One approach divides work among agents with different roles, such as a Planner to make plans, a Critic to find problems, a Reviewer to check results, and a Reflection Agent to look back over the work; another has people prescribe how work should be broken down. Both were attempts to help models that struggled to solve problems on their own.
 
 A strong model can choose a different first action for each problem.
 
-It may read the error log immediately, run tests first, or look through the code's change history to find when a problem began. Some problems need a short plan. For others, writing a long plan is itself a waste of time.
+It may read the error log immediately, run tests first, or look through the code's change history to find when a problem began. Some problems need a short plan, while for others, writing a long plan is itself a waste of time.
 
 If the harness always forces `Research → Plan → Break down tasks → Implement → Review → Reflect`, it decides in advance how the model must solve the problem.
 
-Rules created to help an older model may get in a newer model's way. I call the problem of keeping those rules instead of removing them **Harness Debt**.
+I use **Harness Debt** to describe rules created to help an older model that remain in place and get in a newer model's way.
 
 {% raw %}
 ```mermaid
@@ -225,17 +211,15 @@ flowchart LR
 
 Pi, which has recently attracted attention, describes itself as a "minimal agent harness": a harness with a small set of basic features. Users can add features through extensions, task instructions through skills, and reusable requests through prompt templates to create their own workflows.[^7]
 
-That freedom is appealing.
+That freedom is appealing, but with the latest models, making more changes yourself does not guarantee better results, because a procedure you design may stop the model from choosing a better approach.
 
-But with the latest models, making more changes yourself does not guarantee better results.
+Fixed procedures may be needed for payment and financial tasks with work sequences and approval rules that must be followed, but whether all software development should work that way is a separate question.
 
-A procedure designed by the user may stop the model from choosing a better approach. Some payment and financial tasks have work sequences and approval rules that must be followed. Fixed procedures may be needed there, but whether all software development should work that way is a separate question.
-
-The organizations behind Claude Code and Codex develop both models and agent products. With each new model, they can test what information and instructions it still needs and which decisions it can make on its own. Choosing and organizing that information and those instructions is called context engineering.
+Because the organizations behind Claude Code and Codex develop both models and agent products, they can test which information and instructions to provide and which decisions to leave to the model with each new release.
 
 Anthropic also says it is difficult to predict what information and instructions future models will need. In Managed Agents, it therefore separates and connects the session, which manages work records; the harness, which helps the model do the work; and the sandbox, an isolated place to run code.[^8]
 
-OpenAI's Codex case does not focus on teaching the model a long sequence of thinking steps. It focuses on automatically checking that code follows the agreed structure and rules, and using tests to check the results.[^9]
+OpenAI's Codex case focuses less on teaching the model a long sequence of thinking steps and more on automatically checking that code follows the agreed structure and rules, and using tests to check the results.[^9]
 
 That is close to the role I expect a good harness to play.
 
@@ -245,9 +229,7 @@ The harness decides which code repositories the model can read, where it can run
 
 Within those boundaries, the model should choose how to solve the problem whenever possible.
 
-AI-DLC's adaptive workflow greatly reduces the problem of applying the same procedure to every task.
-
-Even so, the tools still prescribe what to produce at each stage, when to get approval, and when to review the work together. I think this still amounts to prescribing how the model should think and in which order it should work.
+AI-DLC's adaptive workflow greatly reduces the problem of applying the same procedure to every task, but the tools still prescribe what to produce at each stage, when to get approval, and when to review the work together. In that sense, I think they still prescribe how the model should think and in which order it should work.
 
 As models improve, I think we should revisit the work sequences and solution strategies prescribed by the harness, and delegate more of those decisions to the model.
 
@@ -257,11 +239,11 @@ If I were completely certain up to this point, I could simply continue in my own
 
 **More cases than I expected keep appearing in which teams built real services and achieved results with AI-DLC.**
 
-An AWS article connects parts of the process used to build Bedrock Mantle with AI-DLC. Six people built it in 76 days. The article also describes an early adoption case at a European financial institution, where one product owner and three developers delivered up to 35 features per sprint—a fixed period of work.[^10]
+An AWS article connects AI-DLC with parts of the process used by six people to build Bedrock Mantle in 76 days. The article also describes an early adoption case at a European financial institution, where one product owner and three developers delivered up to 35 features per sprint—a fixed period of work.[^10]
 
 But Mantle's success alone does not prove that the full AI-DLC methodology caused those results.
 
-The project had excellent engineers, fast decisions, and good internal tools. It also involved building a new system rather than changing an existing one. The public article itself carefully says that some of the processes and tools used for Mantle are now parts of AI-DLC.
+The project combined excellent engineers, fast decisions, and good internal tools with the chance to build a new system rather than change an existing one. The public article itself carefully says that some of the processes and tools used for Mantle are now parts of AI-DLC.
 
 The result still exists.
 
@@ -269,13 +251,11 @@ Whenever I hear similar stories, I wonder whether I have missed another reason f
 
 At times, I cannot tell whether I am overvaluing my experience or undervaluing the results described inside the organization.
 
-I do not think I can resolve that question from my current position.
-
-I am closer to explaining AI-DLC and helping customers adopt it than to operating one product and team for years and owning the method's results end to end.
+I do not think I can resolve that question from my current position, because my role is closer to explaining AI-DLC and helping customers adopt it than to running one product and team for years and taking responsibility for the results.
 
 I do not want to decide which approach works better under which conditions from presentations and workshop reactions alone.
 
-I want to choose a real customer problem, lead a team, and launch a service. I want to experience the outages and problems within the organization that follow before reaching a conclusion.
+I want to choose a real customer problem, lead a team, launch a service, and experience the outages and problems within the organization that follow before reaching a conclusion.
 
 **I think I need to run a product with a real team and live with the consequences of my decisions to find the limits of my perspective**.
 
@@ -295,7 +275,7 @@ Working on a range of customer problems as an SA has been valuable. What I need 
 
 I have also seen people in product organizations who only complete assigned tickets and collect a paycheck without caring about the outcome. **Owning an outcome requires staying involved from problem definition through operation.**
 
-As AI narrows the differences in people's ability to write code, how the team works together becomes more important. People need to share the problem and its background, check results, and improve the harness so the same failures do not happen again. Amazon teams using the same tools produced sharply different results for the same reason.[^5]
+As AI narrows the differences in people's ability to write code, it becomes more important for a team to share the problem and its background, check results, and improve the harness so the same failures do not happen again. Amazon teams using the same tools produced sharply different results for the same reason.[^5]
 
 I want to work with **a team that runs a product together and uses what went wrong to inform its next decisions**.
 
@@ -309,9 +289,9 @@ A team with firsthand experience of agentic engineering would not need to agree 
 
 My goal is therefore to change jobs by the end of the year. More than a company name or title, I want a team that takes customer problems seriously and shares responsibility for operations. I would also like to learn new development practices and share them with colleagues on a team whose view of AI's future fits mine.
 
-If I cannot find such a team, I am also considering starting a small company that uses AI. I would like to try Lean Startup: build something small, see how customers respond, and use that to decide what to do next.[^12] Taking responsibility for everything from choosing the customer problem to developing and operating the product would let me find out whether my ideas work.
+If I cannot find such a team, I am also considering starting a small company that uses AI to try the Lean Startup approach of building something small, seeing how customers respond, and using that to decide what to do next.[^12] Taking responsibility for everything from choosing the customer problem to developing and operating the product would let me find out whether my ideas work.
 
-**I want to find out whether my ideas hold up with a real team working on real customer problems.** I am now looking for a team where I can gain that experience.
+I am now looking for **a team where I can find out whether my ideas hold up when we work on real customer problems**.
 
 ---
 
