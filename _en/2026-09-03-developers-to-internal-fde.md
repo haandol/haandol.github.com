@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "As Agents Automate Development, Where Do Developers Go Next?"
-excerpt: Exploring FDE as one evolution of traditional developers
+excerpt: Exploring FDE as an evolution of traditional developers
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent fde agentic-development organization process-automation
 publish: true
 lang: en
 date: 2026-09-03 00:00:00 +0900
-last_modified_at: 2026-09-03 11:38:06 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: developers-to-internal-fde
 korean_url: /2026/09/03/developers-to-internal-fde.html
 permalink: /en/2026/09/03/developers-to-internal-fde.html
@@ -44,7 +44,7 @@ Maersk's talk about operating agents in global shipping made the work of an FDE 
 
 > “The agent loop is not the system. The refining loop around the agent is the system.”[^2]
 
-The inner loop, where an agent executes once, is smaller than the surrounding loop that observes failures and turns expert corrections back into SOPs and the harness. That surrounding loop is the real system.
+The point is that the real system is the outer loop: observing failures and incorporating domain experts' corrections into standard operating procedures (SOPs) and the harness, beyond a single run of the agent's inner loop.
 
 Here, the harness means the environment around the agent: context, permissions, runtime, evaluations, and guardrails. It looks like [harness engineering](/en/2026/03/15/harness-engineering-beyond-context-engineering.html) applied to enterprise operations.
 
@@ -64,14 +64,14 @@ The system needs explicit rules for when the work begins, which identifier retri
 
 The work of an FDE can be divided into stages and artifacts.
 
-| Stage | What the FDE does | What remains |
+| Stage | Actual work | What remains |
 | --- | --- | --- |
-| Observe the work | Follow how operators handle exceptions and make decisions | Current workflow and baseline |
-| Set the boundary | Define the first automation scope and what remains a human judgment | Automation boundary |
-| Represent the work | Turn tacit knowledge into executable procedures | SOP and harness |
-| Validate offline | Replay historical cases without write access | Evaluation cases and failure categories |
-| Operate carefully | Begin in Shadow Mode, proposing actions without making changes | Traces and expert corrections |
-| Refine continuously | Feed failures into the harness and move stable procedures into code | Composite Tools and organizational knowledge |
+| Field observation | Observe how staff handle exceptions and make decisions | Current workflow and baseline |
+| Scope definition | Choose the initial automation scope and the decisions people will retain | Automation boundary |
+| Expressing the workflow | Turn tacit knowledge into executable procedures | SOPs and harness |
+| Pre-production validation | Replay historical cases in read-only mode | Evaluation cases and failure categories |
+| Limited operation | Start in Shadow Mode, offering suggestions without making actual changes | Execution records (traces) and domain experts' corrections |
+| Iterative improvement | Feed failures into the harness and move stable procedures into code | Composite Tools and organizational knowledge |
 
 {% raw %}
 ```mermaid
@@ -170,7 +170,7 @@ Cases escalated to people should be analyzed in the same way.
 
 Suppose a company processes 100,000 requests in one month, automates 82,000, and escalates 18,000. An 82% automation rate sounds fairly good.
 
-But the 18,000 cases may break down into 8,000 with missing data, 4,000 with ambiguous policy, 3,000 with conflicting system states, and only 2,000 that require genuine human judgment.
+But suppose those 18,000 cases consist of 8,000 with missing data, 4,000 with ambiguous policies, 3,000 with inconsistent system values, and 3,000 that actually need human judgment.
 
 Each category should lead to a different action.
 
@@ -220,8 +220,6 @@ This is especially difficult in the heavily siloed structures common in Korean e
 The organization then automates only as far as access allows and sends the rest to people.
 
 Several agents may appear to be working, but people still connect data and accountability across organizational boundaries. The person becomes a kind of middleware between departments.
-
-An FDE can make this problem visible, but cannot unilaterally change another organization's authority.
 
 The company also needs a Process Owner accountable for the end-to-end result and an executive sponsor able to push through cross-organizational data access and responsibility changes.
 
@@ -276,15 +274,15 @@ They need to add agent engineering and the ability to observe real work.
 
 They do not need the full domain knowledge of an operator. But they must be able to ask why an operator made a decision, then translate that answer into data access, SOPs, evaluation cases, permissions, and harness behavior.
 
-The work differs considerably from traditional development.
+When developers also take responsibility for improving the workflow, they need to make the following decisions alongside implementation.
 
-| Traditional developer | FDE-shaped developer |
+| When focusing on implementation | When also improving the workflow |
 | --- | --- |
-| Implements a given requirement | Starts by asking why the requirement exists |
-| Focuses on the owned system | Follows the whole path from the beginning to the end of the work |
-| Treats deployment as completion | Follows recurring exceptions in production |
-| Primarily works with code and APIs | Also works with data definitions and organizational ownership |
-| Produces a technically correct solution | Persuades related organizations and changes the process |
+| Implement the requirements received | Ask why those requirements exist |
+| Look within the system they own | Follow the workflow from beginning to end |
+| Check that deployment meets the requirements | Follow recurring exceptions in production |
+| Work mainly with code and APIs | Also address data definitions and organizational responsibility boundaries |
+| Build a technically sound solution | Persuade the relevant teams to change the process too |
 
 The last point may give an internal FDE an advantage over an external one.
 
@@ -318,15 +316,7 @@ Seen this way, internalizing FDE is a decision about where to reinvest the capac
 
 ## Conclusion
 
-I initially thought existing developers would spend more time on design and review as Coding Agents improved.
-
-Now I suspect that FDE may be one of the forms the traditional developer evolves into.
-
-An FDE has to find the causes behind recurring exceptions, remove unnecessary approvals and data inconsistencies, and feed the result back into SOPs, deterministic code, and evaluation cases.
-
-External FDEs may help with the initial implementation, but the company needs an internal owner for continuous refinement. Executives must support cross-organizational data access and responsibility changes, while the Process Owner decides what to automate and what should remain a human responsibility.
-
-Developers who specialize deeply in platforms and infrastructure will remain. Developers who previously translated business requirements into applications, however, may evolve toward a form that combines the business process, agents, and organizational change.
+At first, I thought better coding agents would leave traditional developers doing more design and review. Now I think developers who translate business needs into applications may evolve toward an FDE role that combines workflows, agents, and organizational change.
 
 As companies spend the capacity created by development automation on reducing manual work and process debt elsewhere, the boundary between developer and FDE may naturally blur.
 

@@ -8,7 +8,7 @@ tags: ai agent harness-engineering agentic-development claude-code headless
 publish: true
 lang: en
 date: 2026-05-11 00:00:00 +0900
-last_modified_at: 2026-09-02 12:44:55 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: direction-of-agentic-engineering
 korean_url: /2026/05/11/direction-of-agentic-engineering.html
 permalink: /en/2026/05/11/direction-of-agentic-engineering.html
@@ -16,7 +16,8 @@ permalink: /en/2026/05/11/direction-of-agentic-engineering.html
 
 ## TL;DR
 
-- The destination of agentic engineering is **removing humans from the loop**, which may leave tools designed to keep people in the pipeline as **transitional technologies**.
+- I expect agentic engineering to move toward removing recurring human intervention.
+- Designs that make human review mandatory are likely to change over the long term.
 
 ## Introduction
 
@@ -30,9 +31,9 @@ Today, I want to organize my recent thoughts on the direction of this trend and 
 
 I have already covered the development process in earlier posts,[^1][^2] so I will move on. If I had to summarize the direction of what we call **agentic engineering** in one sentence, it would be this:
 
-**The final goal is removing humans from the loop.**
+I think the long-term goal is **removing the human in the loop: the person who repeatedly intervenes during execution**.
 
-The goal is to remove the human element entirely from the compilation process that turns business requirements into code. Whether that is actually possible is not especially important when explaining the direction itself. **Unless someone rigorously proves that it is impossible, the companies working in this area will keep trying as long as resources continue to flow.** As with autonomous driving and cloud migration, once an entire industry begins moving in one direction, individual skepticism does not reverse the current.
+That means reducing the reasons people must implement and check every step of turning business requirements into code. Whether they can be removed entirely is a separate question, but I expect the companies involved to keep investing in attempts to move in this direction.
 
 ## 2. Why people remain—and why those reasons are finite
 
@@ -52,27 +53,27 @@ Both bottlenecks are real today, but they are **finite bottlenecks** in the sens
 
 I think today's agentic development tools are splitting around two broad design assumptions: those **designed for coexistence with people** and those **designed for removing people**.
 
-Cursor is a representative example of the coexistence-oriented approach. It optimizes the experience of a person sitting beside an agent in an IDE, moving forward while checking each line. It is a good experience and extremely powerful for productivity today. But leaving a person in the starting assumptions of the design also means that **no matter how much automation is added, the speed at which a person can inspect the work becomes the pipeline's upper bound**. The broader progression of cloud infrastructure so far—VMs, containers, serverless, various PaaS products, and GitOps tools—also sits closer to this axis. It has generally aimed to help "people do this work more easily," not to remove people from it.
+The way I became accustomed to using Cursor inside an IDE was to proceed while checking the agent's changes myself. That is useful for current work, but **as long as every change requires human review, throughput can remain tied to review speed**.
+
+This does not mean that a particular product cannot change in the future. Here, I want to distinguish designs by where they require human review rather than by product name.
 
 On the opposite axis are headless coding-agent configurations and approaches such as Anthropic's Managed Agents. These begin by removing the person. Their default mode assumes that the agent runs its own loop, verifies its own work, and deploys on its own. The immediate experience may be rougher than with coexistence-oriented tools, but their ceiling rises along with advances in LLMs and agents.
 
-The gap between the two matters because it is not merely a UX difference. It is **a difference in design assumptions**. A tool built around coexistence can release the capabilities of a smarter LLM only within "the range a person can verify." A tool designed around human removal, by contrast, can absorb model improvements directly.
+Even if models improve, review queues remain if people must still check every change. To use the wider scope of work models can handle, we need to move repeatable judgments into tests and the harness.
 
 ## 4. Coexistence-oriented technologies are transitional
 
-Placed against the direction described in Section 1, this distinction leads to a fairly clear conclusion. **Technologies designed to preserve people inside the pipeline are transitional.**
+From this perspective, I consider designs that require repeated human review **transitional**.
 
 Because review and deployment remain bottlenecks today, coexistence-oriented tools are currently the most practical choice. But once those bottlenecks disappear one by one, the reason for those tools to exist also begins to shrink. Coexistence itself was valuable because of the assumption that "a person must intervene," and that assumption is the first thing beginning to shake.
 
-From this perspective, the difference between transitional and enduring technologies is not how polished they are today but **the direction of their design assumptions**. A good tool built around coexistence is powerful **now**, while a tool built around human removal becomes powerful **later**. The former binds the benefits of model progress to "the speed at which a person can inspect," while the latter absorbs that progress as it comes.
+When evaluating tools, I therefore want to consider both their current maturity and how much repeated human review they can remove as models take on more work.
 
 ## Conclusion
 
-The direction of agentic engineering is clear: removing humans from the loop. People still occupy places in the pipeline because bottlenecks such as review and deployment remain, but those bottlenecks will gradually be dismantled as repeated judgments on the normal path move into the harness and models and agents improve.
+We can choose today's tools based on how well they work for the task at hand. But I want to consider the direction of long-term investment separately.
 
-In that process, **tools designed around coexistence are like lights illuminating a transitional period**. They are extremely useful for raising productivity today, but viewed along the direction of travel, they are likely to be replaced by agentic engineering itself or quietly pushed into obscurity.
-
-Which tool to use today is a practical question. Which direction to bet on is a separate one. For the latter, I personally think **tools designed around removing people** are the better long-term choice.
+I intend to spend more time on tools and designs that move recurring decisions on normal execution paths from people into the harness. Whether they actually reduce the remaining review and deployment bottlenecks will be the test of that choice.
 
 ---
 

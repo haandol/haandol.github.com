@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Why Did Some Teams Get Up to 10x Faster with the Same AI Tools? — Five Habits of Frontier Development"
-excerpt: How Amazon teams changed workflows, not just tools
+excerpt: Five habits behind Amazon's frontier development teams
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent frontier-development harness-engineering organization developer-experience kiro
 publish: true
 lang: en
 date: 2026-08-31 00:00:00 +0900
-last_modified_at: 2026-08-31 22:09:19 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: frontier-development-habits
 korean_url: /2026/08/31/frontier-development-habits.html
 permalink: /en/2026/08/31/frontier-development-habits.html
@@ -114,7 +114,7 @@ The teams split into two groups.
 
 Ninety percent of the teams used Kiro along with nearly the same internal tools.
 
-The tool was not the main variable.
+Tool choice alone could not explain the performance differences between teams.
 
 The teams with larger gains did more than place AI tools on top of the existing development process. **They intentionally changed how they worked.**
 
@@ -321,9 +321,7 @@ As code generation accelerates, the following steps become visible bottlenecks:
 
 If even easily reversible decisions remain under lengthy review, organizational decision-making absorbs the speed gained from code.
 
-Clare's main message is therefore not a particular prompt or tool technique.
-
-**Frontier Development means intentionally changing how the team and organization work, not merely adding an AI tool.**
+Once the five habits had accelerated implementation, the teams also needed to shorten product decisions and release approvals.
 
 ## 6. Start with the current state before applying it to an organization
 
@@ -396,11 +394,11 @@ The workflow described in the talk consumes tokens continuously.
 
 Tokens are required not only for code changes and tests but also for feeding lessons into context, tools, and tests and for removing obsolete rules from the harness.
 
-This is closer to an operating cost for maintaining and improving the workflow than a one-time experimentation cost.
+This remains an ongoing operating cost of maintaining and improving the workflow.
 
 Recent studies consistently show a rapid decline in the cost of reaching the same performance level. Estimates vary widely, and long-reasoning frontier tasks can still become more expensive in total, but the downward price trend appears across several sources.[^6][^7][^8]
 
-Price is not the only thing changing. The length of software tasks that agents can complete reliably is also increasing quickly.[^9]
+The length of software tasks that agents can reliably complete is also growing quickly.[^9]
 
 These studies do not directly measure `business value per token`. Even so, as the same performance becomes cheaper and models finish longer tasks, I think the business value available from a given token budget is increasing.
 
@@ -408,17 +406,13 @@ The recent trend should not be extrapolated mechanically. Still, a scenario in w
 
 If an organization waits until prices are low enough before beginning the transition, it may struggle to catch teams that have already spent years accumulating context, tools, tests, and organizational habits. Token prices can fall much faster than an organization can change how it works.
 
+When designing workflows, I therefore think we should consider expected token prices and usage over the next three years, the business value that budget can deliver, and the harness we will build during that time.
+
 ## Conclusion
 
-Reducing this talk to `"how Kiro makes teams 10x faster"` misses the important part.
+What stayed with me most from the talk was that the teams whose performance improved accepted slower feature delivery in the short term. They first spent time improving the context, tools, and tests their agents would use.
 
-The teams with larger gains used the same tools but changed context, tools, intent, and tests together. They also accepted slower feature delivery while making those changes.
-
-This does not require assuming unlimited tokens. It does require treating tokens spent on code changes, retries, and harness updates as operating cost rather than a one-time experiment.
-
-Token prices are falling, and the range of work a model can complete with the same budget is expanding. Waiting until tokens are sufficiently cheap before changing organizational workflows may be too late.
-
-Rather than optimizing every task against today's token price alone, I think an organization should **design the workflow around expected token prices and usage over the next three years, the business value delivered per token budget, and the harness it expects to accumulate during that time**.
+If I were applying this in an organization, I would start with a small workflow in one team. I would secure time and a token budget for improving the harness, then expand after checking whether recurring failures and repeated human intervention had decreased.
 
 ---
 

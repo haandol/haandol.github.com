@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Multi-Agent Without a Harness Is Just Context Engineering"
-excerpt: When multi-agent systems become more than role-split prompting
+excerpt: Multi-agent without harness is just large-scale context engineering
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent multi-agent harness-engineering context-engineering agentic-development
 publish: true
 lang: en
 date: 2026-03-31 00:00:00 +0900
-last_modified_at: 2026-08-27 19:21:43 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: multi-agent-without-harness-is-just-context-engineering
 korean_url: /2026/03/31/multi-agent-without-harness-is-just-context-engineering.html
 permalink: /en/2026/03/31/multi-agent-without-harness-is-just-context-engineering.html
@@ -16,9 +16,9 @@ permalink: /en/2026/03/31/multi-agent-without-harness-is-just-context-engineerin
 
 ## TL;DR
 
-- An agent is not merely an LLM with a different prompt, but an **execution unit** combining an LLM, tools, context, and a harness.
-- Multi-agent systems become meaningful when every agent has an **independent execution structure** with its own tools, recovery loops, validation methods, and context boundaries.
-- Splitting roles without harnesses merely gives one LLM more roles and fragments of context.
+- Each agent should be able to validate its work and recover from failures.
+- Divide tool and context boundaries to match each role.
+- Stabilize one execution unit before increasing the number of agents.
 
 ## Introduction
 
@@ -34,40 +34,24 @@ There is a common trap in discussions of multi-agent systems: the belief that ch
 
 But an agent is not simply "an LLM with a different prompt." **An agent is closer to an execution unit that combines an LLM, tools, context, and a harness.**
 
-The important point is that context and harnesses play different roles. As discussed in the earlier post,[^3] **context engineering keeps an agent moving in the intended direction over a long cycle.** System prompts, CLAUDE.md, RAG documents, and memory tell it "where to go." **Harness engineering lets the agent work autonomously by recovering errors, retrying, and managing failures within short cycles.** Linters, CI, structural tests, and retry loops let it "get back up automatically when it stumbles along the way."
+In the earlier post,[^3] I distinguished providing and updating information for model decisions from validating execution results and retrying. System prompts, `CLAUDE.md`, and retrieved documents provide context for decisions. Linters, tests, and retry loops let agents find and fix execution errors. I use harness to mean the execution environment connecting the two.
 
-An agent created only by changing the prompt is missing the harness. Context can provide the broad direction, but there is no error recovery or validation within the short execution cycle. Dividing roles may make each agent appear busy, but mistakes accumulate, agents fail to validate one another's output properly, and the expected performance never materializes.
+Even with role-specific prompts, an earlier agent's mistakes can reach the next agent if there is no path for validating results and recovering from failures. Communication costs and information lost during context transfer further reduce the benefits of dividing roles.
 
 ## 2. When multi-agent systems become meaningful
 
-When, then, does a multi-agent system make sense?
-
-**When the agents differ not only in role or prompt, but each has a sufficiently harnessed execution structure of its own.**
+When building a multi-agent system, the first thing I want to check is **whether each agent can finish and validate its own work**.
 
 In an environment such as Claude Code, for example, each agent can be harnessed in considerable detail. You can design agent-specific tools, recovery loops, validation methods, and context boundaries.
 
-What does that require in practice?
-
-- **Tool boundaries**: The tools available to each agent should be separate. A coding agent might receive filesystem access and a linter, a testing agent a test environment and coverage tools, and a review agent diff tools and architectural validation rules.
-- **Recovery loops**: Each agent should be able to recover from failures in its own area. A coding agent should automatically correct lint failures, while a testing agent should analyze a failed test and report the cause.
-- **Validation methods**: There must be mechanisms that validate agent output mechanically. This is enforcement, not hope. One agent's output should pass automated validation before becoming the next agent's input.
-- **Context boundaries**: The context visible to each agent should be clearly separated. If every agent shares the same context, the system is effectively no different from assigning several roles to one agent.
+- **Tool boundaries**: Separate the tools each agent can access. For example, a coding agent gets the file system and a linter; a testing agent gets the test environment and coverage tools; a review agent gets diff tools and architecture-validation rules.
+- **Recovery loops**: Each agent should be able to recover from failures in its area. A coding agent fixes lint failures automatically; a testing agent analyzes failed tests and reports their causes.
+- **Validation**: Before passing one agent's output to the next, check it with tests or architecture checks. Record conditions that could not be verified so the next stage can see them.
+- **Context boundaries**: Clearly separate the context each agent can see. If all agents share the same context, the setup is effectively no different from assigning several roles to a single agent.
 
 Only with these four elements can a multi-agent system operate as a collection of **truly independent execution units**. In human organizations, it is the difference between merely saying, "You handle the frontend and you handle the backend," and giving each team its own CI/CD pipeline, code-review process, deployment permissions, and monitoring dashboards.
 
-## 3. What a multi-agent system without harnesses really is
-
-What happens when a multi-agent system divides roles without providing harnesses?
-
-From the outside, several agents appear to collaborate. The picture is intuitive and attractive: "A planning agent organizes the requirements, a coding agent implements them, and a review agent checks the result."
-
-**In practice, however, this may amount to nothing more than giving one LLM more separated roles and more fragments of context.** If each agent is just another call to the same LLM with a different system prompt, without an independent execution environment or validation mechanism, the structure is fundamentally equivalent to asking one LLM to take on different roles in sequence.
-
-In that state, it is difficult to achieve the expected performance gains or ROI. Instead, the system adds communication overhead between agents, loses information while passing context, and allows one agent's mistakes to propagate to the next without validation.
-
-The same is true in human organizations. Dividing roles without processes, tools, or validation systems only increases communication costs. Agents are no different.
-
-## 4. What to do before adding more agents
+## 3. What to Do Before Adding More Agents
 
 At this point, increasing the number of agents matters less than **designing a harness that lets one agent work reliably to completion**.
 
@@ -77,11 +61,9 @@ As Anthropic's article on harness design for long-running agents emphasizes,[^1]
 
 ## Conclusion
 
-Multi-agent systems become effective not when we create many agents, but **when each agent has its own harness and operates as a genuinely independent execution unit**.
+Rather than starting with how many roles have been created, I want to see who decides the next action after a failure and what evidence supports that decision.
 
-Until then, many multi-agent systems may be little more than context engineering at a larger scale.
-
-Before increasing the agent count, build an environment in which one agent can get back up after it falls. That is ultimately the fastest path to a multi-agent system.
+If that path cannot be explained, I think it is better to strengthen tools and validation before adding agents. That validation must remain in place after roles are divided for the work to be entrusted to them.
 
 ---
 

@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "How I Built the EncBird Harness Layer by Layer — Harness Engineering in Practice"
-excerpt: How harness engineering works in practice, layer by layer
+excerpt: How harness engineering actually works in practice, layer by layer
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering context-engineering agentic-development sub-agent guardrail
 publish: true
 lang: en
 date: 2026-06-16 00:00:00 +0900
-last_modified_at: 2026-08-27 19:21:43 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: harness-engineering-in-practice
 korean_url: /2026/06/16/harness-engineering-in-practice.html
 permalink: /en/2026/06/16/harness-engineering-in-practice.html
@@ -123,7 +123,7 @@ If a PRD defines "what," an ADR, or Architecture Decision Record, captures decis
 
 ALPS Writer uses `/feature-to-adr` to transfer PRD features into ADR drafts. From there, `adr-writer` runs a cycle in which `/adr-new` records a new decision and `/adr-impl` implements it.
 
-The rule I maintain is a **one-way dependency from PRD to ADR to code**.
+Work proceeds in the order **PRD → ADR → Code**. The arrows below point to the higher-level contract each artifact must follow.
 
 {% raw %}
 ```mermaid
@@ -426,15 +426,7 @@ flowchart LR
 ```
 {% endraw %}
 
-Code generation, debugging, and refactoring eventually reach a form that satisfies the requirements.
-
-Then feed the newly discovered condition into the harness so the agent does not repeat the same mistake.
-
-In other words, turn the "correct form" discovered through this round of debugging and refactoring into a rule in AGENTS.md or a guardrail such as a linter or test.
-
-Without this step, the same debugging and refactoring return every time.
-
-Repeating it reduces the same debugging and refactoring in the next request.
+I put conditions identified through this round of debugging and refactoring into rules (`AGENTS.md`) or guardrails such as linters and tests. This reduces the need to make the same fixes for the same reasons on the next request.
 
 Harness updates can be divided into two types by time horizon.[^1]
 
@@ -460,8 +452,6 @@ Keep the PRD, ADRs, AGENTS.md, and codebase current so that even during a multi-
 
 Stages 1 and 2 belong here. **Execution-harness updates** operate over a short horizon. During each execution cycle, tools perform the work, feedback loops drive correction, and guardrails provide deterministic validation so short-term errors do not accumulate. Stages 3, 4, and 5 belong here.
 
-Context updates maintain long-term direction, while execution-harness updates reduce errors in each run.[^1]
-
 EncBird's AGENTS.md describes the ADR-first feedback loop this way.
 
 > Run fast cycles and improve the ADR on every pass — **do not try to write the perfect ADR at the beginning.**
@@ -475,11 +465,7 @@ Moving repeated decisions into the harness this way lets people spend time check
 
 ## Conclusion
 
-The EncBird harness also began with a minimum PRD, ADRs, and AGENTS.md.
-
-Whenever the agent made a mistake, I added a rule. Whenever it could not perform a necessary task, I added a CLI, Skill, or MCP tool. Repeated mistakes became pre-commit checks and Hooks, and only after the context grew bloated did I divide work across subagents.
-
-There is no need to build this entire structure from the beginning. Establish the basic direction and validation mechanisms, then preserve only the problems that actually repeat during work in the next harness layer.
+EncBird's harness also began with a minimal PRD, ADRs, and `AGENTS.md`. Rather than assembling the entire setup at the beginning, I found it useful to carry recurring problems from real work into the next version of the harness, one at a time.
 
 If you resolve a recurring mistake within one session, do not end there. Finish by entering the following instruction.
 

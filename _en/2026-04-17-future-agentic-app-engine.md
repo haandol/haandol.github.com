@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "The Future Agentic App Engine"
-excerpt: Deploy the agent itself, not only the code it produces
+excerpt: Hosting code generation and execution in one app engine
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering agentic-development claude-code managed-agents serverless
 publish: true
 lang: en
 date: 2026-04-17 00:00:00 +0900
-last_modified_at: 2026-08-27 19:21:43 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: future-agentic-app-engine
 korean_url: /2026/04/17/future-agentic-app-engine.html
 permalink: /en/2026/04/17/future-agentic-app-engine.html
@@ -16,27 +16,25 @@ permalink: /en/2026/04/17/future-agentic-app-engine.html
 
 ## TL;DR
 
-- The purpose of software development is ultimately to **translate business requirements into code**, and the progression from VMs to containers to serverless has continually abstracted away infrastructure layers distant from that purpose.
-- The ideal next stage of agentic development is not deploying code produced by an agent, but having **the agent itself serve business logic directly at runtime**.
-- Token cost and nondeterminism make that ideal difficult today, so a practical starting point is to **separate generation mode from execution mode with a gate**; extending the same structure can lead to **hyper-personalization** through dynamically generated per-user modules.
+- I envision an app engine that hosts code generation and execution in one environment.
+- Agents handle generation mode; validated code handles execution mode.
+- The same setup could support personalization through user-specific modules.
 
 ## Introduction
 
-Earlier posts discussed harness engineering[^1] and multi-agent systems without harnesses.[^2] While writing them, one question kept circling in my mind: **Where are we ultimately going?**
+While writing about harness engineering[^1] and multi-agent systems without harnesses,[^2] I became curious about what happens after an agent writes the code.
 
-After working in software development for a long time, I have found that the names of technologies change while their direction remains surprisingly consistent. In one sentence, that direction is this: **minimize human intervention in the process of translating business requirements into code.** VMs became containers, and containers became serverless, along that same path. The agentic development trend we are now watching is ultimately the next scene in the same progression.
+Even completed code must pass through packaging and a deployment pipeline before users can use it. **Could we operate the code-generating agent and the environment that runs its code together?**
 
 Anthropic's recent release of Managed Agents[^3] made the picture I had been imagining feel a little more concrete. This post is about that picture.
 
 ## 1. The fundamental purpose of software development
 
-The purpose of software development may look complicated, but it is actually simple: **translate business requirements into executable code**.
+I view software development as **the process of turning business requirements into executable code**.
 
-Doing so requires product managers, developers, designers, and operators at a small scale, or large teams at a greater one. Over the past several decades, technologies have repeatedly been created to reduce human intervention in this process.
+This process includes planning, design, and implementation, as well as managing the execution environment.
 
-Consider the progression **from VMs to containers, and from containers to serverless**. On the surface, it looks like an evolution in deployment methods, but its essence lies elsewhere. The closer a layer is to infrastructure, the less it has to do with business requirements. Time spent managing operating systems, configuring networks, and worrying about scaling is not time spent translating business requirements into code.
-
-The industry has therefore continued to abstract away these non-business layers. VMs hid the operating system, containers standardized the runtime environment, and serverless removed server management itself. At each stage, people moved closer to the essential work. **The direction of abstraction has always been toward an environment where people can focus exclusively on translating business requirements into code.**
+When considering VMs, containers, or serverless options, I am interested in how much of the execution environment developers can stop managing directly. From the same perspective, I wondered whether packaging and deployment after code generation could be brought together more closely.
 
 ## 2. Agentic development and the harness
 
@@ -44,11 +42,7 @@ Agentic development is a natural extension of this progression. It is the stage 
 
 As the earlier post explained,[^1] an agent needs a **harness** to operate reliably. Unless linters, CI, structural tests, retry loops, permission controls, and similar mechanisms recover errors outside the agent at short intervals, the agent cannot complete long-running tasks.
 
-This makes one fact clear: **whether we build an agent directly or use an agent to build code, we ultimately have to construct the harness from the ground up.** A good prompt alone does not make an agent produce production-grade code consistently. OpenAI and Anthropic have already demonstrated this through their respective experiments.
-
-That raises a practical question: **nobody wants to build an agent from scratch.** We want to focus on translating business requirements into code, not assembling linters, CI, recovery loops, and permission systems from the ground up. Doing so would be like returning to the era of managing servers and orchestrating containers ourselves.
-
-Fortunately, **agents already exist with sufficiently mature harnesses optimized for translating business requirements into code.** Tools such as Claude Code and Codex have spent a long time refining their harnesses around the goal of producing production-grade code. Starting with them gets us closer to the essential work than building a new agent.
+Rather than building this entire execution environment myself, I want to start with the coding agents I already use, connecting project tests, permissions, and recovery procedures to tools such as Claude Code or Codex.
 
 ## 3. The idea of deploying the agent itself
 
@@ -56,7 +50,7 @@ Let us push the idea one step further. **Deploying code produced by an agent** a
 
 The current workflow looks like this: an agent produces code on my local machine or in CI → that code is packaged into a container → it passes through a deployment pipeline → the code handles requests at runtime. The agent exists only at build time and disappears at runtime.
 
-When you think about it, this structure is rather awkward. **If an agent can understand business logic and turn it into code, why serve only the artifact?** The ideal picture is to place the agent itself in the runtime so that it interprets the business logic directly and responds whenever a request arrives. That is the true state in which "the agent is the app engine."
+Taking this further, I imagined an agent interpreting business logic and responding to requests at runtime. In this vision, the agent handles both code generation and serving.
 
 Reality, however, presents two barriers: **token cost** and **nondeterministic execution**. If an LLM interprets every request in real time, the cost per call becomes too high. The same input may also produce different outputs, making production reliability difficult to guarantee. Until token costs effectively approach zero and determinism improves enough, we cannot implement this ideal directly.
 
@@ -67,15 +61,16 @@ We therefore need a practical compromise: **separate generation from execution**
 flowchart TB
     subgraph C["Container"]
         direction TB
-        G["Gateway<br/>(mode-gating unit)"]
+        G["Gateway<br/>(Select generation or execution path)"]
         H["Headless Claude Code"]
         B["Business Logic Code"]
         G -- "Generation mode" --> H
         G -- "Execution mode" --> B
-        H -. "Generate / modify code" .-> B
+        H -- "Changed code" --> V["Validation · decision to apply"]
+        V -- "Apply validated changes" --> B
     end
     R[("Code Repository")]
-    H -. "State persistence · version control" .-> R
+    H -. "Persist state · version control" .-> R
 ```
 {% endraw %}
 
@@ -84,7 +79,7 @@ The structure is simple. Put headless Claude Code—or another agent such as Cod
 - **Generation mode**: Pass requirements in natural language to the headless agent. The agent uses its harness to create code, validates it with linters and tests, and commits the final artifact to a code repository.
 - **Execution mode**: The generated business-logic code handles requests like an ordinary application. This path does not call an LLM. It is deterministic, fast, and inexpensive.
 
-The important point is that this separation is **a practical compromise on the ideal of "agent = app engine."** If token costs fall far enough and determinism becomes reliable, execution mode will gradually become thinner and eventually disappear, leaving only generation mode. Until then, this hybrid is the most practical form.
+This hybrid setup is what I want to try now. If some workflows eventually meet their cost and reliability requirements even when a model interprets each request, we could start letting the model handle those workflows directly.
 
 If you want to see the structure running as actual code, refer to the proof-of-concept implementation[^5] that places headless Claude Code behind a gateway and separates generation mode from execution mode.
 
@@ -92,17 +87,19 @@ If you want to see the structure running as actual code, refer to the proof-of-c
 
 If this structure works in practice, the daily life of a developer changes considerably.
 
-**You need neither an IDE nor a local machine.** Send business requirements directly to the deployed Claude Code infrastructure, and it immediately creates an API containing the requested logic. The gate's mode control can let that API begin receiving real traffic at once. Changes work the same way. Send a natural-language instruction such as, "Change the refund policy for order cancellations like this," and the agent finds the relevant code, modifies it, runs the tests, and saves the new state. The next request uses the updated logic.
+In this vision, a developer can send requirements to a deployed agent to generate or modify an API without opening a local IDE. Given a request such as "Change the refund policy for order cancellations this way," the agent finds the relevant code, modifies it, and runs tests.
 
-**If you can send text from anywhere, you can change and serve the business from anywhere.** It could be a smartphone chat window, Slack, or email. The development environment leaves the physical device behind and becomes ubiquitous. This is the idea of "the value of developers who understand the business" from an earlier post[^4] pushed to its extreme. The hands that write code disappear, leaving only the language that communicates the business precisely.
+Requests use the new logic only after the change has passed validation and the process for applying it to execution mode.
 
-Debugging and testing also require no separate environment. **Because you can modify and test code simply by switching modes**, a natural hybrid emerges: the LLM serves as the business-logic management engine, while only the deterministic parts remain fixed as stored state. The runtime moves between logic produced by the LLM and stored deterministic artifacts.
+In this setup, changes can begin wherever requirements can be sent, such as a phone chat or Slack. As I discussed in an earlier post,[^4] describing the desired behavior precisely becomes important.
+
+Debugging and testing can also begin in the hosted environment. But we still need to decide how to separate code being generated from code handling live requests, and when to apply validated changes. Splitting the modes does not resolve that boundary by itself.
 
 This idea is not entirely new. Anthropic's Managed Agents[^3] have already opened a path for running agents as long-lived tasks on hosted infrastructure. The app engine I am describing is an extension of that direction, closer to **treating the agent as a runtime component rather than a development tool**.
 
 ## 5. Extension: hyper-personalization
 
-Push this idea just one step further and it reaches an interesting destination: **hyper-personalization**.
+If users need different behaviors, this arrangement could also support **personalization through user-specific generated modules**.
 
 Software has traditionally been built on the assumption that "one piece of business logic applies equally to every user." Shared code processes user-specific data to produce personalized results, but structurally everyone calls the same function.
 
@@ -114,27 +111,29 @@ That assumption breaks when the agent becomes a runtime component. **The system 
 
 Traditional A/B tests and feature flags select among "predefined variations." In this approach, **the variations themselves are created by the agent at runtime**. The unit of personalization moves one level down, from data to code. If the shared core remains deterministic while the agent generates or updates only a thin per-user layer, the system can also control cost and determinism to some extent.
 
-There is another easy-to-overlook advantage: **instead of injecting the user's context into every prompt, the system translates it into code once and leaves it in the module.** Traditional personalization must keep carrying the user's preferences, history, and profile into the model's context window. As the information accumulated for each user grows, token cost and latency increase linearly. Once the context-window limit is reached, summarization or omission becomes unavoidable, and personalization quality declines. If the system translates context into code and serves that code instead, **personalized runtime behavior becomes independent of the size of the user's context.** Whether a user has ten years of history or joined moments ago, the execution path consumes nearly zero tokens in either case. Cost arises only when the per-user module is updated—only when the personalization conditions actually change.
+Compared with including user history in the prompt on every request, this setup **does not need another LLM call to execute personalization rules already translated into code**.
 
-There are, of course, barriers here as well: storing and loading modules that multiply with the number of users, designing harnesses that ensure the quality of each personalized module, and governing user-specific artifacts. But these are all **concrete problems to solve along the direction of "agent = app engine."**
+LLM call costs arise when generating or updating a module. That does not eliminate the costs of data retrieval, code execution, or storing and loading modules.
+
+We also need to compare the costs of managing a growing number of user-specific modules and verifying that each follows shared rules. The next question is which workflows benefit from code generation rather than managing personalization rules as data.
 
 ## 6. Assumptions and limitations
 
-This picture does not fit every service today.
+The limitations of the two designs described above also need to be considered separately.
 
-**Services with massive traffic and strict latency requirements** still benefit from the traditional code-deployment model. The overhead of having an agent interpret logic at runtime remains high, and areas requiring deterministic performance leave little room for compromise.
+**A design in which the model interprets every request** still faces LLM call costs, response latency, and result-validation challenges. Those costs need to be checked first for high-traffic workflows or ones with strict response-time requirements.
+
+**A hybrid setup that executes generated code** makes no LLM calls on its execution path. Instead, it needs to separate changes under generation and validation from currently serving code, and provide a process for applying or reverting validated changes.
 
 **Security and audit trails** must also be redesigned. If natural language can change business logic in real time, the records and approval flows showing who changed what and when must be stricter than those in conventional CI/CD. The gate controller becomes more than a simple mode switch; it becomes the governance layer.
 
-**The quality of the harness becomes the quality of the system.** The reliability of the API produced by the app engine ultimately depends on how thorough the harness around the headless agent is. At this point, harness engineering[^1] becomes even more important. **In a world that deploys code produced by an agent, a weak harness at least leaves an opportunity to catch problems before deployment. In a world that deploys the agent itself, every hole in the harness is a hole in production.**
+The app engine must also apply only code that has passed harness validation[^1] to its execution path. Even when generation and serving are close together, any path that bypasses validation can expose defects directly through the live API.
 
 ## Conclusion
 
-The progression of abstraction from VMs to containers to serverless has ultimately moved toward **an environment where people can focus only on translating business requirements into code**. Within that progression, agentic development is now abstracting the act of development itself.
+I am curious whether hosting code generation and execution together could shorten the process from a requirement change to users seeing the result.
 
-The ideal future is **a world where the agent itself becomes the runtime, interprets business logic directly, and responds**. Token cost and nondeterminism remain practical constraints, however, so today we have to begin with a compromise that separates generation from execution through a gate. If that compromise expands into per-user module generation, it leads to hyper-personalization, and execution mode will become thinner as token costs fall.
-
-The idea remains experimental, and reality imposes many constraints. But just as serverless would have sounded imaginary when we managed VMs ourselves, this picture may become an ordinary infrastructure default within a few years. **When that future arrives, one thing will still matter: how well we understand the business and how precisely we can express that understanding in language.**
+For now, I want to test a setup that validates code produced in generation mode before applying it to execution mode. User-specific module generation is an experiment to extend into once that boundary can be operated reliably.
 
 ---
 

@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Why Avoiding Failure Comes First"
-excerpt: Remove recurring failure modes, then run more learning experiments
+excerpt: Lowering the cost of learning from failed experiments
 author: haandol
 email: ldg55d@gmail.com
 tags: business startup lean-startup pmf experiment ai
 publish: true
 lang: en
 date: 2026-06-27 00:00:00 +0900
-last_modified_at: 2026-08-27 19:21:43 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: failure-comes-first
 korean_url: /2026/06/27/failure-comes-first.html
 permalink: /en/2026/06/27/failure-comes-first.html
@@ -42,7 +42,7 @@ I had the same impression while watching restaurant consulting programs. Busines
 
 I therefore came to think that, whatever business I start, it is better to identify and remove the recurring failure modes in that domain before exploring a path to success.
 
-## 2. Failure contains little information about success
+## 2. Analyzing Failure Does Not Tell You How to Succeed
 
 Looking back on my business and many other cases led me to the following hypothesis.
 
@@ -68,9 +68,7 @@ The founder of Toss makes the same point in his PO lecture series.[^2]
 
 Founders often feel strongly convinced by the problem they have chosen. Changing the problem itself can therefore be a difficult decision to accept.
 
-Changing **how the problem is solved**, however, is much easier to accept. That leaves room to move.
-
-I do not think the solution method has to remain fixed to the first idea either.
+But **changing the way they solve the problem** may be easier to accept.
 
 Even if a founder discovers a problem before anyone else, that does not guarantee they also know the best solution.
 
@@ -94,9 +92,9 @@ Or they somehow finish building it, but cannot endure the slightly tedious relea
 
 That is why changing the environment so enough energy remains to sustain experiments comes before resolving to run more of them.
 
-## 5. The flow looks like this
+## 5. Leave Clues for the Next Attempt, Even When an Experiment Fails
 
-Combining the argument so far, I think the ideal flow might look like this.
+If I start another business, I want to experiment in the following order. Product-market fit (PMF) means that a product fits market demand.
 
 {% raw %}
 ```mermaid
@@ -107,20 +105,11 @@ flowchart LR
 ```
 {% endraw %}
 
-1. Find a problem with clearly identifiable users.
-2. Remove recurring failure modes.
-3. Adjust the environment to support many useful experiments.
-4. Keep experimenting and preserving customer learning until reaching PMF.
-
-This is because it is difficult to determine in advance how to turn the problem I found into a successful business.
-
 Even a failed experiment narrows the next experiment when it leaves the knowledge that "customers do not want this."
 
 I documented separately how I ran this hypothesis–experiment–validation cycle through a side project.[^3][^4]
 
 ## 6. AI makes this flow run better
-
-What is interesting is that the center of this flow is ultimately **lowering the cost of one experiment that produces customer learning**. This is an area where today's AI is strong.
 
 In the past, testing one hypothesis could take several days of designing screens, connecting them, and deploying the result. Because that attempt was expensive, the natural response was to make fewer attempts and attach too much meaning to each one.
 
@@ -134,7 +123,7 @@ We may not know the path to success in advance, but we can now test more hypothe
 
 For a business still in Explore and still looking for PMF, I therefore think **an AI-first strategy and the Lean Startup approach are especially worth considering together**.
 
-There is an important qualification. This does not apply to every business. In 3X terms, it applies to Explore: startups that have not yet found PMF and need to discover a valuable idea through cheap, fast experiments. Priorities are completely different in Expand, where a validated idea is grown, or Extract, where efficiency is maximized.
+Priorities are different in Expand, where you grow a validated idea, or Extract, where you improve its efficiency.
 
 In Explore, Lean Startup explains what to do: filter failure modes, form hypotheses, validate them through experiments, and survive until PMF.
 
@@ -144,17 +133,11 @@ With direction from Lean Startup but expensive attempts, there will not be enoug
 
 ## Conclusion
 
-This post is not trying to present a formula for success. It organizes a hypothesis I am still testing myself.
-
-I hope it is read as one lens for designing the next experiment rather than as an answer.
-
 As an employed developer, every new AI technology used to make me feel stressed and anxious. My view changed after I started building micro-SaaS products.[^6]
 
 I began hoping that AI would improve even faster and let me run more experiments on the problems I had found.
 
 Ironically, working on side projects lowered my stress about AI technology and made me more receptive to it at work. It also gave me somewhat more experience and insight into using AI than the people around me.
-
-From the perspective of reducing recurring failure modes first and increasing the number of useful experiments, AI is ultimately a useful tool for lowering the cost of each experiment.
 
 ---
 

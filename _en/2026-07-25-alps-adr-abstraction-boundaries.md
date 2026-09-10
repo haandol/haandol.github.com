@@ -8,7 +8,7 @@ tags: ai agent harness-engineering prd adr alps agentic-development hexagonal-ar
 publish: true
 lang: en
 date: 2026-07-25 00:00:00 +0900
-last_modified_at: 2026-09-03 20:06:37 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: alps-adr-abstraction-boundaries
 korean_url: /2026/07/25/alps-adr-abstraction-boundaries.html
 permalink: /en/2026/07/25/alps-adr-abstraction-boundaries.html
@@ -22,17 +22,11 @@ permalink: /en/2026/07/25/alps-adr-abstraction-boundaries.html
 
 ## Introduction
 
-The opening section of the ALPS Writer Plugins `AGENTS.md` states one design principle for the entire repository.
+In ALPS Writer Plugins, I clarified what should remain in each document to reduce mismatches between documentation and code.
 
-PRDs, ADRs, and code are **three resolutions of the same system**.[^1]
+The approach treats the product requirements document (PRD), architecture decision records (ADRs), and code as **views of the same system at different resolutions**. I also recorded this principle in the repository's `AGENTS.md`.[^1]
 
-Turning that principle into repository rules created several constraints.
-
-PRD Architecture stops at C4 Context and Container. ADRs omit libraries, SDKs, and file paths. Document bodies store neither PRD-to-ADR nor ADR-to-code paths.
-
-At first, I treated these as documentation hygiene for preventing drift.
-
-Applying them revealed changes larger than document drift.
+After applying it, I noticed changes beyond cleaner documentation.
 
 An agent no longer had to read every document for each task. Code refactoring stopped propagating into higher-level documents, and implementation remained open while humans could still review contracts and risks.
 
@@ -124,7 +118,7 @@ flowchart LR
 
 The repository's PRD Architecture ADR permits only C4 Context, Container, and constraints that must survive reimplementation. Component structure, frameworks, SDKs, ORMs, and internal deployment tools remain recoverable from code.
 
-ADRs also pass an `admission gate`. Requirement contracts, data or security boundaries, external providers and fallbacks, and trade-offs constraining several implementations qualify. Replaceable libraries, credential plumbing, and module structure stay in code.
+I also set criteria for which decisions belong in ADRs: requirement contracts, data and security boundaries, external service providers and fallback paths, and trade-offs that continue to constrain multiple implementations. Libraries, credential wiring, and module structure that can change without altering the contract stay in code.
 
 An SDK replacement or file move therefore does not drag an ADR edit behind it. A framework change does not require a PRD edit when product and system boundaries remain intact.
 
@@ -204,17 +198,9 @@ Finally, apply the single-level read test again. If one artifact cannot answer i
 
 ## Conclusion
 
-The changes I felt after separating abstraction levels in ALPS Writer Plugins appeared in execution.
-
-Agents can read only the level needed for the question. Libraries and file structures can change without rewriting ADRs and PRDs, while contracts stay fixed and implementation remains open.
-
-Review can begin with contracts, evidence, and exceptions instead of reconstructing every implementation choice.
-
-The agent orchestrates work across all three levels, but it neither replaces their authority nor leaves its execution state as a prerequisite for the next task.
-
 I now treat a code refactor requiring an ADR edit as a sign that the ADR may be too low-level. If implementation must reread the PRD, I check whether handoff lost a contract. If code cannot distinguish a contract value from an incidental choice, I check whether the ADR lacks its rationale.
 
-Good abstraction boundaries **reduce how much must be read at once and limit how far changes propagate.** They also divide what agents and humans must decide within that boundary.
+These checks reduced **how much I need to read at once and how far changes spread**. When separating documents, I find it helpful to start with the question each document must answer on its own.
 
 ---
 

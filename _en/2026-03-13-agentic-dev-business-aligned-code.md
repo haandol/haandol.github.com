@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "The Value of Developers Who Understand the Business in the Age of Agentic Development"
-excerpt: In the agentic development era, developers who understand business become far more valuable
+excerpt: Helping agents find business meaning in code
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development ddd business vibe-coding claude-code
 publish: true
 lang: en
 date: 2026-03-13 00:00:00 +0900
-last_modified_at: 2026-08-27 19:21:43 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: agentic-dev-business-aligned-code
 korean_url: /2026/03/13/agentic-dev-business-aligned-code.html
 permalink: /en/2026/03/13/agentic-dev-business-aligned-code.html
@@ -16,9 +16,9 @@ permalink: /en/2026/03/13/agentic-dev-business-aligned-code.html
 
 ## TL;DR
 
-- Managing development progress in a separate document is a transitional approach. When the code itself explains what it does well, that code is the best context.
-- Give agents the role of proposing work as well as executing it, while people make decisions based on the domain and the organization.
-- The value of coders will decline, while the value of developers who understand the business will rise significantly.
+- Business terminology in code helps agents locate what needs to change.
+- Let agents propose as well as execute, while people judge in the context of the domain and organization.
+- As execution costs fall, deciding what to build becomes more important.
 
 ## Introduction
 
@@ -26,19 +26,21 @@ Now that Claude Code is available through Bedrock, I have been trying it for the
 
 Unlike tools such as TaskMaster or todo lists that track work within a session, I personally think managing development progress through documents, as GSD does, is a transitional technology.
 
-If the code itself is written to explain clearly what it does, an agent can generate reliable code simply by reading and understanding it. In an earlier post,[^1] I argued that dynamic context should be allowed to disappear, leaving only code and tests. Seen as an extension of that argument, the code itself is the most trustworthy context. A separate summary document may fail to be updated and cannot contain all the detailed context, so it may instead leave room for the agent to generate incorrect code. It also seems to offer little advantage in terms of tokens, because the agent will read the code related to the target of a change during development anyway.
+Code that reveals what it does helps an agent understand current behavior. That is also why I suggested in the previous post[^1] cleaning up temporary execution records while retaining code and tests: the current state can be checked again in those artifacts.
+
+Separate summary documents can miss updates or omit necessary details. If the agent must read the relevant code when making changes anyway, I start asking whether continuously maintaining a summary is worth the cost.
 
 Then how can we make an agent understand the business simply by reading the code?
 
 ## 1. Aligning Business Processes and Code
 
-When you think about how to make an agent write code more consistently and maintain it better, you eventually arrive at one conclusion. **When the code clearly explains the business and what it does, that code becomes the best context.**
+To find the code to modify, an agent needs to connect business terms in the requirements to names in the code. **The more clearly the code shows which workflow it handles, the easier that connection becomes.**
 
 From the perspective of requirements analysis and design, I think DDD, or Domain-Driven Design, may become even more important. One of DDD's core principles is encouraging real business processes to be reflected in code. With a ubiquitous language, domain experts and developers use the same words, and those words appear directly in class and method names. This becomes even more valuable in the age of agents.
 
-When business processes are reflected clearly in code, you can make consistent code changes simply by explaining a change in the business process to the agent. If you say, "The refund policy for order cancellations has changed," the agent can find domain objects such as `OrderCancellation` and `RefundPolicy` and modify precisely the relevant logic.
+For example, given a request to change the refund policy for order cancellations, names such as `OrderCancellation` and `RefundPolicy` provide clues to the relevant logic. The agent still needs to read the code connected to those objects and verify the revised policy with tests.
 
-Conversely, if business logic is scattered across the codebase or code names are disconnected from business terms, the agent misunderstands the context, changes the wrong place, or creates duplicate logic. In the end, **as agentic development advances, it creates an environment in which business processes and code can align more closely, while a codebase with strong alignment becomes the foundation for using agents more effectively.**
+When business logic is scattered or names differ from business terminology, an agent may miss relevant code or create duplicate logic. I therefore think making the connection between workflows and code explicit also helps when developing with agents.
 
 ## 2. Agents Propose, Humans Decide
 
@@ -46,7 +48,7 @@ Agents are often used only to execute work proposed by a person. But if you give
 
 In the future, the knowledge that people will continue to understand better than agents will probably be domain knowledge and operational knowledge about the organization. A good developer may ultimately be someone who gives an agent enough domain information, lets it produce three or four proposals, and then makes a judgment informed by the organization, including the team's capabilities and the direction of the business.
 
-In this flow, the value of coding skill itself continues to decline. In an era when agents write, refactor, and even optimize code, "the ability to write code well" is no longer scarce. By contrast, **the ability to understand a business domain deeply and communicate that understanding accurately to an agent** becomes increasingly scarce.
+As agents take on more implementation and refactoring, I expect to spend more time deciding what to change. That requires understanding the domain and organizational circumstances, and communicating those decisions precisely to the agent.
 
 ## 3. What Changes as Execution Costs Fall
 
@@ -54,15 +56,13 @@ Over the past few years of developing with AI, the cost of execution has steadil
 
 Documentation, refactoring, and optimization are representative examples of work that is hard to make time for ordinarily but has become easy to try with AI. This effect is also expanding beyond code.
 
-Ironically, as the cost of execution falls, what becomes more important is not execution itself but **the ability to decide what to execute**. If you tell an agent, "Build this," without understanding the business, it will build it. But only a person can decide whether the result is actually needed by the business and whether it has the right priority.
+Even when execution costs fall, someone must decide which changes are needed and which should take priority now. I want to solicit the agent's proposals and use human knowledge to judge whether they fit the domain and the organization.
 
 ## Conclusion
 
-As agentic development advances, the role of the coder will shrink, while the value of developers who understand the business will rise significantly.
+AI has given me room to attempt documentation and refactoring that I used to postpone. I also want to use that time to clarify the connection between business terminology and code.
 
-Making code explain the business clearly, letting agents make proposals and judging them from a domain perspective, and using lower execution costs to spend time on the problems that truly matter—these are becoming core capabilities that developers will need.
-
-More than writing a good separate summary document, **building a codebase in which the business is directly embedded in the code** is the most powerful form of context engineering in the age of agents.
+When evaluating an agent's changes, I want to start with which workflow is changing and why. As more things become feasible to execute, I think the domain knowledge needed for that judgment will matter more.
 
 ---
 

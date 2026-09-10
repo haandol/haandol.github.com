@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "AI Wrote the Code Faster—Why Is Review Harder? Reducing Shifted Cognitive Load"
-excerpt: Close smaller cycles and review contracts before code
+excerpt: Why AI shifts cognitive load from coding to review
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent cognitive-load developer-experience code-review hitl
 publish: true
 lang: en
 date: 2026-08-18 09:00:00 +0900
-last_modified_at: 2026-09-02 12:53:15 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: ai-coding-review-cognitive-load
 korean_url: /2026/08/18/ai-coding-review-cognitive-load.html
 permalink: /en/2026/08/18/ai-coding-review-cognitive-load.html
@@ -271,29 +271,13 @@ The longer the review lasts, the longer the person must sustain high cognitive l
 
 ## 4. Move recurring decisions out of review
 
-Traditional code review assumes that the author understands the implementation.
-
-The reviewer reads the author's explanation, asks about suspicious parts, and looks for missed risks. The author can explain why the implementation took this form.
-
-When an agent produces most of the code, the human is no longer the author in the same sense.
-
-If we still require that human to explain every line, the implementation time saved by the agent is simply paid again during review.
-
-I think human review therefore needs to move away from reconstructing the entire implementation and toward checking business requirements and contract boundaries.
-
-The agent should run tests and architecture checks, then organize evidence for each contract condition, assumptions used for decisions outside the contract, and remaining risks. The human starts by looking for unproven conditions and hidden assumptions.
+Even after narrowing the review scope this way, the burden remains if a person still checks the same conditions every time.
 
 When the normal path has sufficient evidence and exposes its out-of-contract assumptions, it should not require repetitive human approval.
 
 Escalation should be reserved for contract changes, conflicts with existing decisions, important assumptions, and high-risk exceptions that automation could not verify. Human involvement then becomes a mechanism for contracts and exceptions rather than a default step in every implementation.[^6]
 
-It is equally important to make repeated decisions disappear from future reviews.
-
 If reviewers repeatedly point out the same import direction, turn it into an architecture test. If they repeatedly check the same requirement, turn it into a test case. Instead of fixing the same mistake several times, improve the harness so the next agent avoids it from the beginning.[^5]
-
-Seen this way, reducing cognitive load means moving recurring human decisions out of review.
-
-As repeated judgments become contracts and guardrails, humans have fewer decisions to make and less new material to understand in the next review.
 
 I apply this principle to the [ALPS Writer Plugins](https://github.com/haandol/alps-writer-plugins) that I maintain.[^3]
 
@@ -324,15 +308,9 @@ Starting with the early Copilot releases forced me to develop the habit of split
 
 Even after newer models became capable of large tasks, I kept short development feedback loops instead of asking for the maximum amount of code in one pass. That may be why I did not feel the review burden as strongly.
 
-Small pull requests alone will not remove the long-term bottleneck.
+For now, I want to keep **the development cycle from building through understanding, validation, and committing** small. When the same judgment recurs within that cycle, I want to move it into contracts and tests so the next review does not have to repeat it.
 
-If an agent stacks several pull requests before review, each diff may be small while the human still has to reconstruct all of the surrounding context at once. By a small unit, I mean **a development cycle that closes only after the code is produced, understood, verified, and committed**.
-
-Lowering the peaks still leaves the assumption that a human must understand and approve all code.
-
-Over time, I think the better direction is not to make humans read code faster, but to make them understand the contract between business requirements and code. Agents should present verification evidence for each contract and expose externally verifiable assumptions instead of hiding unverified work behind success.
-
-From this perspective, reducing cognitive load is not merely making review more comfortable. **It is the process of moving recurring human decisions into contracts and harnesses so that human-in-the-loop approval disappears from the normal path.**
+Over the long term, I think we should move recurring human judgments into the harness to remove repeated human intervention, or HITL, from normal execution paths. Understanding behavior in preparation for the next change is different from approving the same conditions every time.
 
 ---
 

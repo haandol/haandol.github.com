@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "When Should AI Adoption Be Measured by Business Metrics? — Revisiting AHEAD and LEVER 2/2"
-excerpt: Measure harness learning before business value
+excerpt: Measuring harness learning before business value
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development harness-engineering organization developer-experience cts-sw
 publish: true
 lang: en
 date: 2026-08-18 18:00:00 +0900
-last_modified_at: 2026-08-27 19:21:43 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: measuring-ai-adoption-ahead-lever-part-2
 korean_url: /2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html
 permalink: /en/2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html
@@ -16,35 +16,29 @@ permalink: /en/2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html
 
 ## TL;DR
 
-- In Shape, measure harness learning and review burden.
-- In Scale, combine CTS-SW with business outcomes.
-- AHEAD and LEVER are question sets, not composite scores.
+- While learning within one team, track changes in the harness and review burden.
+- When expanding to other workflows, track total delivery cost and business outcomes.
+- AHEAD and LEVER are lists of questions, not composite scores.
 
 ## Introduction
 
-When I first defined the 3S model in [part 1](/en/2026/06/15/organizational-ai-adoption-3s.html), I put Efficiency in AHEAD and Extraction Efficiency in LEVER.
+In [Part 1](/en/2026/06/15/organizational-ai-adoption-3s.html), I described AI adoption as connecting the work environment, reducing failures within one team, and extending a proven approach to other workflows.
 
-Because both items focused on cost, the distinction between Shape and Scale became unclear. They also failed to expose how savings in code generation can move into review, CI, and operations.
+But asking about cost savings both while a team was learning and after expansion blurred the distinction between those stages. It also failed to show clearly how costs saved in code generation could move into review, CI, and operations.
 
-While writing [the August 18 post](/en/2026/08/18/ai-coding-review-cognitive-load.html), I became convinced that the first question in Shape is not whether cost has fallen, but **whether the burden of understanding and approving results is actually decreasing**.[^1]
+Writing the [post on review cognitive load](/en/2026/08/18/ai-coding-review-cognitive-load.html) clarified what I wanted to check first: **whether the burden of understanding and approving results is actually falling**.[^1]
 
-While working on [the August 14 CTS-SW post](/en/2026/08/14/cts-sw-software-delivery-cost.html), I also concluded that cost in Scale should mean the end-to-end cost of reaching customers, not token spend or implementation time.[^2]
+While working on the [software delivery cost post](/en/2026/08/14/cts-sw-software-delivery-cost.html), I came to think that after expansion we should measure the full cost of getting software to customers.[^2]
 
-I therefore changed the `E` in AHEAD from `Efficiency` to `Evidence Quality`, and redefined the first `E` in LEVER as `End-to-end Efficiency`.
-
-AHEAD examines whether the harness learns and reduces recurring human decisions during Shape. LEVER examines whether reusing that harness during Scale lowers total cost and time while creating business value.
-
-These remain evaluation lenses that I am proposing. They are not validated standards or formulas for one score.
+In this post, I want to revise the questions we ask at each stage accordingly.
 
 ## 1. Evaluate from the beginning, but ask different questions
 
-Evaluation does not begin only after a workload reaches Scale.
+Before adoption, record the time, quality, cost, and human intervention involved in the current workflow.
 
-Before adoption, record the time, quality, cost, and human intervention in the current workflow. During Streamlining, verify that the agent has the data, tools, and permissions required to complete the work.
+In the earlier post, I called the stage of connecting the work environment Streamlining, the stage of improving the harness within one team Shape, and the stage of extending a proven approach Scale. A harness means the context, tools, permissions, and validation system an agent uses.
 
-During Shape, look for failures becoming part of the harness and review burden declining.
-
-During Scale, examine customer delivery cost, delivery time, and business outcomes.
+I named the question list for Shape AHEAD and the list for Scale LEVER. Both are criteria I propose, not validated standards or composite scores. CTS-SW measures the total cost per unit of software delivered to customers.[^2]
 
 | Stage | First question | Evaluation focus |
 | --- | --- | --- |
@@ -52,7 +46,7 @@ During Scale, examine customer delivery cost, delivery time, and business outcom
 | Shape | Do failures and review feedback change the harness? | AHEAD |
 | Scale | Does harness reuse reduce the cost of delivering value? | CTS-SW and LEVER |
 
-Applying Scale ROI directly to Streamlining and Shape makes necessary foundation work look like failure.
+Applying Scale's return-on-investment criteria directly to Streamlining and Shape makes it easy to mistake upfront investment for failure.
 
 The opposite is also dangerous. If a production workload is permanently labeled a learning experiment, nobody has to explain its cost or results. Stage names should change the next decision, not merely justify investment.
 
@@ -60,7 +54,7 @@ The opposite is also dangerous. If a production workload is permanently labeled 
 
 During Shape, the important question is not how many artifacts an agent produced, but whether recurring failures and decisions are becoming less common.
 
-The updated AHEAD consists of five questions.
+I changed AHEAD's `E` from `Efficiency`, meaning cost efficiency, to `Evidence Quality`, meaning the quality of validation evidence. The updated AHEAD consists of the following five questions.
 
 | Dimension | Question | Signals to inspect |
 | --- | --- | --- |
@@ -76,17 +70,13 @@ Low-risk normal paths with clear contracts should let the agent complete impleme
 
 Low human involvement alone does not prove good autonomy. If necessary escalations disappear as well, Dependability has declined.
 
-`Harness Learning` does not count failure reports.
-
-It asks whether recurring review decisions became contracts, tests, rules, or tools available to the next agent. If humans keep finding the same issue, the harness has not learned.
+`Harness Learning` asks whether recurring review decisions have become contracts, tests, rules, or tools that the next agent can use. If people keep finding the same problem, it is difficult to say that the harness has learned.
 
 The new `Evidence Quality` item directly addresses review cognitive load.
 
 If an agent reports only that the tests passed, the human still has to read the code from the beginning. To narrow review, the result must show what satisfied each contract, which evidence supports it, which risks remain unverified, and which new decisions were made during implementation.
 
-Better Evidence Quality does not mean a longer report.
-
-It means the scope a human must newly understand has narrowed to contract changes and exceptions. Security, payments, and data migrations may still require code inspection, but every change should not receive the same review depth.
+Look at whether the scope people need to understand has narrowed to contract changes and exceptions, rather than at report length. Keep code-level review where it is needed, such as security, payments, and data migrations, without demanding the same depth of review for every change.
 
 `Adoption` looks at operational ownership rather than tool logins.
 
@@ -204,14 +194,6 @@ A new security requirement may temporarily increase human review and lead time. 
 Metrics are closer to a record of where to improve next than a score that declares success.
 
 ## Conclusion
-
-Measuring AI adoption only by code generation speed misses where cost has moved.
-
-During Shape, look for failures becoming part of the harness and for a growing range of work that humans can judge without reconstructing the entire implementation. That is why I changed the `E` in AHEAD from Efficiency to Evidence Quality.
-
-During Scale, do not stop at tokens or implementation time.
-
-Use CTS-SW to examine total delivery cost across review, CI, deployment, and operations. Use LEVER to consider time, cost, reuse, reliability, and business value together.
 
 For now, I think AHEAD and LEVER are best used as **checklists that keep stage-appropriate questions from being skipped**, not as organizational scoring formulas.
 

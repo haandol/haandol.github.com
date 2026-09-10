@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Demystifying Harness Engineering"
-excerpt: How short-cycle recovery keeps long-running agents on track
+excerpt: Demystifying Harness Engineering
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering context-engineering prompt-engineering agentic-development long-running-agent
 publish: true
 lang: en
 date: 2026-03-15 00:00:00 +0900
-last_modified_at: 2026-08-27 19:21:43 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: harness-engineering-beyond-context-engineering
 korean_url: /2026/03/15/harness-engineering-beyond-context-engineering.html
 permalink: /en/2026/03/15/harness-engineering-beyond-context-engineering.html
@@ -16,9 +16,9 @@ permalink: /en/2026/03/15/harness-engineering-beyond-context-engineering.html
 
 ## TL;DR
 
-- Can agents alone build and maintain production code at a scale of millions of lines? **Yes.** OpenAI[^4] and Anthropic[^6] have demonstrated it.
-- **Context engineering** and **harness engineering** complement each other, with the harness extending control beyond context: context sets the broad direction, while the harness preserves it through automatic error recovery during every short execution cycle.
-- If you do not intend to delegate the entire development process to agents, you do not need to adopt harness engineering yet.
+- A harness is an execution environment connecting context, tools, and validation.
+- Short validation and retry cycles reduce the accumulation of errors.
+- If you do not intend to delegate the full development process to agents, you may not need to adopt harness engineering yet.
 
 ## Introduction
 
@@ -46,7 +46,7 @@ A harness originally refers to the tack placed on a horse: equipment such as rei
 
 A harness for an AI agent serves the same purpose. It means **the entire environment that surrounds an agent and prevents it from wandering down the wrong path**.
 
-Let us begin by clarifying what we can control. An agent is a combination of **context + LLM (model) + tools**. Of those three, **we cannot modify the model**. Whether it is GPT or Claude, we can choose the model, but we cannot open it up and change how it works internally. It is a fixed constant.
+First, consider what we can control. An agent combines **context + an LLM (model) + tools**. Here, I am discussing a development environment in which we select and use models rather than train them ourselves.
 
 In other words, what we can actually manipulate is **everything except the model**: the context, the tools, and the environment in which they operate.
 
@@ -72,9 +72,7 @@ flowchart LR
 ```
 {% endraw %}
 
-A harness therefore does more than surround the "outside" of an agent. It fixes only the model and **actively manipulates the context and tools**. As we will see, feedback loops place validation results back into the context and verify them through tools, so the harness effectively operates the inside of the agent as well.
-
-Look inside this harness and it ultimately comes down to two mechanisms: **feedback loops** and **guardrails**. Let us examine them one at a time.
+A harness puts validation results into context and uses tools to carry out the next action. Two mechanisms used in this process are **feedback loops** and **guardrails**.
 
 ### Feedback loops — "inspect the result, then retry if it is wrong"
 
@@ -82,22 +80,24 @@ A feedback loop is **a cycle that validates the agent's output and makes the age
 
 Instead of a person saying, "This is wrong, fix it," the system automates that role. It runs tests, lets the agent correct the code when they fail, runs them again, and repeats until they pass.
 
-One property matters here: the feedback loop is **nondeterministic**. Even in the same situation, the agent may make a slightly different correction each time. This is the flexible but imprecise area where we delegate the instruction, "Decide whether this is correct and fix it yourself."
+We need to distinguish validation from modification within the loop. We can use **deterministic checks that produce the same result for the same input**, such as linters and tests, or ask a model to evaluate whether the requirements are met.
+
+The model may choose different fixes in the same situation. That does not mean the entire feedback loop combining validation and retries needs to be classified as nondeterministic.
 
 ### Guardrails — "cross the line and the system blocks you"
 
-Guardrails, by contrast, are **deterministic**. They define explicit rules and block anything that violates them.
+The guardrails discussed here are **deterministic blocking mechanisms**. They define explicit rules and prevent progress when those rules are violated.
 
-A linter catches style violations, tests reject broken code, and Hooks block prohibited actions. Rather than asking the agent, "Please do it this way," guardrails build rails on both sides of the path so that **the work cannot pass unless it follows the rule**.
+A linter catches style violations, tests reject broken code, and blocking hooks stop prohibited actions. A hook that only adds a prompt does not guarantee such enforcement, so the two must be distinguished.
 
 They are predictable automatic blocking mechanisms that produce the same result from the same input.
 
 ### They serve different roles
 
-| Mechanism | Character | What it does | Example |
+| Mechanism | Nature | Role | Example |
 | --- | --- | --- | --- |
-| Feedback loop | Nondeterministic · flexible | Validates the result and retries autonomously until it is correct | Run tests → revise after failure |
-| Guardrail | Deterministic · strict | Automatically blocks rule violations | Linter · type check · Hooks |
+| Feedback loop | A cycle of validation and modification | Return validation results and retry | Run tests → revise after failure |
+| Guardrail | Deterministic blocking based on rules | Prevent the next action when a rule is violated | Linter · type check · blocking hook |
 
 Guardrails draw the lines the agent must not cross, while feedback loops refine the work within those lines until it is correct. Together, they form the environment surrounding the agent: the harness.
 
@@ -106,12 +106,12 @@ Placed into an actual workflow, the system operates like this.
 {% raw %}
 ```mermaid
 flowchart TB
-    REQ["User request"] --> AGENT["Agent performs the task<br/>(context + LLM + tools)"]
-    AGENT --> OUT["Task output"]
-    OUT --> GR{"🛡️ Guardrails<br/>linters · tests · Hooks"}
+    REQ["User request"] --> AGENT["Agent performs work<br/>(Context + LLM + tools)"]
+    AGENT --> OUT["Work result"]
+    OUT --> GR{"🛡️ Guardrails<br/>Linter · tests · blocking hooks"}
     GR -->|Violation| BACK["Block → agent revises"]
     BACK --> AGENT
-    GR -->|Pass| FB{"🔄 Feedback loop<br/>Does it satisfy the requirements?"}
+    GR -->|Pass| FB{"Does it meet the requirements?<br/>Tests or model evaluation"}
     FB -->|No| BACK
     FB -->|Yes| DONE["✅ Complete"]
     classDef agent fill:#ffe9c7,stroke:#e8973a,stroke-width:2px;
@@ -125,34 +125,31 @@ flowchart TB
 ```
 {% endraw %}
 
-The important point is that these mechanisms **leave the model fixed while validating and correcting everything else—the context, tools, and execution environment—at every step**.
-
-Guardrails filter the output, and feedback loops place that result back into the context and run the agent again. The harness does not merely wrap the agent from a distance. It reaches inside and steers it. That is what a harness is.
+The reason a guardrail blocked an action also becomes input to the next revision. In the diagram above, the entire path that checks the result and returns to the work is the feedback loop.
 
 ## 2. The relationship between context engineering and harness engineering
 
-The most intuitive way to understand the difference is along the **time axis**.
+It helps to distinguish what information to give the model from how to validate the work it performs with that information.
 
 **Context engineering adjusts the broad direction.** It tells the agent what to do, which architecture to follow, and which business context governs its work.
 
-System prompts, CLAUDE.md, documents retrieved through RAG, and memory all belong here. They give the agent **a destination and a route**.
+System prompts, `CLAUDE.md`, retrieved documents, and memory are examples. Code read during a task and validation results also become context for the next decision.
 
 **Harness engineering automatically recovers errors during short execution cycles, allowing the agent to complete a long-running task without drifting far from the broad direction.**
 
 A linter catches a style violation and the agent immediately corrects it. CI reports a failed test and the agent fixes it automatically. A structural test detects an architectural violation and forces the agent to reverse course. These mechanisms are **safety systems that check the ground beneath every step**.
 
-To use an analogy, context engineering hands you a map and route before a mountain climb, while harness engineering is the safety rope that catches you whenever you lose your footing along the way.
-
-Without a map, you do not know where to go. Without a safety rope, one mistake can send you over a cliff. **The longer the task, the more valuable the safety rope becomes.**
+In a hiking analogy, context provides the map and current location, while validation and recovery during execution act like a safety rope when you lose your footing. Just as you consult the map again when circumstances change, context is also updated during the task.
 
 {% raw %}
 ```mermaid
 flowchart LR
-    CTX["🗺️ Context engineering<br/>Once at task start<br/>Provides destination · route"]
-    CTX -.broad direction.-> START(("Start"))
+    CTX["🗺️ Context engineering<br/>Goals · rules · needed information<br/>Updated before and during work"]
+    CTX -.Direction.-> START(("Start"))
     START --> S1["Step"] --> S2["Step"] --> S3["Step"] --> GOAL(("Finish"))
-    ROPE["🪢 Harness engineering<br/>Repeated at every step<br/>Recovers immediately after a misstep"]
-    ROPE -.safety rope.-> S1
+    CTX -.Update information.-> S2
+    ROPE["🪢 Harness engineering<br/>Repeated at each step<br/>Recover immediately after a misstep"]
+    ROPE -.Safety rope.-> S1
     ROPE -.-> S2
     ROPE -.-> S3
     classDef ctx fill:#ffe9c7,stroke:#e8973a;
@@ -168,14 +165,14 @@ When agents work across several context windows, **"compaction alone is not enou
 
 Every execution loop needs mechanisms that record state, detect failure, and recover automatically.
 
-| Category | Primary role | Time axis | Design target |
+| Area | Main role | Timing | Design focus |
 | --- | --- | --- | --- |
-| Context engineering | Adjust the broad direction | At task start | Every token visible to the LLM |
-| Harness engineering | Automatic recovery in short cycles | Every execution loop | Guardrails and feedback loops, excluding the model |
+| Context engineering | Provide goals, rules, and needed information | Updated before and during work | Information the LLM uses to make decisions |
+| Validation and recovery during execution | Check results and retry | Each execution loop | Tools · guardrails · feedback loops |
+
+In the broader sense, I use harness to mean the entire execution environment connecting context with validation and recovery. The table distinguishes roles within that environment rather than two mutually exclusive technologies.
 
 Martin Fowler's summary[^5] likewise explains that **"context engineering helps the model think well, while harness engineering keeps the system from going off track."**
-
-The practical issue is not the framing itself. It is the recognition that setting only the broad direction is not enough for a long-running task to reach completion.
 
 ### Ultimately, the question is how far we reduce human intervention
 
@@ -270,7 +267,7 @@ The shorter each loop is, the sooner it stops a mistake from accumulating. This 
 
 Mitchell Hashimoto summarized it in one sentence: **"When an agent makes a mistake, engineer the environment so the agent can never make that mistake again."**[^3]
 
-The solution is mechanical enforcement, not hope. The more often that enforcement repeats in **short cycles**, the more likely the agent is to complete a long-running task without drifting from the broad direction.
+Connect conditions that can be checked automatically to actual checks. Short feedback cycles let the agent attempt corrections before errors accumulate.
 
 ## 4. What OpenAI and Anthropic demonstrated
 
@@ -361,33 +358,17 @@ Most developers still use AI coding tools at roughly the level of autocomplete. 
 
 ## 6. What this means in practice
 
-The concrete practices of harness engineering are too broad to cover fully in this post. The central principle, however, is clear.
+First, choose one condition that people repeatedly check. Put code-style conditions in a linter or behavioral conditions in tests, and have the agent run them during work.
 
-**Keep feedback loops short and automatic recovery fast.** This is the core of harness engineering.
+When validation fails, return the violated condition and execution result as input to the next revision. Use the same check to verify whether the revision now passes.
 
-When an agent makes a mistake, the system should discover it quickly, and the agent should be able to correct it as soon as it knows. The faster failure feedback arrives, the fewer errors accumulate and the less the agent drifts from the broad direction.
-
-**Choose mechanical enforcement over hope.** Do not merely ask the agent, "Please do it this way." Build guardrails that make the work fail if it does not. Linters, tests, and Hooks serve this role.
-
-**Fight entropy.** The more code an agent generates, the more consistency decays. The codebase needs a periodic process that finds architectural violations and mismatches between documentation and code.
-
-**Set the direction with context and protect every step with the harness.** Without good context, the harness cannot tell the agent what it should do.
-
-Without a good harness, context alone cannot keep the agent on track. Context owns the broad direction, while the harness owns the stability of every step.
+After the task, also check for mismatches between documentation and code. Rules added to prevent the same mistake must agree with actual behavior if they are to remain useful for the next task.
 
 ## Conclusion
 
-The overall direction I see in agent development is clear: **testing whether we can delegate to AI the entire process of translating business requirements into code**.
+I want to keep expanding the scope of work I can entrust to agents when turning business requirements into code.
 
-The attention around harness engineering and the flood of Claw environments such as OpenClaw, NanoClaw, and NemoClaw can be read as agreement with that direction from several different perspectives.
-
-Context engineering tells the agent "where to go." Harness engineering lets it "get back up automatically when it falls along the way."
-
-Only with mechanisms that catch and recover errors during every short execution cycle can an agent complete a long-running task without drifting from the broad direction.
-
-Harness engineering is, of course, still at an early stage. The term itself has existed for only about a month, and the tools and methods continue to evolve.
-
-But the fact that both OpenAI[^4] and Anthropic[^6] have begun addressing the importance of this area publicly means that the future of agents operating autonomously for long periods is already underway.
+That requires an execution environment that shows what was checked and where it failed, rather than asking me to trust a description of the result. I think building a harness starts with moving repeated human checks into that environment one at a time.
 
 ---
 

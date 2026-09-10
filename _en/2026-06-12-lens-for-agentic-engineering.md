@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "A Lens for Interpreting Phenomena—and Agentic Engineering"
-excerpt: Why HITL removal is my lens for agentic engineering
+excerpt: Interpreting agentic engineering through the removal of human intervention
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development hitl agent-centered forward-deployed-engineer
 publish: true
 lang: en
 date: 2026-06-12 00:00:00 +0900
-last_modified_at: 2026-08-27 19:21:43 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: lens-for-agentic-engineering
 korean_url: /2026/06/12/lens-for-agentic-engineering.html
 permalink: /en/2026/06/12/lens-for-agentic-engineering.html
@@ -16,7 +16,8 @@ permalink: /en/2026/06/12/lens-for-agentic-engineering.html
 
 ## TL;DR
 
-- A lens makes a phenomenon predictable by holding countless variables constant according to its purpose, and I view agentic engineering through the lens of **removing humans from the loop**.
+- A lens makes explicit which variables we hold constant when interpreting a phenomenon.
+- I view agentic engineering as moving toward the removal of recurring human intervention.
 
 ## 1. What is a lens?
 
@@ -103,26 +104,26 @@ Through this lens, the next goal appears naturally. Once the mission of removing
 
 A little later, I expect attempts to automate even **business-requirement analysis**, which today begins with a person and ends with a person.
 
-## 4. What lens does our organization wear?
+## 5. What Lens Does Our Organization Wear?
 
 If we define a lens as the perspective an organization uses to interpret phenomena and the direction in which it tries to move, we can identify that lens by watching its behavior rather than listening to what it says.
 
 In my personal classification, OpenAI and Anthropic are leading examples of companies wearing an agent-centered lens. Google appears somewhat neutral, while AWS and Cursor look like leading examples of companies wearing a human-centered lens.
 
-This difference also appears in organizational structure. One clear signal is whether the company has roles such as the **AI Deployment Engineer, or AI DE**, and the **Forward Deployed Engineer, or FDE**, which I will discuss again below.
+When examining this difference, we can also look at the work assigned to **AI Deployment Engineers (AI DEs)** and **Forward Deployed Engineers (FDEs)**. I want to look beyond the presence of a title to whether they can actually change data access, permissions, and work procedures.
 
 {% raw %}
 ```mermaid
 flowchart TB
-    L{{"Which lens<br/>does it wear?"}}
-    L --> A["Agent-centered<br/>(OpenAI · Anthropic)"]
-    L --> H["Human-centered<br/>(AWS · Cursor)"]
-    A --> A1["Set HITL removal as the goal"]
-    A1 --> A2["Harness engineering is essential"]
-    A2 --> A3["Build AI DE · FDE teams<br/>Realign data · organizational structure"]
-    H --> H1["Assume people remain<br/>Compromise at an appropriate level of automation"]
-    H1 --> H2["The need for AI DE · FDE<br/>does not arise on its own"]
-    H2 --> H3["Research · spread methods<br/>for human-centered AI use"]
+    L{{"Which lens<br/>do we use?"}}
+    L --> A["Agent-centered"]
+    L --> H["Human-centered"]
+    A --> A1["Aim to remove HITL"]
+    A1 --> A2["Find the causes of human intervention"]
+    A2 --> A3["Improve data access · permissions · validation"]
+    H --> H1["Keep human review as a default step"]
+    H1 --> H2["Support review and approval"]
+    H2 --> H3["Manual work can remain unless<br/>its causes are addressed separately"]
     classDef agent fill:#dce8ff,stroke:#46c;
     classDef human fill:#ffe6d6,stroke:#e86;
     class A,A1,A2,A3 agent;
@@ -132,29 +133,15 @@ flowchart TB
 
 A company wearing an **agent-centered lens** asks how to automate the HITL that remains today.
 
-If important information is exposed or arranged in ways that agents cannot easily access, making HITL removal difficult, the company will do everything it can to make that information accessible and usable by agents.
+If people retrieve information for the agent, improve data access. If they act because permissions are missing, improve tools and permissions. If they review results because those results cannot be trusted, improve validation.
 
-Harness engineering is essential for this work. When domain experts inside the organization have difficulty building the harness directly, the company will also create teams such as AI DE or FDE to support them.
-
-Ultimately, the presence or absence of these teams offers an indirect view of the company's direction.[^2]
+Domain experts and AI DEs or FDEs can do this work together. I try to read an organization's direction from how far those roles can change customer workflows and systems.[^2]
 
 An organization wearing a **human-centered lens**, by contrast, always pursues an appropriate level of automation on the assumption that a person remains.
 
-It hesitates to make complex adjustments or break down boundaries between individuals or between organizations. In the end, it compromises on the difficult parts of automation under the assumption that "a person will be there."
+One risk in this approach is that human review can hide data and permission problems. Having a person handle difficult cases keeps operations running for now, but leaves that person necessary for the same reasons on the next task.
 
-Because a person is always present at the important points under this lens, expectations for AI are not especially high. Harness engineering is needed only to an appropriate degree, so the need for roles such as AI DE or FDE does not arise on its own.
-
-The visible signals also differ.
-
-Human-centered companies either lack AI DE and FDE roles or, when they have them, the roles are closer to solving problems with agents than automating organizational work through agents. These roles are probably closer to quickly building PoCs and MVPs.
-
-These companies do not talk much about harness engineering. Instead, they research and spread various methods in which people remain at the center while using AI.
-
-Put differently, they build strategies and explain the world on the assumption that **AI will not improve beyond its current level, or will improve only linearly**.
-
-Agent-centered companies, by contrast, show little interest in the human-centered side.
-
-For them, the goal of AI DE and FDE roles is to automate the organization's work through harness engineering and help realign data and organizational structures around that goal.
+Of course, an organization can improve this foundation while retaining human review. Rather than deciding its direction from a job title or company name alone, I think it is better to examine **whether it is actually removing the causes of human intervention**.
 
 > As an aside, I think FDE is currently the most self-destructive role. I can picture today's Solutions Architects, or SAs, shrinking substantially and being replaced by FDEs, only for the FDEs themselves to disappear a little later. This is pure speculation too, but there is a great deal more I could say about it.
 
@@ -166,7 +153,7 @@ At some point, the rising curve of the side that began by removing people will o
 
 > Physical AI companies can actually be divided in roughly the same way.[^3]
 
-## 5. Once you choose a lens, what will you do?
+## 6. Once You Choose a Lens, What Will You Do?
 
 Finally, once you choose a lens, you need to decide **what to do with it** and begin moving.
 
@@ -184,9 +171,7 @@ Conversely, if it is already settled that agents will eventually replace softwar
 
 Everyone will have ideas that come to mind and choices they have already made. Even this thought experiment alone can produce many entertaining scenarios.
 
-Either way, **the purpose of a lens is not to make the lens itself. Its purpose is to decide your next action through it**.
-
-So even if each person chooses a different direction for that action, I hope everyone has at least one lens of their own for looking at a phenomenon.
+I also use this perspective to choose which technologies to learn next and what kind of team I want to work with.
 
 ## Conclusion
 
@@ -197,8 +182,6 @@ More than anything, finding one plausible lens that explains what is happening r
 We are usually stressed when **prediction is impossible**—that is also what causes motion sickness—and a good lens gives us some freedom from that stress.
 
 It leaves room to think about a world and a current we cannot control. That space also gives us the courage to take the next action.
-
-That is what I ultimately wanted to say in this post. I am not trying to impose one correct lens, but to describe the value of the act of having a lens itself.
 
 One downside of my current company is that everyone has different interests or serves different customers, so there is no one with whom I can have conversations like this. Even when I go out of my way to organize and explain my thoughts, many people disagree, so having the conversation only becomes tiring.
 

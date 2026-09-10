@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Did AI Coding Tools Actually Cut Development Cost? — Getting Started with CTS-SW"
-excerpt: Measure AI by end-to-end software delivery cost
+excerpt: Measuring AI by software delivery cost
 author: haandol
 email: ldg55d@gmail.com
 tags: ai engineering-productivity cts-sw developer-experience organization
 publish: true
 lang: en
 date: 2026-08-14 00:00:00 +0900
-last_modified_at: 2026-08-31 22:09:19 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: cts-sw-software-delivery-cost
 korean_url: /2026/08/14/cts-sw-software-delivery-cost.html
 permalink: /en/2026/08/14/cts-sw-software-delivery-cost.html
@@ -175,23 +175,11 @@ I would start by making before-and-after changes explainable within one team, ra
 
 ## Conclusion
 
-If we judge AI coding tools only by coding time and pull request count, it is easy to miss the cost created after implementation.
+For now, I think the best use of CTS-SW is to agree on customer-delivered units and quality criteria within one team, then work on its largest bottleneck.
 
-When review queues grow, CI slows down, or manual deployment and incident response increase, faster code generation has not reduced the cost of delivering software to customers.
+Compare against a recent baseline. If the number falls, also check whether costs have shifted into review or incident response. The software unit and cost scope must retain the same meaning for that comparison to work.
 
-CTS-SW is not a formula that calculates this cost perfectly. The result depends heavily on how a team defines software units and cost boundaries.
-
-Still, I think it is a useful starting point because it asks **what it cost to produce software that reached customers, not how much code was produced**.
-
-My current recommendation is simple.
-
-Define a customer-delivered unit and quality boundary for one team. Reconstruct a recent baseline and improve the largest bottleneck. Before celebrating a lower CTS-SW, check whether the cost moved into review, incidents, or operations.
-
-Repeating this loop may reduce real development cost more directly than simply using more AI tools.
-
-Improving individual AI skills still matters. But for those skills to become team productivity, the team must turn personal techniques into shared contracts, tools, and guardrails.
-
-**AI productivity looks less like the result of giving individuals a tool and more like the result of investing in the team harness.**
+I would also allocate time to improve the harness as planned team work. Turning an individual's discoveries into shared contracts, tools, and tests lets those improvements carry over to the next task and other team members.
 
 ---
 

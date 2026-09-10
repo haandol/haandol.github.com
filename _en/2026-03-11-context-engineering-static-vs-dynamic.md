@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Context Engineering — Static Context and Dynamic Context"
-excerpt: Managing durable constraints separately from temporary execution context
+excerpt: Context engineering for agentic development - static context vs dynamic context
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent context-engineering agentic-development vibe-coding prd adr
 publish: true
 lang: en
 date: 2026-03-11 00:00:00 +0900
-last_modified_at: 2026-08-27 19:21:43 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: context-engineering-static-vs-dynamic
 korean_url: /2026/03/11/context-engineering-static-vs-dynamic.html
 permalink: /en/2026/03/11/context-engineering-static-vs-dynamic.html
@@ -16,9 +16,9 @@ permalink: /en/2026/03/11/context-engineering-static-vs-dynamic.html
 
 ## TL;DR
 
-- It is effective to manage development context as static context—PRDs and ADRs—and dynamic context—tasks, code, and tests.
-- Static context contains durable standards and constraints, while dynamic context is created and consumed temporarily.
-- As models and tools improve, dynamic context should stay lightweight and disappear whenever possible.
+- PRDs and ADRs preserve criteria and constraints for future tasks.
+- Clean up temporary plans and exploration records once they are no longer needed.
+- Preserve code and tests as verifiable deliverables.
 
 ## Introduction
 
@@ -49,26 +49,26 @@ These are pieces of information that must remain available for reference through
 
 ## 3. Dynamic Context
 
-Dynamic context, by contrast, is execution information created and consumed temporarily to move the current work forward.
+Dynamic context is information we read and create while performing the current task. It includes both temporary execution records and deliverables that should remain.
 
-- A **Task** is closer to a unit of execution created briefly for the work at hand.
-- **Code and tests** are the final outputs showing whether the requirements and constraints have actually been satisfied.
+- **Tasks and exploration records** help organize and advance the current work. Temporary plans and search results that the next task does not need can be cleaned up.
+- **Code and tests** implement and validate requirements and constraints. They change during work but must remain in the repository after completion.
 
-People used to have to manage this dynamic context as well. That is no longer the case. Once implementation is complete, what matters is not the record of every intermediate step but **whether the requirements and constraints are properly reflected in the code and tests**.
+Frequently changing information is not necessarily disposable. I think it is better to decide what to keep based on whether the next execution needs it and whether it can already be checked again in code and tests.
 
-## 4. Dynamic Context Should Be Ephemeral
+## 4. Keep Temporary Execution Records Lightweight
 
-If dynamic context is kept around for too long, documents accumulate with every repeated change, and the amount of context that both people and agents must read continues to grow. That bloated context can sometimes interfere with the exploration and execution of an agent that has otherwise become much more capable.
+If agents keep reading plans and exploration records for completed tasks, context grows with each change. A summary of code that has already changed can also confuse decisions based on the current code.
 
-By its nature, dynamic context should therefore remain **lightweight and clear**. Whenever possible, I think it is better to keep only the code and tests and let the rest disappear. As agents and tools become smarter, the amount of context we can allow to disappear keeps growing.
+Clean up temporary records that the next task does not need, while retaining code and tests as deliverables. New requirements and lasting decisions made during work should be reflected in PRDs and ADRs.
+
+There is no need to delete the state or unresolved issues needed to hand ongoing work to the next session. First check whether that information has served its purpose.
 
 ## Conclusion
 
-The core of context engineering today is not preserving every intermediate step forever. It is **keeping static context sharp while treating dynamic context as something more ephemeral**.
+I want to retain the requirements, decisions, code, and tests needed for future tasks, while cleaning up temporary plans and exploration records when they are no longer needed.
 
-As models improve and tools advance, the work left for people seems to move closer to managing good requirements, good constraints, and good validation criteria.
-
-For the code that remains after the dynamic context disappears to become genuinely good context, the code itself must explain the business well. I will discuss that further in the [next post][^2].
+For the retained code to help the next agent, it needs to reveal which workflow it handles. I discuss that in the [next post][^2].
 
 ---
 

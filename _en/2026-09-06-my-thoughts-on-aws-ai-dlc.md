@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "AWS AI-DLC — Where It Differs from My View of Agentic Development"
-excerpt: How concept, process, and implementation diverge
+excerpt: Where AI-DLC diverges from my view of agentic development
 author: haandol
 email: ldg55d@gmail.com
 tags: career ai agent agentic-development ai-dlc harness-engineering hitl solutions-architect
 publish: true
 lang: en
 date: 2026-09-06 09:00:00 +0900
-last_modified_at: 2026-09-08 12:17:46 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: aws-ai-dlc-thoughts
 korean_url: /2026/09/06/my-thoughts-on-aws-ai-dlc.html
 permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -23,7 +23,7 @@ permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
 
 Recently, I have spent a great deal of time thinking about the distance between my current role and the direction I believe in.
 
-This is not a list of complaints about the company or my colleagues. The people I work with are still exceptionally capable and kind, and the company offers substantial stability and opportunity.
+The people I work with are still exceptionally capable and kind, and the company offers substantial stability and opportunity.
 
 That is precisely why I have thought about it for so long.
 
@@ -31,9 +31,7 @@ For the past year, I managed to avoid taking the lead in communicating ideas far
 
 Then AI-DLC—AWS's AI-Driven Development Life Cycle—became more concrete, with a fuller methodology and execution tooling, and began spreading more broadly. It became increasingly difficult to avoid.[^1][^2]
 
-A senior employee's role does not end with understanding the company's direction.
-
-Senior employees are expected to stand at the front, help junior colleagues move with that direction, and turn what the company wants into actual results.
+Senior employees are expected to understand the company's direction, help junior colleagues act on it, and deliver the results the company wants.
 
 The problem is that I cannot find the motivation to actively advocate ideas that remain far from my own perspective.
 
@@ -41,25 +39,17 @@ Staying for title and stability while lacking confidence in the direction—doub
 
 **If I cannot actively communicate a direction I do not believe in, I am not fulfilling the role expected of me as a senior employee.**
 
-This post is therefore not an attempt to declare AI-DLC right or wrong.
+I want to explain where AI-DLC and my own view diverge, and why that difference has led me to reconsider my current role. These are my personal views, based on public material and my experience, not an official AWS position.
 
-It is an attempt to explain where AI-DLC and I see agentic development differently, and why that difference has led me to reconsider my current role.
-
-These are, of course, my personal views based on public material and my own experience, not an official AWS position.
-
-My career background also creates a bias.
-
-I began as a developer. Even after becoming a Solutions Architect, or SA, I continued to build, deploy, and operate my own services. That makes me feel a stronger need to own one product for a long time and live with the consequences of its decisions than to observe a wide range of customer problems.
+I began as a developer. Even after becoming a Solutions Architect (SA), I continued to build, deploy, and operate my own services. I tend to feel a stronger need to own one product over time and live with the consequences of my decisions than to observe a broad range of customer problems.
 
 An SA with a different background and set of strengths may interpret the same role very differently.
-
-**This post does not try to generalize a limitation of the SA role. It describes a personal limitation that I, as a former developer, have felt in my current role.**
 
 The places where my view differs from AI-DLC form three connected layers: **Concept → Process → Implementation**.
 
 Here, concept means the future a methodology aims toward. Process means how work is divided and repeated on the way to that future. Implementation means how that process is encoded into workflows and harnesses.
 
-These are not three unrelated differences. The higher-level concept shapes the process, and that process determines the form of the implementation.
+The future we aim for shapes how we work, and that way of working shapes the implementation.
 
 {% raw %}
 ```mermaid
@@ -100,9 +90,7 @@ The official article calls HITL a cornerstone of trust, accountability, and accu
 
 This approach can be useful for a team running its first workshop with AI, or for an organization that needs explicit human responsibility because of regulation and audit requirements.
 
-That usefulness is not where my view diverges.
-
-I expect a different **default form toward which production development will converge**.
+However, I expect a different **default form toward which production development will converge**.
 
 An organization aligned with my view removes the reasons a person is currently required, one by one.
 
@@ -136,9 +124,7 @@ This is where the future I expect and the concept behind AI-DLC diverge.
 
 ## 2. The Process Difference — Making the Big Loop Run Faster
 
-The most powerful part of developing with AI, in my experience, is not code-generation speed itself.
-
-It is the ability to compress the cycle of defining a requirement, building something real, testing it, and receiving feedback until it is almost immediate.
+What I have found most powerful about developing with AI is **the ability to shorten the cycle of defining requirements, building, testing, and receiving feedback to something close to real time**.
 
 In the past, even an attempt to test a sufficiently small product often stopped at a paper prototype or wireframe.
 
@@ -168,8 +154,6 @@ flowchart TB
     end
 ```
 {% endraw %}
-
-The advantage of small loops is not speed alone.
 
 A team does not have to pour out requirements in a meeting room for a product nobody has ever seen. People can touch the product, become familiar with it, and build requirements from real experience, reducing cognitive load.
 
@@ -203,9 +187,7 @@ The conceptual and process differences continue into the actual implementation o
 
 Here, a harness means the context, tools, permissions, execution environment, and validation system surrounding the model.[^6]
 
-This does not mean harnesses are unnecessary.
-
-The longer an agent works without a person, the more necessary a good harness becomes.
+The longer an agent works without a person, the more it needs a good harness.
 
 I do, however, think it is useful to divide harnesses into two categories.
 
@@ -263,7 +245,7 @@ The adaptive AI-DLC workflow substantially reduces the problem of forcing one fi
 
 Even so, placing the stage library, artifacts, approval points, and collaboration rituals deeply in the execution layer remains closer to cognitive scaffolding than to the future I expect.
 
-As models improve, I think the answer is not to keep putting more intelligence into the harness, but to return to the model the intelligence that earlier generations forced into the harness.
+As models improve, I think we should revisit the work sequences and solution strategies prescribed by the harness, and delegate more of those decisions to the model.
 
 ## 4. Real Results Are What Challenge My View Most
 
@@ -309,7 +291,7 @@ The phenomenon I called agent-driven development became shared vocabulary much f
 
 The breadth I gained as an SA is an asset. What I need now is the experience of owning one team and product over time and feeding my decisions, failures, and operational results into the next choice.
 
-Joining a product organization does not automatically create ownership either. I have seen people process assigned tickets, ignore outcomes, and collect a paycheck. **Ownership comes from participating in problem definition and staying with the operational result, not from a title.**
+I have also seen people in product organizations who only complete assigned tickets and collect a paycheck without caring about the outcome. **Owning an outcome requires staying involved from problem definition through operation.**
 
 As AI narrows individual differences in implementation ability, a team's capacity to share the problem and context, validate results, and preserve failure in the next harness becomes more important. Amazon teams using the same tools produced sharply different results for the same reason.[^5]
 

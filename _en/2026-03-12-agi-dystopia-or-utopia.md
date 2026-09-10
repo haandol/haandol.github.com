@@ -8,7 +8,7 @@ tags: ai agi asi dystopia utopia competition
 publish: true
 lang: en
 date: 2026-03-12 00:00:00 +0900
-last_modified_at: 2026-08-27 19:21:43 +0900
+last_modified_at: 2026-09-10 10:44:38 +0900
 translation_key: agi-dystopia-or-utopia
 korean_url: /2026/03/12/agi-dystopia-or-utopia.html
 permalink: /en/2026/03/12/agi-dystopia-or-utopia.html
@@ -44,13 +44,13 @@ I think success is closer to the result you obtain after refusing to give up on 
 
 Seen from this perspective, today's AGI race has already moved beyond what individual companies can bear. It is becoming increasingly similar to an ideological competition between the United States and China, and with enormous funding and sunk costs already committed, it cannot easily stop. I therefore think this competition is increasingly taking on the character of an infinite game in which clear rules are difficult to enforce.
 
-If someone truly reaches AGI first under these conditions, the next move may be more obvious than we think. I am not an expert in this field, but the overall structure feels similar to a nuclear arms race. The first side to arrive is unlikely merely to hold its advantage. **It is likely to try to use that advantage immediately to eliminate its competitors.**
+I am not an expert in this field, but the overall situation reminds me of a nuclear arms race. My concern starts with the assumption that whoever gets there first will use that advantage to prevent rivals from catching up.
 
 ## 3. What Would the First Side to Reach AGI Do?
 
-First, the side that reaches AGI first will probably try to deploy it immediately against its competitors. It is likely to attach every available piece of infrastructure and move toward reducing or eliminating the possibility that rival countries can reach AGI at all. From relatively indirect methods such as data poisoning at the level of entire language communities, generating fake data at scale, misdirecting research, and distorting decision-making to far more aggressive measures, AGI could become an actor that finds and executes the optimal means to achieve its objective in near real time. In other words, **AGI may be less like an asset that is merely held and more like an actor deployed immediately to cut off every competitor's chance to catch up.**
+Suppose the first side to reach AGI uses it to disrupt other countries' research. It could try to reduce rivals' chances of catching up through data contamination, fabricated data, disruption of research directions, or distortion of decision-making.
 
-Second, it will probably try to entrench that advantage by improving the AGI even faster and pushing it toward ASI. In other words, on one side it is likely to deploy the AGI it already has to suppress competitors immediately, while on the other it accelerates the evolution of that AGI into a stronger system. The AGI race could develop into a structure close to winner-takes-all. Even if several players remain, only a small number of overwhelmingly dominant players are likely to survive.
+If it simultaneously develops its own AGI further toward ASI, its advantage could grow while its rivals are slowed down. I worry about those two processes working together until only a few players remain.
 
 If states move this way, companies may not behave very differently. Companies are also likely to use AGI to weaken competitors and strengthen lock-in around their own services.
 
@@ -66,7 +66,7 @@ Everyone would then keep running because "it might still be possible." In the en
 
 Ironically, I think this scenario may actually be more utopian.
 
-Even if we never reach AGI, today's LLMs have already opened far more paths than we had before. In business and technology alike, we will be able to solve much harder problems in far more enjoyable ways.
+Even without reaching AGI, I think the technology developed along the way can continue to be useful in business and software development. Today's LLMs already let us attempt things that used to be difficult.
 
 ## Conclusion
 
