@@ -11,7 +11,7 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 
 1. Read the entire target post or supplied material. Identify the reader's question, the author's answer, the audience, and which claims are observations, inferences, or proposals. For review-only requests, use [haandol-blog-review](../haandol-blog-review/SKILL.md) in report-only mode.
 2. Read 2-4 related recent posts before changing definitions, terminology, or the author's recurring argument. Also compare at least two older author posts for voice; reuse suitable posts already read. Note their paths and relevant recurring traits so the review can assess the author's style against actual passages. Current user preferences take priority over old habits. Prefer internal links for ideas established elsewhere.
-3. Draft toward that question and answer. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it.
+3. Draft toward that question and answer. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it. At a new episode or topic, apply **Establish the Reader's Context** below.
 4. Apply "Remove AI Slop" and "Write for Junior Developers and Interested Non-Developers" while composing, not only after drafting. Edit paragraphs and diagrams together so they express the same causal model.
 5. After every draft, prose revision, or translation, read and execute [haandol-blog-review](../haandol-blog-review/SKILL.md) across its six evaluation axes. These cover sentence naturalness, flow, theme and composition, grounded explanation, AI slop, and author voice; the review skill defines them in one place. Cover the whole article, including title, excerpt, TL;DR, headings, diagrams, conclusion, and an accompanying translation. Let the LLM judge passages in context rather than enforce scores or phrase counts. List findings, apply supported fixes within the user's scope, and re-review without asking for routine approval. This also applies to blog copy written in conversation.
 6. Repeat the review's fix-and-recheck loop until a full review of the latest article finds **High: 0 and Medium: 0**, using the severity definitions in the review skill. Review is mandatory even for an apparently clean first draft. Do not stop after listing suggestions, one round of fixes, or an arbitrary number of rounds. Low findings alone do not block completion.
@@ -29,6 +29,14 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
   `evaluation criterion -> locally rational behavior -> organizational consequence`.
 - When a diagram or paragraph contrasts approaches, show both the failure mode and the proposed correction.
 - Treat boundaries carefully. Do not assume team, system, domain, and bounded-context boundaries coincide.
+
+### Establish the Reader's Context
+
+- Distinguish facts known from the conversation from context delivered in the article. The reader has only the text encountered so far and the intended audience's ordinary knowledge. A project or output mentioned in the introduction does not necessarily establish the circumstances of a later episode.
+- When starting a new episode or changing topics, identify what the next judgment or motivation assumes the reader knows. Introduce the concrete task, event, or constraint needed to understand it. Use the supplied facts; do not invent context to make a transition work.
+- Test a paragraph's opening against the preceding text: what does it refer to, and what new information or useful question does it add? Naming a vague category such as “other reasons” or “thoughts about work” does not by itself explain the connection.
+- Try reading the passage without the opening sentence. If the next sentence establishes the situation more clearly and nothing useful is lost, delete the opening instead of adding a smoother connector. A later explanation does not automatically justify an empty announcement before it.
+- Preserve useful result-first openings, intentional suspense, and concise transitions when they orient the reader or raise a specific question. Do not force every paragraph into background → event → opinion, or repeat context that is already clear. After inserting or moving material, re-read the entry into the changed section and its exit into the next one.
 
 ## Match The Author's Voice
 

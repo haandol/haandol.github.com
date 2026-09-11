@@ -32,7 +32,7 @@ These axes define what to examine, not a checklist of mandatory sentence forms. 
 | Evaluation axis | Guiding question |
 | --- | --- |
 | **문장의 자연스러움** | Do wording, syntax, and rhythm read naturally at the intended reading level? Does sentence length follow the thought without awkward translation, overloaded clauses, or artificially chopped statements? |
-| **문장·문단 연결의 자연스러움** | Can the reader follow why one sentence, paragraph, or section leads to the next? Are the relationships and referents clear, with useful development rather than abrupt shifts or repetition? |
+| **문장·문단 연결의 자연스러움** | Using only the article encountered so far, can the reader follow why one sentence, paragraph, or section leads to the next? Are the necessary situation and referents established, with useful development rather than abrupt shifts or repetition? |
 | **주제 전달과 구성의 명확성** | Is the author's central point clear, and does the article fulfill the promise of its title and introduction? Do its structure, emphasis, and conclusion help the reader understand that point? |
 | **구체성·근거·설명력** | Do details, examples, and evidence make the reasoning understandable and support the strength of its claims? Can the reader distinguish observed facts, interpretations, and proposals without having to supply missing reasoning? |
 | **AI Slop 여부** | Does generic, repetitive, inflated prose obscure the author's reasoning? Do formulaic rhetoric, ornamental labels, empty summaries, or fabricated specificity substitute for actual thought in this passage? |
@@ -45,6 +45,21 @@ Use the writing skill's **Three Layers To Check While Writing** as examples of s
 Do not assign numerical scores, weights, sentence-length quotas, banned-word counts, or an “AI probability.” Do not require every axis to yield a finding. Judge a defect by the passage's role and effect on this reader, and explain the evidence for that judgment. Preserve a coherent author opinion even when another opinion is possible; do not replace the topic or erase useful detail merely to shorten the article.
 
 Search may locate candidates but cannot establish a defect or a pass. Do not add slang, deliberate errors, forced humor, or fabricated anecdotes to simulate human writing.
+
+### Read the Transitions as a First-Time Reader
+
+Separate source verification from comprehension review. The brief and conversation establish what is true and what the author intends; they cannot supply context missing from the reader's text.
+
+Read in article order, paying particular attention to section openings, new episodes, and transitions changed in the current revision:
+
+1. Identify what the reader knows at that point and what the opening assumes. Locate the earlier passage that supplies the needed situation or referent. Merely finding the same noun in the introduction is not enough if the task, constraint, or reason needed here is still unexplained.
+2. State what the opening adds: an event, evidence, consequence, distinction, judgment, useful question, or orientation. Then read the next sentence. If it starts explaining an event whose motivation has already been discussed, check whether that ordering makes the reader reconstruct the situation.
+3. Try removing the opening. If the passage becomes clearer without losing meaning or useful orientation, flag the unnecessary setup. “The next paragraph explains it” is not sufficient grounds to pass it.
+4. Distinguish missing context from deliberate storytelling. A concrete result can make a good opening before its cause is explained. Do not flag every new subject, pronoun, or delayed explanation, and do not require full background at every boundary.
+
+For a finding, identify the assumed context, whether and where the article supplies it, and how the current order or empty setup affects the reader. Classify using the existing severity criteria: disruption at a meaningful transition can be Medium even when the individual sentence is grammatical; a dispensable phrase with no disruption may be Low. Do not classify by wording alone.
+
+In the connection assessment, cite a concrete transition and briefly describe the reader's prior context and the opening's contribution, including when no issue is found. A full paragraph-by-paragraph table is unnecessary. Re-check changed transitions after fixes; do not carry forward an earlier zero count as evidence.
 
 ## 3. List Concrete Findings Before Fixing
 
