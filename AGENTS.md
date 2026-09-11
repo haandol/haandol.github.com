@@ -95,6 +95,20 @@ For drafting, revising, or reviewing blog posts, use the project skill at
 workflow for logical structure, personal-opinion tone, terminology, diagrams,
 citations, and validation.
 
+After every blog draft, prose revision, or translation, run
+`.agents/skills/haandol-blog-review/SKILL.md` before reporting completion.
+This applies to `_posts/`, `_drafts/`, `_en/`, and blog copy composed in the
+conversation. Review the article's thesis and AI slop in expressions, sentence
+structure, and connections between sentences. List concrete findings, apply
+supported fixes within the requested scope without another approval, and
+re-review the whole result until High and Medium findings are both zero, using
+the review skill's severity criteria. Do not stop at a fixed number of rounds
+or mark unresolved findings as passed. Low findings alone do not block
+completion; a real blocker must be reported with the remaining finding and
+needed input. Explicit review-only requests remain report-only.
+Keep this editorial review separate from `post-lint.sh`: a passing lint or zero
+search matches does not establish that the writing passed review.
+
 For drafting, revising, or reviewing LinkedIn posts based on a blog article or
 firsthand engineering experience, use
 `.agents/skills/haandol-linkedin-writing/SKILL.md`. It keeps the anecdote as a

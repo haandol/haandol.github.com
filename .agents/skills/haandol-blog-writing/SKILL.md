@@ -1,6 +1,6 @@
 ---
 name: haandol-blog-writing
-description: Write, revise, or review Korean technical blog posts for the Haandol Jekyll repository. Use for `_posts/*.md` and `_drafts/*.md` work involving logical flow, author voice, AI-slop removal, terminology, citations, diagrams, or publication validation.
+description: Write or revise Haandol technical blog posts and their English translations with the author's voice, clear reasoning, and AI-slop prevention. Use for blog copy in conversation or in _posts/, _drafts/, and _en/. Finish every drafting or revision task with haandol-blog-review; route review-only requests there.
 ---
 
 # Haandol Blog Writing
@@ -9,12 +9,13 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 
 ## Workflow
 
-1. Read the entire target post and identify its thesis, audience, and epistemic status.
-2. Read 2-4 related recent posts before changing definitions, terminology, or the author's recurring argument. Prefer internal links for ideas already established elsewhere.
-3. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it.
-4. Edit paragraphs and diagrams together so both express the same causal model.
-5. Run the "Write for Junior Developers and Interested Non-Developers" and "Remove AI Slop" passes across the whole post, including the title, excerpt, TL;DR, headings, diagrams, and conclusion. Apply the same reading level to an accompanying English translation. For review-only requests, report specific passages and suggested rewrites without editing.
-6. Validate Markdown, Liquid, diagrams, links, and Git diff before finishing.
+1. Read the entire target post or supplied material. Identify the reader's question, the author's answer, the audience, and which claims are observations, inferences, or proposals. For review-only requests, use [haandol-blog-review](../haandol-blog-review/SKILL.md) in report-only mode.
+2. Read 2-4 related recent posts before changing definitions, terminology, or the author's recurring argument. Also compare at least two older author posts for voice; reuse suitable posts already read. Prefer internal links for ideas established elsewhere.
+3. Draft toward that question and answer. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it.
+4. Apply "Remove AI Slop" and "Write for Junior Developers and Interested Non-Developers" while composing, not only after drafting. Edit paragraphs and diagrams together so they express the same causal model.
+5. After every draft, prose revision, or translation, read and execute [haandol-blog-review](../haandol-blog-review/SKILL.md). Cover the whole article, including title, excerpt, TL;DR, headings, diagrams, conclusion, and an accompanying translation. List findings, apply supported fixes within the user's scope, and re-review without asking for routine approval. This also applies to blog copy written in conversation.
+6. Repeat the review's fix-and-recheck loop until a full review of the latest article finds **High: 0 and Medium: 0**, using the severity definitions in the review skill. Review is mandatory even for an apparently clean first draft. Do not stop after listing suggestions, one round of fixes, or an arbitrary number of rounds. Low findings alone do not block completion.
+7. Complete the applicable validation below, then report the fixes and final High/Medium counts. If a real source, permission, or author-decision blocker prevents resolving a finding, finish independent work and state the unresolved finding and needed input; do not call the article complete or count the finding as resolved.
 
 ## Build The Argument
 
@@ -43,29 +44,43 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
   - inference: explain the causal link;
   - proposal: state that it is the author's lens or suggestion.
 - Preserve direct wording for facts the user explicitly says can be stated without qualification.
+- Treat the user's supplied firsthand details as source material. Do not remove or turn them into hypothetical examples merely because a shorter brief does not repeat them. Investigate actual contradictions or details identified as unverified or model-invented; absence from a summary alone is not evidence of fabrication.
 
 ## Remove AI Slop
 
 Treat AI slop as an editorial problem: generic, repetitive, inflated prose that obscures the author's reasoning. Do not claim to detect AI authorship from wording.
 
-Before finishing a draft or revision, compare it with at least two older posts by the author, not only recent AI-related posts. Reuse posts already read when suitable. Match their directness, paragraph rhythm, and specificity without copying old factual claims, typos, or mannerisms.
+Use the older author posts read in the workflow to match directness, paragraph rhythm, and specificity without copying old factual claims, typos, or mannerisms. Human writing here means a recognizable judgment, supported detail, and connected reasoning; it does not mean adding invented experiences or artificial imperfections.
 
-### Review Signals
+### Three Layers To Check While Writing
 
-Treat the following as review signals, not automatic errors:
+The signals below prompt contextual review; they are not automatic errors or an AI-authorship test. Review connections first, then sentence structure, then expressions, so polishing words does not conceal an unsupported argument.
 
-- repeated contrast templates such as `단순히 A가 아니라 B다`, `A가 아니다. B다`, or `이것은 X 이상의 의미다`, especially when A was never a plausible claim in the discussion;
-- stock openings and reader-address filler such as `빠르게 변화하는 시대에`, `오늘날 그 어느 때보다`, `함께 살펴보자`, or `여러분도 경험해 보았을 것이다`;
-- unsupported significance claims such as `혁신적인`, `획기적인`, `패러다임을 바꾼다`, or `새로운 가능성을 열어준다`;
-- abstract noun chains such as `효율성 극대화를 통한 가치 창출`, and padded constructions such as `개선을 수행한다` or `중요하다고 할 수 있을 것이다`;
-- ornamental English labels for ideas that are used only once, especially title-cased names such as `Human Decision Surface`, `Comprehension Bandwidth`, or `Evidence Package`;
-- symmetrical `첫째/둘째/셋째` manifestos, question-and-answer hooks, or identical problem/solution/lesson templates repeated in every section;
-- consecutive definitions such as `A는 …다. B는 …다. C는 …다.`, or a connected explanation broken into tiny statements followed by another sentence that repeats their relationship;
-- introductions that define a framework before showing the personal problem that made it useful;
-- tables, diagrams, blockquotes, or bold sentences that merely repeat the adjacent prose;
-- generic bridge phrases repeated across sections, such as `핵심은`, `중요한 것은`, `이 관점에서`, `결국`, and `방향은 분명하다`;
-- conclusions that replay every section, add a generic call to action, or sound more certain than the evidence developed in the body;
-- personal anecdotes, project details, measurements, or outcomes inferred by the model rather than supplied by the user or verified in the repository.
+**Expressions — name the actor, action, object, and supported consequence.**
+
+- Replace unsupported significance claims (`혁신적인`, `획기적인`, `패러다임을 바꾼다`, `새로운 가능성을 열어준다`) with a verified change or remove them. Swapping one grand adjective for another is not a fix.
+- Unpack abstract noun chains such as `효율성 극대화를 통한 가치 창출`. Restore verbs in padded constructions such as `검토를 수행한다`; if `개선한다` is still vague, name what changes.
+- Delete stock openings and reader-address filler (`빠르게 변화하는 시대에`, `오늘날 그 어느 때보다`, `함께 살펴보자`, `여러분도 경험해 보았을 것이다`) when they add no context.
+- State the author's judgment directly instead of `중요하다고 할 수 있을 것이다`. Retain uncertainty that names an actual condition or limitation.
+- Remove ornamental English labels used only once, such as `Human Decision Surface`, `Comprehension Bandwidth`, or `Evidence Package`. Preserve established terms and names needed for a recurring distinction.
+- Ask whether a sentence could move unchanged into an unrelated article. If so, connect it to this case using supported detail or remove it.
+
+**Sentence structure — let the reasoning determine the shape and length.**
+
+- Review repeated contrasts (`단순히 A가 아니라 B다`, `A가 아니다. B다`, `이것은 X 이상의 의미다`). Keep them when they resolve a real misconception or tradeoff; otherwise state the intended claim directly.
+- Replace consecutive dictionary definitions (`A는 …다. B는 …다. C는 …다.`) with an explanation of why the next concept is needed here.
+- Keep a condition and its action, or a cause and its consequence, together when naturally readable. Do not chop connected reasoning into standalone slogans and then add a sentence restating the relationship.
+- Split long `~하며, ~하고, ~함으로써` chains where the actor or subject changes. Make sequence, conditions, and causality explicit; do not join sentences merely to vary length.
+- Avoid forcing every section into `첫째/둘째/셋째`, a rhetorical question and answer, or the same problem/solution/lesson template. Useful lists and short emphasis remain valid.
+
+**Connections — carry forward a known subject and add useful information.**
+
+- For neighboring sentences, identify what the later one adds: evidence, example, condition, consequence, distinction, or author judgment. When no relationship exists, reorder, supply supported reasoning, or remove the detour.
+- Check `또한` and `더 나아가` for accumulation without progress. Check `따라서`, `결국`, and `방향은 분명하다` for conclusions the preceding material does not establish. A smoother connector cannot repair a missing premise.
+- Resolve ambiguous `이는`, `이러한 접근`, and `이 관점에서` by naming the relevant subject. Keep core terms consistent instead of cycling through synonyms for variety.
+- Start from information the reader already has when it helps the transition, then add something new. Do not treat this as a fixed word-order template.
+- Keep `즉` and `다시 말해` only when the restatement clarifies, narrows, or illustrates the point. Remove repeated bridges such as `핵심은` and `중요한 것은` when they add only emphasis.
+- Apply the same test between paragraphs and sections. Introduce the concrete problem before a framework, remove tables or diagrams that merely duplicate prose, and let the conclusion state the resulting position within the body's evidence.
 
 ### Revise In Context
 
@@ -214,6 +229,7 @@ Also verify:
 
 - a junior developer or interested non-developer can follow the argument without looking up unexplained terminology; source paraphrases and English translations use the same plain reading level and natural sentence flow, rather than chopping explanations into short statements;
 - the AI-slop prose pass is complete; rewrites preserve factual meaning and the author's position without fabricated detail;
+- `haandol-blog-review` has listed findings with severity, applied supported in-scope fixes, and reviewed the latest whole article for thesis alignment, connections, structure, and expressions until High and Medium findings both reach zero; an explicit review-only request reports findings without editing;
 - required front matter exists and `excerpt` is English;
 - every `_en/` translation has `last_modified_at` set to its actual English
   publication or meaningful revision time; update Korean `last_modified_at`

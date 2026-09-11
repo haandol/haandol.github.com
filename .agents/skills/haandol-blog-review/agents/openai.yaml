@@ -1,0 +1,4 @@
+interface:
+  display_name: "Haandol Blog Review"
+  short_description: "블로그 주제와 AI Slop을 검토하고 수정·재검토까지 완료하기"
+  default_prompt: "Use $haandol-blog-review to review this Haandol post for thesis alignment and AI slop, list findings by severity, and repeat supported fixes and full review until High and Medium findings are both zero."
