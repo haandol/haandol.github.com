@@ -8,7 +8,7 @@ tags: ai agent context-engineering agentic-development vibe-coding prd adr
 publish: true
 lang: en
 date: 2026-03-11 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: context-engineering-static-vs-dynamic
 korean_url: /2026/03/11/context-engineering-static-vs-dynamic.html
 permalink: /en/2026/03/11/context-engineering-static-vs-dynamic.html
@@ -22,9 +22,7 @@ permalink: /en/2026/03/11/context-engineering-static-vs-dynamic.html
 
 ## Introduction
 
-As I work with agentic coding and vibe coding, I increasingly feel that we are returning to the essence of development.
-
-Turning business requirements into code.
+As I work with agentic coding and vibe coding, I increasingly feel that we are returning to the essence of development: turning business requirements into code.
 
 I used to describe a framework that managed development context as a hierarchy that became progressively more concrete: [Requirement → Feature → Task → Code][^1].
 
@@ -40,10 +38,10 @@ For that reason, I now think it is better to divide development context into **s
 
 ## 2. Static Context
 
-Static context consists of standards and constraints that must remain in place for a long time.
+Static context consists of criteria and constraints that persist across tasks. Static does not mean unchangeable; it means this information should outlast an individual work plan.
 
-- A **PRD** defines what must be built.
-- An **ADR** records why it should be implemented that way and which constraints must be preserved.
+- A **product requirements document (PRD)** defines what must be built.
+- An **architecture decision record (ADR)** explains why a design was chosen and which constraints must be preserved.
 
 These are pieces of information that must remain available for reference throughout the life of a project. No matter how intelligent agents become, people still have to define and manage **what should be built** and **why the team decided to build it this way**. If those foundations shift, the agent will generate code in a different direction each time.
 

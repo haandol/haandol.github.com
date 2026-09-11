@@ -8,7 +8,7 @@ tags: ai agent harness-engineering agentic-development claude-code managed-agent
 publish: true
 lang: en
 date: 2026-04-17 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: future-agentic-app-engine
 korean_url: /2026/04/17/future-agentic-app-engine.html
 permalink: /en/2026/04/17/future-agentic-app-engine.html
@@ -40,7 +40,7 @@ When considering VMs, containers, or serverless options, I am interested in how 
 
 Agentic development is a natural extension of this progression. It is the stage at which we begin reducing human involvement in the act of development itself.
 
-As the earlier post explained,[^1] an agent needs a **harness** to operate reliably. Unless linters, CI, structural tests, retry loops, permission controls, and similar mechanisms recover errors outside the agent at short intervals, the agent cannot complete long-running tasks.
+As discussed earlier,[^1] I think long-running agents need a **harness**: an environment that supports execution and checks results. Code checks and tests find errors, return them to the model, and enable another attempt, while permissions limit what it can do. Adding checks does not itself repair errors; reading the failures and fixing them must be part of the process.
 
 Rather than building this entire execution environment myself, I want to start with the coding agents I already use, connecting project tests, permissions, and recovery procedures to tools such as Claude Code or Codex.
 
@@ -52,9 +52,9 @@ The current workflow looks like this: an agent produces code on my local machine
 
 Taking this further, I imagined an agent interpreting business logic and responding to requests at runtime. In this vision, the agent handles both code generation and serving.
 
-Reality, however, presents two barriers: **token cost** and **nondeterministic execution**. If an LLM interprets every request in real time, the cost per call becomes too high. The same input may also produce different outputs, making production reliability difficult to guarantee. Until token costs effectively approach zero and determinism improves enough, we cannot implement this ideal directly.
+Calling an LLM for every request introduces **cost and latency**, and the same input may lead to different decisions. Whether that is acceptable depends on the workload. For the general API execution path I have in mind, I want to begin with validated code rather than asking the model to decide again on every request.
 
-We therefore need a practical compromise: **separate generation from execution**. The agent behaves as if it were at build time and produces code in advance, while that code runs deterministically at runtime. The agent itself remains in the runtime, but the system does not call the LLM for every request.
+I therefore **separate generation from execution**. The agent produces code in advance; incoming requests follow the order and conditions defined in that code. The agent is hosted alongside the service, but the system does not call the LLM for every request.
 
 {% raw %}
 ```mermaid
@@ -74,10 +74,10 @@ flowchart TB
 ```
 {% endraw %}
 
-The structure is simple. Put headless Claude Code—or another agent such as Codex or Kiro—and the business-logic code in the same container, then **place a gate in front of them**. The gate determines whether each incoming request belongs to "generation mode" or "execution mode."
+In this design, a headless coding agent—one run through commands without an interactive screen—shares a container with the business-logic code. **A gateway routes incoming requests** to generation mode or execution mode.
 
 - **Generation mode**: Pass requirements in natural language to the headless agent. The agent uses its harness to create code, validates it with linters and tests, and commits the final artifact to a code repository.
-- **Execution mode**: The generated business-logic code handles requests like an ordinary application. This path does not call an LLM. It is deterministic, fast, and inexpensive.
+- **Execution mode**: The generated code handles requests like an ordinary application. There is no LLM call cost or wait on this path, but data retrieval and computation still cost resources. Results may also change with external-system responses.
 
 This hybrid setup is what I want to try now. If some workflows eventually meet their cost and reliability requirements even when a model interprets each request, we could start letting the model handle those workflows directly.
 
@@ -125,7 +125,7 @@ The limitations of the two designs described above also need to be considered se
 
 **A hybrid setup that executes generated code** makes no LLM calls on its execution path. Instead, it needs to separate changes under generation and validation from currently serving code, and provide a process for applying or reverting validated changes.
 
-**Security and audit trails** must also be redesigned. If natural language can change business logic in real time, the records and approval flows showing who changed what and when must be stricter than those in conventional CI/CD. The gate controller becomes more than a simple mode switch; it becomes the governance layer.
+**Security and change records** also need a design. Record who requested each change, distinguish permission to generate code from permission to apply it to the live service, and require the appropriate approvals. The gateway must check those permissions and approval states alongside routing requests.
 
 The app engine must also apply only code that has passed harness validation[^1] to its execution path. Even when generation and serving are close together, any path that bypasses validation can expose defects directly through the live API.
 

@@ -8,7 +8,7 @@ tags: ai agent agentic-development harness-engineering organization token-econom
 publish: true
 lang: en
 date: 2026-06-15 00:00:00 +0900
-last_modified_at: 2026-09-11 14:50:06 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: organizational-ai-adoption-3s
 korean_url: /2026/06/15/organizational-ai-adoption-3s.html
 permalink: /en/2026/06/15/organizational-ai-adoption-3s.html
@@ -72,7 +72,7 @@ The following figure is a conceptual illustration of that relationship, not a me
 
 ![Conceptual curve in which team productivity rises after available tokens pass a minimum threshold, then falls again under excessive allocation](/assets/img/2026/0615/token-governance-productivity-curve-en.svg)
 
-On the left, the team lacks enough room to begin exploration and validation. On the right, experiments unrelated to business goals and maintainable outputs both increase.
+On the left, the team lacks enough room to begin exploration and validation. On the right, experiments unrelated to business goals and outputs requiring ongoing maintenance both increase.
 
 The appropriate point depends on the risk and complexity of the workflow and the current maturity of its harness. Even so, I think it is clear that early investment and operational optimization should not be evaluated by the same standard.
 
@@ -186,7 +186,7 @@ Connecting data and tools, reproducing failures, and moving repeated human decis
 
 That does not mean early investment should be unlimited.
 
-During Streamlining, establish the workflow and baseline. During Shape, verify that failures remain in the harness. For workloads in Scale, examine total delivery cost and business outcomes.
+During Streamlining, establish the workflow and baseline. During Shape, check that observed failures led to better instructions, tools, or tests. For workloads in Scale, examine total delivery cost and business outcomes.
 
 3S is less a model for assigning an organizational maturity score than **a lens for distinguishing what to invest in and what not to ask of the current workload**.
 

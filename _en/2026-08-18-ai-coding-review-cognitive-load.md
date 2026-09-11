@@ -8,7 +8,7 @@ tags: ai agent cognitive-load developer-experience code-review hitl
 publish: true
 lang: en
 date: 2026-08-18 09:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: ai-coding-review-cognitive-load
 korean_url: /2026/08/18/ai-coding-review-cognitive-load.html
 permalink: /en/2026/08/18/ai-coding-review-cognitive-load.html
@@ -22,7 +22,7 @@ permalink: /en/2026/08/18/ai-coding-review-cognitive-load.html
 
 ## Introduction
 
-While talking with a customer about AI coding, I heard that reviewing agent-generated code creates overwhelming cognitive load.
+While talking with a customer about AI coding, I heard that reviewing agent-generated code creates overwhelming cognitive load: the mental effort of holding information needed to understand and judge the work.
 
 Looking back at my own experience, I realized I had rarely felt that way.
 
@@ -143,29 +143,32 @@ The human then checks two things:
 - Were all explicit contract conditions satisfied?
 - Which decisions outside the contract were based on assumptions?
 
-Before reading an entire payment implementation, for example, the reviewer might begin with this:
+Before reading an entire payment implementation, for example, the reviewer might begin with the following report. This is a hypothetical format for separating verified results from unresolved decisions, not an actual test run.
 
 ```text
 Requirement
-The same payment_id must never be charged twice.
+- The same payment_id must never be charged twice.
+- A retry with the same payment_id, amount, and currency returns the existing result.
 
 Verification
 - duplicate_webhook_does_not_charge_twice: PASS
 - retry_after_timeout_returns_previous_result: PASS
 
-Obligation derived from the contract
-- A retry with the same payment_id returns the existing payment result.
-
 Implementation discretion
 - Store the idempotency key in the existing Redis cluster.
 - Follow the key format used by neighboring modules.
 
+Condition still requiring verification
+- Duplicate-charge prevention across record retention and loss: UNVERIFIED
+
 Open product decision
 - What happens when the amount or currency changes for the same payment_id?
 - Recommendation: reject the request as a conflict.
-- Alternatives: return the existing result / treat it as a new request.
+- Alternatives: return the existing result / ask for a new payment_id.
 - Impact: this changes payment safety and data meaning, so ask a human.
 ```
+
+Preventing duplicate charges and choosing the retry response are separate requirements. This example assumes both were agreed. Two passing tests do not complete the work while retention, loss, and product decisions remain unresolved.
 
 This does not mean implementation details are never inspected.
 
@@ -243,9 +246,12 @@ In practice, reducing this load requires more than splitting pull requests. **Th
 
 Define one piece of the requirement. Let the agent implement it. Have a human understand and verify the change, then commit it before moving to the next piece.
 
-```text
-One requirement slice → implement → understand and verify → commit
+{% raw %}
+```mermaid
+flowchart LR
+    R["One requirement slice"] --> I["Implement"] --> V["Understand and verify"] --> C["Commit"]
 ```
+{% endraw %}
 
 Small generated units do not create a small development cycle unless human understanding closes at the same boundary. If four small pull requests are stacked first and read in one batch later, generation was divided but the development cycle remained large.
 
@@ -285,12 +291,14 @@ An ALPS Feature is not divided horizontally into frontend, backend, and data lay
 
 `/feature-to-adr` moves the contract for that slice into an ADR. `/adr-impl` implements and tests the UI, API, and data together. Mapped to the small AI cycles above, the flow looks like this:
 
-```text
-ADR containing intent and contract
-→ Agent implements UI, API, and data together
-→ Completion review with contract-level evidence and tests
-→ Accepted
+{% raw %}
+```mermaid
+flowchart LR
+    A["ADR with intent and requirements"] --> I["Implement UI, API, and data together"]
+    I --> R["Review requirement evidence and tests"]
+    R --> D["Review complete · Accepted"]
 ```
+{% endraw %}
 
 If a slice cannot be divided further by meaning, stacked pull requests can still be used inside it. Each pull request gets one review question and its own tests to lower the instantaneous peak, while the full contract and surrounding context remain active until the stack closes.
 

@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: genai chatbot flywheel personalization data user-insight
 publish: true
-last_modified_at: 2026-09-09 23:59:22 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 lang: ko
 translation_key: genai-flywheel-for-business
 english_url: /en/2026/03/12/genai-flywheel-for-business.html
@@ -20,7 +20,7 @@ english_url: /en/2026/03/12/genai-flywheel-for-business.html
 
 ## 시작하며
 
-최근 GenAI 기반 서비스를 설계하면서, 사용자에게서 얻은 정보를 다른 기능에서도 쓸 수 있게 연결하는 일에 관심이 생겼다.
+최근 생성형 AI(GenAI) 기반 서비스를 설계하면서, 사용자에게서 얻은 정보를 다른 기능에서도 쓸 수 있게 연결하는 일에 관심이 생겼다.
 
 내가 만드는 AI 영어 학습 서비스 EncBird(잉크버드)[^1]에서는 **표현사전**을 중심으로 이 구조를 잡았다.
 
@@ -30,11 +30,16 @@ english_url: /en/2026/03/12/genai-flywheel-for-business.html
 
 ## 1. GenAI 플라이휠이란
 
-GenAI 플라이휠은 다음과 같은 순환 구조다.
+EncBird에서 만들고 싶은 순환은 다음과 같다.
 
-![GenAI Flywheel](/assets/img/2026/0312/flywheel.jpg)
-
-**고객 경험 → 상세한 선호도 → 잠재적 수요 → 맞춤형 기능 → (다시) 고객 경험**
+{% raw %}
+```mermaid
+flowchart LR
+    C["대화 기능"] --> D["표현사전에 모인 표현"]
+    D --> R["개인화된 복습과 퀴즈"]
+    R -. "유용한 경험이<br/>다음 이용으로 이어지기를 기대" .-> C
+```
+{% endraw %}
 
 사용자가 대화 중 남긴 정보로 다음 경험을 개선하고, 그 경험에서 다시 정보를 얻는 순환을 플라이휠이라고 부른다.
 

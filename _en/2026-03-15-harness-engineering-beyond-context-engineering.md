@@ -8,7 +8,7 @@ tags: ai agent harness-engineering context-engineering prompt-engineering agenti
 publish: true
 lang: en
 date: 2026-03-15 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: harness-engineering-beyond-context-engineering
 korean_url: /2026/03/15/harness-engineering-beyond-context-engineering.html
 permalink: /en/2026/03/15/harness-engineering-beyond-context-engineering.html
@@ -18,7 +18,7 @@ permalink: /en/2026/03/15/harness-engineering-beyond-context-engineering.html
 
 - A harness is an execution environment connecting context, tools, and validation.
 - Short validation and retry cycles reduce the accumulation of errors.
-- If you do not intend to delegate the full development process to agents, you may not need to adopt harness engineering yet.
+- Start by automatically checking one recurring error.
 
 ## Introduction
 
@@ -30,15 +30,9 @@ But once you run agents at production level, problems appear that context alone 
 
 An agent ignores lint rules, drifts away from architectural principles, or repeats a mistake that has already been corrected. You may have experienced unstable output even after providing a good prompt and strong context.
 
-The emergence of always-on, long-running agent environments such as OpenClaw has made this problem more visible.
+When an agent continues beyond its context window—the amount of information it can read at once—it can lose track of earlier errors or unfinished work. Longer tasks make it important to decide which state carries forward and how results are checked.
 
-As agents begin working for hours or days across multiple context windows, small errors within one execution loop accumulate and repeatedly derail the overall direction.
-
-Although AI adoption among most developers is still immature, harness engineering has rapidly become an important topic across the community.
-
-In February 2026, Mitchell Hashimoto[^3] and OpenAI[^4] gave this area a name: **harness engineering**.
-
-Anthropic later published an article on effective harnesses for long-running agents,[^6] helping form a broader industry consensus.
+Anthropic described harnesses for long-running agents in November 2025.[^6] In February 2026, Mitchell Hashimoto[^3] and OpenAI[^4] also described their practices and experiments using the name **harness engineering**.
 
 ## 1. What is a harness?
 
@@ -82,13 +76,13 @@ Instead of a person saying, "This is wrong, fix it," the system automates that r
 
 We need to distinguish validation from modification within the loop. We can use **deterministic checks that produce the same result for the same input**, such as linters and tests, or ask a model to evaluate whether the requirements are met.
 
-The model may choose different fixes in the same situation. That does not mean the entire feedback loop combining validation and retries needs to be classified as nondeterministic.
+The model may choose different fixes in the same situation, so reproducibility of a check differs from reproducibility of the entire repair process. Using the same check does not guarantee the same fix or number of attempts.
 
 ### Guardrails — "cross the line and the system blocks you"
 
 The guardrails discussed here are **deterministic blocking mechanisms**. They define explicit rules and prevent progress when those rules are violated.
 
-A linter catches style violations, tests reject broken code, and blocking hooks stop prohibited actions. A hook that only adds a prompt does not guarantee such enforcement, so the two must be distinguished.
+A linter or test failure can be connected to a condition that blocks a commit or deployment, while blocking hooks prevent prohibited actions. Merely printing a result or adding a prompt does not guarantee enforcement.
 
 They are predictable automatic blocking mechanisms that produce the same result from the same input.
 
@@ -135,7 +129,7 @@ It helps to distinguish what information to give the model from how to validate 
 
 System prompts, `CLAUDE.md`, retrieved documents, and memory are examples. Code read during a task and validation results also become context for the next decision.
 
-**Harness engineering automatically recovers errors during short execution cycles, allowing the agent to complete a long-running task without drifting far from the broad direction.**
+**Harness engineering configures the environment so errors can be checked and another attempt made during execution.** Short cycles aim to stop later work from accumulating on top of small errors.
 
 A linter catches a style violation and the agent immediately corrects it. CI reports a failed test and the agent fixes it automatically. A structural test detects an architectural violation and forces the agent to reverse course. These mechanisms are **safety systems that check the ground beneath every step**.
 
@@ -161,7 +155,7 @@ flowchart LR
 
 Anthropic's article on harness design for long-running agents[^6] emphasizes the same point.
 
-When agents work across several context windows, **"compaction alone is not enough. Even with more capable models, high-level prompting is insufficient for producing production-ready results while cycling through multiple context windows."**
+The article describes difficulty in continuing reliably across context windows with compaction and a high-level goal alone.
 
 Every execution loop needs mechanisms that record state, detect failure, and recover automatically.
 
@@ -172,7 +166,7 @@ Every execution loop needs mechanisms that record state, detect failure, and rec
 
 In the broader sense, I use harness to mean the entire execution environment connecting context with validation and recovery. The table distinguishes roles within that environment rather than two mutually exclusive technologies.
 
-Martin Fowler's summary[^5] likewise explains that **"context engineering helps the model think well, while harness engineering keeps the system from going off track."**
+Birgitta Böckeler's article on Martin Fowler's site combines guidance before work with checks after it, describing a user harness as a form of context engineering.[^5] Authors draw the terminology differently. Here, I distinguish providing information from checking results and call the environment connecting them the harness.
 
 ### Ultimately, the question is how far we reduce human intervention
 
@@ -265,7 +259,7 @@ flowchart TB
 
 The shorter each loop is, the sooner it stops a mistake from accumulating. This is why "keep feedback loops short" is a core principle of the harness.
 
-Mitchell Hashimoto summarized it in one sentence: **"When an agent makes a mistake, engineer the environment so the agent can never make that mistake again."**[^3]
+Mitchell Hashimoto also describes harness engineering as improving instructions and tools so agents do not repeat the same mistakes.[^3]
 
 Connect conditions that can be checked automatically to actual checks. Short feedback cycles let the agent attempt corrections before errors accumulate.
 
@@ -273,9 +267,9 @@ Connect conditions that can be checked automatically to actual checks. Short fee
 
 In February 2026, OpenAI published the results of a five-month internal experiment.[^4]
 
-A small team used only Codex agents to complete more than one million lines of production code, without manually writing any of it.
+A small team built an internal beta product with Codex without humans writing code directly. The roughly million-line repository included application code, tests, infrastructure, tools, and documentation.
 
-The engineers in this experiment did not spend their time writing code. They spent it **designing the harness**. OpenAI grouped the harness into three broad components.
+The engineers set goals, judged results, and **designed the harness** through which agents could check their work. I grouped the parts worth examining into three areas.
 
 1. **Context engineering**: Continuously improve the knowledge base inside the codebase and give agents access to dynamic context such as observability data and browser exploration.
 2. **Architectural constraints**: Monitor the system not only with LLM-based agents, but also with deterministic custom linters and structural tests.
@@ -284,7 +278,7 @@ The engineers in this experiment did not spend their time writing code. They spe
 {% raw %}
 ```mermaid
 flowchart TB
-    OAI["OpenAI Codex experiment<br/>5 months · 1M lines · zero manually written code"]
+    OAI["OpenAI internal beta experiment<br/>5 months · roughly 1M repository lines<br/>No human-written code"]
     OAI --> C1["① Context engineering<br/>Improve knowledge base · access dynamic context"]
     OAI --> C2["② Architectural constraints<br/>Custom linters · structural tests"]
     OAI --> C3["③ Garbage collection<br/>Periodically detect drift · violations"]
@@ -299,7 +293,7 @@ Anthropic published harness-design principles for long-running agents in the sam
 
 An initializer agent sets up the environment—`init.sh`, a progress file, and the initial commit—while a coding agent implements one feature at a time, incrementally. Every session records its state so the next session can understand the previous work quickly.
 
-The conclusion is that **leaving a clear artifact and validating it after every short execution cycle** is what makes a long-running agent reliable.
+This case shows how **carrying state into the next session and checking current behavior before new work** can support long-running tasks. Automatic checks do not guarantee that every task will succeed.
 
 {% raw %}
 ```mermaid
@@ -321,16 +315,16 @@ flowchart TB
 
 Both articles ultimately emphasize the same point. Context should establish the broad direction, but an agent also needs **mechanisms that automatically detect and recover errors during every execution cycle** if it is to complete a long-running task.
 
-## 5. The progression over time
+## 5. Expanding attention from instructions to the execution environment
 
-The three concepts appeared in sequence because the way we use AI has changed.
+These concepts do not replace one another. I find it useful to see them as an expanding scope of what we try to control.
 
 {% raw %}
 ```mermaid
 flowchart LR
-    P["2023–2024<br/><b>Prompt engineering</b><br/>One-off questions and answers<br/>Optimize the instruction itself"]
-    P --> C["2025<br/><b>Context engineering</b><br/>RAG · MCP · memory<br/>Design system-level context"]
-    C --> H["Early 2026<br/><b>Harness engineering</b><br/>Feedback loops · guardrails<br/>Design an automatic error-recovery environment"]
+    P["Prompt engineering<br/>Refine instructions and examples"]
+    P --> C["Context engineering<br/>Provide documents, search results, and state"]
+    C --> H["Harness engineering<br/>Connect information and tools<br/>Check results and retry"]
     classDef era fill:#dce8ff,stroke:#46c;
     classDef latest fill:#ffe9c7,stroke:#e8973a,stroke-width:2px;
     class P,C era;
@@ -340,21 +334,9 @@ flowchart LR
 
 The direction is consistent: **the target of control expands from "input text" to "the entire process in which the agent works."** As the model becomes more autonomous and works for longer, areas that input alone cannot control become visible.
 
-**2023–2024, the era of prompt engineering.** The interaction consisted of sending ChatGPT one question and receiving one answer.
+For a short question, refining instructions and examples matters. For changes across a repository, we also need to choose the documents and code to expose and how to communicate current state.
 
-Assigning a role, providing step-by-step instructions, and including examples were enough to draw out the desired result. Because the model interaction was one-off, optimizing the instruction itself was central.
-
-**2025, the rise of context engineering.** As agents appeared, it became important to design system-level context—including RAG, MCP, memory, and search results—rather than a single prompt.
-
-The term spread widely after Andrej Karpathy described the shift "from prompt engineering to context engineering."
-
-**Early 2026, the emergence of harness engineering.** As agents began performing more autonomous, longer-running, and broader tasks, the limits of controlling only the input became clear.
-
-Mitchell Hashimoto first used the term "harness engineering" while sharing his AI adoption journey on February 5, 2026. One week later, OpenAI formalized it in a report on its Codex experiment. Anthropic then published its article on harness design for long-running agents.[^6]
-
-The rise of always-on, long-running agent environments such as OpenClaw, NanoClaw, and NemoClaw is especially notable. They provide environments in which agents work autonomously for days without human intervention.
-
-Most developers still use AI coding tools at roughly the level of autocomplete. The rapid emergence of these environments nevertheless shows where the industry is heading.
+Longer tasks also require checking tool results, feeding failures into the next revision, and passing state to the next session. Which mechanisms to provide depends on the task's scope, not a particular year or product name.
 
 ## 6. What this means in practice
 
@@ -376,5 +358,5 @@ That requires an execution environment that shows what was checked and where it 
 [^2]: [The Value of Developers Who Understand the Business in the Age of Agentic Development](/en/2026/03/13/agentic-dev-business-aligned-code.html).
 [^3]: [Mitchell Hashimoto — My AI Adoption Journey](https://mitchellh.com/writing/my-ai-adoption-journey) (2026.02.05).
 [^4]: [OpenAI — Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/) (2026.02.11).
-[^5]: [Martin Fowler — Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html) (2026.02.17).
-[^6]: [Anthropic — Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
+[^5]: Birgitta Böckeler, [Harness engineering for coding agent users](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html), Martin Fowler's site (2026.04.02).
+[^6]: [Anthropic — Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) (2025.11.26).

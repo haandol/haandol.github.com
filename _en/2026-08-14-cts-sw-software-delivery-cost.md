@@ -8,7 +8,7 @@ tags: ai engineering-productivity cts-sw developer-experience organization
 publish: true
 lang: en
 date: 2026-08-14 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: cts-sw-software-delivery-cost
 korean_url: /2026/08/14/cts-sw-software-delivery-cost.html
 permalink: /en/2026/08/14/cts-sw-software-delivery-cost.html
@@ -16,7 +16,7 @@ permalink: /en/2026/08/14/cts-sw-software-delivery-cost.html
 
 ## TL;DR
 
-- AI productivity depends more on the team harness than individual coding speed.
+- Evaluate AI adoption through team delivery cost and quality.
 - CTS-SW connects total delivery cost to software that reaches customers.
 - A harness should be funded as a team asset, not a personal optimization.
 
@@ -46,7 +46,7 @@ cost to build and operate software
 
 Suppose eight developers produce 16 production deployments in one week. If we use developer-weeks as a proxy instead of exact labor cost, each deployment costs `0.5 developer-weeks`.
 
-If the same team can reliably deliver 20 deployments, the figure drops to `0.4 developer-weeks`. The team is spending less engineering capacity per delivered software unit.
+If the same team can reliably deliver 20 deployments in the same one-week period, the figure drops to `0.4 developer-weeks`. The team is spending less engineering capacity per delivered software unit.
 
 The difficult part is not the calculation. It is deciding **what counts as one unit of software**.
 
@@ -62,9 +62,9 @@ That makes CTS-SW closer to an **intermediate measure of software delivery effic
 
 ## 2. Find where the time saved by AI moved
 
-Amazon separates development velocity, such as code review speed, from deployment velocity.[^2]
+Amazon separates development output from deployment output. Development velocity counts code reviews merged per developer per week; deployment velocity counts production deployments per developer per week.[^2] Velocity here measures throughput over a period, not how long one review takes.
 
-This distinction matters because when only one side gets faster, the other immediately becomes the bottleneck.
+Separating these measures helps reveal whether more code changes are also reaching production.
 
 If AI accelerates code generation, changes and pull requests increase. With the same number of reviewers, review queues grow. Even after review, slow CI and deployment mean customer delivery speed does not improve.
 
@@ -80,9 +80,9 @@ Amazon's 50-team Frontier Development pilot provides a concrete example of this 
 
 Teams with similar seniority mixes working in existing codebases used nearly the same AI tools, yet half improved production deployment velocity by less than 3x. The other half reached a median of 4.5x, with some exceeding 10x.
 
-The difference was not mainly the tool. The faster teams changed their working practices together: context, tools, tests, and intent documents let agents validate their own work instead of waiting for continuous human input.
+The presenter focused on differences in working practices. Teams with larger gains improved context, tools, tests, and intent documents so agents could validate their own work instead of waiting for continuous human input.
 
-This is useful evidence that a team harness can affect deployment velocity.
+This is a useful case for examining differences in team harnesses, but observation alone does not isolate the effect of each element.
 
 It still does not prove that CTS-SW fell. The cost of building and operating the added harness, human review and incident response, and delivery quality need to be measured within the same boundary.
 
@@ -100,7 +100,7 @@ flowchart LR
 ```
 {% endraw %}
 
-DORA's 2025 analysis describes AI as an amplifier of existing organizational capabilities, which matches this flow. Where automated testing, version control, and fast feedback are weak, increased change volume can produce more instability.[^8]
+DORA, which studies software delivery and operations performance, describes AI in its 2025 analysis as an amplifier of existing organizational capabilities. Where automated testing, version control, and fast feedback are weak, increased change volume can produce more instability.[^8]
 
 A team does not need a perfect development environment before adopting AI. It does need to know where changes currently wait and fail.
 
@@ -169,7 +169,7 @@ This follows the same performance-analysis principles that system throughput is 
 
 A senior engineer does not need to own every number in this process.
 
-Product can define the unit that reaches customers. SRE can watch quality and operational cost. Engineering management can account for team composition changes and govern how the metric is used. Senior engineers can connect each number back to real pull requests, deployments, and incidents.
+Product can define the unit that reaches customers. Site reliability engineering (SRE), responsible for service reliability and operations, can watch quality and operating cost. Engineering management can account for team composition changes and govern how the metric is used. Senior engineers can connect each number back to real pull requests, deployments, and incidents.
 
 I would start by making before-and-after changes explainable within one team, rather than trying to reproduce Amazon's full analytical model.
 

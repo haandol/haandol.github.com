@@ -8,7 +8,7 @@ tags: genai chatbot flywheel personalization data user-insight
 publish: true
 lang: en
 date: 2026-03-12 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: genai-flywheel-for-business
 korean_url: /2026/03/12/genai-flywheel-for-business.html
 permalink: /en/2026/03/12/genai-flywheel-for-business.html
@@ -22,7 +22,7 @@ permalink: /en/2026/03/12/genai-flywheel-for-business.html
 
 ## Introduction
 
-While designing GenAI-based services recently, I became interested in connecting information gathered from users so other features could use it too.
+While designing generative AI (GenAI) services recently, I became interested in connecting information gathered from users so other features could use it too.
 
 In EncBird,[^1] the AI English-learning service I am building, I organized this around the **Expression Dictionary**.
 
@@ -32,11 +32,16 @@ Rather than building a separate review system for each conversation feature, I c
 
 ## 1. What Is a GenAI Flywheel?
 
-A GenAI flywheel is a cycle like this.
+This is the cycle I want to build in EncBird.
 
-![GenAI Flywheel](/assets/img/2026/0312/flywheel.jpg)
-
-**Customer experience → detailed preferences → latent needs → personalized features → customer experience again**
+{% raw %}
+```mermaid
+flowchart LR
+    C["Conversation features"] --> D["Expressions in the dictionary"]
+    D --> R["Personalized review and quizzes"]
+    R -. "Hope useful learning<br/>encourages another visit" .-> C
+```
+{% endraw %}
 
 I call it a flywheel when information users leave in conversation improves the next experience, which in turn produces more information.
 

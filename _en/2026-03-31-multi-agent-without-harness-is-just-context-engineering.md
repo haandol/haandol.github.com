@@ -8,7 +8,7 @@ tags: ai agent multi-agent harness-engineering context-engineering agentic-devel
 publish: true
 lang: en
 date: 2026-03-31 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: multi-agent-without-harness-is-just-context-engineering
 korean_url: /2026/03/31/multi-agent-without-harness-is-just-context-engineering.html
 permalink: /en/2026/03/31/multi-agent-without-harness-is-just-context-engineering.html
@@ -28,11 +28,11 @@ Something had bothered me ever since I first heard the phrase "agent swarm." Doe
 
 Earlier posts covered context engineering[^2] and harness engineering[^3] separately. This time, I want to connect those two perspectives and examine when multi-agent systems have real meaning—and when they are merely context engineering at a larger scale.
 
-## 1. An agent is not an LLM with a different prompt
+## 1. Role-specific prompts are not enough
 
 There is a common trap in discussions of multi-agent systems: the belief that changing the system prompt is enough to create a new agent. We assign roles such as "You are a code reviewer," "You are a tester," or "You are an architect," expecting each one to examine the problem from a different perspective.
 
-But an agent is not simply "an LLM with a different prompt." **An agent is closer to an execution unit that combines an LLM, tools, context, and a harness.**
+Role-specific prompts can elicit different perspectives. What I want to examine, however, is **which tools and information the model uses and how it checks its results**, beyond the role name.
 
 In the earlier post,[^3] I distinguished providing and updating information for model decisions from validating execution results and retrying. System prompts, `CLAUDE.md`, and retrieved documents provide context for decisions. Linters, tests, and retry loops let agents find and fix execution errors. I use harness to mean the execution environment connecting the two.
 
@@ -42,14 +42,14 @@ Even with role-specific prompts, an earlier agent's mistakes can reach the next 
 
 When building a multi-agent system, the first thing I want to check is **whether each agent can finish and validate its own work**.
 
-In an environment such as Claude Code, for example, each agent can be harnessed in considerable detail. You can design agent-specific tools, recovery loops, validation methods, and context boundaries.
+When dividing coding work among agents, I think we need to design the tools and information each can use, what happens after failure, and how results will be checked, alongside their role names. Creating an agent does not automatically provide these procedures.
 
 - **Tool boundaries**: Separate the tools each agent can access. For example, a coding agent gets the file system and a linter; a testing agent gets the test environment and coverage tools; a review agent gets diff tools and architecture-validation rules.
 - **Recovery loops**: Each agent should be able to recover from failures in its area. A coding agent fixes lint failures automatically; a testing agent analyzes failed tests and reports their causes.
 - **Validation**: Before passing one agent's output to the next, check it with tests or architecture checks. Record conditions that could not be verified so the next stage can see them.
-- **Context boundaries**: Clearly separate the context each agent can see. If all agents share the same context, the setup is effectively no different from assigning several roles to a single agent.
+- **Context boundaries**: Share common goals and requirements while defining the information and scope each role needs. Agents can read the same material and still perform different work and checks. Copying every exploration record, however, can pass along irrelevant information and errors in earlier judgments.
 
-Only with these four elements can a multi-agent system operate as a collection of **truly independent execution units**. In human organizations, it is the difference between merely saying, "You handle the frontend and you handle the backend," and giving each team its own CI/CD pipeline, code-review process, deployment permissions, and monitoring dashboards.
+These four elements help agents **take responsibility for their own work and validation**. They do not require separate harnesses. Anthropic's example also uses the same tools and harness for its initializer and coding agents.[^1] The important distinction is between shared infrastructure and the results each role must check.
 
 ## 3. What to Do Before Adding More Agents
 

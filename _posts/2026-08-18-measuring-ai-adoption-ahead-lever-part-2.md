@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development harness-engineering organization developer-experience cts-sw
 publish: true
-last_modified_at: 2026-09-11 14:57:48 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 lang: ko
 translation_key: measuring-ai-adoption-ahead-lever-part-2
 english_url: /en/2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html
@@ -58,17 +58,17 @@ Shape에서는 Agent가 만든 산출물의 수보다 같은 실패와 판단이
 
 | 관점 | 판단할 질문 | 살펴볼 신호 |
 | --- | --- | --- |
-| **A — Autonomy Boundary** | 정상 경로는 자동으로 닫고 새 계약·모순·고위험 예외만 사람에게 올리는가 | 반복 승인, escalation 정확도, 승인 대기 |
+| **A — Autonomy Boundary** | 정상 경로는 자동으로 끝내고 새 계약·모순·고위험 예외만 사람에게 올리는가 | 반복 승인, 사람에게 넘길 건을 정확히 골랐는지, 승인 대기 |
 | **H — Harness Learning** | 실패와 리뷰 피드백이 계약·평가 사례·테스트·규칙·도구로 남는가 | 같은 실패의 재발, 수동 체크의 자동화 |
 | **E — Evidence Quality** | 사람이 전체 구현을 복원하지 않고 계약과 증거로 판단할 수 있는가 | 계약별 검증 근거, 코드 확인이 필요한 예외 |
 | **A — Adoption** | 도메인팀이 실제 업무에서 사용하고 직접 개선하는가 | 운영 워크로드, 도메인 피드백, 소유권 이전 |
-| **D — Dependability** | 품질·안전·안정성과 실패 시 통제가 기준 안에 있는가 | regression, 장애, rollback, 위험 누락 |
+| **D — Dependability** | 품질·안전·안정성과 실패 시 통제가 기준 안에 있는가 | 기존 동작의 오류, 장애, 이전 버전 복구, 위험 누락 |
 
 `Autonomy Boundary`는 자동화율을 높이라는 뜻이 아니다.
 
 위험이 낮고 계약이 분명한 정상 경로는 Agent가 구현과 검증을 끝낼 수 있어야 한다. 반대로 계약 변경, 기존 결정과의 모순, 보안과 데이터 위험은 빠짐없이 사람에게 올라와야 한다.
 
-사람의 개입이 적다는 사실만으로는 좋은 자율성인지 알 수 없다. 필요한 escalation까지 사라졌다면 Dependability가 낮아진 것이다.
+사람의 개입이 적다는 사실만으로는 좋은 자율성인지 알 수 없다. 사람이 판단해야 할 위험까지 보고하지 않는다면 Dependability가 낮아진 것이다.
 
 `Harness Learning`에서는 리뷰에서 반복된 판단이 다음 Agent가 사용할 계약, 테스트, 규칙이나 도구로 바뀌었는지 본다. 같은 문제를 사람이 계속 찾아낸다면 하네스가 학습했다고 보기 어렵다.
 
@@ -88,7 +88,7 @@ Agent가 테스트를 통과했다는 한 줄만 남기면 사람은 코드를 �
 
 AHEAD 다섯 항목은 하나의 점수로 합치지 않는다.
 
-Autonomy만 높이면 Dependability를 잃을 수 있고, Dependability만 강화하면 Evidence Quality와 Adoption이 나빠질 수 있다. 서로의 부작용을 확인하는 대시보드처럼 보는 편이 낫다고 생각한다. 생산성을 단일 활동량으로 환원하지 말자는 SPACE의 제안과도 같은 이유다.[^3]
+자동 완료 비율만 높이려 하면 위험을 놓칠 수 있다. 반대로 안정성을 높이겠다며 모든 변경에 수동 검토를 붙이면, 검증 근거를 개선할 이유가 줄고 현업의 사용 부담은 커질 수 있다. 한 항목을 개선하려고 택한 방법이 다른 항목에 어떤 영향을 주는지 함께 보는 편이 낫다고 생각한다. 생산성을 단일 활동량으로 환원하지 말자는 SPACE의 제안과도 같은 이유다.[^3]
 
 ## 3. Shape에서 Scale로 넘어가는 기준
 

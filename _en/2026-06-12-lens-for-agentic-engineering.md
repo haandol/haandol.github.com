@@ -8,7 +8,7 @@ tags: ai agent agentic-development hitl agent-centered forward-deployed-engineer
 publish: true
 lang: en
 date: 2026-06-12 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: lens-for-agentic-engineering
 korean_url: /2026/06/12/lens-for-agentic-engineering.html
 permalink: /en/2026/06/12/lens-for-agentic-engineering.html
@@ -21,17 +21,17 @@ permalink: /en/2026/06/12/lens-for-agentic-engineering.html
 
 ## 1. What is a lens?
 
-Economics often uses modeling to explain economic phenomena. To bring a subject made of countless variables down to a level we can understand, modeling **holds every variable constant except the part being explained**.
+Economics uses models to explain complex phenomena. One method is to **select the variables and relationships to examine while simplifying others or assuming they remain constant**.
 
 We can find this way of thinking all around us.
 
 MBTI is a familiar example.
 
-The idea of understanding a person through four variables in their decision-making flow and sixteen types has kept it in use across many settings for quite a long time. Another example that has been my favorite for several years is Kent Beck's 3X model.
+MBTI describes people through sixteen combinations of four preference axes. What interests me here is the reduction of a complex subject to a few axes, rather than the accuracy of that classification. Another example that has been my favorite for several years is Kent Beck's 3X model.
 
-It explains every business and product through three stages—Explore, Expand, and Extract—and proposes running the organization with a strategy suited to each one.[^5]
+It frames product development as exploring possibilities, expanding a validated opportunity, and extracting value from an established product, with a different strategy for each stage.[^5]
 
-I call the act of interpreting a phenomenon by selecting its many variables for a purpose and fixing most of them as constants a **lens**.
+I call the perspective that chooses what to examine closely and what to simplify a **lens**.
 
 {% raw %}
 ```mermaid
@@ -43,8 +43,8 @@ flowchart LR
         v4["Variable"]
         v5["Variable"]
     end
-    V --> LENS{{"Lens<br/>(vary only what must be explained,<br/>hold the rest constant)"}}
-    LENS --> P["Understandable · predictable model"]
+    V --> LENS{{"Lens<br/>Choose variables and assumptions"}}
+    LENS --> P["A model for interpretation"]
 ```
 {% endraw %}
 
@@ -57,7 +57,7 @@ Without a lens, there is little to do except guess. With a lens, **the variables
 
 There are countless lenses through which to interpret a phenomenon, and the same is true for the currently popular field of agentic engineering. There may be a cost lens, a UX lens, or a lens based on competition within the ecosystem.
 
-Personally, I often use the **HITL lens** when looking at agentic engineering. In other words, I choose to *interpret all agentic engineering using human in the loop as the criterion, especially the direction of removing it*.
+Personally, I often use the **HITL lens** when looking at agentic engineering. Human in the loop (HITL) means a person intervenes during execution to judge or approve something. I look at *where that intervention remains and how it can be reduced*.
 
 The reason I chose this lens over others is simple. **It explains the development so far with the fewest exceptions and also makes the direction ahead easy to explain.** I especially like it because I think Anthropic's moves can be explained through this lens.[^1]
 
@@ -73,7 +73,7 @@ But agent technology is advancing too quickly and its effects are too disruptive
 
 The software development life cycle turns business requirements into code. In short, it is the compilation process for business requirements.[^4]
 
-Agentic engineering pushes this process in an agent-centered direction—that is, toward removing humans from the loop. Claude Code and Codex are already developing products in ways that remove much of the HITL, and the tools produced by those teams can be interpreted through the same lens.
+I interpret agentic engineering through the reduction of HITL in this process. OpenAI has published an internal experiment in building a product with Codex without humans writing the code.[^7] I can examine such attempts and the tools those teams produce through the same lens.
 
 Personally, simplifying software engineering around HITL and deliberately ignoring the other variables allowed me to treat everything else as noise—or, since this is a lens, to leave it blurred. That relieved a considerable amount of the motion sickness.
 
@@ -81,7 +81,7 @@ Personally, simplifying software engineering around HITL and deliberately ignori
 
 Another use of this lens is **prediction**. If we closely examine where HITL remains in the current process, we can make a reasonable guess at the tools and technologies likely to appear next.
 
-If we call the long flow from business requirements through software engineering, deployment, operations, and incident recovery the business life cycle, today's agentic engineering mainly covers **only the software-engineering section in the middle**.
+Across the flow from business requirements through software engineering, deployment, operations, and incident recovery, I have focused first on changes in **writing and validating code**.
 
 {% raw %}
 ```mermaid
@@ -98,9 +98,9 @@ flowchart LR
 ```
 {% endraw %}
 
-In the figure above, software engineering is colored green because HITL is being removed rapidly there. People are still involved in the remaining gray sections.
+Green marks the area where I have focused on automation changes, not a stage from which people have disappeared. Gray stages also have existing tools such as deployment automation. I use the picture to ask which human decisions remain in each stage.
 
-Through this lens, the next goal appears naturally. Once the mission of removing HITL from software engineering is largely complete, methodologies and tools will emerge to automate the human intervention that remains in the stages that follow: deployment, operations, and incident recovery.
+Through this lens, I expect more attempts to automate recurring judgments in deployment, operations, and incident recovery alongside code writing. Development automation need not finish before those attempts begin.
 
 A little later, I expect attempts to automate even **business-requirement analysis**, which today begins with a person and ends with a person.
 
@@ -109,6 +109,8 @@ A little later, I expect attempts to automate even **business-requirement analys
 If we define a lens as the perspective an organization uses to interpret phenomena and the direction in which it tries to move, we can identify that lens by watching its behavior rather than listening to what it says.
 
 In my personal classification, OpenAI and Anthropic are leading examples of companies wearing an agent-centered lens. Google appears somewhat neutral, while AWS and Cursor look like leading examples of companies wearing a human-centered lens.
+
+This is my impression of the products and working practices I have encountered. Tools and methods within the same company can handle human involvement differently, so I would not use it as a fixed classification of an entire company.
 
 When examining this difference, we can also look at the work assigned to **AI Deployment Engineers (AI DEs)** and **Forward Deployed Engineers (FDEs)**. I want to look beyond the presence of a title to whether they can actually change data access, permissions, and work procedures.
 
@@ -147,7 +149,7 @@ Of course, an organization can improve this foundation while retaining human rev
 
 Seen through this lens, the conclusion leans in one direction.
 
-As token prices fall rapidly and the methods and tools of harness engineering improve, the gap between **token value and business value** will gradually narrow. When that happens, I think **the human-centered lens will ultimately be rejected, at least within agentic engineering**.[^6]
+If lower model execution costs and better harnesses let us **finish more work with the same budget**, I think **the human-centered lens will ultimately be rejected, at least within agentic engineering**.[^6]
 
 At some point, the rising curve of the side that began by removing people will overtake the ceiling of automation built around the compromise that a person will remain.
 
@@ -159,13 +161,11 @@ Finally, once you choose a lens, you need to decide **what to do with it** and b
 
 If LLMs stop improving at their current level and ultimately fail to replace software engineering, what will I do?
 
-> Agents may never reach the AGI that academia expected. But that possibility assumes we keep the current direction of building AI for self-improvement. If every company changed direction and concentrated its data on automating software engineering at today's level, I think capability that is effectively AGI-level is already possible within that narrow scope. This is another topic large enough for its own article, so I will leave it there.
+> Artificial general intelligence, or AGI, capable of intellectual work across many fields, may never arrive. Even so, I think concentrating data and verification on the narrower task of software development can automate a substantial part of the work people perform. I want to distinguish general intelligence from automation of a particular workflow.
 
 Either way, we cannot avoid learning agent technology.
 
-Codex and Claude Code already generate 90 to 100 percent of the code using only today's technology.
-
-A person may still decide what ultimately gets accepted, but it is reasonable to say that the intermediate process has already been conquered. This does assume a nearly unlimited supply of tokens, but hardware advances will reduce token costs rapidly anyway.
+Today's technology already allows more code writing to be delegated to agents. In the OpenAI experiment above, people still set goals, built the verification environment, and judged the results.[^7] A high proportion of generated code does not establish that design, validation, and operations have all been automated.
 
 Conversely, if it is already settled that agents will eventually replace software engineering, what should I prepare now?
 
@@ -206,3 +206,5 @@ My trail so far has been unimpressive, but focusing on meaningful side projects 
 [^5]: Kent Beck, [The Product Development Triathlon](https://medium.com/@kentbeck_7670/the-product-development-triathlon-6464e2763c46) (2016). The original article introducing the 3X model of Explore, Expand, and Extract.
 
 [^6]: [Why AI Adoption Should Not Start with Token Savings — The 3S Stages 1/2](/en/2026/06/15/organizational-ai-adoption-3s.html).
+
+[^7]: OpenAI, [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/) — describes an internal product-development experiment without human-written code and the goal-setting, environment design, and review people performed.

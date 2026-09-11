@@ -8,7 +8,7 @@ tags: ai agent agentic-development ddd business vibe-coding claude-code
 publish: true
 lang: en
 date: 2026-03-13 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: agentic-dev-business-aligned-code
 korean_url: /2026/03/13/agentic-dev-business-aligned-code.html
 permalink: /en/2026/03/13/agentic-dev-business-aligned-code.html
@@ -17,12 +17,12 @@ permalink: /en/2026/03/13/agentic-dev-business-aligned-code.html
 ## TL;DR
 
 - Business terminology in code helps agents locate what needs to change.
-- Let agents propose as well as execute, while people judge in the context of the domain and organization.
+- Knowledge of the business and organization matters when judging an agent's proposals.
 - As execution costs fall, deciding what to build becomes more important.
 
 ## Introduction
 
-Now that Claude Code is available through Bedrock, I have been trying it for the first time, and GSD seems to be widely used for managing project state.
+Now that Claude Code is available through Bedrock, I have been trying it for the first time, and GSD (Get Shit Done) seems to be widely used for managing project state. It keeps requirements, plans, and progress in documents that later tasks can read.[^2]
 
 Unlike tools such as TaskMaster or todo lists that track work within a session, I personally think managing development progress through documents, as GSD does, is a transitional technology.
 
@@ -36,7 +36,7 @@ Then how can we make an agent understand the business simply by reading the code
 
 To find the code to modify, an agent needs to connect business terms in the requirements to names in the code. **The more clearly the code shows which workflow it handles, the easier that connection becomes.**
 
-From the perspective of requirements analysis and design, I think DDD, or Domain-Driven Design, may become even more important. One of DDD's core principles is encouraging real business processes to be reflected in code. With a ubiquitous language, domain experts and developers use the same words, and those words appear directly in class and method names. This becomes even more valuable in the age of agents.
+I think Domain-Driven Design (DDD), which organizes software around business concepts and rules, may become more important in requirements analysis and design. Domain experts and developers share words that also appear in class and method names—an approach called ubiquitous language. Those names give agents clues for connecting a business request to code.
 
 For example, given a request to change the refund policy for order cancellations, names such as `OrderCancellation` and `RefundPolicy` provide clues to the relevant logic. The agent still needs to read the code connected to those objects and verify the revised policy with tests.
 
@@ -67,3 +67,4 @@ When evaluating an agent's changes, I want to start with which workflow is chang
 ---
 
 [^1]: [Context Engineering — Static Context and Dynamic Context](/en/2026/03/11/context-engineering-static-vs-dynamic.html).
+[^2]: [GSD README](https://github.com/gsd-build/get-shit-done/blob/main/README.md) — a tool that preserves requirements, plans, and state in documents to carry work context across sessions.

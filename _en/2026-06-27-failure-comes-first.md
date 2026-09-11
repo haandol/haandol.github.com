@@ -8,7 +8,7 @@ tags: business startup lean-startup pmf experiment ai
 publish: true
 lang: en
 date: 2026-06-27 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: failure-comes-first
 korean_url: /2026/06/27/failure-comes-first.html
 permalink: /en/2026/06/27/failure-comes-first.html
@@ -16,7 +16,7 @@ permalink: /en/2026/06/27/failure-comes-first.html
 
 ## TL;DR
 
-- Failure modes repeat, while paths to success depend on context.
+- I assume failure modes repeat while paths to success depend on context.
 - Increase the number of experiments that produce customer learning.
 - Use AI to lower the cost of useful experiments.
 
@@ -24,7 +24,7 @@ permalink: /en/2026/06/27/failure-comes-first.html
 
 Years ago, I ran a business and shut it down after four years because of several problems. Fortunately, I had no debt, and I think about KRW 34,100 remained in the bank account.
 
-After it failed, I joined a startup near my home. That company grew from eight people to 50 in less than two years.
+After it failed, I joined a startup near my home. That company grew from eight people to 50 in about two years.
 
 I had been fairly calm and did not feel especially defeated when my own business failed. Only when the company I had joined became a major success did the sense of loss finally hit me.
 

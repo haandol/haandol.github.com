@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent context-engineering agentic-development vibe-coding prd adr
 publish: true
-last_modified_at: 2026-09-09 23:59:22 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 lang: ko
 translation_key: context-engineering-static-vs-dynamic
 english_url: /en/2026/03/11/context-engineering-static-vs-dynamic.html
@@ -20,9 +20,7 @@ english_url: /en/2026/03/11/context-engineering-static-vs-dynamic.html
 
 ## 시작하며
 
-에이전틱 코딩과 바이브 코딩을 하다 보면, 결국 개발의 본질로 돌아가고 있다는 생각이 든다.
-
-비즈니스 요구사항을 코드로 바꾸는 일.
+에이전틱 코딩과 바이브 코딩을 하다 보면, 결국 비즈니스 요구사항을 코드로 바꾸는 개발의 본질로 돌아가고 있다는 생각이 든다.
 
 예전에는 나는 개발 컨텍스트를 [Requirement → Feature → Task → Code][^1] 처럼 점점 구체화되는 계층으로 나누어 관리하는 프레임워크를 이야기하곤 했다.
 
@@ -38,10 +36,10 @@ english_url: /en/2026/03/11/context-engineering-static-vs-dynamic.html
 
 ## 2. 정적인 컨텍스트
 
-정적인 컨텍스트는 오래 유지되어야 하는 기준과 제약이다.
+정적인 컨텍스트는 여러 작업에 걸쳐 유지할 기준과 제약이다. 한 번 정하면 바꾸지 않는다는 뜻이 아니라, 작업 계획보다 오래 유지할 정보라는 뜻이다.
 
-- **PRD** 는 무엇을 만들어야 하는지를 정의한다.
-- **ADR** 은 왜 그렇게 구현하는지와 어떤 제약을 지켜야 하는지를 남긴다.
+- **제품 요구사항 문서(PRD)**는 무엇을 만들어야 하는지를 정의한다.
+- **아키텍처 결정 기록(ADR)**은 왜 그런 설계를 선택했고 어떤 제약을 지켜야 하는지를 남긴다.
 
 이 두 가지는 프로젝트가 살아 있는 한 계속 참조되어야 하는 정보다. 에이전트가 아무리 똑똑해져도, **무엇을 만들어야 하는지**와 **왜 이렇게 만들기로 했는지**는 사람이 정의하고 관리해야 한다. 이것들이 흔들리면 에이전트는 매번 다른 방향으로 코드를 생성한다.
 

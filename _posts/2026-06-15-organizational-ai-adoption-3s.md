@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development harness-engineering organization token-economics
 publish: true
-last_modified_at: 2026-09-11 14:50:06 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 lang: ko
 translation_key: organizational-ai-adoption-3s
 english_url: /en/2026/06/15/organizational-ai-adoption-3s.html
@@ -184,7 +184,7 @@ AI 도입 초기에는 토큰 사용량이 늘어날 수 있다.
 
 그렇다고 초기 투자를 무제한으로 허용하자는 뜻은 아니다.
 
-Streamlining에서는 업무와 기준선을 만들고, Shape에서는 실패가 하네스에 남는지 확인한다. Scale에 들어간 워크로드에서 전체 전달 비용과 비즈니스 성과를 본다.
+Streamlining에서는 업무와 기준선을 만들고, Shape에서는 관찰한 실패를 지침·도구·테스트 개선에 반영했는지 확인한다. Scale에 들어간 워크로드에서 전체 전달 비용과 비즈니스 성과를 본다.
 
 3S는 조직에 성숙도 점수를 붙이기 위한 모델보다, **지금 이 워크로드에 무엇을 투자하고 무엇을 묻지 말아야 하는지 구분하는 렌즈**에 가깝다.
 

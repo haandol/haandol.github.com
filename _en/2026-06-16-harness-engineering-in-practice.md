@@ -8,7 +8,7 @@ tags: ai agent harness-engineering context-engineering agentic-development sub-a
 publish: true
 lang: en
 date: 2026-06-16 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: harness-engineering-in-practice
 korean_url: /2026/06/16/harness-engineering-in-practice.html
 permalink: /en/2026/06/16/harness-engineering-in-practice.html
@@ -36,7 +36,7 @@ This post describes the order in which I built harness layers around [EncBird](h
 
 I used the same approach to build agent tools such as [ALPS Writer](https://github.com/haandol/alps-writer-plugins) and [PPT Generator](https://github.com/haandol/ppt-generator).
 
-All of these projects share the same foundation: an Nx monorepo with an ADR-first workflow. I will therefore use EncBird as the main example and mention other projects when useful.
+The tools and repository structures differ, but I applied the same practice of recording decisions in ADRs before implementation. I will mainly use EncBird, whose packages are managed with Nx, and mention other projects where useful.
 
 The EncBird harness was not the result of designing the entire structure in advance.
 
@@ -105,13 +105,13 @@ That is why, **before** asking for code, I first create a direction the agent ca
 
 There are two parts.
 
-**PRD — describe what to build without ambiguity.** The main reason an agent drifts is that business requirements exist only in a person's head.
+**Product requirements document (PRD) — describe what to build.** When business requirements exist only in a person's head, the agent has to guess what is missing.
 
 I therefore begin with a PRD using a tool such as [ALPS Writer](https://github.com/haandol/alps-writer-plugins).
 
-ALPS, or Agentic Lean Product Spec, is a PRD format designed so **an agent can write code without ambiguity**, unlike a traditional PRD that expects a human reader to fill gaps through intuition.
+ALPS, or Agentic Lean Product Spec, is a PRD format intended to **clarify the user problem and required behavior before delegating implementation to an agent**.
 
-Instead of asking a human to begin from a blank page, the agent asks questions across nine sections and the human answers them.
+In the Full ALPS format I use, the agent asks questions across nine sections and the human answers them instead of starting from a blank page.
 
 It also treats "what will not be built," or Out of Scope, as a first-class section, making explicit what the agent **must not do**.
 
@@ -123,36 +123,33 @@ If a PRD defines "what," an ADR, or Architecture Decision Record, captures decis
 
 ALPS Writer uses `/feature-to-adr` to transfer PRD features into ADR drafts. From there, `adr-writer` runs a cycle in which `/adr-new` records a new decision and `/adr-impl` implements it.
 
-Work proceeds in the order **PRD → ADR → Code**. The arrows below point to the higher-level contract each artifact must follow.
+Work proceeds by **transferring PRD requirements into ADRs, then implementing the code**.
 
 {% raw %}
 ```mermaid
-flowchart RL
-    PRD["ALPS / PRD<br/>Business requirements<br/>(most stable)"]
-    ADR["ADR<br/>Architecture decisions<br/>(ambiguous gray area)"]
-    CODE["Code<br/>Implementation details<br/>(changes most often)"]
-    CODE -. logical dependency .-> ADR
-    ADR -. logical dependency .-> PRD
+flowchart LR
+    PRD["ALPS / PRD<br/>Planning requirements"] --> H["Transfer required obligations into ADRs"]
+    H --> ADR["ADR<br/>Current implementation reference"]
+    ADR --> CODE["Code and tests"]
+    H --> OLD["PRD retained as a planning record"]
 ```
 {% endraw %}
 
-Code is written to satisfy the ADR, and the ADR is written to satisfy the PRD.
-
-When the inner layer, the PRD, changes, the outer layers, ADRs and code, follow. The reverse does not happen.
+After handoff, implementation and review follow the ADRs. The PRD records the earlier plan, so editing it later does not automatically change code. Re-import requires comparing it with current ADRs and deciding on any requirement changes.[^8]
 
 If every code refactoring forces an ADR rewrite, the ADR was holding implementation details.
 
 That is why an ADR records why a decision was made and how alternatives were compared rather than storing file paths and code fragments.
 
-The PRD and ADR become the reference point for the rules and validation mechanisms added later.
+Requirements transferred from the PRD into ADRs guide the rules and checks added later.
 
-The "correct form" enforced by AGENTS.md rules and guardrails is judged against the direction established by the PRD and ADR.
+The "correct form" enforced by AGENTS.md rules and guardrails follows the current ADRs.
 
 Without a written direction, every later automation runs without knowing what it is supposed to automate toward.
 
 It is easy to skip this stage and ask for code immediately.
 
-That may be fine if you do not intend to delegate the entire development process to an agent.[^1]
+A small edit does not need a new full PRD. It still needs a clear basis in existing requirements or tests.[^1]
 
 If you want to increase delegation, however, writing the direction first is the starting point.
 
@@ -211,7 +208,7 @@ flowchart TB
 
 The root contains only shared agreements. Each package's AGENTS.md owns its specific build, lint, and convention rules.
 
-When the agent changes the web package, it reads only the web AGENTS.md. When it changes Go, it reads only the Go AGENTS.md.
+The agent applies root and parent-directory instructions, then reads the web AGENTS.md for web work or the Go AGENTS.md for Go work.
 This keeps the context from becoming bloated and reduces the chance of applying rules from the wrong package.
 
 At this point, the agent deviates less from the project's broad direction. This is the domain of context engineering. Soon, however, context alone reaches a wall.
@@ -224,15 +221,13 @@ AGENTS.md provides direction, but some tasks reveal things the agent fundamental
 - It needs to inspect deployment status but cannot read the logs, so it ends with "it probably worked."
 - It repeatedly calls the payment integration through the wrong interface.
 
-An agent's input and output consist only of text, or tokens.
+Generating a response does not itself change an external system. Reading a file or executing a command requires a **tool**.[^4] The second layer is therefore giving the agent tools.
 
-To touch the external world, it needs a gateway called a **tool**.[^4] The second layer is therefore giving the agent tools.
-
-CLI, Skill, and MCP are different ways to provide tools. I recommend starting lightly and moving to the next stage only after the need becomes clear.
+Command-line tools (CLIs), task instructions in Skills, and the Model Context Protocol (MCP) for connecting external tools complement one another. I start with existing tools and add the other mechanisms as repeated procedures and shared integrations become necessary.
 
 **① Runtime CLI — the lightest and usually the most powerful.** The most powerful tools are often CLIs that are already installed, such as `gh`, `aws`, and `psql`.
 
-Give the agent a shell and it can use them directly. No separate integration is required. In EncBird, most deployment and inspection tasks are handled by calling CLIs such as `aws --profile encbird`, `cdk`, `gh`, `nx`, and `pnpm` directly from the shell.
+Once installation, authentication, and access permissions are in place, the agent can call these tools from a shell. In EncBird, most deployment and inspection tasks use CLIs such as `aws --profile encbird`, `cdk`, `gh`, `nx`, and `pnpm` directly.
 
 **② Skill — turn a procedure into a file.** As tools multiply and their usage becomes more complex, repeatedly explaining the procedure becomes tedious and consumes the context window.
 
@@ -259,11 +254,11 @@ These were not created all at once either.
 
 Whenever a repeated procedure appeared, I separated it and fixed it into a file.
 
-**③ MCP — standardize the tool interface and contract.** Some areas cannot be handled by a shell CLI or a procedural document.
+**③ MCP — standardize the tool interface and contract.** A common calling interface can help when the same tool is used across execution environments.
 
 This happens when an agent must communicate with an external system in a structured way or when several tools and agents need to share the same interface.
 
-MCP standardizes the tool's input, output, and invocation contract. An MCP server can run as a local stdio process or as a remote service, so it does not necessarily have to be an independent server outside the agent process.
+MCP standardizes the tool's input, output, and invocation contract. A client can launch a local server process and communicate through standard input and output (stdio), or connect to a remote service. A separate always-running server machine is not required.
 
 It becomes easier to reuse the same tool across several agents, and a remote service allows centralized access control and deployment. The cost of operating and debugging the server must also be considered.[^5] EncBird's `.mcp.json` contains integrations that would be cumbersome to build directly.
 
@@ -290,7 +285,7 @@ Even with tools, an agent does not perfectly satisfy every requirement in one pa
 
 It therefore needs a **feedback loop** that checks whether the result matches the requirements and asks for another attempt when it does not.
 
-A feedback loop is not inherently nondeterministic. Some checks, such as linters and tests, return the same result for the same input, while others use a model to make a nondeterministic judgment about requirement compliance.
+Reproducibility needs to be considered separately within the loop. Linters and tests with fixed inputs and environments can return the same result, while model evaluations and chosen fixes may vary.
 
 The problem appears when even mechanically verifiable items are left to model judgment. Instead of asking, "Did this pass lint?" run the actual linter.
 
@@ -317,14 +312,17 @@ Instead of relying on nondeterministic LLM judgment, they mechanically force a p
 
 Whatever code the agent writes, a commit is blocked if it does not pass the linter.
 
+The following example abbreviates the check flow. It assumes `$staged` already contains the files to check and makes a failed check fail the hook.
+
 ```bash
-# scripts/pre-commit (abridged)
-web_files=$(echo "$staged" | grep -E '^packages/web/.*\.(vue|ts)$')
+# scripts/pre-commit (abridged example)
+set -e
+web_files=$(echo "$staged" | grep -E '^packages/web/.*\.(vue|ts)$' || true)
 if [ -n "$web_files" ]; then
   echo "$web_files" | xargs npx eslint --fix
   echo "$web_files" | xargs npx prettier --write
 fi
-go_files=$(echo "$staged" | grep -E 'functions/main/.*\.go$')
+go_files=$(echo "$staged" | grep -E 'functions/main/.*\.go$' || true)
 if [ -n "$go_files" ]; then
   (cd packages/api-infra/functions/main && golangci-lint run ./...)
 fi
@@ -354,7 +352,7 @@ Prompt injection alone does not mechanically enforce the procedure, however. The
 
 It is also useful for a validation failure to explain how to fix the problem.
 
-The OpenAI Codex team used this technique while building Codex itself. Instead of reporting only "rule violation," custom linters included guidance to use one pattern instead of another, allowing the agent to read the error and correct itself.[^6]
+OpenAI used this technique in its experiment building an internal product with Codex. Instead of reporting only "rule violation," custom linters included guidance to use one pattern instead of another, allowing the agent to read the error and attempt a correction.[^6]
 
 Do not leave rules that can be judged automatically, such as linter and test conditions, only in the prompt. Enforce them through the environment so violations break the build or block the commit.
 
@@ -387,15 +385,13 @@ flowchart TB
 
 The orchestrator (1) reads the ADR and defines the scope, (2) **first** defines interfaces such as endpoints, types, and event payloads for work spanning packages, (3) delegates the contracts and constraints to each subagent, and (4) reviews and integrates the combined changes.
 
-Each subagent **reads only its package's AGENTS.md, runs commands only within its own directory, and does not casually copy patterns from another package.** Work proceeds in dependency order: CDK → Go API → Web.
+Each subagent **applies root and parent-directory instructions, then checks its package's AGENTS.md and assigned scope.** It runs commands in its assigned directory and does not casually copy another package's patterns. Work proceeds in dependency order: CDK → Go API → Web.
 
 The noise from dozens of files examined while working on the Go API is discarded with the Go subagent's context. The orchestrator's context remains clean, holding only the broad direction and each subagent's conclusion.
 
 PixelBank uses Python and FastAPI rather than Go for its backend, so its subagent structure differs accordingly. The foundation remains the same: packages with different toolchains are separated into subagents with their own context, tool, and guardrail boundaries.
 
-Dividing roles alone does not create subagents.
-
-As discussed in an earlier post,[^2] changing only the prompt to say "you are the reviewer" or "you are the tester" leaves every role dependent on the same context and tools.
+Role names alone do not divide work effectively. As discussed earlier,[^2] agents can share common goals while each has a defined scope and results to check.
 
 In EncBird, each subagent uses its package's AGENTS.md and its own lint and build commands. Context, tool, and guardrail boundaries must all be divided before the noise read in an earlier stage can be discarded.
 
@@ -409,7 +405,7 @@ Build context, tools, and guardrails first, then divide the work across subagent
 
 Once stages 1 through 5 establish direction and the basic harness, iterative feature implementation begins.
 
-The agent at this stage works with substantial autonomy. In both the case where Claude Code wrote 90% of its own code and the case where Codex wrote one million lines without manually written code, the teams built tools and validation environments around the model.[^6]
+The agent at this stage works with substantial autonomy. OpenAI's internal experiment with a roughly million-line repository and Anthropic's long-running agent case both built tools and validation environments around the model.[^6]
 
 As the model changes, the codebase grows, and new requirements arrive, the agent finds new ways to stumble. Each time, add another layer.
 
@@ -428,29 +424,31 @@ flowchart LR
 
 I put conditions identified through this round of debugging and refactoring into rules (`AGENTS.md`) or guardrails such as linters and tests. This reduces the need to make the same fixes for the same reasons on the next request.
 
-Harness updates can be divided into two types by time horizon.[^1]
+Harness updates can be grouped by what they change.[^1]
 
 {% raw %}
 ```mermaid
 flowchart TB
-    subgraph CTX["Context updates — maintain long-term direction"]
-        C1["Continuously update context so the agent stays aligned with<br/>the project's broad direction and requirements"]
-        C2["PRD · codebase · API documentation<br/>test results · ADR · AGENTS.md"]
+    subgraph CTX["Context updates — information for decisions"]
+        C1["Update the information needed<br/>to follow current requirements"]
+        C2["Current ADRs · code · API documentation<br/>test results · AGENTS.md"]
     end
-    subgraph HRN["Execution-harness updates — detect and recover short-term errors"]
-        H1["Use feedback loops for self-correction and<br/>guardrails for deterministic validation"]
-        H2["Tools · feedback loops (Skills · MCP)<br/>guardrails (blocking Hooks · linters · tests)"]
+    subgraph HRN["Validation and recovery updates"]
+        H1["Revise and recheck after failure<br/>Block rule violations"]
+        H2["Tools · task instructions<br/>Linters · tests · blocking hooks"]
     end
     CTX --> ALL["Autonomous development environment"]
     HRN --> ALL
 ```
 {% endraw %}
 
-**Context updates** operate over a long horizon.
+**Context updates** change the information the agent uses to decide.
 
-Keep the PRD, ADRs, AGENTS.md, and codebase current so that even during a multi-day task, the agent does not drift from the project's broad direction.
+Keep current ADRs, project instructions, and code aligned so the agent does not lose requirements during long tasks. Update the PRD when revising planning before handoff; after handoff, PRD changes require a separate re-import.
 
-Stages 1 and 2 belong here. **Execution-harness updates** operate over a short horizon. During each execution cycle, tools perform the work, feedback loops drive correction, and guardrails provide deterministic validation so short-term errors do not accumulate. Stages 3, 4, and 5 belong here.
+Stages 1 and 2 establish that information. Context is not limited to long-lived documents: code read during work and test results also inform the next decision.
+
+**Validation and recovery updates** change how results are checked and another attempt is made. Stages 3, 4, and 5 provide tools, verification paths, and role responsibilities. Check results return to context, so the two roles connect during each execution.
 
 EncBird's AGENTS.md describes the ADR-first feedback loop this way.
 
@@ -482,3 +480,4 @@ The cause and solution you just discovered must remain in a file if you want the
 [^5]: [What to Consider Before Building an MCP Server](/en/2026/03/02/considerations-before-developing-mcp-server.html).
 [^6]: [OpenAI — Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/) (2026.02.11) / [Anthropic — Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
 [^7]: [Agentic Engineering and Transitional Technologies](/en/2026/05/11/direction-of-agentic-engineering.html).
+[^8]: [ALPS Writer Plugins — Dependency model](https://github.com/haandol/alps-writer-plugins/blob/main/docs/dependency-model.md) — the transfer of PRD requirements into ADRs and their role as the implementation reference afterward.

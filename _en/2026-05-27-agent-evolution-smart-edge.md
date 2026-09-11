@@ -8,7 +8,7 @@ tags: ai agent agentic-development orchestration vertical-agent headless-saas ph
 publish: true
 lang: en
 date: 2026-05-27 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: agent-evolution-smart-edge
 korean_url: /2026/05/27/agent-evolution-smart-edge.html
 permalink: /en/2026/05/27/agent-evolution-smart-edge.html
@@ -31,7 +31,7 @@ It reminds me of the Enterprise Service Bus (ESB) that mediated communication be
 
 In operation, complexity grows along with the responsibilities concentrated at the center. **The center's processing capacity and the cost of changing it can become bottlenecks for the whole system.**
 
-The industry gradually moved in another direction. Messaging infrastructure such as Kafka is a good example. The pipeline becomes intentionally simple, or a dumb pipeline, while domain knowledge and decisions move to producers and consumers at both edges, creating smart edges. We have already experienced a transition in which the whole system can behave intelligently without an intelligent center.
+Another choice is to leave message delivery at the center and business decisions in the services that send and receive messages. Infrastructure such as Kafka can support this design. That is what I mean here by dumb pipeline, smart edge. Using Kafka does not automatically distribute responsibility; the team still has to decide which services own the business rules.
 
 Looking at today's agent ecosystem, it sometimes feels as if we have returned to the stage before learning that lesson. Every tool hangs from **the ESB called the main agent**.
 
@@ -87,7 +87,7 @@ When users begin and finish work inside a SaaS product's screens, its UI and wor
 
 If the main agent combines multiple services, SaaS companies can concentrate on providing **smart edges specialized in their domains**. This is **headless SaaS**: the main agent calls capabilities without requiring the user to operate the screens directly.
 
-Instead of focusing on orchestration itself, focus on building **a domain-specific tool that does genuinely intelligent work when the orchestrator calls it**. The agent with the deepest context and most sophisticated harness in one area may become the default for that domain. It resembles the smart appliances described above.
+Alongside coordinating tools, I am interested in **specialized tools that complete and validate the work they are given**. A service that handles a workflow's rules and exceptions well could become a tool the main agent chooses repeatedly, much like the smart appliances imagined above.
 
 ## 6. From a developer's perspective: domain knowledge and the Forward Deployed Engineer
 

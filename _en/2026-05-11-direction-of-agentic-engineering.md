@@ -8,7 +8,7 @@ tags: ai agent harness-engineering agentic-development claude-code headless
 publish: true
 lang: en
 date: 2026-05-11 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: direction-of-agentic-engineering
 korean_url: /2026/05/11/direction-of-agentic-engineering.html
 permalink: /en/2026/05/11/direction-of-agentic-engineering.html
@@ -43,9 +43,9 @@ But this problem will not disappear automatically as models improve. We are movi
 
 Model progress expands the range that an agent can close on its own, but reducing the actual bottleneck remains an engineering problem in its own right.
 
-The bottleneck after review is **deployment**. A human still has to participate in the handoff from something built locally to something running in production. Packaging the code, building an image, configuring environment variables and permissions, and deciding whether to roll back after a failure all fall into this category.
+**Deployment** can become the bottleneck after review. Packaging, image builds, and environment configuration can already be automated. But in teams where a person decides whether to apply each change to production or revert after a failure, those decisions remain.
 
-This point also reaches backward into the development stage. **If even one point of human intervention remains at the end of the pipeline, the stages before it are ultimately designed around that person.** If someone must inspect the code and make a judgment during deployment, the development stage must preserve code in a form that "a person can understand and review." Human dependence in deployment ends up setting the limit on automation in development.
+This also affects development. **If every change waits for human approval, faster earlier stages may leave total throughput limited by approval speed.** We then need to distinguish changes requiring judgment from those that can be checked automatically, and prepare the necessary evidence during development.
 
 Both bottlenecks are real today, but they are **finite bottlenecks** in the sense that their scope can shrink as models, harnesses, and deployment and operations automation improve. What matters is which tools can ride the trend when these bottlenecks begin to disappear.
 
@@ -57,7 +57,9 @@ The way I became accustomed to using Cursor inside an IDE was to proceed while c
 
 This does not mean that a particular product cannot change in the future. Here, I want to distinguish designs by where they require human review rather than by product name.
 
-On the opposite axis are headless coding-agent configurations and approaches such as Anthropic's Managed Agents. These begin by removing the person. Their default mode assumes that the agent runs its own loop, verifies its own work, and deploys on its own. The immediate experience may be rougher than with coexistence-oriented tools, but their ceiling rises along with advances in LLMs and agents.
+I am interested in headless coding agents, which run without an interactive screen, and long-running environments such as Anthropic's Managed Agents. Managed Agents handles tool execution and the agent's working environment, but it does not define our service's validation criteria or deployment approvals for us.[^4]
+
+I want to connect tests, deployment, and recovery procedures to these environments so work can continue without waiting for a person's next instruction. I care more about whether that setup works than which product provides it.
 
 Even if models improve, review queues remain if people must still check every change. To use the wider scope of work models can handle, we need to move repeatable judgments into tests and the harness.
 
@@ -82,3 +84,5 @@ I intend to spend more time on tools and designs that move recurring decisions o
 [^2]: [Multi-Agent Without a Harness Is Just Context Engineering](/en/2026/03/31/multi-agent-without-harness-is-just-context-engineering.html).
 
 [^3]: [AI Made the Code Faster, So Why Is Review Harder?](/en/2026/08/18/ai-coding-review-cognitive-load.html) — moving repeated review judgments into contracts and guardrails so that people decide only new contracts and exceptions.
+
+[^4]: [Anthropic — Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview) — describes the harness, tool execution, and managed environment for long-running agents.

@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent cognitive-load developer-experience code-review hitl
 publish: true
-last_modified_at: 2026-09-09 22:42:10 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 lang: ko
 translation_key: ai-coding-review-cognitive-load
 english_url: /en/2026/08/18/ai-coding-review-cognitive-load.html
@@ -20,7 +20,7 @@ english_url: /en/2026/08/18/ai-coding-review-cognitive-load.html
 
 ## 시작하며
 
-고객과 AI 코딩에 관해 이야기하다가, Agent가 만든 코드를 리뷰할 때 인지부하가 심하게 걸린다는 말을 들었다.
+고객과 AI 코딩에 관해 이야기하다가, Agent가 만든 코드를 리뷰할 때 인지부하가 심하게 걸린다는 말을 들었다. 여기서 인지부하는 작업을 이해하고 판단하려고 머릿속에 정보를 유지하는 데 드는 부담이다.
 
 내 경험을 돌아보니 나는 그런 느낌을 거의 받지 못했던 것 같다.
 
@@ -141,29 +141,32 @@ Agent는 계약을 기준으로 구현하고 테스트한 뒤, 요구사항별�
 - 명시된 계약 조건을 모두 지켰는가
 - 계약에 없던 판단은 어떤 가정을 바탕으로 내렸는가
 
-예를 들어 결제 코드 전체를 읽기 전에 아래 정도를 먼저 확인하는 식이다.
+예를 들어 결제 코드 전체를 읽기 전에 아래 내용을 먼저 확인하는 식이다. 실제 실행 결과가 아니라, 검증한 내용과 남은 판단을 구분하기 위한 가상의 보고서다.
 
 ```text
 요구사항
-같은 payment_id는 두 번 결제되지 않는다.
+- 같은 payment_id는 두 번 결제되지 않는다.
+- 같은 payment_id, 금액, 통화로 재시도하면 기존 결제 결과를 반환한다.
 
 검증
 - duplicate_webhook_does_not_charge_twice: PASS
 - retry_after_timeout_returns_previous_result: PASS
 
-계약에서 도출한 의무
-- 같은 payment_id의 재시도에는 기존 결제 결과를 반환
-
 구현 재량
 - 기존 Redis cluster에 idempotency key 저장
 - 이웃 모듈과 같은 key 형식 사용
 
+아직 검증할 조건
+- 결제 기록의 보관 기간과 유실 시에도 중복 결제를 막는지: 미검증
+
 제품 판단이 필요한 빈칸
 - 같은 payment_id로 금액이나 통화가 달라졌을 때의 동작
 - 추천안: 충돌 오류로 거부
-- 대안: 기존 결과 반환 / 새로운 요청으로 처리
+- 대안: 기존 결과 반환 / 새 payment_id로 다시 요청하도록 안내
 - 영향: 중복 결제와 데이터 의미가 달라지므로 사람에게 요청
 ```
+
+중복 결제 금지와 재시도 응답은 별개의 요구사항이다. 예시에서는 둘 다 이미 합의했다고 가정했다. 테스트 두 개가 통과해도 보관·유실 조건과 제품 판단이 남아 있으므로 전체 작업을 완료로 표시해서는 안 된다.
 
 구현 세부를 전혀 보지 않겠다는 뜻은 아니다.
 
@@ -241,9 +244,12 @@ Stacked PR은 한 번에 복원해야 하는 컨텍스트와 순간적인 리뷰
 
 요구사항 한 조각을 정하고, Agent가 구현하면, 사람이 그 변경을 이해하고 검증한 뒤 커밋한다. 그다음 작은 조각으로 넘어간다.
 
-```text
-요구사항 한 조각 → 구현 → 이해 · 검증 → 커밋
+{% raw %}
+```mermaid
+flowchart LR
+    R["요구사항 한 조각"] --> I["구현"] --> V["이해 · 검증"] --> C["커밋"]
 ```
+{% endraw %}
 
 코드가 작은 단위로 생성됐어도 사람의 이해가 같은 단위에서 닫히지 않으면 개발 사이클은 작아지지 않는다. 작은 PR 네 개를 먼저 쌓아두고 나중에 몰아서 읽으면 생성 단위는 작아도 개발 사이클은 여전히 크다.
 
@@ -283,12 +289,14 @@ ALPS의 Feature는 frontend, backend와 data layer가 아니라 사용자가 관
 
 `/feature-to-adr`가 이 Slice의 계약을 ADR로 옮기고, `/adr-impl`은 UI, API와 Data를 함께 구현하고 테스트한다. 앞의 색깔별 작은 AI 사이클에 대응시키면 아래처럼 볼 수 있다.
 
-```text
-의도와 계약을 가진 ADR
-→ Agent가 UI · API · Data를 함께 구현
-→ 계약별 증거와 테스트로 완료 리뷰
-→ Accepted
+{% raw %}
+```mermaid
+flowchart LR
+    A["의도와 요구사항을 담은 ADR"] --> I["화면 · API · 데이터<br/>함께 구현"]
+    I --> R["요구사항별 증거와 테스트 검토"]
+    R --> D["검토 완료 · Accepted"]
 ```
+{% endraw %}
 
 하나의 Slice를 의미상 더 나눌 수 없다면 같은 Slice 안에서 Stacked PR을 사용할 수 있다. 각 PR에 하나의 리뷰 질문과 테스트를 두어 순간적인 봉우리를 낮추지만, 전체 계약과 전후 컨텍스트는 Stack이 끝날 때까지 남는다.
 

@@ -8,7 +8,7 @@ tags: ai agent harness-engineering prd adr alps agentic-development hexagonal-ar
 publish: true
 lang: en
 date: 2026-07-25 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: alps-adr-abstraction-boundaries
 korean_url: /2026/07/25/alps-adr-abstraction-boundaries.html
 permalink: /en/2026/07/25/alps-adr-abstraction-boundaries.html
@@ -16,8 +16,8 @@ permalink: /en/2026/07/25/alps-adr-abstraction-boundaries.html
 
 ## TL;DR
 
-- PRDs, ADRs, and code are different resolutions of the same system.
-- The agent is a temporary orchestration layer connecting all three.
+- PRDs, ADRs, and code answer different questions about the same system.
+- After requirements are transferred, ADRs become the implementation reference.
 - Clear levels reduce change propagation and human review scope.
 
 ## Introduction
@@ -25,6 +25,8 @@ permalink: /en/2026/07/25/alps-adr-abstraction-boundaries.html
 In ALPS Writer Plugins, I clarified what should remain in each document to reduce mismatches between documentation and code.
 
 The approach treats the product requirements document (PRD), architecture decision records (ADRs), and code as **views of the same system at different resolutions**. I also recorded this principle in the repository's `AGENTS.md`.[^1]
+
+Resolution here means the level of detail. The PRD describes what users should get, ADRs hold the decisions and requirements an implementation must honor, and code provides the behavior. By a contract, I mean requirements such as allowed states, permissions, and exact limits that must survive an implementation change.
 
 After applying it, I noticed changes beyond cleaner documentation.
 
@@ -34,45 +36,41 @@ This post uses the current ALPS Writer Plugins design to explain the practical b
 
 ## 1. View the same system at three resolutions
 
-Just as C4 zooms into one system through Context, Container, and Component views, PRDs, ADRs, and code zoom into the same system.
+C4 zooms from a system's external relationships (Context), to its applications and data stores (Container), to their internal parts (Component). Similarly, PRDs, ADRs, and code describe one system at different levels of detail.
 
 ![A Clean Architecture-style target with the ALPS PRD at the center, ADRs around it, code and tests on the outside, and the Agent orchestrating across all three from outside the rings](/assets/img/2026/0725/abstraction-target-en.svg)
 
-This is a conceptual model of information resolution, persistence, and dependency direction rather than a runtime call sequence.
+The concentric circles, borrowed from Clean Architecture diagrams, illustrate the detail each document holds. They do not show runtime calls or mean that every stage must reread the PRD.
 
-The center holds the ALPS PRD: user problems, product intent, and feature contracts. It should be the most stable level, so file paths, technology inventories, and implementation plans stay out.
+The center holds the ALPS PRD's planning-stage user problems, product intent, and feature contracts. File paths, technology inventories, and detailed implementation plans stay out.
 
 The ADR ring holds rationale, alternatives, exact requirements, and system boundaries. SDKs, function signatures, internal call flow, and tuning values remain in the outer code-and-tests ring.
 
-Dependencies point inward toward contracts, while change frequency increases toward the outside.
+When planning moves to implementation, every required obligation is transferred into ADRs. **After that transfer, ADRs guide implementation and the PRD records the earlier plan.** Code must honor the ADR requirements; a later PRD edit does not automatically change them.
 
-A Context diagram with every class is more detailed, but it answers Context-level questions less effectively. Each ring also becomes clearer through what it excludes.
+A diagram of the system's external relationships becomes harder to read if it also includes every class. Documents have the same problem: details that do not help answer their question are better left at a lower level.
 
-ALPS Writer applies a `single-level read test`:
+ALPS Writer checks this by reading one document on its own, a `single-level read test`:
 
 > Can this level answer its own question by itself, without lower-level details and without omitting a contract held nowhere else?
 
-## 2. Let the agent orchestrate between levels
+## 2. Let the agent work across documents and code
 
-A Clean Architecture Use Case or Hexagonal Architecture Application Service orchestrates a business flow.[^2]
-
-It receives a request from an input adapter, invokes the domain model, and communicates with external adapters through ports. Depending on port contracts rather than a concrete database client or web framework inverts the dependency.
+A Clean Architecture Use Case or Hexagonal Architecture Application Service coordinates work: receive a request, apply business rules, and read or store the necessary data.[^2] It depends on an interface describing the storage operations it needs rather than on a particular database product. The database connection code can then change without changing the business rules.
 
 The agent plays a similar role in ALPS Writer.
 
-It reads product intent and feature contracts from the PRD, then separates durable decisions from implementation discretion at ADR resolution. During implementation, it uses the ADR to locate current code, modifies and tests it through Skills, MCP, and CLI tools, and produces review evidence.
+During handoff, it reads the PRD, transfers lasting decisions and requirements into ADRs, and identifies choices that can be left to the implementer. Later implementation uses ADRs to locate the current code. The agent follows task instructions in Skills, connects external tools through MCP, and uses command-line tools (CLIs) to modify and test code and produce results for review.
 
 This is also why the target places the Agent outside the rings. It works across all three levels but does not persistently own any of them.
 
-The roles are analogous, but the structures are not identical. A Use Case or Application Service remains as code, while the agent's orchestration plan is temporary.
+Both coordinate work, but a Use Case or Application Service remains as code, while the agent's plan serves the current execution. That plan does not become an additional implementation reference alongside PRDs, ADRs, and code.
 
-The agent is not a fourth authoritative artifact.
+Completed-task plans, search results, helper-agent arrangements, and intermediate review material do not guide the next implementation. The PRD records the planning starting point; ADRs hold current decisions, including the transferred intent and requirements; code and tests hold actual behavior. Records needed to continue unfinished work can remain useful until that work is done.
 
-Plans, search results, subagent composition, and intermediate review material matter only during execution. After the task, product intent remains in the PRD, decisions and contracts in ADRs, and current behavior in code and tests.
+The next agent reads current ADRs and code and chooses its own work sequence. Requirements should not become readable only after restoring a previous agent's internal state or a separate registry.
 
-The next agent reads those artifacts and reconstructs the orchestration. It does not need the previous agent's internal state or a hidden registry.
-
-I see this as Dependency Inversion at the development-workflow level. Durable artifacts do not depend on one agent, model, or plugin's internal state; a replaceable agent depends on the contracts in those artifacts.
+I see this as applying dependency inversion to development work. Understanding the documents does not require a particular agent or plugin's internal state. Instead, a replaceable agent reads and follows the documented requirements.
 
 The PRD, ADRs, and code therefore remain readable after removing the plugin or changing the model. The agent's execution strategy may change as long as it preserves the contracts and verification results.
 
@@ -82,13 +80,11 @@ As with abstraction layers in Clean Architecture, this structure adds classifica
 
 Read the PRD to understand why signup exists.
 
-Read the ADR to understand why the refresh-token lifetime is seven days. Drop to code only when you need the rotation logic or cache key.
+For example, read the ADR to understand why a refresh token, used to maintain a login session, lasts seven days. Read code when you need to know how the token is replaced or which key stores it in the cache.
 
 When each artifact answers its own question, an agent can load the required level and stop.
 
-ALPS Writer applies this benefit fairly aggressively.
-
-After `/feature-to-adr` handoff, normal implementation and review no longer read the PRD. `.mapping.json` stores ADR paths, status, summaries, and real contract prerequisites, but neither PRD paths nor code paths.
+ALPS Writer's `/feature-to-adr` transfers implementation requirements from a PRD into ADRs. After handoff, normal implementation and review no longer read the PRD. The ADR index, `.mapping.json`, stores each ADR's path, status, summary, and requirements from other ADRs that must be satisfied first. It stores neither PRD paths nor code paths.
 
 ADR bodies also omit PRD section numbers, Feature IDs, functions, and file paths. An agent reads the ADR and searches the current repository for relevant code.
 
@@ -100,23 +96,25 @@ Searching when needed resolves against current code. It reduces loaded context a
 
 The three levels do not change at the same frequency.
 
-Functions and modules change often, architectural decisions change occasionally, and user problems and product goals usually last longer. ALPS Writer describes this as the stability gradient `Code >> ADR >> PRD`.
+Functions and modules change often, architectural decisions change occasionally, and user problems and product goals usually last longer. ALPS Writer's `Code >> ADR >> PRD` describes those different change frequencies during planning. After handoff, implementation follows code and ADRs; PRD revisions are considered only through an explicit re-import.
 
-With clear levels, a change stops at its own resolution.
+With clear levels, an implementation-only change does not force a product-document edit. A changed requirement, however, must be reflected in code.
 
 {% raw %}
 ```mermaid
 flowchart LR
-    P["Product goal or contract change"] --> PRD["ALPS PRD"]
-    PRD --> H["Explicit handoff<br/>or re-import"]
-    H --> ADR["ADR"]
-    A["Architecture decision change"] --> ADR
+    PRD["Planning-stage ALPS PRD"] --> H["Transfer all requirements"]
+    H --> ADR["Current implementation reference: ADR"]
+    P["PRD edited after handoff"] --> R["User requests re-import<br/>Compare with current ADRs"]
+    R --> A["Approve requirement or decision change"]
+    A --> ADR
+    D["Architecture decision change"] --> ADR
     ADR --> CODE["Code and tests"]
     I["Library, module, or tuning change"] --> CODE
 ```
 {% endraw %}
 
-The repository's PRD Architecture ADR permits only C4 Context, Container, and constraints that must survive reimplementation. Component structure, frameworks, SDKs, ORMs, and internal deployment tools remain recoverable from code.
+Full ALPS architecture descriptions retain external system relationships, internal applications and data stores, and constraints that must survive reimplementation. Internal components, frameworks, software development kits (SDKs), database libraries, and deployment tools remain recoverable from code and stay out of the PRD.
 
 I also set criteria for which decisions belong in ADRs: requirement contracts, data and security boundaries, external service providers and fallback paths, and trade-offs that continue to constrain multiple implementations. Libraries, credential wiring, and module structure that can change without altering the contract stay in code.
 
@@ -126,7 +124,7 @@ Changing the adopted alternative for the same decision does not create an endles
 
 Current state, major transitions, and verbatim history do not accumulate in one document, so the number of ADRs does not grow with the number of revisions.
 
-PRD re-import also ignores changes to wording or order. It proposes an ADR update only when the actual contract or boundary changes.
+Even when the user requests a PRD re-import, changes to wording or order have no effect. Actual contract or boundary changes produce ADR proposals; removing an existing requirement is not applied automatically either.
 
 Document churn no longer scales with code churn.
 
@@ -134,19 +132,19 @@ Document churn no longer scales with code churn.
 
 Separating abstraction levels gives the agent more implementation discretion.
 
-ALPS Writer's regeneration test does not ask whether the same code can be recreated. It asks whether entirely new code can still preserve the same requirements and boundaries.
+ALPS Writer checks whether an implementation honoring the same requirements and boundaries could be rebuilt if all code disappeared. It calls this the `regeneration test`. The files and functions need not be identical.
 
-If `refresh tokens remain valid for seven days` is a pricing or security policy, the ADR records the exact seven-day value and its rationale.
+For example, if `refresh tokens remain valid for seven days` is an established security policy, the ADR records that exact value and its rationale.
 
 The SDK, function, cache structure, and module implementing that policy remain code-level choices. A later agent can choose an approach matching the current repository and tools.
 
-The value appearing in both the ADR and code is not duplication. The ADR records the contract and why it must not change freely; the code enforces it.
+The seven-day value appears in both the ADR and code, but serves different purposes. The ADR records a requirement that needs a new decision before it changes, along with the rationale; the code enforces it.
 
 Code alone shows that the value is seven days today, but not whether it is a product contract or an incidental tuning choice.
 
-Requirement values, states, permissions, ordering, and failure guarantees therefore remain in ADRs, while identifiers and representation remain in code.
+Requirement values, allowed states and permissions, mandatory ordering, and failure behavior therefore remain in ADRs. Internal names and data storage formats remain in code.
 
-This produces a state that is **contract-complete and implementation-open**.
+The requirements are **complete enough to follow while leaving the implementation open**.
 
 As long as the contract holds, an agent can refactor, select a more suitable library, and change internal structure. Humans do not need to prewrite the implementation plan to preserve the autonomy boundary.
 
@@ -180,17 +178,17 @@ ALPS Writer routes information through these questions:
 
    If yes, retain it in the PRD or ADR that owns the requirement. Exact limits, allowed states, permissions, ordering, and failure guarantees belong here.
 
-2. **If it is not a requirement, can code or a deterministic tool recover it?**
+2. **If it is not a requirement, can reading code or running a tool recover it?**
 
-   If yes, leave it in code and tests. Libraries, SDKs, signatures, module placement, and tuning values usually stop here.
+   If yes, leave it in code and tests. Libraries, SDKs, function input and output formats, module placement, and tuning values usually stop here.
 
-3. **Can code explain neither the reason for the choice nor the durable decision it changes?**
+3. **Is the reason for this choice absent from code, and would changing it alter a lasting architectural decision?**
 
    If yes, retain the rationale, alternatives, trade-offs, and boundary in an ADR.
 
 The same technology name can produce different answers.
 
-Choosing Amazon Bedrock as the external model-provider boundary, including a fallback policy, may require an ADR. The SDK, credential provider chain, and signer implementing that boundary remain in code when they preserve the same contract.
+For example, choosing Amazon Bedrock as the external model provider and deciding which service to switch to during an outage may require an ADR. The SDK and code that obtain credentials or sign requests remain implementation choices as long as they preserve those requirements.
 
 The relevant question is not whether a technology name appears, but which contract and boundary the choice fixes.
 

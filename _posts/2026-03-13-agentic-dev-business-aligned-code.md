@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development ddd business vibe-coding claude-code
 publish: true
-last_modified_at: 2026-09-09 23:59:22 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 lang: ko
 translation_key: agentic-dev-business-aligned-code
 english_url: /en/2026/03/13/agentic-dev-business-aligned-code.html
@@ -15,12 +15,12 @@ english_url: /en/2026/03/13/agentic-dev-business-aligned-code.html
 ## TL;DR
 
 - 업무 용어가 코드에 드러나면 에이전트가 수정 대상을 찾기 쉽다.
-- 에이전트에게 실행뿐 아니라 제안의 역할도 넘기고, 사람은 도메인과 조직을 고려한 판단을 한다.
+- 에이전트의 제안을 판단할 때 업무와 조직에 대한 지식이 중요하다.
 - 실행 비용이 낮아질수록 무엇을 만들지 판단하는 능력이 중요해진다.
 
 ## 시작하며
 
-베드락으로 클로드 코드를 쓸 수 있게 되면서 클로드 코드를 처음 써보고 있는데, 프로젝트 상태 관리에 GSD 라는 걸 많이 쓰고 있는 것 같다.
+베드락으로 클로드 코드를 쓸 수 있게 되면서 클로드 코드를 처음 써보고 있는데, 프로젝트 상태 관리에 GSD(Get Shit Done)라는 도구를 많이 쓰고 있는 것 같다. 요구사항과 계획, 현재 진행 상태를 문서로 남겨 다음 작업에서 읽게 하는 방식이다.[^2]
 
 개인적으로는 TaskMaster 나 todo list 같은 세션 내의 작업 추적을 위한 도구와 달리, GSD 와 같이 문서를 통해 개발 진행상황에 대한 관리를 하는 것은 과도기적인 기술이라고 생각한다.
 
@@ -34,7 +34,7 @@ english_url: /en/2026/03/13/agentic-dev-business-aligned-code.html
 
 에이전트가 수정할 코드를 찾으려면 요구사항에 나온 업무 용어와 코드의 이름을 연결할 수 있어야 한다. **코드가 어떤 업무를 처리하는지 드러날수록 그 연결이 쉬워진다.**
 
-요구사항 분석과 설계 측면에서, DDD(Domain-Driven Design)가 앞으로 더 중요해지지 않을까 생각한다. DDD 는 핵심가치 중 하나로 실제 비즈니스 프로세스가 코드에 반영되는 것을 장려하고 있기 때문이다. 유비쿼터스 언어로 도메인 전문가와 개발자가 같은 단어를 쓰고, 그 단어가 코드의 클래스명과 메서드명에 그대로 드러나는 것. 이것이 에이전트 시대에 더욱 빛을 발한다.
+요구사항 분석과 설계 측면에서, 업무의 개념과 규칙을 중심으로 소프트웨어를 설계하는 DDD(Domain-Driven Design)가 앞으로 더 중요해지지 않을까 생각한다. 현업 전문가와 개발자가 같은 단어를 쓰고 그 단어를 코드의 클래스명과 메서드명에도 사용하는 방식, 즉 유비쿼터스 언어가 에이전트에게도 업무와 코드를 연결하는 단서가 되기 때문이다.
 
 예를 들어 "주문 취소 시 환불 정책이 바뀌었다"고 요청했을 때 `OrderCancellation`, `RefundPolicy` 같은 이름이 있으면 관련 로직을 찾는 단서가 된다. 그 객체와 연결된 코드를 읽고, 변경한 정책을 테스트로 확인하는 과정도 필요하다.
 
@@ -65,3 +65,4 @@ AI 덕분에 평소 미뤄두던 문서화와 리팩토링을 시도할 여유�
 ---
 
 [^1]: [컨텍스트 엔지니어링 - 정적 컨텍스트와 동적 컨텍스트](/2026/03/11/context-engineering-static-vs-dynamic.html)
+[^2]: [GSD README](https://github.com/gsd-build/get-shit-done/blob/main/README.md) — 요구사항, 계획과 상태를 문서로 유지해 세션 사이의 작업 맥락을 이어가는 도구.

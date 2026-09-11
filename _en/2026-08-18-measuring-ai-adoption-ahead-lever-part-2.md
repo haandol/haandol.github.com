@@ -8,7 +8,7 @@ tags: ai agent agentic-development harness-engineering organization developer-ex
 publish: true
 lang: en
 date: 2026-08-18 18:00:00 +0900
-last_modified_at: 2026-09-11 14:57:48 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 translation_key: measuring-ai-adoption-ahead-lever-part-2
 korean_url: /2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html
 permalink: /en/2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html
@@ -90,7 +90,7 @@ The domain team must trust the output, classify failures, and change evaluation 
 
 The five AHEAD dimensions should not be collapsed into one score.
 
-Maximizing Autonomy can reduce Dependability. Maximizing Dependability can damage Evidence Quality and Adoption. I think the dimensions work better as a dashboard of side effects. This follows the same reasoning behind SPACE's warning against reducing productivity to one activity metric.[^3]
+Chasing automatic completion alone can hide risks. Adding manual review to every change in the name of reliability, however, can reduce the incentive to improve evidence and make the workflow harder for domain teams to use. I think we should examine how the method chosen to improve one dimension affects the others. This follows the same reasoning behind SPACE's warning against reducing productivity to one activity metric.[^3]
 
 ## 3. The boundary between Shape and Scale
 

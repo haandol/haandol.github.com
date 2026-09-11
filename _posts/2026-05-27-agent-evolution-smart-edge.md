@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development orchestration vertical-agent headless-saas physical-ai humanoid
 publish: true
-last_modified_at: 2026-09-09 23:59:22 +0900
+last_modified_at: 2026-09-11 16:33:32 +0900
 lang: ko
 translation_key: agent-evolution-smart-edge
 english_url: /en/2026/05/27/agent-evolution-smart-edge.html
@@ -29,7 +29,7 @@ english_url: /en/2026/05/27/agent-evolution-smart-edge.html
 
 그런데 운영하다 보면 중앙에 책임이 모인 만큼 복잡도도 커진다. **중앙의 처리 능력과 변경 비용이 전체 시스템의 병목이 되기 쉽다.**
 
-그래서 업계는 점차 다른 방향으로 옮겨갔다. 카프카 같은 메시지 인프라가 대표적인 예시다. 파이프라인은 의도적으로 단순해지고(dumb pipeline), 도메인 지식과 의사결정은 양쪽 끝의 프로듀서/컨슈머로 밀려난다(smart edge). 중앙이 똑똑하지 않아도 시스템 전체는 똑똑하게 동작할 수 있다는 것을, 한 번쯤 경험해본 흐름이다.
+다른 선택은 중앙에는 메시지 전달을 맡기고, 업무 판단은 메시지를 보내고 받는 서비스에 두는 것이다. 카프카 같은 메시지 인프라를 이런 방식으로 사용할 수 있다. 이것이 내가 여기서 말하는 dumb pipeline, smart edge다. 카프카를 쓴다고 자동으로 책임이 분리되는 것은 아니고, 업무 규칙을 어느 서비스에 둘지 설계해야 한다.
 
 지금의 에이전트 생태계를 보면, 묘하게 그 학습 이전 단계로 돌아가 있는 것 같기도 하다. **메인 에이전트라는 ESB**에 모든 도구가 매달려 있는 그림이다.
 
@@ -85,7 +85,7 @@ english_url: /en/2026/05/27/agent-evolution-smart-edge.html
 
 메인 에이전트가 여러 서비스를 조합하는 역할을 맡는다면, SaaS 회사는 **자기 도메인에 특화된 smart edge**를 제공하는 데 집중할 수 있다. 사용자가 직접 화면을 조작하지 않아도 메인 에이전트가 기능을 호출하는 **headless SaaS** 형태다.
 
-오케스트레이션 자체보다, **오케스트레이션이 호출했을 때 진짜로 똑똑하게 일을 해내는 도메인 특화 도구**를 만드는 데 집중하는 방향. 한 영역에서 가장 깊은 컨텍스트와 가장 정교한 하네스를 가진 에이전트가 그 도메인의 기본값으로 자리 잡을 수도 있다. 위에서 본 스마트 가전과 비슷한 결의 그림이다.
+나는 여러 도구를 조율하는 부분과 함께, **호출받은 업무를 스스로 처리하고 검증하는 전문 도구**를 만드는 데도 관심이 있다. 특정 업무의 규칙과 예외를 잘 다루는 서비스라면 메인 에이전트가 반복해서 선택하는 도구가 될 수 있다. 위에서 상상한 스마트 가전과 비슷한 역할이다.
 
 ## 6. 개발자 입장에서: 도메인 지식과 Forward Deployed Engineer
 

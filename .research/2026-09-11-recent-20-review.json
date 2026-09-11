@@ -1,0 +1,480 @@
+{
+  "scope": "latest 20 Korean posts and their English translations; existing first 3 reviewed at 638523b",
+  "voice_references": [
+    "_posts/2017-01-05-the-psychology-of-programming.md",
+    "_posts/2017-02-24-software-engineer-career.md"
+  ],
+  "posts": [
+    {
+      "file": "_posts/2026-09-06-my-thoughts-on-aws-ai-dlc.md",
+      "translation": "_en/2026-09-06-my-thoughts-on-aws-ai-dlc.md",
+      "status": "reviewed",
+      "findings": [],
+      "review_mode": "reused-verified-review",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "앞선 검토·수정이 반영된 상태를 확인했습니다. 추가 수정 없음.",
+      "modified_languages": [],
+      "sha256": {
+        "ko": "0bc60cf8ad4124adc5e8c1a518ac97e28c929f8d41a09d68fdebc6bdc250411e",
+        "en": "8b1ec7a0814101248e5de1b0ab0e2a48a4016c2f80d4e1087b1be8b1dbf8fd52"
+      }
+    },
+    {
+      "file": "_posts/2026-09-03-developers-to-internal-fde.md",
+      "translation": "_en/2026-09-03-developers-to-internal-fde.md",
+      "status": "reviewed",
+      "findings": [],
+      "review_mode": "reused-verified-review",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "앞선 검토·수정이 반영된 상태를 확인했습니다. 추가 수정 없음.",
+      "modified_languages": [],
+      "sha256": {
+        "ko": "bd0d969399c3d0aaf445b0d1c0b8d769b1562c9aba4ed275b4d96d3223e2a9ec",
+        "en": "e714d4894649abe0dc948de55e06d80b462710f425d362a5310153d183b9800a"
+      }
+    },
+    {
+      "file": "_posts/2026-08-31-frontier-development-habits.md",
+      "translation": "_en/2026-08-31-frontier-development-habits.md",
+      "status": "reviewed",
+      "findings": [],
+      "review_mode": "reused-verified-review",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "앞선 검토·수정이 반영된 상태를 확인했습니다. 추가 수정 없음.",
+      "modified_languages": [],
+      "sha256": {
+        "ko": "e2a6a062c55da9c991f9367a34cd26960426c5a9bf05ce92f7c819e8f1334e93",
+        "en": "5b6b2730a286bd46faa3156b22f66efe824be161f3fc3c513a4feb7c2809075b"
+      }
+    },
+    {
+      "file": "_posts/2026-08-18-measuring-ai-adoption-ahead-lever-part-2.md",
+      "translation": "_en/2026-08-18-measuring-ai-adoption-ahead-lever-part-2.md",
+      "status": "reviewed",
+      "findings": [
+        "Medium: explain mechanism of dimension trade-offs and table terminology"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "평가 항목 간 부작용이 생기는 원인을 설명하고, 표의 전문용어를 풀었습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "c650b7343e2bbb8395f4ac185bb0c8ac3f01ac81f4e7af450e9caa1bd85e04aa",
+        "en": "e0499d7b78c399a055150a64c1c4e8bacdcb7c5e5a75500188eaba21f05c5ef2"
+      }
+    },
+    {
+      "file": "_posts/2026-08-18-ai-coding-review-cognitive-load.md",
+      "translation": "_en/2026-08-18-ai-coding-review-cognitive-load.md",
+      "status": "reviewed",
+      "findings": [
+        "High: retry response is a separate contract from duplicate-charge prevention",
+        "Medium: define cognitive load and render actual flow diagrams"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "중복 결제 금지와 재시도 응답을 별개 요구사항으로 명시했습니다. 가상 보고서의 미검증 조건을 드러내고 흐름을 Mermaid로 바꿨습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "c770d5fbd792841a358dad6d307ed52119dd3cb55216fc5e8a00a19e06bb50a0",
+        "en": "140a6178043440dd4a5d06c959765b82a3cb363bac5c98a617d6d9c81f8888cd"
+      }
+    },
+    {
+      "file": "_posts/2026-08-14-cts-sw-software-delivery-cost.md",
+      "translation": "_en/2026-08-14-cts-sw-software-delivery-cost.md",
+      "status": "reviewed",
+      "findings": [
+        "Medium: distinguish review throughput from latency",
+        "Medium: keep observational evidence distinct from causal attribution"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "검토 소요 시간과 개발자당 주간 병합 건수를 구분하고, 팀 관찰을 인과 증명처럼 읽히지 않게 고쳤습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "c3da4183f0bfb2282f421291337c5e4cb0a8855fcebc06325edc162a897fcd2c",
+        "en": "757bfb4119384ed00c284336e49e6fd5c106b6525843213e6d7c8271be85a550"
+      }
+    },
+    {
+      "file": "_posts/2026-07-25-alps-adr-abstraction-boundaries.md",
+      "translation": "_en/2026-07-25-alps-adr-abstraction-boundaries.md",
+      "status": "reviewed",
+      "findings": [
+        "High: distinguish PRD planning authority from ADR implementation authority after handoff",
+        "Medium: explain terminology and connect argument; fix English question 3"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "PRD 기획 단계와 ADR 이관 이후를 구분했습니다. 구현 기준의 이전을 본문·Mermaid·SVG에 반영하고 추상적인 용어를 풀었습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "c30aa9b3229e78ecebeb6d29ec6c92818df65c83e29d2174208df6a829131ef3",
+        "en": "d3642c3ffab35bc294e24c6c6787e16c9771b00a241a6efe69602e173c812573"
+      }
+    },
+    {
+      "file": "_posts/2026-06-27-failure-comes-first.md",
+      "translation": "_en/2026-06-27-failure-comes-first.md",
+      "status": "reviewed",
+      "findings": [
+        "Medium: preserve hypothesis and approximate timing in English"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "한국어 경험과 가설은 유지했습니다. 영어 요약의 가설 표시와 약 2년이라는 기간 표현을 맞췄습니다.",
+      "modified_languages": [
+        "en"
+      ],
+      "sha256": {
+        "ko": "f7311deb771feb5221fed30c4df47c7164dc269b343c3eb8c9383418b23c74e8",
+        "en": "78a21ecb3bde6a8492d6d3566af8d4c50e77fc3a64ca14aab06a18e02d6a8f73"
+      }
+    },
+    {
+      "file": "_posts/2026-06-16-harness-engineering-in-practice.md",
+      "translation": "_en/2026-06-16-harness-engineering-in-practice.md",
+      "status": "reviewed",
+      "findings": [
+        "High: PRD handoff lifecycle contradicts implementation authority",
+        "Medium: clarify parent instructions, MCP process and illustrative hook failure behavior",
+        "Medium: distinguish context and validation by role rather than timescale"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "ADR 이관, 상위 AGENTS.md 적용, MCP 로컬 프로세스와 도구 설명을 수정했습니다. 훅 예시의 실패 전파와 컨텍스트·검증 역할 구분을 보완했습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "b1d88db86064b37c97a40e151cd022e9ee83455a3fa90a353572d3f2b0517dbc",
+        "en": "22f0a95618579ca986eb6fb4b9d223ffff4de88f5fa9d9c0084cfb98e4d5723f"
+      }
+    },
+    {
+      "file": "_posts/2026-06-15-organizational-ai-adoption-3s.md",
+      "translation": "_en/2026-06-15-organizational-ai-adoption-3s.md",
+      "status": "reviewed",
+      "findings": [
+        "Medium: clarify translated maintenance burden and learning from failures"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "제안과 관찰의 구분은 유지했습니다. 실패의 학습 반영과 유지보수 부담을 설명하는 번역을 바로잡았습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "d24ede2bd47b463c58f31113e1e411744dffc777ad1f51443557a17669f0456f",
+        "en": "9062adf11ad7581f545f370228e0414e441af7ebc16f72edb2c6c97f4f5c6712"
+      }
+    },
+    {
+      "file": "_posts/2026-06-12-lens-for-agentic-engineering.md",
+      "translation": "_en/2026-06-12-lens-for-agentic-engineering.md",
+      "status": "reviewed",
+      "findings": [
+        "High: generated-code proportion does not establish complete software-engineering automation",
+        "Medium: explain modeling, HITL and business-value premise; bound company labels"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "모델링과 HITL을 설명하고 관찰·가정을 구분했습니다. 코드 생성량을 전체 개발 자동화로 해석하던 부분을 수정했습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "45e866b765ba3032ae8b332e5e893c7bdf9a67f801d87e5c3cd7b3145d225f72",
+        "en": "f32527faac40739f56aaafe8c5ba53b370cc9fabab744b4fa4c39fa6d4510a62"
+      }
+    },
+    {
+      "file": "_posts/2026-05-27-agent-evolution-smart-edge.md",
+      "translation": "_en/2026-05-27-agent-evolution-smart-edge.md",
+      "status": "reviewed",
+      "findings": [
+        "Medium: qualify ESB/Kafka analogy and replace inflated claims about specialized tools"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "ESB·Kafka를 업계 전체의 필연적 진화로 묘사하지 않도록 한정하고, 전문 도구의 역할을 구체적으로 썼습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "22d49bd81c3e30af19cad665667b22576d1e082188716e997181ec7c9193ecbf",
+        "en": "8ff54e602e2f88a0b6841fe0599adc5a49e3a7d8a9511914c3d2a35647d8620d"
+      }
+    },
+    {
+      "file": "_posts/2026-05-11-direction-of-agentic-engineering.md",
+      "translation": "_en/2026-05-11-direction-of-agentic-engineering.md",
+      "status": "reviewed",
+      "findings": [
+        "High: managed runtime does not imply automatic production deployment",
+        "Medium: distinguish repeat approvals from already automated deployment steps"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "관리형 실행 환경과 자동 배포를 구분했습니다. 이미 자동화 가능한 작업과 사람에게 남기는 판단을 나눴습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "efe45006600035800b9ef92c2bc340f5d79437835e4991be2bb14b6bfb838ab8",
+        "en": "e15043dd374b39cb0afd61fe5e55cd8b06d2a99d35c9704c599847368f744553"
+      }
+    },
+    {
+      "file": "_posts/2026-04-17-future-agentic-app-engine.md",
+      "translation": "_en/2026-04-17-future-agentic-app-engine.md",
+      "status": "reviewed",
+      "findings": [
+        "Medium: code execution does not guarantee determinism or negligible cost",
+        "Medium: concrete validation and approval responsibilities"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "코드 실행이 언제나 결정론적이고 저렴하다는 단정을 고쳤습니다. 생성·반영 권한과 검증 책임을 구체화했습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "391ba4d450ce6361d27f36ceec38f7607ba0435fc1b4f6b2d546937be535d418",
+        "en": "bfbbfa44a05e29b25e4a27a776b06e0d3d425250513774e66f985637e49b9e53"
+      }
+    },
+    {
+      "file": "_posts/2026-03-31-multi-agent-without-harness-is-just-context-engineering.md",
+      "translation": "_en/2026-03-31-multi-agent-without-harness-is-just-context-engineering.md",
+      "status": "reviewed",
+      "findings": [
+        "Medium: shared context does not imply identical agents",
+        "Medium: distinguish tool support from designed validation and recovery"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "공통 컨텍스트를 공유해도 역할과 검증을 나눌 수 있음을 설명하고, 도구의 기본 기능과 직접 설계할 절차를 구분했습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "6ef929d4208031fd4712351ef27417010b29a29a0e8bcb98615a5862f4c34524",
+        "en": "52fe1ccda9550197903a8907af553a08478bd52406c971676f9660dbc55cddf2"
+      }
+    },
+    {
+      "file": "_posts/2026-03-15-harness-engineering-beyond-context-engineering.md",
+      "translation": "_en/2026-03-15-harness-engineering-beyond-context-engineering.md",
+      "status": "reviewed",
+      "findings": [
+        "High: incorrect chronology and quote attribution",
+        "Medium: distinguish verification from guaranteed recovery; correct code-volume scope"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "Anthropic 글의 발표 순서와 Birgitta Böckeler의 저자 표기를 고쳤습니다. 확인되지 않은 직접 인용과 최초 명명 주장을 정리하고 실험 범위를 명시했습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "5ae06629b429ec2aa5e891f8ebc135a9846061771338358aca2a5587e0ad503e",
+        "en": "b6ac32481e5a6dcd417e624f76779341179ff8cc77b86d18a2cb8779fb915c09"
+      }
+    },
+    {
+      "file": "_posts/2026-03-13-agentic-dev-business-aligned-code.md",
+      "translation": "_en/2026-03-13-agentic-dev-business-aligned-code.md",
+      "status": "reviewed",
+      "findings": [
+        "Medium: explain GSD and DDD; shorten compound TLDR"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "GSD와 DDD의 역할을 설명하고, 도입과 요약을 읽기 쉽게 연결했습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "5dd7bed8ab509cf59f9e03abf2255175e5d903ef45dc355fa34ddf7263a6fad7",
+        "en": "7dcccceaa9709f1c4cdcb2b6b02f82accd00df226d8b1045dbe1c5d03863473c"
+      }
+    },
+    {
+      "file": "_posts/2026-03-12-genai-flywheel-for-business.md",
+      "translation": "_en/2026-03-12-genai-flywheel-for-business.md",
+      "status": "reviewed",
+      "findings": [
+        "Medium: replace model-training diagram with actual expression reuse loop"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "모델 정확도 향상까지 암시하던 그림을 EncBird의 실제 대화→표현사전→복습 흐름으로 교체했습니다. 재방문 효과는 기대임을 표시했습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "36b160c13527129520c4fb7a1620ffeb18e5f7592be50e0a3d209748bfc64da1",
+        "en": "96aed7ffffd2edaea0f28296dcf4d71b98601ce97232a5cb775303996bffd7a7"
+      }
+    },
+    {
+      "file": "_posts/2026-03-12-agi-dystopia-or-utopia.md",
+      "translation": "_en/2026-03-12-agi-dystopia-or-utopia.md",
+      "status": "reviewed",
+      "findings": [
+        "Medium: preserve hypothesis status in TLDR and explain AGI/ASI"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "AGI·ASI를 설명하고 요약의 확정적인 전망을 본문의 가정·우려와 맞췄습니다. 저자의 미래관과 경험은 유지했습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "f0a3d2c148aa3c9d6c013c008aab081228afeeed64021b17302739e38a540eba",
+        "en": "47bfafc627ae12738d3be6cdffa4e8ba07fede8940a0884717944424cd1e0598"
+      }
+    },
+    {
+      "file": "_posts/2026-03-11-context-engineering-static-vs-dynamic.md",
+      "translation": "_en/2026-03-11-context-engineering-static-vs-dynamic.md",
+      "status": "reviewed",
+      "findings": [
+        "Medium: explain PRD/ADR and static context lifetime"
+      ],
+      "review_mode": "revised-and-rereviewed",
+      "final_findings": {
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+      },
+      "summary": "PRD·ADR과 정적 컨텍스트의 유지 기간을 설명하고, 도입의 끊긴 문장을 연결했습니다.",
+      "modified_languages": [
+        "ko",
+        "en"
+      ],
+      "sha256": {
+        "ko": "c33e0f8bb984e4d4cf01cbde612251a50cc13e5f6936637542d417d3398d11ff",
+        "en": "177a6880c585c2afbbbc424da0dfad2d59f1fcb1e8952809c7652c93da83df9f"
+      }
+    }
+  ],
+  "completed_at": "2026-09-11 16:33:32 +0900",
+  "validation": {
+    "lint_files": 40,
+    "internal_post_links": 124,
+    "image_references": 12,
+    "mermaid_rendered": 18,
+    "svg_rendered": 2,
+    "hook_example_scenarios_passed": 3,
+    "diff_check": "passed",
+    "jekyll_build": "not run: Bundler 2.6.8 unavailable (installed default 1.17.2)"
+  },
+  "assessment_limits": [
+    "Editorial self-review, not an independent review or AI-authorship detector.",
+    "The first three articles reuse the review applied in commit 638523b; no additional changes.",
+    "Source checking focused on disputed technical claims and attributions; underlying datasets and private applications were not independently reproduced.",
+    "Full Jekyll site build unavailable due to missing required Bundler."
+  ]
+}
