@@ -98,8 +98,11 @@ citations, and validation.
 After every blog draft, prose revision, or translation, run
 `.agents/skills/haandol-blog-review/SKILL.md` before reporting completion.
 This applies to `_posts/`, `_drafts/`, `_en/`, and blog copy composed in the
-conversation. Review the article's thesis and AI slop in expressions, sentence
-structure, and connections between sentences. List concrete findings, apply
+conversation. Use the review skill's six axes: sentence naturalness, flow,
+theme and composition, grounded explanation, AI slop, and author voice.
+Let the LLM judge details in context and ground style comparisons in older
+author posts and current preferences. Classify concrete findings separately
+as High, Medium, or Low. List findings, apply
 supported fixes within the requested scope without another approval, and
 re-review the whole result until High and Medium findings are both zero, using
 the review skill's severity criteria. Do not stop at a fixed number of rounds

@@ -10,12 +10,12 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 ## Workflow
 
 1. Read the entire target post or supplied material. Identify the reader's question, the author's answer, the audience, and which claims are observations, inferences, or proposals. For review-only requests, use [haandol-blog-review](../haandol-blog-review/SKILL.md) in report-only mode.
-2. Read 2-4 related recent posts before changing definitions, terminology, or the author's recurring argument. Also compare at least two older author posts for voice; reuse suitable posts already read. Prefer internal links for ideas established elsewhere.
+2. Read 2-4 related recent posts before changing definitions, terminology, or the author's recurring argument. Also compare at least two older author posts for voice; reuse suitable posts already read. Note their paths and relevant recurring traits so the review can assess the author's style against actual passages. Current user preferences take priority over old habits. Prefer internal links for ideas established elsewhere.
 3. Draft toward that question and answer. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it.
 4. Apply "Remove AI Slop" and "Write for Junior Developers and Interested Non-Developers" while composing, not only after drafting. Edit paragraphs and diagrams together so they express the same causal model.
-5. After every draft, prose revision, or translation, read and execute [haandol-blog-review](../haandol-blog-review/SKILL.md). Cover the whole article, including title, excerpt, TL;DR, headings, diagrams, conclusion, and an accompanying translation. List findings, apply supported fixes within the user's scope, and re-review without asking for routine approval. This also applies to blog copy written in conversation.
+5. After every draft, prose revision, or translation, read and execute [haandol-blog-review](../haandol-blog-review/SKILL.md) across its six evaluation axes. These cover sentence naturalness, flow, theme and composition, grounded explanation, AI slop, and author voice; the review skill defines them in one place. Cover the whole article, including title, excerpt, TL;DR, headings, diagrams, conclusion, and an accompanying translation. Let the LLM judge passages in context rather than enforce scores or phrase counts. List findings, apply supported fixes within the user's scope, and re-review without asking for routine approval. This also applies to blog copy written in conversation.
 6. Repeat the review's fix-and-recheck loop until a full review of the latest article finds **High: 0 and Medium: 0**, using the severity definitions in the review skill. Review is mandatory even for an apparently clean first draft. Do not stop after listing suggestions, one round of fixes, or an arbitrary number of rounds. Low findings alone do not block completion.
-7. Complete the applicable validation below, then report the fixes and final High/Medium counts. If a real source, permission, or author-decision blocker prevents resolving a finding, finish independent work and state the unresolved finding and needed input; do not call the article complete or count the finding as resolved.
+7. Complete the applicable validation below, then report the fixes and final High/Medium/Low counts. If a real source, permission, or author-decision blocker prevents resolving a finding, finish independent work and state the unresolved finding and needed input; do not call the article complete or count the finding as resolved.
 
 ## Build The Argument
 
@@ -229,7 +229,7 @@ Also verify:
 
 - a junior developer or interested non-developer can follow the argument without looking up unexplained terminology; source paraphrases and English translations use the same plain reading level and natural sentence flow, rather than chopping explanations into short statements;
 - the AI-slop prose pass is complete; rewrites preserve factual meaning and the author's position without fabricated detail;
-- `haandol-blog-review` has listed findings with severity, applied supported in-scope fixes, and reviewed the latest whole article for thesis alignment, connections, structure, and expressions until High and Medium findings both reach zero; an explicit review-only request reports findings without editing;
+- `haandol-blog-review` has assessed all six axes, grounded author-style judgments in reference posts and current preferences, listed findings with High/Medium/Low severity, applied supported in-scope fixes, and reviewed the latest whole article until High and Medium findings both reach zero; an explicit review-only request reports findings without editing;
 - required front matter exists and `excerpt` is English;
 - every `_en/` translation has `last_modified_at` set to its actual English
   publication or meaningful revision time; update Korean `last_modified_at`

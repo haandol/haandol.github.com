@@ -8,7 +8,7 @@ tags: career ai agent agentic-development ai-dlc harness-engineering hitl soluti
 publish: true
 lang: en
 date: 2026-09-06 09:00:00 +0900
-last_modified_at: 2026-09-11 14:44:54 +0900
+last_modified_at: 2026-09-11 16:05:06 +0900
 translation_key: aws-ai-dlc-thoughts
 korean_url: /2026/09/06/my-thoughts-on-aws-ai-dlc.html
 permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -119,7 +119,7 @@ Kiro's published Frontier Engineering guide points in the same direction. Its se
 
 > “The goal is to progressively remove yourself from the loop”
 
-People set the direction and verify the outcome, while agents handle the repeated implementation, testing, and fixes in between. The guide shows that **the direction I believe in also aligns with what the people building agent tools are publicly advocating**.
+People set the direction and verify the outcome, while agents handle the repeated implementation, testing, and fixes in between.
 
 ## 2. The Process Difference — Making the Big Loop Run Faster
 
@@ -129,7 +129,7 @@ In the past, even an attempt to test a small version of a product often stopped 
 
 Today, even with temporary substitutes for some functions and data, we can connect existing code and real screens to make something close to the service. Users can try it first, then decide what they need next.
 
-Imagine the traditional software development life cycle as bending a hundred-meter wire into one large circle.
+The software development life cycle (SDLC) covers planning, building, and operating software. Consider an approach that collects requirements in one batch before design and development: it resembles bending a hundred-meter wire into one large circle.
 
 Requirements are collected, the system is designed, development and testing follow, and the circle closes for the first time only at the end.
 
@@ -189,7 +189,7 @@ The longer an agent works without a person, the more it needs a good harness, bu
 | Rules for thinking and work order (cognitive scaffolding) | Forces how the model should think and in which order it should work | Likely to shrink |
 | An environment for doing the work (execution infrastructure) | Provides tools, permissions, an isolated space to run code, tests, and records of what happened | Remains necessary |
 
-One approach divides work among agents with different roles, such as a Planner to make plans, a Critic to find problems, a Reviewer to check results, and a Reflection Agent to look back over the work; another has people prescribe how work should be broken down. Both were attempts to help models that struggled to solve problems on their own.
+One approach divides work among agents with different roles, such as a Planner to make plans, a Critic to find problems, a Reviewer to check results, and a Reflection Agent to look back over the work; another has people prescribe how work should be broken down. These procedures can help with problems a model struggles to solve on its own.
 
 A strong model can choose a different first action for each problem.
 
@@ -226,9 +226,7 @@ Because the organizations behind Claude Code and Codex develop both models and a
 
 Anthropic also says it is difficult to predict what information and instructions future models will need. In Managed Agents, it therefore separates and connects the session, which manages work records; the harness, which helps the model do the work; and the sandbox, an isolated place to run code.[^8]
 
-OpenAI's Codex case focuses less on teaching the model a long sequence of thinking steps and more on automatically checking that code follows the agreed structure and rules, and using tests to check the results.[^9]
-
-That is close to the role I expect a good harness to play.
+OpenAI's Codex case also includes written plans, reviews between agents, and repeated fixes. What caught my attention was the environment: it automatically checks code structure and rules, and lets agents inspect the application UI and logs themselves.[^9]
 
 > **A harness should provide the playing field, not decide how the model plays the game.**
 
@@ -284,7 +282,7 @@ Working on a range of customer problems as an SA has been valuable. What I need 
 
 I have also seen people in product organizations who only complete assigned tickets and collect a paycheck without caring about the outcome. **Owning an outcome requires staying involved from problem definition through operation.**
 
-As AI narrows the differences in people's ability to write code, it becomes more important for a team to share the problem and its background, check results, and improve the harness so the same failures do not happen again. Amazon teams using the same tools produced sharply different results for the same reason.[^5]
+As AI narrows the differences in people's ability to write code, I think it becomes more important for a team to share the problem and its background, check results, and improve the harness so the same failures do not happen again. Amazon's account also describes changes in these working practices among the teams with larger gains.[^5]
 
 I want to work with **a team that runs a product together and uses what went wrong to inform its next decisions**.
 

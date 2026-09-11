@@ -8,7 +8,7 @@ tags: ai agent frontier-development harness-engineering organization developer-e
 publish: true
 lang: en
 date: 2026-08-31 00:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 16:05:06 +0900
 translation_key: frontier-development-habits
 korean_url: /2026/08/31/frontier-development-habits.html
 permalink: /en/2026/08/31/frontier-development-habits.html
@@ -16,13 +16,13 @@ permalink: /en/2026/08/31/frontier-development-habits.html
 
 ## TL;DR
 
-- Teams using the same tools achieved very different results because they worked differently.
+- Teams using the same tools achieved very different results.
 - Frontier teams increased agent autonomy through five habits.
 - Review and decision-making became the next bottlenecks after coding.
 
 ## Introduction
 
-While working on the CTS-SW post, I looked for evidence about how much AI coding tools actually change software delivery speed.
+While working on the CTS-SW post about software delivery costs across development, review, and operations, I looked for evidence about how much AI coding tools actually change delivery speed.
 
 The numbers varied widely. Some teams reported modest improvements, while others claimed gains of several times or even more than 10x.
 
@@ -32,7 +32,7 @@ AWS Senior Principal Engineer Clare Liguori presented the characteristics of `Fr
 
 The talk ranges from a system estimated to require 30 people for 18 months but built by six people in 76 days, to a comparison of 50 teams maintaining existing codebases.
 
-What interested me most was the explanation of why teams using nearly the same AI tools diverged so sharply: five habits in how they worked.
+The speaker organized the working practices of teams with larger gains into five habits. I was particularly interested in the differences she observed among teams using the same tools.
 
 ## 1. AI coding is entering a fourth phase
 
@@ -65,27 +65,23 @@ Clare defines frontier developers through three behaviors rather than a particul
 2. They let agents work for hours without human intervention.
 3. They minimize idle time by having several agents process a backlog in parallel.
 
-These numbers are not standards that every developer should follow.
-
-They are closer to an operational description of early adopters inside Amazon who achieved step-function productivity gains.
-
-The talk does not stay with the definition for long. It moves directly into three cases that show how these behaviors appeared in real teams.
+These numbers describe early adopters inside Amazon whose productivity improved substantially, rather than standards every developer should follow.
 
 ## 2. Six people built it in 76 days—but the result was not automatically reproducible
 
 The first case is the Bedrock Mantle team.
 
-The Bedrock organization needed a new inference data plane and initially estimated that the work would require 30 people for about 18 months.
+The Bedrock organization needed a new system for handling AI model inference requests and responses—an inference data plane—and initially estimated that the work would require 30 people for about 18 months.
 
 It was a large project: build a new system, then migrate customers and models from the existing one.
 
 Instead, six engineers built it with Kiro in 76 days.
 
-Amazon had not seen a result like this internally. Based on commits, the pathfinder team demonstrated an improvement of roughly 20x.
+Amazon had not seen a result like this internally. Measured by commits, the saved changes to a code repository, this initial pathfinder experiment showed an improvement of roughly 20x.
 
 The problem was that these were not six ordinary engineers.
 
-The team included two Distinguished Engineers and some of the company's strongest experts in distributed systems, LLMs, and the architecture itself. It was also a greenfield system without the constraints of an existing codebase.
+The team included two Distinguished Engineers and some of the company's strongest experts in distributed systems, large language models (LLMs), and the architecture itself. It was also a new system built without the constraints of an existing codebase.
 
 The case proved that the result was possible. It did not prove that another team could reproduce it during ordinary work.
 
@@ -93,17 +89,15 @@ The next experiment took place in Prime Video.
 
 Six different engineers used Kiro without restriction during a ten-day sprint. Based on their progress, the estimated project duration fell from 90 weeks to 24.
 
-This experiment showed that engineers outside the Bedrock Mantle team could produce a similar result.
-
-It also came with unusual conditions.
+This suggested that engineers outside the Bedrock Mantle team could also work faster. But 24 weeks was a revised estimate based on progress during the experiment, not the actual time to complete the project. The experiment also came with unusual conditions.
 
 The team had almost no on-call responsibilities or meetings, and the interruptions common in an engineer's normal day were deliberately limited. A senior engineer had also spent three weeks preparing small, well-scoped tasks and detailed requirements.
 
-It was less an ordinary development team than a sprint designed to give agents ideal working conditions.
+This sprint—a short, focused development period—was deliberately arranged to give agents favorable conditions, unlike the team's normal working environment.
 
-Amazon Stores therefore ran a more realistic pilot.
+Amazon Stores therefore ran a pilot, a trial adoption under more realistic conditions.
 
-It observed 50 teams with normal seniority distributions, working on existing systems and codebases, for much of a year.
+It observed 50 teams with normal seniority distributions, working on existing systems and codebases, over an extended period.
 
 The metric also changed from commit volume to how quickly changes reached production.
 
@@ -118,14 +112,14 @@ Tool choice alone could not explain the performance differences between teams.
 
 The teams with larger gains did more than place AI tools on top of the existing development process. **They intentionally changed how they worked.**
 
-The three cases can be read as a sequence that progressively narrows the conditions required for reproducibility, not merely as three impressive numbers.
+Across the three cases, the question shifts from what expert engineers can build from scratch to whether teams maintaining existing systems can also work faster.
 
 {% raw %}
 ```mermaid
 flowchart LR
     B["Bedrock Mantle<br/>6 engineers · 76 days"] --> P["Prime Video<br/>6 engineers · 10-day sprint"]
     P --> S["Amazon Stores<br/>50 teams on existing systems"]
-    B --> BC["Top experts · greenfield"]
+    B --> BC["Top experts · new system"]
     P --> PC["Meetings and on-call limited<br/>3 weeks of task preparation"]
     S --> L["Half: less than 3x"]
     S --> H["Half: median 4.5x<br/>some above 10x"]
@@ -134,21 +128,21 @@ flowchart LR
 
 These figures come from Amazon's internal observations as presented in the talk. The raw data and team-level methodology have not been published as a complete research study.
 
-I therefore would not treat 4.5x as an expectation that can be transferred to another organization. The more useful question is what caused teams using the same tools to diverge.
+I therefore would not treat 4.5x as an expectation that can be transferred to another organization. I would focus on the differences in working practices observed among teams using the same tools.
 
 ## 3. Five habits of frontier teams
 
 Amazon interviewed the Bedrock Mantle team, the Prime Video sprint, and teams from the 50-team pilot, then identified five shared habits.
 
-Clare deliberately uses the word `habit` rather than `practice`. The results did not come from one exceptional sprint but from a way of working repeated every day.
+Clare uses `habit` rather than `practice` to emphasize a way of working repeated every day, beyond one exceptional experiment.
 
 ### 1) Invest in agent context
 
 People carry a great deal of knowledge that never appears in documentation.
 
-They pass it to colleagues through Slack conversations, onboarding, mentoring, code reviews, stand-ups, and sprint planning. For agents, that knowledge has to be written into files.
+They pass it to colleagues through Slack conversations, onboarding, mentoring, code reviews, and planning meetings. Information agents will need again can be kept in files.
 
-Whenever an agent made a mistake or worked in a way the team would not have chosen, frontier teams asked:
+Frontier teams kept this information in Skills and steering files, which provide task instructions and project rules. Whenever an agent made a mistake or worked in a way the team would not have chosen, they asked:
 
 > What was missing from the Skill or steering file that the agent needed?
 
@@ -156,7 +150,7 @@ They did not correct the result once and move on. They preserved the lesson as c
 
 Context should not only grow.
 
-A `do not` rule added to work around an older model's behavior may no longer be necessary for a newer one. Leaving old workarounds in place only increases the context an agent must read.
+A `do not` rule added to work around an older model's behavior may no longer be necessary for a newer one. Keeping it can leave the agent with more instructions to read without helping the task.
 
 The habit is therefore two-sided: add rules when new failures reveal missing context, and remove rules when stronger models no longer need them.
 
@@ -169,16 +163,14 @@ Giving an agent a coding tool does not immediately make it productive in an exis
 The teams first made their environments easier for agents to work in.
 
 - They improved error messages so failures explained what went wrong.
-- They built new tools and MCP servers for tasks the agent could not perform.
+- They built new tools and MCP servers, which connect tools to agents through a common protocol, for tasks the agent could not perform.
 - They restructured codebases that were difficult for agents to navigate.
-- They added linters and tests.
+- They added linters, which check code for errors or rule violations, and tests.
 - When necessary, they moved to languages whose type systems and compilers returned more useful feedback.
 
 The talk mentions teams moving from Python or JavaScript to TypeScript, and others choosing Rust because its compiler returns specific errors.
 
-That does not mean every team should change programming languages.
-
-It means these teams made substantial engineering investments to reduce how much the agent had to guess and to give it actionable feedback after a failure.
+The useful lesson is why teams changed languages. They made substantial engineering investments to reduce how much agents had to guess and to show them what to fix after a failure.
 
 ### 3) Feed agents instead of babysitting them
 
@@ -195,7 +187,7 @@ Frontier teams provided the following information before the agent began:
 - How the agent should validate its own work
 - Which quality bar it must meet before returning
 
-The agent runs the code, compiles it, executes tests, checks coverage, and returns only after meeting the quality bar.
+The agent runs and compiles the code, checks test results and coverage—how much of the code the tests exercised—and returns only after meeting the quality bar.
 
 Repeated instructions move into steering files so they do not need to be typed again for the next task.
 
@@ -209,29 +201,23 @@ The conversation becomes: `"That is not what I meant,"` `"You misunderstood the 
 
 Clare argues that discussing intent through code is inefficient when the intent itself is still wrong.
 
-For complex or ambiguous features, Amazon teams first created a specification in the style of BDD, or Behavior-Driven Development.
+For complex or ambiguous features, Amazon teams first documented the behavior and result expected in a particular situation. Expressing expected behavior through concrete examples is the approach used in Behavior-Driven Development (BDD).
 
-The person did not have to write the entire document manually.
+The agent generated a draft specification, and the person and agent adjusted requirements and technical design in a document that was easier to change than code. Code generation began only after the intent was aligned.
 
-The agent generated a draft specification, and the person and agent adjusted requirements and technical design in a document that was cheaper to change than code. Code generation began only after the intent was aligned.
-
-### 5) Shift testing left
+### 5) Bring testing earlier into development
 
 For an agent to work for hours without human intervention, it needs fast feedback.
 
-The agent can make mistakes. It must be able to detect and correct them quickly.
+To help agents detect and correct mistakes quickly, frontier teams added linters, unit tests, integration tests, performance tests, and security tests.
 
-Frontier teams added linters, unit tests, integration tests, performance tests, and security tests.
+These are established engineering practices, but an added test can now help an agent each time it retries a task. That makes investment in codebases machines can read and repair more valuable.
 
-These have always been considered good engineering practices. What changed was their return on investment.
-
-A test does not prevent one person's mistake only once. It becomes part of every future agent retry loop. Making the codebase easier for a machine to read and repair has become more valuable.
-
-Several teams also invested in replacing external services with deterministic local mocks.
+Several teams invested in local substitutes, or mocks, that return a defined response for a given input during tests instead of calling the real external service.
 
 Connecting to cloud services and real environments during every iteration makes feedback slower and less predictable. When the same local input produces the same response, an agent can run more correction loops in less time.
 
-The five habits form one execution pattern.
+I would connect the five habits in the following way.
 
 {% raw %}
 ```mermaid
@@ -258,11 +244,9 @@ Clare does not claim that adopting the five habits solves every problem.
 
 This is still an early-adopter phase, and teams are learning a different way to work.
 
-One risk is burnout.
+One risk is burnout: engineers may stay up late trying to create the perfect prompt that will run overnight and leave completed code ready in the morning.
 
-Engineers stay up late trying to create the perfect prompt that will run overnight and leave completed code ready in the morning.
-
-Running several agents in parallel also means constantly switching between terminal tabs. Cognitive load removed from implementation moves into tracking agent state and reviewing output.
+Running several agents in parallel also means constantly switching between terminal tabs. The mental effort, or cognitive load, removed from implementation moves into tracking agent state and reviewing output.
 
 Reviewing AI-generated code may feel harder than writing it directly.
 
@@ -278,13 +262,13 @@ Clare says teams may need to spend roughly two months changing the codebase and 
 
 Rolling the approach out across the entire organization too quickly creates another risk.
 
-Amazon did not turn the result of one pathfinder team into an immediate company-wide standard. It ran a constrained sprint, learned from a 50-team pilot, and is now working on how to extend the approach to the next 2,000 teams.
+Amazon did not turn the result of one pathfinder team into an immediate company-wide standard. It ran a constrained sprint and learned from a 50-team pilot. At the time of the talk, it was working on how to extend the approach to the next 2,000 teams.
 
 ## 5. Decision-making becomes the next bottleneck after code
 
 The talk ends with a new bottleneck encountered by frontier teams.
 
-In the past, building the code for a new product took nine to twelve months.
+The talk uses an example in which building the code for a new product takes nine to twelve months.
 
 Two months to decide whether to build the product and another two months to approve the launch were less visible within the overall schedule.
 
@@ -307,7 +291,7 @@ flowchart LR
         AC --> AL["Launch approval<br/>about 2 months"]
     end
 
-    BC -. "Longest stage" .-> AC
+    BC -. "Shorter coding phase" .-> AC
     AD -. "New bottleneck" .-> AL
 ```
 {% endraw %}
@@ -331,13 +315,11 @@ The rest of this section is my proposal, based on earlier posts rather than the 
 
 ### Establish a baseline for the current workflow
 
-Do not begin with AI-tool adoption rates or generated code volume.
-
-Choose one workflow in one team and lay out the path from requirement to production.
+Before treating AI-tool adoption rates or generated code volume as outcomes, choose one workflow in one team and lay out the path from requirement to production.
 
 - How long does it take to decide the requirement?
 - Where do humans intervene during implementation and review?
-- How much time is spent waiting for CI and deployment?
+- How much time is spent waiting for continuous integration (CI), which automatically builds and tests code changes, and for deployment?
 - How often do rework, rollbacks, and incident response occur?
 - Does the agent have the data, tools, and permissions required to finish the work?
 
@@ -345,11 +327,11 @@ Without a pre-adoption baseline, a team may not notice that time removed from co
 
 ### Connect one team, then turn failures into the harness
 
-Next, connect the context, tools, permissions, and validation criteria that the agent needs to finish the workflow end to end.
+The background information, tools, permissions, execution environment, and checks described above together form the harness. Once the current workflow is understood, the next step is to equip the agent with the harness it needs to finish the work.
 
 Rather than expanding immediately to several agents and teams, I think it is better to first verify that one agent can complete one small task without human intervention.
 
-When the same mistake repeats, preserve it in project rules. When the agent cannot perform a task, add a CLI, Skill, or MCP. When it cannot detect a failure, add a linter or test.
+When the same mistake repeats, preserve it in project rules. When the agent cannot perform an action, connect a command-line tool or MCP server; when it needs instructions, write a Skill. When it cannot detect a failure, add a linter or test.
 
 The practical sequence is described in the post on building the EncBird harness layer by layer.[^2]
 
@@ -366,7 +348,7 @@ flowchart LR
     S1 --> S2["Learn in one team<br/>Feed failures into the harness"]
     S2 --> S3["Expand a validated approach<br/>Reuse across teams and workflows"]
 
-    B --> BM["Lead time · review waiting<br/>CI · incidents · human intervention"]
+    B --> BM["Time from request to deployment<br/>Review · CI waiting<br/>Incidents · human intervention"]
     S2 --> M1["Fewer recurring failures<br/>Autonomy · evidence · dependability"]
     S3 --> M2["Total delivery cost<br/>Customer value · reuse · reliability"]
 ```
@@ -376,7 +358,7 @@ flowchart LR
 
 Demanding immediate cost savings and business outcomes from an early pilot makes the talk's `slow down to speed up` period look like failure.
 
-While one team is learning, examine whether the same failures recur, whether humans still have to reconstruct all the code, and whether the agent can close normal paths independently.
+While one team is learning, examine whether the same failures recur, whether humans still have to reconstruct all the code, and whether the agent can independently finish routine work that has no exceptions.
 
 The questions change when the validated approach expands.
 
@@ -384,11 +366,11 @@ Examine whether requirements reach customers faster, whether total cost across d
 
 The questions for these two stages are discussed in more detail in an earlier post.[^4] CTS-SW can serve as a starting point for measuring total delivery cost per unit of customer-delivered software.[^5]
 
-The 50-team case shows that changing how teams work can substantially change deployment velocity.
+The 50-team case reports changes in working practices among teams whose deployment speed increased substantially. It does not establish how much each habit contributed, but it can help select practices to examine during a pilot.
 
 After applying it to an organization, the next question is whether **faster deployment improved total delivery cost and customer value**.
 
-### Waiting for token prices to fall may be too late
+### Learn the way of working before execution becomes cheaper
 
 The workflow described in the talk consumes tokens continuously.
 
@@ -398,15 +380,15 @@ This remains an ongoing operating cost of maintaining and improving the workflow
 
 Recent studies consistently show a rapid decline in the cost of reaching the same performance level. Estimates vary widely, and long-reasoning frontier tasks can still become more expensive in total, but the downward price trend appears across several sources.[^6][^7][^8]
 
-The length of software tasks that agents can reliably complete is also growing quickly.[^9]
+METR's evaluations also show growth in the length of software tasks agents can complete with a 50% success rate. Length here means the time a person would need to finish the task; it does not mean an agent can work reliably for that long on a company's actual tasks.[^9]
 
 These studies do not directly measure `business value per token`. Even so, as the same performance becomes cheaper and models finish longer tasks, I think the business value available from a given token budget is increasing.
 
 The recent trend should not be extrapolated mechanically. Still, a scenario in which the same work costs tens of times less in two or three years is worth considering when designing a workflow.
 
-If an organization waits until prices are low enough before beginning the transition, it may struggle to catch teams that have already spent years accumulating context, tools, tests, and organizational habits. Token prices can fall much faster than an organization can change how it works.
+If an organization waits until execution costs are low enough before beginning the transition, it may struggle to catch teams that have already spent years accumulating context, tools, tests, and organizational habits. The cost of doing the same work can fall without the organization changing how it works at the same pace.
 
-When designing workflows, I therefore think we should consider expected token prices and usage over the next three years, the business value that budget can deliver, and the harness we will build during that time.
+When designing workflows, I therefore think we should consider several scenarios for token prices and usage over the next three years, the work that budget can support, and how we will improve the harness during that time.
 
 ## Conclusion
 
