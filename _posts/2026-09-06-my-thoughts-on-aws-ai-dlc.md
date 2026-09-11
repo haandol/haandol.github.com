@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: career ai agent agentic-development ai-dlc harness-engineering hitl solutions-architect
 publish: true
-last_modified_at: 2026-09-10 21:52:40 +0900
+last_modified_at: 2026-09-11 14:44:54 +0900
 lang: ko
 translation_key: aws-ai-dlc-thoughts
 english_url: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -113,6 +113,12 @@ flowchart LR
 
 내가 생각하는 미래와 AI-DLC의 컨셉은 이 지점에서 갈라진다.
 
+Kiro가 공개한 Frontier Engineering 가이드에서도 같은 방향을 제시한다. 두 번째 원칙은 에이전트가 일하는 시간을 늘리고 사람의 개입을 줄이라는 것으로, 목표를 다음과 같이 설명한다.[^13]
+
+> 목표는 실행 과정에서 사람의 개입을 점차 줄여가는 것이다. (원문 일부 번역)
+
+사람은 방향을 정하고 결과를 확인하되, 그 사이의 구현과 테스트, 오류 수정은 에이전트가 스스로 반복하도록 맡기자는 이야기다. **내가 생각하는 방향이 실제 에이전트 도구를 만드는 쪽에서 공개적으로 제시하는 방향과도 맞닿아 있다는 점**을 확인할 수 있다.
+
 ## 2. 프로세스의 차이 — 큰 원을 더 빨리 도는 접근
 
 AI로 개발하면서 가장 강력하다고 느낀 것은 **요구사항을 정하고, 실제로 만들고, 테스트하고, 피드백을 받는 사이클을 거의 실시간에 가깝게 줄일 수 있다는 점**이다.
@@ -191,6 +197,8 @@ AI-DLC 워크숍에 참여한 사람들이 좋았다고 말하는 이유 중에�
 
 과거 모델의 약점을 보완하려고 만든 규칙을 새 모델에서도 걷어내지 못해 오히려 방해가 되는 문제를 나는 **Harness Debt**, 하네스 부채라고 부르고 싶다.
 
+Kiro의 열 번째 원칙도 새 모델이 나오면 예전 모델의 약점을 보완하려고 만든 임시방편이 여전히 필요한지 다시 검토하라고 한다.[^14] 실패에서 배워 필요한 지침과 도구를 추가하는 만큼, 모델이 좋아졌을 때 더는 필요하지 않은 제약을 걷어내는 일도 중요하다는 뜻으로 읽었다.
+
 {% raw %}
 ```mermaid
 flowchart LR
@@ -225,6 +233,8 @@ OpenAI의 Codex 사례도 모델에게 생각할 순서를 길게 가르치기�
 하네스는 모델이 읽을 수 있는 코드 저장소, 명령을 실행할 환경, 접근 가능한 데이터와 금지된 작업, 통과해야 할 테스트를 정한다.
 
 그 경계 안에서 어떤 순서로 문제를 풀지는 가능한 한 모델에게 맡긴다.
+
+Kiro의 여덟 번째 원칙도 필요한 파일과 도구, 네트워크에만 접근하도록 권한을 제한한 뒤, 사람이 계속 지켜보지 않아도 에이전트가 일하게 하라고 설명한다. 이를 옮기면 “안전장치를 자동화할 때마다 사람이 개입해야 할 이유가 하나씩 줄어든다”라는 뜻인데, 내가 하네스에 기대하는 역할과 가깝다.[^15] 되돌릴 수 없는 작업에는 승인을 남기면서도, 사람이 매번 확인하던 일을 시스템이 대신하도록 바꿔가는 방향이다.
 
 AI-DLC의 adaptive workflow는 모든 작업에 같은 절차를 적용하던 문제를 상당히 줄였지만, 단계마다 무엇을 만들고 언제 승인받고 함께 검토할지는 여전히 도구에 정해두고 있다. 그런 점에서 모델의 사고방식과 작업 순서를 정해주는 장치에 가깝다고 생각한다.
 
@@ -315,3 +325,9 @@ AI-DLC는 AI를 처음 도입하거나 승인 절차와 책임을 엄격하게 �
 [^11]: MIT Sloan, [Steve Jobs talks consultants, hiring, and leaving Apple in unearthed 1992 talk](https://mitsloan.mit.edu/ideas-made-to-matter/steve-jobs-talks-consultants-hiring-and-leaving-apple-unearthed-1992-talk) — 권고를 구현하고 그 결과를 오래 겪지 않을 때 학습이 얕아질 수 있다는 잡스의 강연을 정리한다.
 
 [^12]: [망하지 않는 게 먼저인 이유](/2026/06/27/failure-comes-first.html) — AI로 실험 비용을 낮추고, 고객 반응을 보며 다음 시도를 정하는 개발 방식에 대한 내 생각을 정리했다.
+
+[^13]: Kiro, [Maximize agent time, minimize your involvement](https://kiro.dev/topics/frontier-engineering/maximize-agent-time/) — Frontier Engineering의 두 번째 원칙. 사람의 개입을 방향 설정과 결과 확인으로 줄여가는 방향을 제시한다.
+
+[^14]: Kiro, [Continuously tune your agent setup](https://kiro.dev/topics/frontier-engineering/tune-your-setup/) — 열 번째 원칙. 실패에서 지침과 도구를 개선하고, 새 모델에서 오래된 임시방편이 여전히 필요한지 재검토하도록 한다.
+
+[^15]: Kiro, [Trust the boundaries, not the agent](https://kiro.dev/topics/frontier-engineering/trust-the-boundaries/) — 여덟 번째 원칙. 권한 제한과 자동 검사로 사람의 반복 개입을 줄이되, 되돌릴 수 없는 행동에는 승인을 남긴다.

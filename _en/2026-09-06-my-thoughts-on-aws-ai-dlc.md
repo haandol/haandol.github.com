@@ -8,7 +8,7 @@ tags: career ai agent agentic-development ai-dlc harness-engineering hitl soluti
 publish: true
 lang: en
 date: 2026-09-06 09:00:00 +0900
-last_modified_at: 2026-09-10 21:52:40 +0900
+last_modified_at: 2026-09-11 14:44:54 +0900
 translation_key: aws-ai-dlc-thoughts
 korean_url: /2026/09/06/my-thoughts-on-aws-ai-dlc.html
 permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -115,6 +115,12 @@ Starting only then to connect data held separately by teams, give agents the per
 
 This is where the future I expect and the concept behind AI-DLC diverge.
 
+Kiro's published Frontier Engineering guide points in the same direction. Its second principle is to maximize agent time while minimizing human involvement, and describes the goal this way:[^13]
+
+> “The goal is to progressively remove yourself from the loop”
+
+People set the direction and verify the outcome, while agents handle the repeated implementation, testing, and fixes in between. The guide shows that **the direction I believe in also aligns with what the people building agent tools are publicly advocating**.
+
 ## 2. The Process Difference — Making the Big Loop Run Faster
 
 What I have found most powerful about developing with AI is **the ability to shorten the cycle of defining requirements, building, testing, and receiving feedback to something close to real time**.
@@ -193,6 +199,8 @@ If the harness always forces `Research → Plan → Break down tasks → Impleme
 
 I use **Harness Debt** to describe rules created to help an older model that remain in place and get in a newer model's way.
 
+Kiro's tenth principle also says to revisit workarounds for an older model's weaknesses when a new model arrives.[^14] I read this as a reminder that removing constraints that are no longer needed matters just as much as learning from failures and adding useful instructions and tools.
+
 {% raw %}
 ```mermaid
 flowchart LR
@@ -227,6 +235,8 @@ That is close to the role I expect a good harness to play.
 The harness decides which code repositories the model can read, where it can run commands, which data it can access, which actions are forbidden, and which tests it must pass.
 
 Within those boundaries, the model should choose how to solve the problem whenever possible.
+
+Kiro's eighth principle similarly recommends limiting access to the files, tools, and network the agent needs, then letting it work without constant supervision. Its statement that “Every guardrail you automate is one less reason to stay in the loop” is close to the role I expect a harness to play.[^15] Approval remains for actions that cannot be undone, while the system takes over checks that previously required a person each time.
 
 AI-DLC's adaptive workflow greatly reduces the problem of applying the same procedure to every task, but the tools still prescribe what to produce at each stage, when to get approval, and when to review the work together. In that sense, I think they still prescribe how the model should think and in which order it should work.
 
@@ -317,3 +327,9 @@ I am now looking for **a team where I can find out whether my ideas hold up when
 [^11]: MIT Sloan, [Steve Jobs talks consultants, hiring, and leaving Apple in unearthed 1992 talk](https://mitsloan.mit.edu/ideas-made-to-matter/steve-jobs-talks-consultants-hiring-and-leaving-apple-unearthed-1992-talk) — summarizes Jobs's argument that learning can remain shallow without implementing recommendations and living with their consequences over time.
 
 [^12]: [Why Avoiding Failure Comes First](/en/2026/06/27/failure-comes-first.html) — explains my ideas about using AI to lower the cost of experiments and choosing the next attempt based on customer responses.
+
+[^13]: Kiro, [Maximize agent time, minimize your involvement](https://kiro.dev/topics/frontier-engineering/maximize-agent-time/) — the second Frontier Engineering principle, which calls for reducing human involvement to setting direction and verifying outcomes.
+
+[^14]: Kiro, [Continuously tune your agent setup](https://kiro.dev/topics/frontier-engineering/tune-your-setup/) — the tenth principle, on improving instructions and tools after failures and revisiting old workarounds when new models arrive.
+
+[^15]: Kiro, [Trust the boundaries, not the agent](https://kiro.dev/topics/frontier-engineering/trust-the-boundaries/) — the eighth principle, on reducing repeated human intervention through access limits and automated checks while retaining approval for irreversible actions.
