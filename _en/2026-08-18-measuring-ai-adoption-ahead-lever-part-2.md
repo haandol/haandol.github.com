@@ -8,7 +8,7 @@ tags: ai agent agentic-development harness-engineering organization developer-ex
 publish: true
 lang: en
 date: 2026-08-18 18:00:00 +0900
-last_modified_at: 2026-09-10 10:44:38 +0900
+last_modified_at: 2026-09-11 14:57:48 +0900
 translation_key: measuring-ai-adoption-ahead-lever-part-2
 korean_url: /2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html
 permalink: /en/2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html
@@ -48,6 +48,8 @@ I named the question list for Shape AHEAD and the list for Scale LEVER. Both are
 
 Applying Scale's return-on-investment criteria directly to Streamlining and Shape makes it easy to mistake upfront investment for failure.
 
+Kiro's guide for managers reports that high-performing teams initially slowed down, distinguishing them from teams that expected immediate gains without changing their workflows.[^5] This observation supports my distinction between asking about learning early and outcomes after expansion. Kiro did not propose or validate AHEAD and LEVER.
+
 The opposite is also dangerous. If a production workload is permanently labeled a learning experiment, nobody has to explain its cost or results. Stage names should change the next decision, not merely justify investment.
 
 ## 2. AHEAD — measure harness learning and review burden
@@ -72,11 +74,15 @@ Low human involvement alone does not prove good autonomy. If necessary escalatio
 
 `Harness Learning` asks whether recurring review decisions have become contracts, tests, rules, or tools that the next agent can use. If people keep finding the same problem, it is difficult to say that the harness has learned.
 
+Kiro's continuous-improvement principle recommends updating rules, tools, and context whenever an agent takes a wrong turn or unnecessarily calls on a human, so the same problem does not recur.[^6] Translating that principle into an evaluation question leads me to examine whether the causes of recurring intervention diminish in later runs, rather than measuring usage.
+
 The new `Evidence Quality` item directly addresses review cognitive load.
 
 If an agent reports only that the tests passed, the human still has to read the code from the beginning. To narrow review, the result must show what satisfied each contract, which evidence supports it, which risks remain unverified, and which new decisions were made during implementation.
 
 Look at whether the scope people need to understand has narrowed to contract changes and exceptions, rather than at report length. Keep code-level review where it is needed, such as security, payments, and data migrations, without demanding the same depth of review for every change.
+
+The managers' guide describes a team whose review focus moved from code style and naming to interface definitions and architectural decisions after it introduced earlier automated checks and tests.[^5] This supports examining what humans now judge during review. Using contract-level evidence quality to assess that change is my proposal here.
 
 `Adoption` looks at operational ownership rather than tool logins.
 
@@ -136,9 +142,13 @@ The definition of value depends on the workload. At the beginning, decide whethe
 
 If every new workload requires prompts, tools, evaluations, and permissions to be rebuilt from scratch, the earlier investment has not been reused. If existing contracts and evaluation cases need only a small extension, the effect of Scale is starting to appear.
 
+Kiro also recommends introducing organization-wide rules during expansion and sharing early adopters' experience and context during sustained operation.[^5] This aligns with `Extension & Reuse`: examine what teams actually reuse alongside how many teams use the tools.
+
 `Reliability` checks whether cost reduction has been transferred elsewhere.
 
 If CTS-SW falls while change failures and on-call work rise, it is difficult to call the result an improvement. Trends within the same team need to be read alongside quality measures.
+
+The managers' guide explicitly recommends measuring correctness as well as speed during expansion.[^5] This aligns with LEVER's position that lower delivery cost accompanied by worse quality does not count as an improvement.
 
 ## 5. When code generation accelerates but review queues grow
 
@@ -208,3 +218,7 @@ Applying them to real workloads will probably change some names and signals. I s
 [^3]: Nicole Forsgren et al., [The SPACE of Developer Productivity](https://queue.acm.org/detail.cfm?id=3454124) — proposes evaluating productivity across multiple dimensions rather than reducing it to one activity metric.
 
 [^4]: Google Cloud DORA, [Announcing the 2025 DORA Report: State of AI-Assisted Software Development](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report) — describes AI as an amplifier of existing organizational strengths and weaknesses and emphasizes foundations such as fast feedback and automated testing.
+
+[^5]: Kiro, [Frontier Engineering Teams](https://kiro.dev/topics/frontier-teams/) — covers early learning, changes in review focus after automated verification, correctness measurement during expansion, and shared organizational context. These are team examples and adoption recommendations, not validation of AHEAD or LEVER.
+
+[^6]: Kiro, [Continuously tune your agent setup](https://kiro.dev/topics/frontier-engineering/tune-your-setup/) — recommends turning recurring mistakes and unnecessary human interventions into improvements to rules, tools, and context.

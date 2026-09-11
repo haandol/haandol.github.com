@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development harness-engineering organization developer-experience cts-sw
 publish: true
-last_modified_at: 2026-09-09 22:42:10 +0900
+last_modified_at: 2026-09-11 14:57:48 +0900
 lang: ko
 translation_key: measuring-ai-adoption-ahead-lever-part-2
 english_url: /en/2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html
@@ -46,6 +46,8 @@ Shape의 질문 목록은 AHEAD, Scale의 질문 목록은 LEVER로 이름 붙�
 
 Streamlining과 Shape에 Scale의 투자수익 기준을 바로 적용하면 선행 투자를 실패로 보기 쉽다.
 
+Kiro의 매니저용 가이드도 성과가 높았던 팀들이 초기에는 느려졌다고 보고하며, 일하는 방식을 바꾸지 않고 즉각적인 성과를 기대한 팀들과 구분한다.[^5] 초기에는 학습을, 확산 이후에는 성과를 묻자는 내 구분을 뒷받침하는 관찰이다. 다만 Kiro가 AHEAD와 LEVER를 제안하거나 검증한 것은 아니다.
+
 반대로 Scale에 들어간 워크로드를 계속 학습 단계라고만 부르면 비용과 성과를 설명하지 않아도 된다. 단계 구분은 투자를 정당화하기 위한 이름이 아니라 다음 판단을 바꾸기 위한 기준이어야 한다.
 
 ## 2. AHEAD — 하네스와 리뷰 부담의 변화를 본다
@@ -70,11 +72,15 @@ Shape에서는 Agent가 만든 산출물의 수보다 같은 실패와 판단이
 
 `Harness Learning`에서는 리뷰에서 반복된 판단이 다음 Agent가 사용할 계약, 테스트, 규칙이나 도구로 바뀌었는지 본다. 같은 문제를 사람이 계속 찾아낸다면 하네스가 학습했다고 보기 어렵다.
 
+Kiro의 지속 개선 원칙에서도 Agent가 잘못된 방향으로 가거나 사람을 불필요하게 부를 때마다, 다음에는 같은 일이 생기지 않도록 규칙·도구·컨텍스트를 고치라고 권한다.[^6] 이 원칙을 평가 질문으로 옮기면, 사용량보다 반복 개입의 원인이 다음 실행에서 줄었는지를 보게 된다.
+
 이번에 새로 넣은 `Evidence Quality`는 리뷰 인지부하를 직접 다룬다.
 
 Agent가 테스트를 통과했다는 한 줄만 남기면 사람은 코드를 처음부터 읽게 된다. 계약별로 무엇을 만족했고 어떤 증거가 있으며, 확인하지 못한 위험과 구현 중 새로 정한 내용이 무엇인지 보여줘야 검토 범위를 줄일 수 있다.
 
 보고서의 길이보다 사람이 새로 이해해야 할 범위가 계약 변경과 예외로 좁아졌는지를 본다. 보안, 결제와 데이터 마이그레이션처럼 코드까지 봐야 하는 영역은 남겨두되, 모든 변경에 같은 수준의 리뷰를 요구하지 않는다.
+
+매니저용 가이드에는 자동 검사와 테스트를 앞당긴 뒤 리뷰의 초점이 코드 스타일과 이름에서 인터페이스 정의와 아키텍처 결정으로 옮겨간 팀의 사례가 나온다.[^5] 리뷰에서 사람이 무엇을 판단하게 됐는지 확인해야 한다는 근거다. 계약별 증거의 질로 이를 살펴보자는 것은 이 글의 제안이다.
 
 `Adoption`은 도구 접속자 수보다 운영 소유권을 본다.
 
@@ -134,9 +140,13 @@ CTS-SW는 이 항목을 보는 출발점으로 사용할 수 있다.[^2]
 
 새 워크로드마다 프롬프트, 도구, 평가와 권한 체계를 처음부터 만든다면 앞선 투자를 재사용한 것이 아니다. 반대로 기존 계약과 평가 사례를 조금 확장해 새 요구사항을 처리했다면 Scale의 효과가 나타난 것이다.
 
+Kiro도 확산 단계에서 조직 공통 규칙을 적용하고, 지속 운영 단계에서는 먼저 도입한 팀의 경험과 컨텍스트를 조직에 공유하도록 제안한다.[^5] 도구를 쓰는 팀 수와 함께 실제로 무엇을 재사용했는지 봐야 한다는 `Extension & Reuse`의 방향과 맞닿아 있다.
+
 `Reliability`는 비용 절감이 다른 곳으로 전가되지 않았는지 확인한다.
 
 CTS-SW가 낮아졌는데 변경 실패와 당직 대응이 늘었다면 개선으로 보기 어렵다. 같은 팀의 시간에 따른 추세를 품질 지표와 함께 봐야 한다.
+
+매니저용 가이드 역시 확산할 때 속도뿐 아니라 결과의 정확성을 측정하라고 명시한다.[^5] 전달 비용이 줄었어도 품질이 나빠졌다면 개선으로 보지 않는다는 LEVER의 판단과 같은 방향이다.
 
 ## 5. 코드 생성이 빨라졌는데 리뷰가 밀리는 경우
 
@@ -206,3 +216,7 @@ AHEAD와 LEVER의 각 항목을 KPI로 만들면 다시 숫자 최적화가 시�
 [^3]: Nicole Forsgren et al., [The SPACE of Developer Productivity](https://queue.acm.org/detail.cfm?id=3454124) — 생산성을 단일 활동량으로 환원하지 않고 여러 차원에서 함께 보아야 한다고 제안한다.
 
 [^4]: Google Cloud DORA, [Announcing the 2025 DORA Report: State of AI-Assisted Software Development](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report) — AI가 기존 조직의 강점과 약점을 증폭하며 빠른 피드백과 자동화된 테스트 같은 기반 역량이 결과를 좌우한다고 설명한다.
+
+[^5]: Kiro, [Frontier Engineering Teams](https://kiro.dev/topics/frontier-teams/) — 초기 학습, 자동 검증에 따른 리뷰 초점의 변화, 확산 시 정확성 측정과 조직 내 컨텍스트 공유를 다룬다. 팀 사례와 도입 권고이며 AHEAD·LEVER의 검증 결과는 아니다.
+
+[^6]: Kiro, [Continuously tune your agent setup](https://kiro.dev/topics/frontier-engineering/tune-your-setup/) — 반복되는 실수와 불필요한 사람 개입을 규칙·도구·컨텍스트 개선으로 연결할 것을 권한다.

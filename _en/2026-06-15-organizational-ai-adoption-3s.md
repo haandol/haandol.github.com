@@ -38,8 +38,6 @@ Rather than searching for one budget principle between these extremes, I think i
 
 I divide those stages into `Streamlining`, `Shape`, and `Scale`. [Part 2](/en/2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html) continues with how to evaluate each stage using AHEAD and LEVER.
 
-After reading Kiro's Frontier Engineering principles and its guide for managers, I expanded what teams need to prepare and operate within each stage. Its suggestion to start with a small workflow in one team, share what works, and keep maintaining it was particularly useful.[^6]
-
 ## 1. Tokens are only part of the total cost
 
 Token prices are immediately visible.
@@ -78,9 +76,7 @@ On the left, the team lacks enough room to begin exploration and validation. On 
 
 The appropriate point depends on the risk and complexity of the workflow and the current maturity of its harness. Even so, I think it is clear that early investment and operational optimization should not be evaluated by the same standard.
 
-Making room for this work is also a manager's responsibility. If a team is asked to improve tests and tools while maintaining its previous feature output, people will prioritize the feature work on which they are evaluated.
-
-I would choose the first workflow together with a time allocation, budget, and review date for harness work. At that review, examine which tools and evaluation cases remain and how repeated interventions have changed. This gives learning room without keeping ineffective experiments running indefinitely.
+Kiro's guide for managers reports that high-performing teams initially slowed down while learning the models. Their acceleration followed investment in context, tools, and changes to how they worked. This supports the argument that immediate cost savings are an inadequate measure of early harness investment.[^6]
 
 ## 3. Divide adoption into the 3S stages
 
@@ -95,7 +91,6 @@ Applying that idea to AI adoption, I divided the process into three stages: `Str
 flowchart LR
     S1["Streamlining<br/>Connect workflow boundaries and tools"] --> S2["Shape<br/>Move failures into the harness"]
     S2 --> S3["Scale<br/>Reuse a validated harness"]
-    S3 -. "Recurring failures · verification gaps" .-> S2
     S3 -. "New workflow · new contract" .-> S1
 ```
 {% endraw %}
@@ -114,8 +109,6 @@ Within one team, order-cancellation automation may be in Scale while a newly sta
 
 Streamlining starts with the workflow, not the model.
 
-I would begin with a small workflow in one team whose outcome and owner can be clearly defined. Even when the workflow crosses several systems, the initial scope and completion criteria can remain narrow.
-
 Suppose we want to automate order cancellations.
 
 The cancellation request may live in the order system, the payment reversal may go through the payments team's API, and the refund policy may live in a customer-support tool. If every team simply wraps its system in Model Context Protocol (MCP), a standard for connecting agents to external tools, the agent receives several API fragments but may not know the order or permissions required to combine them.
@@ -128,17 +121,12 @@ Then connect the required reads and mutations through explicit contracts.
 
 There is no need to merge all data into one place. The agent only needs to check the order state, decide whether cancellation is allowed, and issue the refund within its authorized scope. Least privilege, audit records, and the conditions for handing work to a human should also be defined here.
 
-The implementation task also needs enough detail for an agent to execute it. Suppose the first scope is cancellation before shipment. Include the eligible order states, how duplicate requests should behave, the result to show on completion, and the tests to run. For an existing service, examine its current behavior first and distinguish what must remain from what should change.
-
-Keep design decisions and instructions for running and testing the system in the repository so the next session can find them. **Reducing the information available only by asking a colleague** is part of connecting the workflow.
-
-Permissions need more than written prohibitions. Kiro's developer guide recommends enforcing limits on file, tool, network, and credential access.[^7] In this example, permission to verify cancellation in development and test environments should be separate from permission to refund real customers.
+Kiro describes making team knowledge accessible to agents and defining completion criteria before coding as shared team practices.[^6] Its developer guide also emphasizes limits on file, tool, network, and credential access.[^7] These recommendations align with Streamlining's emphasis on connecting the information and permissions a workflow needs.
 
 The questions in this stage are closer to readiness than performance.
 
 - Are the workflow's start and completion conditions clear?
 - Can the agent access the required data and tools?
-- Are documents and tests available to check existing behavior and completion criteria?
 - Are permission and responsibility boundaries connected?
 - Is there a baseline for the current manual workflow's time, quality, and cost?
 
@@ -150,26 +138,9 @@ During Shape, give the connected workflow to the agent and observe its failures.
 
 Instead of aiming for high autonomy from the beginning, find which decisions repeat and where humans return to reading the code.
 
-To observe failures, the agent must be able to verify its work. If a human has to run tests and paste errors back, each iteration waits for that person. Kiro recommends giving agents access to local tests, browser verification, and test substitutes for external services.[^8]
-
-For the cancellation feature, let the agent test a normal cancellation and a duplicate request, read the failure, make a correction, and rerun the same test. Passing in a test environment does not establish that integration with the real payment system works. The results should identify what was verified and in which environment.
-
-{% raw %}
-```mermaid
-flowchart LR
-    T["Prepared task<br/>Purpose · constraints · completion criteria"] --> A["Agent implements"]
-    A --> V{"Automated verification"}
-    V -->|Fail| A
-    V -->|Pass| R["Human reviews result and evidence"]
-    A -->|New decision needed| H["Human decides exception"]
-    R --> F["Find causes of recurring feedback"]
-    H --> F
-    F --> U["Improve docs · tools · tests"]
-    U --> T
-```
-{% endraw %}
-
 If reviewers repeatedly point out the same import direction, move it into an architecture test. If the same requirement must be confirmed every time, turn it into a contract and test case. If missing evidence forces a human to read the entire codebase, require the next execution to leave verification results for each contract.[^1]
+
+Kiro's fast-feedback principle recommends investing in environments where agents can run tests and correct failures themselves.[^8] Together with its principle of turning recurring interventions into rules and tools, this provides concrete support for what learning should leave behind during Shape.[^9]
 
 In my view, the output of Shape is not an automation rate.
 
@@ -183,17 +154,13 @@ Harness engineers do not need to remain permanently embedded in every domain.
 
 Early on, they can establish the shared foundation and feedback loop. Once the domain team can classify failures and repair the harness directly, it is better for the harness engineer to move to the next workload. For the harness to become an organizational capability, the domain team must take over operational ownership.
 
-Meanwhile, managers should prepare both the next tasks and time to review the results. Resolve missing purposes and prerequisite decisions before assigning work, and reduce concurrent tasks when review falls behind. Maximizing agent runtime alone can leave the team with a growing pile of unfinished work.
-
 ## 6. Scale — reuse the earlier investment for the next requirement
 
 During Scale, a team does not rebuild the environment and evaluation criteria from scratch for every new requirement.
 
 It reuses validated data contracts, external-system connectors, tests, access controls, and execution records. The agent should complete normal paths through the agreed verification and bring new contracts or unverified risks to a human.
 
-When expanding to another team, separate shared rules from workflow-specific ones instead of copying every rule from the original team. A check for credentials accidentally included in code can be shared, but an order-cancellation policy cannot simply be applied to settlement work. Verify quality and permission conditions in the new workflow before widening its scope.
-
-Shared assets also need an owner. I would have an early-adopter team or support team maintain common tools and examples, while each domain team maintains its own policies and evaluations. Without people and time allocated to incorporating other teams' feedback, the original rules can be left unchanged.
+Kiro's guide for managers also proposes experimenting within one team before expanding through shared rules and context.[^6] This supports Scale's emphasis on reusing earlier investment in later workflows. It does not, however, validate the effectiveness of my proposed 3S model itself.
 
 At this point, the earlier investment can be examined as a reduction in total delivery cost.
 
@@ -209,7 +176,7 @@ I could not move for a while because a harness I had built around Cursor did not
 
 Separating contracts and evaluation cases that should remain common assets from tools tailored to a particular agent makes it possible to compare the system before and after replacement using the same standard.
 
-Kiro also recommends reassessing whether rules and tools created to compensate for an older model are still needed when a new model arrives.[^9] Preserving failure cases, removing unnecessary rules, and verifying again should be included in the operating cost of Scale.
+Kiro also recommends reassessing whether rules and tools created to compensate for an older model are still needed when a new model arrives.[^9] This is another reason to pair harness reuse with evaluation before and after a model change.
 
 ## Conclusion
 
@@ -219,9 +186,9 @@ Connecting data and tools, reproducing failures, and moving repeated human decis
 
 That does not mean early investment should be unlimited.
 
-I would begin with a small workflow in one team and agree on an investment period and the results to examine. Expand once that team can address recurring problems itself, and keep allocating time to maintain the tools it shares.
+During Streamlining, establish the workflow and baseline. During Shape, verify that failures remain in the harness. For workloads in Scale, examine total delivery cost and business outcomes.
 
-3S is **a lens for deciding what to invest in and what to check in the current workload**. The stage names become useful as an adoption method when they change how work is assigned and evaluated.
+3S is less a model for assigning an organizational maturity score than **a lens for distinguishing what to invest in and what not to ask of the current workload**.
 
 The next post, [part 2](/en/2026/08/18/measuring-ai-adoption-ahead-lever-part-2.html), explains how I use AHEAD to examine harness learning and review burden during Shape, and LEVER to examine total delivery cost and value capture during Scale.
 
