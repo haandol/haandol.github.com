@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Did AI Coding Tools Actually Cut Development Cost? — Getting Started with CTS-SW"
+title: "Did AI Coding Tools Actually Cut Development Cost? — Understanding CTS-SW"
 excerpt: Measuring AI by software delivery cost
 author: haandol
 email: ldg55d@gmail.com
@@ -8,7 +8,7 @@ tags: ai engineering-productivity cts-sw developer-experience organization
 publish: true
 lang: en
 date: 2026-08-14 00:00:00 +0900
-last_modified_at: 2026-09-11 16:33:32 +0900
+last_modified_at: 2026-09-13 15:01:31 +0900
 translation_key: cts-sw-software-delivery-cost
 korean_url: /2026/08/14/cts-sw-software-delivery-cost.html
 permalink: /en/2026/08/14/cts-sw-software-delivery-cost.html
@@ -16,191 +16,129 @@ permalink: /en/2026/08/14/cts-sw-software-delivery-cost.html
 
 ## TL;DR
 
-- Evaluate AI adoption through team delivery cost and quality.
-- CTS-SW connects total delivery cost to software that reaches customers.
-- A harness should be funded as a team asset, not a personal optimization.
+- CTS-SW measures cost per unit of software delivered to customers.
+- Keep cost scope and delivery-unit definitions stable within a team.
+- Read cost alongside quality and unfinished work.
 
 ## Introduction
 
-When a team adopts AI coding tools, it naturally starts with numbers that are easy to collect: coding time, autocomplete acceptance rate, and pull request count.
+When a team adopts AI coding tools, it naturally starts with numbers that are easy to collect: coding time, autocomplete acceptance rate, and pull request count. A pull request, or PR, asks others to review and merge code changes.
 
-These numbers show how often the tools are used and how much faster code is generated. They do not show whether the cost of delivering a feature to customers has actually gone down.
+These numbers show tool usage and code-generation speed. They do not tell us whether delivering a feature to customers has become cheaper.
 
-Code may be produced faster while reviews pile up. If CI is slow or deployment remains manual, the added change volume simply moves into another queue. If more frequent deployments also bring more rollbacks and incident response, the time saved during implementation has only moved elsewhere.[^5]
+Code may arrive quickly while reviews wait. Slow continuous integration (CI), which builds and tests changes automatically, or manual deployment can consume the time saved during generation.
 
-In an earlier post, I argued that it is more useful to examine the **cost of realizing a requirement**—including the model, tools, retries, and human review—than token prices alone.[^1]
+In an earlier post, I argued for examining the **cost of realizing a requirement**, including models, tools, retries, and human review, rather than token prices alone.[^1] Amazon's Cost to Serve Software, or CTS-SW, offers a way to examine software delivery cost.[^2]
 
-Amazon's Cost to Serve Software, or CTS-SW, applies a similar idea to the software delivery process.[^2]
+This post explains how to define and interpret CTS-SW. A companion post covers what individuals and teams can do about cognitive load and review queues.[^5]
 
-CTS-SW does not automatically determine whether an AI rollout has worked. I still find it useful because it connects the cost from development through operations to results that actually reach customers, rather than stopping at code generation speed.
+## 1. The cost of one unit delivered to customers
 
-## 1. Count the cost of reaching customers
-
-The basic CTS-SW calculation is simple.
+The basic calculation is simple.
 
 ```text
-CTS-SW =
-cost to build and operate software
-/ units of software delivered to customers
+CTS-SW = cost to build and operate software during a period
+         / software units delivered to customers during that period
 ```
 
-Suppose eight developers produce 16 production deployments in one week. If we use developer-weeks as a proxy instead of exact labor cost, each deployment costs `0.5 developer-weeks`.
+Amazon connects input cost with delivered output without first allocating costs to every development activity. It then investigates which tools and practices are associated with changes in cost.[^2]
 
-If the same team can reliably deliver 20 deployments in the same one-week period, the figure drops to `0.4 developer-weeks`. The team is spending less engineering capacity per delivered software unit.
+If exact cost is difficult to obtain, developer count and time can serve as a proxy. The result must then be expressed in developer time, not money.
 
-The difficult part is not the calculation. It is deciding **what counts as one unit of software**.
+Suppose eight developers produce 16 customer-facing deployments in one week. This is a hypothetical calculation example.
 
-Amazon explains that a deployment may work for a service-oriented architecture, while customer-delivered code reviews or commits may be more appropriate for a monolith or an organization with scheduled releases.[^2]
-
-If deployments are the chosen unit, a team might count only deployments that received real customer traffic rather than every push to an internal environment. For an organization with large release batches, a bundle of changes made available to customers may be more natural than deployment count.
-
-Without this agreement, CTS-SW still produces a number, but different teams will be counting different things.
-
-A software unit is not the same as business value either. Whether one deployment changes revenue or customer satisfaction still needs to be measured separately.
-
-That makes CTS-SW closer to an **intermediate measure of software delivery efficiency** than a final business outcome. I think it is best used to examine how many people and how much time are required after code is written but before it reaches customers.
-
-## 2. Find where the time saved by AI moved
-
-Amazon separates development output from deployment output. Development velocity counts code reviews merged per developer per week; deployment velocity counts production deployments per developer per week.[^2] Velocity here measures throughput over a period, not how long one review takes.
-
-Separating these measures helps reveal whether more code changes are also reaching production.
-
-If AI accelerates code generation, changes and pull requests increase. With the same number of reviewers, review queues grow. Even after review, slow CI and deployment mean customer delivery speed does not improve.
-
-By contrast, automated tests, fast CI, small deployments, and reliable rollback mechanisms let a team validate and deliver the additional changes in short cycles.
-
-Here, a harness means more than a developer's prompt or editor settings. It includes shared requirement contracts, repository rules, tools, tests, CI/CD, deployment, and observability.[^10]
-
-I therefore think AI productivity depends less on how well one person operates a model and more on **how reliably the team's harness absorbs generated changes**.
-
-One developer may produce code quickly with strong prompts and settings, but weak review criteria and tests create more work for everyone else. When the team harness automates recurring decisions, an individual's learning remains available to future tasks and other team members.
-
-Amazon's 50-team Frontier Development pilot provides a concrete example of this claim.[^11]
-
-Teams with similar seniority mixes working in existing codebases used nearly the same AI tools, yet half improved production deployment velocity by less than 3x. The other half reached a median of 4.5x, with some exceeding 10x.
-
-The presenter focused on differences in working practices. Teams with larger gains improved context, tools, tests, and intent documents so agents could validate their own work instead of waiting for continuous human input.
-
-This is a useful case for examining differences in team harnesses, but observation alone does not isolate the effect of each element.
-
-It still does not prove that CTS-SW fell. The cost of building and operating the added harness, human review and incident response, and delivery quality need to be measured within the same boundary.
-
-{% raw %}
-```mermaid
-flowchart LR
-    AI["AI increases code generation"] --> CHANGE["More changes and PRs"]
-    CHANGE --> REVIEW{"Can review, tests, and CI<br/>absorb the volume?"}
-    REVIEW -->|No| WAIT["More queues and rework"]
-    WAIT --> COST["Higher total delivery cost"]
-    REVIEW -->|Yes| DEPLOY{"Can changes ship small<br/>and recover safely?"}
-    DEPLOY -->|No| OPS["Manual deploys, rollbacks,<br/>and incident response"]
-    OPS --> COST
-    DEPLOY -->|Yes| DELIVERY["More changes reach customers"]
+```text
+8 developer-weeks / 16 deployments = 0.5 developer-weeks per deployment
+8 developer-weeks / 20 deployments = 0.4 developer-weeks per deployment
 ```
-{% endraw %}
 
-DORA, which studies software delivery and operations performance, describes AI in its 2025 analysis as an amplifier of existing organizational capabilities. Where automated testing, version control, and fast feedback are weak, increased change volume can produce more instability.[^8]
+Completing 20 deployments with the same people and time reduces input per deployment by 20%. A developer-week means one developer's time for one week.
 
-A team does not need a perfect development environment before adopting AI. It does need to know where changes currently wait and fail.
+For a monetary measure that includes tool fees, combine labor, tool and model charges, and operating costs in the same currency. Token charges cannot simply be added to developer-weeks.
 
-If review is the longest delay, improving review scope and assignment may matter more than generating even more code. If CI is the bottleneck, shortening test feedback may come first. If post-deployment incidents are frequent, rollback and observability need attention.
+Keep work on contracts, tests, and development tools—the harness—inside the agreed cost scope. Excluding it can make adoption look cheaper than it was.
 
-The effect of AI tools is hard to measure separately from this foundation. In my view, AI does not replace the development system; it mainly makes the strengths and weaknesses of its existing feedback loops more visible.
+## 2. Decide what counts as one unit
 
-## 3. Turning the metric into a target distorts it
+Defining **one software unit** is harder than doing the arithmetic.
 
-Even if a team defines deployments as its software unit, deployment count itself should not become the target.
+Amazon describes deployments as a possible unit for service-oriented architectures and customer-delivered code changes as an alternative for large applications released together.[^2] A PR merged into a repository but not delivered to customers is not equivalent.
 
-When evaluation rewards deployment count, people can split changes more than necessary or create meaningless deployments. That behavior is rational for the individual, but the organization ends up optimizing a number unrelated to customers.
+Agree on the following before measuring.
 
-DORA also warns that using delivery metrics as goals or for competition between teams invites manipulation under Goodhart's law.[^9]
-
-CTS-SW is not exempt.
-
-| How to make the number look better | What to verify instead |
+| Definition | An example agreement |
 | --- | --- |
-| Split releases into smaller deployments | Did each unit deliver something meaningful to customers? |
-| Exclude maintenance and incident costs | Did the cost boundary remain consistent from development through operations? |
-| Count rollbacks and redeployments as output | Did change failures and incidents rise at the same time? |
-| Compare teams using different definitions | Is this a trend within one team using one stable definition? |
+| Delivery unit | A production deployment serving customer traffic, or a change bundle customers can use |
+| Completion point | Deployment, or the point when the feature becomes available to customers |
+| Cost scope | Which development, review, testing, harness, and operating costs are included |
+| Rework treatment | How to avoid counting a rollback and redeployment as new output |
+| Comparison period | Equal-length periods, with changes in team composition and unit definitions recorded |
 
-This is also why CTS-SW should not become an individual productivity score.
+One deployment may contain ten features; another may change one setting. Deployment count does not directly measure customer value.
 
-Software delivery does not end when one developer writes code. Review practices, test infrastructure, deployment permissions, and the operating model all shape the result. Scoring individuals turns system problems into personal performance problems.
+I therefore treat CTS-SW as a **delivery-cost measure**, separate from revenue or customer satisfaction. A lower number does not establish that the product has become more valuable.
 
-AI coding tools may be used by individuals, but the harness their output must pass through is a team asset. It is therefore more natural to measure adoption at the level of team delivery cost and quality than individual output volume.
+Record changes in how work is split as well. Releasing the same feature in four deployments does not by itself make delivery four times more economical.
 
-SPACE makes the same point from another direction: developer productivity should not be reduced to one activity metric.[^3]
+## 3. Read cost alongside other measures
 
-I think CTS-SW works best as a trend within the same team, with flow metrics such as cycle time and review waiting time used to find the cause. Rollback rate, change failure rate, and incident recovery time should sit beside it to show whether cost has merely been shifted elsewhere.[^4]
+Amazon uses CTS-SW together with measures such as security and resilience. A tension metric checks whether an important property is deteriorating while cost improves.[^4]
 
-For example, if CTS-SW falls while change failures and on-call work increase, it is difficult to call that an improvement. If code volume stays similar but review queues and manual deployments shrink, a lower CTS-SW reflects a genuinely better delivery system.
+I also want to track **work that has started but has not reached customers**. The unfinished-work measures discussed here are my proposed companions to CTS-SW, not additions to its official formula.
 
-## 4. Start by funding one bottleneck in one team
+| Question | What to examine |
+| --- | --- |
+| Is delivering one unit cheaper? | CTS-SW |
+| Did we sacrifice quality? | Change failures, rollbacks, incidents, security, and recovery criteria |
+| Is unfinished work accumulating? | Average work in progress, review waiting time, and old unfinished items |
+| Does the output matter to customers? | Task success, actual usage, satisfaction, and other product goals |
 
-For a team without an evaluation baseline, I would start with a one-page agreement rather than a dashboard.
+If consistently defined CTS-SW falls while review queues and old work grow, the delivered units became cheaper, but the health of future delivery needs investigation.
 
-At minimum, agree on the following:
+Queue growth alone does not establish future cost increases or cognitive debt. A temporary large task, leave, or an external approval can also cause it. Treat it as a signal to examine what is waiting, where, and for how long.
 
-- What are we trying to learn from this number?
-- What is one customer-delivered software unit?
-- Which proxy will we use instead of exact cost?
-- What proves that quality has not declined?
-- Will we prohibit its use for individual ratings, team rankings, and headcount cuts?
+Labor and model charges already spent on unfinished work belong in the agreed period cost. Adding an arbitrary inventory penalty could count the same cost twice. **Keep the CTS-SW formula and interpret it alongside unfinished work and quality.**
 
-The agreement should also reserve time to improve the harness.
+This month's costs may also include work delivered next month, while this month's output may include work started last month. That is another reason to examine several periods rather than judge an intervention from one week's movement.
 
-Moving recurring review comments into tests, shortening CI feedback, and automating deployment and recovery can look slower than shipping one more feature today. If this work depends on voluntary individual effort, urgent feature work will usually win.
+## 4. Do not turn the metric into an individual output target
 
-Teams need to schedule it as real work and combine domain knowledge with platform and operations expertise so that each improvement survives into the next task. AI adoption budgets should include not only tool licenses and training but also **the capacity to build and operate the team harness**.
+Rewarding deployment count can encourage meaningless deployments. Setting review-completion quotas can encourage approval without sufficient understanding.
 
-If the definition of a software unit changes, do not splice the new series onto the old one. Keeping the definition stable from week to week matters more than the SQL used to calculate it.
+DORA warns that delivery metrics used as targets or for competition can invite manipulation.[^6] SPACE likewise argues against reducing developer productivity to a single activity measure.[^3]
 
-Next, connect several recent weeks of Git, CI/CD, organizational, and incident data to create a baseline.
+CTS-SW is better used to examine changes and their causes within one team. Ranking teams with different products, operating responsibilities, and software units starts from incompatible definitions.
 
-There is no need to calculate perfect cost on day one. Active developer count, customer-delivered units, cycle time, rollbacks, and incident response time are often enough to locate where cost is growing.
+Dividing it into individual scores is difficult too. A developer's coding speed does not determine delivery alone; testing environments, review practices, and deployment permissions also matter. Investigate a cost change before attributing it to someone's performance.
 
-After checking that the baseline roughly matches the team's lived experience, choose the largest bottleneck.
+If I introduce CTS-SW, I want an explicit agreement that it will not be used for individual ratings, team rankings, or headcount cuts.
 
-If review queues are long, change the review process. If CI is slow, shorten test feedback. If you want to trial an AI coding tool, avoid overlapping it with another major change and watch how code review, deployment, and CTS-SW move together.
+## 5. Start with consistent definitions in one team
 
-This follows the same performance-analysis principles that system throughput is constrained by the slowest component and that changing one variable at a time makes the effect easier to verify.[^6][^7]
+Begin by defining the delivery unit, cost scope, and quality criteria in one team. Product can define what reaches customers; development and operations can connect costs and incident records.
 
-A senior engineer does not need to own every number in this process.
+Build a baseline from several recent weeks and check whether it roughly matches the team's experience. Record changes in definitions or team composition and distinguish comparable periods.
 
-Product can define the unit that reaches customers. Site reliability engineering (SRE), responsible for service reliability and operations, can watch quality and operating cost. Engineering management can account for team composition changes and govern how the metric is used. Senior engineers can connect each number back to real pull requests, deployments, and incidents.
+After introducing a tool or improving one bottleneck, inspect delivered volume, unfinished work, and quality alongside cost. If several things changed at once, do not attribute the outcome to one intervention.
 
-I would start by making before-and-after changes explainable within one team, rather than trying to reproduce Amazon's full analytical model.
+If review queues grow, the next question needs to go beyond approving faster. Diagnose why work waits, then choose an intervention that reduces required human judgment or improves verification. The companion post develops these actions at individual and team levels.[^5]
 
 ## Conclusion
 
-For now, I think the best use of CTS-SW is to agree on customer-delivered units and quality criteria within one team, then work on its largest bottleneck.
+CTS-SW helps move the evaluation of AI beyond generated code toward what it costs to deliver results to customers.
 
-Compare against a recent baseline. If the number falls, also check whether costs have shifted into review or incident response. The software unit and cost scope must retain the same meaning for that comparison to work.
-
-I would also allocate time to improve the harness as planned team work. Turning an individual's discoveries into shared contracts, tools, and tests lets those improvements carry over to the next task and other team members.
+Stable definitions, combined with quality, unfinished work, and customer value, make changes in the number easier to explain. I want to use it as a starting point for finding improvements within one team.
 
 ---
 
-[^1]: [Why AI Adoption Should Not Start with Token Savings — The 3S Stages](/en/2026/06/15/organizational-ai-adoption-3s.html).
+[^1]: [Why AI Adoption Should Not Start with Token Savings — The 3S Stages](/en/2026/06/15/organizational-ai-adoption-3s.html) — examines requirement-realization cost and organizational learning alongside tool usage.
 
-[^2]: Amazon Science, [Measuring the effectiveness of software development tools and practices](https://www.amazon.science/blog/measuring-the-effectiveness-of-software-development-tools-and-practices) — defines CTS-SW and explains architecture-specific software units, team velocity, delivery quality, and the analysis of Amazon Q Developer.
+[^2]: Amazon Science, [Measuring the effectiveness of software development tools and practices](https://www.amazon.science/blog/measuring-the-effectiveness-of-software-development-tools-and-practices) — defines CTS-SW, software units, cost proxies, and complementary quality measures.
 
-[^3]: Nicole Forsgren et al., [The SPACE of Developer Productivity](https://queue.acm.org/detail.cfm?id=3454124) — proposes evaluating developer productivity across multiple dimensions rather than reducing it to one activity metric.
+[^3]: Nicole Forsgren and colleagues, [The SPACE of Developer Productivity](https://queue.acm.org/detail.cfm?id=3454124) — examines productivity across satisfaction, performance, activity, collaboration, and efficiency and flow.
 
-[^4]: Google Cloud DORA, [Accelerate State of DevOps Report 2024](https://dora.dev/research/2024/dora-report/) — explains why software delivery throughput and instability need to improve together.
+[^4]: AWS Enterprise Strategy, [Business Value of Developer Experience Improvements: Amazon's 15.9% Breakthrough](https://aws.amazon.com/blogs/enterprise-strategy/business-value-of-developer-experience-improvements-amazons-15-9-breakthrough/) — describes cost proxies and tension metrics such as security and resilience.
 
-[^5]: [Why Does AI-Generated Code Make Review Harder?](/en/2026/08/18/ai-coding-review-cognitive-load.html) — examines how AI moves cognitive load from implementation into review.
+[^5]: [AI Code Is Faster—Why Does Work Still Pile Up? Reducing Individual Cognitive Load and Team WIP](/en/2026/08/18/ai-coding-review-cognitive-load.html) — covers small understanding units, contracts and verification, work-in-progress limits, and bottleneck interventions.
 
-[^6]: Microsoft Learn, [How to Investigate Bottlenecks](https://learn.microsoft.com/en-us/biztalk/core/how-to-investigate-bottlenecks) — explains that throughput is constrained by the slowest component and recommends changing one variable before measuring again.
-
-[^7]: AWS Well-Architected Framework, [Use a data-driven approach for architectural choices](https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/perf_architecture_use_data_driven_approach.html) — treats decisions based on guesses as an anti-pattern and recommends validating choices with performance data and experiments.
-
-[^8]: Google Cloud DORA, [Announcing the 2025 DORA Report: State of AI-Assisted Software Development](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report) — describes AI as an amplifier of organizational strengths and weaknesses and links weak testing, version control, and feedback loops to delivery instability.
-
-[^9]: DORA, [DORA's software delivery performance metrics](https://dora.dev/guides/dora-metrics-four-keys/) — warns against metric targets, cross-application comparisons, and competition between teams.
-
-[^10]: [How I Built the EncBird Harness Layer by Layer](/en/2026/06/16/harness-engineering-in-practice.html) — describes how requirements, context, tools, tests, and guardrails accumulated into a project harness.
-
-[^11]: [Why Did Some Teams Get Up to 10x Faster with the Same AI Tools? — Five Habits of Frontier Development](/en/2026/08/31/frontier-development-habits.html) — connects Amazon's 50-team pilot and five Frontier Development habits to the team-harness argument.
+[^6]: DORA, [DORA's software delivery performance metrics](https://dora.dev/guides/dora-metrics-four-keys/) — discusses problems with targets and comparisons across applications and teams.
