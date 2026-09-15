@@ -30,7 +30,7 @@ Code may arrive quickly while reviews wait. Slow continuous integration (CI), wh
 
 In an earlier post, I argued for examining the **cost of realizing a requirement**, including models, tools, retries, and human review, rather than token prices alone.[^1] Amazon's Cost to Serve Software, or CTS-SW, offers a way to examine software delivery cost.[^2]
 
-This post explains how to define and interpret CTS-SW. A companion post covers what individuals and teams can do about cognitive load and review queues.[^5]
+This post explains how to define and interpret CTS-SW. A companion post examines cognitive debt and review bottlenecks when people have less time to become familiar with context.[^5]
 
 ## 1. The cost of one unit delivered to customers
 
@@ -123,7 +123,7 @@ Build a baseline from several recent weeks and check whether it roughly matches 
 
 After introducing a tool or improving one bottleneck, inspect delivered volume, unfinished work, and quality alongside cost. If several things changed at once, do not attribute the outcome to one intervention.
 
-If review queues grow, the next question needs to go beyond approving faster. Diagnose why work waits, then choose an intervention that reduces required human judgment or improves verification. The companion post develops these actions at individual and team levels.[^5]
+If review queues grow, the next question needs to go beyond approving faster. Diagnose why work waits, then choose an intervention that reduces required human judgment or improves verification. The companion post explains how understanding cost and automation affect review bottlenecks.[^5]
 
 ## Conclusion
 
@@ -141,6 +141,6 @@ Stable definitions, combined with quality, unfinished work, and customer value, 
 
 [^4]: AWS Enterprise Strategy, [Business Value of Developer Experience Improvements: Amazon's 15.9% Breakthrough](https://aws.amazon.com/blogs/enterprise-strategy/business-value-of-developer-experience-improvements-amazons-15-9-breakthrough/) — describes cost proxies and tension metrics such as security and resilience.
 
-[^5]: [AI Code Is Faster—Why Does Work Still Pile Up? Reducing Individual Cognitive Load and Team WIP](/en/2026/08/18/ai-coding-review-cognitive-load.html) — covers small understanding units, contracts and verification, work-in-progress limits, and bottleneck interventions.
+[^5]: [Why AI Code Review Feels Harder — Context Familiarity and Cognitive Debt](/en/2026/08/18/ai-coding-review-cognitive-load.html) — examines compressed understanding time, unrecognized debt, human review effort, and automation.
 
 [^6]: DORA, [DORA's software delivery performance metrics](https://dora.dev/guides/dora-metrics-four-keys/) — discusses problems with targets and comparisons across applications and teams.
