@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai engineering-productivity cts-sw developer-experience organization
 publish: true
-last_modified_at: 2026-09-13 15:01:31 +0900
+last_modified_at: 2026-09-15 09:42:42 +0900
 lang: ko
 translation_key: cts-sw-software-delivery-cost
 english_url: /en/2026/08/14/cts-sw-software-delivery-cost.html
@@ -94,6 +94,8 @@ Amazon은 CTS-SW를 단독으로 쓰지 않고 보안·복원력 같은 품질 �
 예를 들어 같은 정의로 측정한 CTS-SW가 낮아졌는데 리뷰 대기열과 오래된 작업이 늘었다면, 당장 전달한 단위의 비용은 개선됐어도 앞으로의 전달이 원활할지는 더 확인해야 한다.
 
 그렇다고 대기열 증가만으로 미래 비용 상승이나 인지부채를 확정할 수는 없다. 일시적인 대형 작업, 휴가, 외부 승인 대기처럼 다른 이유도 있을 수 있다. 어떤 일이 어디에서 얼마나 기다리는지 찾아볼 신호로 사용하는 편이 낫다.
+
+반대로 필요한 이해를 미룬 채 승인하면 리뷰 대기열은 줄어도 팀의 이해에는 빈칸이 남을 수 있다. 승인 건수가 늘었다는 사실을 고객에게 전달한 완료량의 증가와 구분하고, 중요한 변경의 동작·실패 조건을 설명할 수 있는지와 후속 재작업도 함께 확인해야 한다.[^5]
 
 미완료 작업에 이미 쓴 인건비와 모델 비용은 합의한 기간 비용에 포함된다. 여기에 임의의 ‘재고 벌점’을 더하면 같은 비용을 두 번 셀 수 있다. **CTS-SW 계산은 유지하고, 미완료 작업과 품질을 옆에 놓고 해석한다.**
 

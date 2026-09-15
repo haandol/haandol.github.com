@@ -8,7 +8,7 @@ tags: ai engineering-productivity cts-sw developer-experience organization
 publish: true
 lang: en
 date: 2026-08-14 00:00:00 +0900
-last_modified_at: 2026-09-13 15:01:31 +0900
+last_modified_at: 2026-09-15 09:42:42 +0900
 translation_key: cts-sw-software-delivery-cost
 korean_url: /2026/08/14/cts-sw-software-delivery-cost.html
 permalink: /en/2026/08/14/cts-sw-software-delivery-cost.html
@@ -96,6 +96,8 @@ I also want to track **work that has started but has not reached customers**. Th
 If consistently defined CTS-SW falls while review queues and old work grow, the delivered units became cheaper, but the health of future delivery needs investigation.
 
 Queue growth alone does not establish future cost increases or cognitive debt. A temporary large task, leave, or an external approval can also cause it. Treat it as a signal to examine what is waiting, where, and for how long.
+
+Conversely, approvals can shrink a review queue while leaving gaps in the team's understanding. Distinguish increased approvals from increased customer-delivered output, and also check whether people can explain important changes and their failure conditions, alongside later rework.[^5]
 
 Labor and model charges already spent on unfinished work belong in the agreed period cost. Adding an arbitrary inventory penalty could count the same cost twice. **Keep the CTS-SW formula and interpret it alongside unfinished work and quality.**
 

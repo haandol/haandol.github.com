@@ -8,7 +8,7 @@ tags: ai agent cognitive-load developer-experience code-review hitl wip cts-sw
 publish: true
 lang: en
 date: 2026-08-18 09:00:00 +0900
-last_modified_at: 2026-09-13 15:01:31 +0900
+last_modified_at: 2026-09-15 09:42:42 +0900
 translation_key: ai-coding-review-cognitive-load
 korean_url: /2026/08/18/ai-coding-review-cognitive-load.html
 permalink: /en/2026/08/18/ai-coding-review-cognitive-load.html
@@ -42,7 +42,7 @@ The cognitive load removed by AI does not necessarily disappear. **It can move f
 
 For now, small changes and short feedback loops can divide that load. Over time, I think human review should focus on the contract between business requirements and code, with evidence showing whether the agent satisfied it.
 
-We still need to preserve the understanding required for the next change. If review gets shorter but nobody on the team can explain the behavior, the cost may return during the next modification or incident.
+We still need to preserve the understanding required for the next change. Under a review backlog, maintaining the approval rate may mean choosing to defer necessary understanding. Reviews may become shorter now, but if nobody on the team can explain the behavior, the cost can return during the next modification or incident.
 
 At team level, individual habits cannot solve everything. Everyone may produce small changes, yet submitting them simultaneously can still overload their colleagues.
 
@@ -100,7 +100,7 @@ This is related to the familiar problem of large pull requests, but it is not ex
 
 In a traditional large pull request, the author could explain the context gained during implementation. In an agent-authored pull request, the human responsible for the result may also need to learn that context from scratch.
 
-Running multiple agents in parallel does not reduce this gap. It only accumulates unread changes faster.
+Increasing agent count without changing how people understand and verify the work may leave this gap intact. Unread changes accumulate while the work requiring human review arrives faster than reviewers can handle it.
 
 The current review model, in which a human checks every result, therefore protects quality while also limiting throughput. If every line must be understood before work can proceed, development speed eventually converges on the human's reading speed.
 
@@ -116,13 +116,29 @@ I think this distinction supports contract-centered review. Instead of reading e
 
 ## 3. Deferred understanding becomes a cost in the next change
 
-What happens if we respond to a review backlog simply by spending less time reading?
+Spending less time reading does not by itself resolve a review backlog. We need to distinguish understanding gained from understanding deferred to the next task.
+
+### Distinguish the effort of concentrating from overload
 
 Cognitive load theory distinguishes the limited working memory used to hold and process information from knowledge structures acquired through experience.[^8] Applied to code, someone remembering unfamiliar states and exceptions individually may face a different burden from someone who recognizes them as one familiar behavior.
 
 That is why reviewing 200 lines of familiar screen changes can feel different from reviewing 200 lines of unfamiliar payment retry logic. The latter requires understanding request order, stored state, and the conditions under which another call is safe.
 
-Under pressure to approve quickly, I think it becomes easier to rely on passing tests or the agent's summary instead of tracing the behavior to the end. At that point, finding no problem can become indistinguishable from not having looked for one.
+Tracing behavior and checking failure conditions require cognitive resources too. Eliminating that effort is not the goal. I want to reduce unnecessary work, such as repeatedly locating scattered information, and cognitive overload from taking on more than a person can handle at once.
+
+A 2022 code-review experiment also observed a relationship between higher cognitive load and better review performance. Its participants were professional developers, but many had little review experience. The researchers suggested that the result might reflect participants investing enough cognitive resources in the task.[^24]
+
+This study does not establish an optimal cognitive-load level for everyone. Low load can also reflect familiar code and good explanations, so it should not automatically be treated as superficial reading.
+
+### Deferring understanding to maintain the approval rate
+
+My concern is a team whose review demand exceeds its capacity but that neither controls new starts nor changes verification. Under additional pressure from deadlines and approval targets, people may leave unfamiliar behavior for later, when they need to change it.
+
+That choice can reduce reading time now while also postponing understanding needed for later changes and incident response. I see it as one way cognitive debt can accumulate: gaps remain in the team's shared understanding. Maintaining approval counts does not establish that customer-delivered output and quality were maintained.
+
+A systematic review of time pressure examined 102 papers. Most high-quality studies reported increased productivity and decreased quality, but the review also discussed conflicting results and the influence of task type and knowledge.[^25] It did not directly test comprehension deferral in AI development; it supports examining costs that can accompany higher immediate throughput.
+
+When reviews are rushed, I think it becomes easier to rely on passing tests or the agent's summary instead of tracing the behavior to the end. At that point, finding no problem can become indistinguishable from not having looked for one.
 
 ### Mistaking a plausible explanation for understanding
 
@@ -141,35 +157,38 @@ Margaret-Anne Storey's Triple Debt Model distinguishes technical, cognitive, and
 | Type | What is missing or inadequate | A question to ask |
 | --- | --- | --- |
 | Technical debt | Code and structure that make future changes harder | Why does a small change require edits across several modules? |
-| Cognitive debt | The team's shared understanding of system behavior | Can anyone explain what happens when an operation is retried after failure? |
+| Cognitive debt | Shared understanding of system behavior and decision reasons | Can anyone explain what happens when an operation is retried after failure? |
 | Intent debt | Recorded purpose, constraints, and reasons for decisions | Does a record explain why this behavior was chosen and which conditions must hold? |
 
-Cognitive load is the effort spent reviewing now. Cognitive debt is a burden left for future work when changes pass without understanding. Reading difficult code does not automatically create debt; learning from it may reduce the burden of the next task.
+Technical debt includes deliberate shortcuts for an earlier release as well as problems arising from unrecognized dependencies or technical constraints. Fowler's Technical Debt Quadrant also distinguishes deliberate and inadvertent choices.[^26] The three debts differ by where the problem resides—in code, shared understanding, or external records—not by whether it was intentional.
 
-Writing documentation does not automatically remove cognitive debt either. Recording a decision's rationale can reduce intent debt, but whether the team understands and can use it is a separate question.
+Cognitive load is the effort spent reviewing now. Cognitive debt is the gap left in shared understanding when changes pass without being understood. Reading may require effort while still reducing the burden of the next task through learning.
+
+Writing documentation does not automatically remove cognitive debt. Recording a decision's rationale can reduce intent debt, but whether the team understands and can use it is a separate question. People may know the requirement without understanding the conditions under which the implementation guarantees it.
 
 Consider a hypothetical system that prevents duplicate payments by retaining payment identifiers throughout the retry period. The initial implementation meets that condition, but the reason may be absent from both documentation and the team's understanding.
 
 Later, an agent asked to reduce storage costs shortens the retention period. If the reviewer misses the consequence, a problem enters the system. Existing tests may still pass if none checks a retry after the record has been deleted.
 
-A gap in understanding can allow a bad change through or delay discovery of an existing defect. This is a path by which cognitive debt can create or increase technical debt.
+The team may know that duplicate payments must be prevented yet approve the change because it does not understand the relationship between retention and retries. I think gaps like this can affect later decisions, creating unintentional technical debt or delaying discovery and repair of existing problems.
 
 {% raw %}
 ```mermaid
+%%{init: {"flowchart": {"nodeSpacing": 20, "rankSpacing": 30}}}%%
 flowchart TD
-    A["Review backlog"] --> B["Time pressure<br/>Checks skipped"]
-    B --> C["Cognitive debt<br/>Behavior and constraints<br/>not understood"]
-    D["Intent debt<br/>Purpose and reasons<br/>not recorded"] --> C
-    C --> E["A condition missed<br/>in the next change"]
-    E --> F["More technical debt<br/>Faulty changes<br/>Costlier maintenance"]
+    A["Review demand<br/>above capacity"] --> B["Needed understanding<br/>deferred or skipped"]
+    P["Keep new starts<br/>Deadline pressure<br/>Approval targets"] --> B
+    B --> C["Cognitive debt<br/>Gaps in shared<br/>understanding"]
+    D["Intent debt<br/>Reasons unrecorded"] --> C
+    C --> E["Later changes<br/>may miss constraints"]
+    E --> F["Unintentional<br/>technical debt<br/>may arise or grow"]
     F --> C
-    A -. "Response" .-> G["Smaller changes<br/>Understand and verify"]
-    G --> H["Record conditions<br/>and reasons<br/>Test failure paths"]
-    H --> I["Evidence for<br/>the next decision"]
+    A -. "Response" .-> G["Work limits<br/>Contracts · checks<br/>Clear explanations"]
+    G --> H["Needed understanding<br/>and verification<br/>completed"]
 ```
 {% endraw %}
 
-This is a conceptual diagram of how the debts can interact, not an inevitable sequence established by one study. Unfamiliar code can be correct, and tests or static analysis may catch defects before a person does.
+This diagram presents a hypothesis about how the debts can interact. A queue does not inevitably cause overload or deferred understanding, and unfamiliar code can be correct. Cognitive debt does not disappear and turn into technical debt; both can remain.
 
 ### What the studies actually measured
 
@@ -476,9 +495,13 @@ Larger PRs and longer waits occurring together do not establish causation. Trace
 
 ### Reduce the amount that requires human judgment
 
-Teams have two broad options: **reduce the review demand reaching people, or help them complete necessary reviews with less effort**.
+The WIP limits described earlier can control new starts. Teams can also change review itself: **reduce the review demand reaching people, or help them complete necessary reviews with less effort**.
 
 Contracts and tests can help with the first; context explanations and joint reviews can help with the second. DORA also recommends small batches, automated checks during authoring, and reconsidering verification practices in response to large AI-generated changes.[^14]
+
+Delegating repeated checks to contracts and automated verification requires a record of what was checked and the evidence for passing. Making that responsibility explicit differs from leaving behavior no one can explain for later.
+
+Define the understanding people still need. They do not have to read every function and library internal at the same depth, but maintainers need to reason about the behavior, constraints, and failure conditions relevant to later changes and incident response.
 
 The following is an example routing policy based on risk and evidence. It requires team agreement; it is not an automatic approval rule based on file type.
 
@@ -503,6 +526,8 @@ Even equal average demand and capacity can leave queues when complex changes or 
 CTS-SW measures the cost of one software unit delivered to customers.[^19] Separate flow measures help reveal whether unfinished work is accumulating while that cost falls.
 
 I would start with completed items, average WIP, old work, and quality. Average WIP is the average of counts recorded at equal time intervals. For old items, distinguish time since work started from time spent waiting for review.
+
+Changes approved with necessary understanding deferred may already have left the review queue. **A smaller queue does not establish better shared understanding.** I would also sample important changes to check whether maintainers can explain behavior and failure conditions, and whether subsequent changes repeatedly require context reconstruction or rework.
 
 ### Compare average WIP with completion rate
 
@@ -655,3 +680,9 @@ I want more work completed at the same quality. Adjusting both individual unders
 [^22]: Team Topologies, [Key Concepts](https://teamtopologies.com/key-concepts) — explains team cognitive load, flow of value, and platform, enabling, and complicated-subsystem team roles.
 
 [^23]: [Why Did Some Teams Get Up to 10x Faster with the Same AI Tools? — Five Habits of Frontier Development](/en/2026/08/31/frontier-development-habits.html) — discusses Amazon teams' investments in context, tools, tests, and intent, with limits on interpreting the observations.
+
+[^24]: [Do explicit review strategies improve code review performance? Towards understanding the role of cognitive load](https://link.springer.com/article/10.1007/s10664-022-10123-8) (2022). An experiment on guidance, review performance, and cognitive load. Participants were professional developers, but many had little review experience; it does not establish a universal optimal load.
+
+[^25]: Miikka Kuutila and colleagues, [Time Pressure in Software Engineering: A Systematic Review](https://arxiv.org/abs/1901.05771) (2020; first draft 2019). Reviews 102 papers and discusses context-dependent and conflicting findings on productivity and quality.
+
+[^26]: Martin Fowler, [Technical Debt Quadrant](https://martinfowler.com/bliki/TechnicalDebtQuadrant.html) (2009). Classifies technical debt along deliberate/inadvertent and prudent/reckless axes.
