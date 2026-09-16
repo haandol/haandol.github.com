@@ -40,6 +40,8 @@ These axes define what to examine, not a checklist of mandatory sentence forms. 
 
 Read the whole article across all six axes, including title, excerpt, TL;DR, headings, diagrams, conclusion, and any accompanying translation. A reverse outline can help assess the topic and composition; reading neighboring paragraphs together can expose breaks in flow and repeated forms. Use these methods when useful, not as mandatory output templates.
 
+For formulas, apply the writing skill's **Explain Formulas With Worked Examples** guidance: verify that a nearby example shows the inputs and units, substitution and calculation, and the practical meaning of the result. Check that operators and meaningful variables are explained, arithmetic is correct, and hypothetical inputs are not presented as measurements.
+
 Use the writing skill's **Three Layers To Check While Writing** as examples of signals and possible repairs, not an exhaustive rubric. A natural passage can still be off-topic or unsupported; a passage free of stock phrases can still lose the author's voice. Conversely, a useful contrast or repeated technical term is not a defect merely because it resembles a listed signal.
 
 Do not assign numerical scores, weights, sentence-length quotas, banned-word counts, or an “AI probability.” Do not require every axis to yield a finding. Judge a defect by the passage's role and effect on this reader, and explain the evidence for that judgment. Preserve a coherent author opinion even when another opinion is possible; do not replace the topic or erase useful detail merely to shorten the article.

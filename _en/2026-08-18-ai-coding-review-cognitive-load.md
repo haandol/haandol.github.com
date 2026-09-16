@@ -8,7 +8,7 @@ tags: ai agent cognitive-load cognitive-debt code-review developer-experience ba
 publish: true
 lang: en
 date: 2026-08-18 09:00:00 +0900
-last_modified_at: 2026-09-16 11:33:09 +0900
+last_modified_at: 2026-09-16 15:36:25 +0900
 translation_key: ai-coding-review-cognitive-load
 korean_url: /2026/08/18/ai-coding-review-cognitive-load.html
 permalink: /en/2026/08/18/ai-coding-review-cognitive-load.html
@@ -123,7 +123,9 @@ team velocity ≈ min(human review velocity, automated review velocity)
 
 Velocity here counts changes meeting the same quality criteria, not approvals alone. Rework and waiting can lower actual throughput. If generation or delivery is slower, that stage must also be included in the bottleneck analysis.
 
-Human capacity can be broken down further:
+Consider a hypothetical team where every change requires human review. People can review eight changes per day, while automated checks can process twelve. `min` selects the smaller value, so `min(8, 12) = 8`. Even if automation finishes twelve changes, the team can sustainably deliver about eight per day when people can review only eight.
+
+Where does that human capacity of eight changes come from? We can calculate it from the time available for review and the time each change requires.
 
 ```text
 H = human review time available per day
@@ -133,13 +135,17 @@ p = fraction of all changes requiring human review
 human review velocity = H / (p × C)
 ```
 
-This is the total change volume supported by human capacity, not the number of reviews people personally perform.
+Suppose that team has 240 minutes available for review each day and each review takes 30 minutes on average. Every change requires human review, so p is 1. Substituting those values gives `240 / (1 × 30) = 8`: capacity for eight changes per day.
+
+Now suppose only half of all changes need human review, making p equal to 0.5. With H and C unchanged, `240 / (0.5 × 30) = 16`. People review eight of those sixteen changes, requiring `8 × 30 minutes = 240 minutes`. The denominator, `p × C`, is the average human review time needed per change across all changes.
+
+The result therefore counts the total changes that human capacity can support, not the reviews people personally perform. Since automated checks still handle only twelve changes per day, team velocity becomes `min(16, 12) = 12`, or about twelve changes per day.
 
 C includes reading code, reconstructing context, checking assumptions in architecture and documentation, and exploring exceptions. When unfamiliar context and complex conditions take longer to understand and judge, C grows. With available review time H and the fraction requiring human review p held constant, a larger C means fewer changes can be processed.
 
 This is why I think **cognitive load can act inversely to team velocity**. Here, I connect cognitive load to throughput through the time needed for understanding and judgment. I am not claiming an exact inverse relationship between a psychological load score and team velocity; the relationship constrains team velocity when human review is the bottleneck.
 
-For a hypothetical example, assume every change requires human review. With 240 available review minutes per day and 30 minutes per change, human capacity is eight changes per day. Reducing familiarity-building cost enough to review at the same quality in 15 minutes raises it to sixteen. But if automated checks can process only twelve changes per day, the team cannot sustainably exceed twelve.
+Return to the original condition where every change requires human review. Suppose reducing the effort of becoming familiar with the context makes a review possible in 15 minutes at the same quality. H stays at 240 minutes and p stays at 1, while C falls: `240 / (1 × 15) = 16`. Halving the time per review doubles the changes human capacity can support. With automated capacity unchanged, team velocity can rise to about twelve changes per day.
 
 Holding staffing and available time constant leaves C and p as the human-side levers: reduce the cost of understanding and judgment, or reduce the fraction needing direct human review. For a route with no human review, remove that stage from the capacity model rather than divide by zero.
 

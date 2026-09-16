@@ -158,6 +158,13 @@ Examples show the intended reading level, not mandatory replacements:
 - Do not mix English and Korean merely for novelty. Keep terminology consistent across prose, tables, and diagrams.
 - Prefer concrete business language such as `업무에 필요한 데이터를 찾아 읽거나 바꾼다` over abstract cost or outcome jargon.
 
+## Explain Formulas With Worked Examples
+
+- Whenever explaining a formula, include a concrete worked example beside it. Defining symbols alone is not enough. This applies to Korean originals and English translations.
+- State the example's situation, input values, units, and relevant assumptions; substitute the values, show the calculation, and explain what the result means for the reader. Explain operators such as `min` in ordinary words.
+- Reuse one scenario across related formulas so readers can follow the connection. Make every meaningful variable visible in the example; if a ratio disappears when set to 1, also show a case where it is not 1.
+- Label invented numbers as hypothetical. Preserve the distinction between a conceptual model and measured evidence, and check arithmetic and units. Replace a redundant later example rather than repeating the same calculation.
+
 ## Design Diagrams
 
 Use a diagram only when it reveals a relationship that prose makes hard to scan.
