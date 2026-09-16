@@ -8,7 +8,7 @@ tags: ai agent cognitive-load cognitive-debt code-review developer-experience ba
 publish: true
 lang: en
 date: 2026-08-18 09:00:00 +0900
-last_modified_at: 2026-09-15 23:00:13 +0900
+last_modified_at: 2026-09-16 11:33:09 +0900
 translation_key: ai-coding-review-cognitive-load
 korean_url: /2026/08/18/ai-coding-review-cognitive-load.html
 permalink: /en/2026/08/18/ai-coding-review-cognitive-load.html
@@ -66,11 +66,11 @@ When describing deliberate technical debt, Fowler makes this awareness explicit.
 
 Knowing what was deferred and what it may cost makes repayment a decision the team can discuss. Technical debt can also be unintentional. The comparison here is between a recognized compromise and a gap in understanding that passes through review unnoticed.
 
-Cognitive debt is inadequate shared understanding of the system's contracts and behavior for reasoning about change. I am focusing on situations where a team accepts code without adequately recognizing that gap.
+Cognitive debt is a lack of shared understanding within the team about how the system behaves and how changes will affect it. I am focusing on situations where a team accepts code without adequately recognizing that gap.
 
 Consider a hypothetical duplicate-payment prevention feature. Payments work through the interface and retry tests pass, but nobody explored retries after record loss or two requests arriving simultaneously.
 
-Knowing the contract—one request must not cause two charges—is different from understanding the conditions under which the implementation satisfies it. Accepting the result simply because it works can leave the team unaware of what it missed.
+Here, a contract means the behavior and conditions an implementation must satisfy, such as ensuring that one request cannot cause two charges. Knowing that contract is different from understanding the conditions under which the implementation satisfies it. Accepting the result simply because it works can leave the team unaware of what it missed.
 
 Deferring understanding under deadline and approval pressure can be a conscious choice. That does not mean the team recognizes the size or consequences of the gap it leaves. Storey distinguishes those two things.[^10]
 
@@ -93,11 +93,11 @@ flowchart TD
 ```
 {% endraw %}
 
-This is the path I want to explain, not a law applying to all AI development. Cognitive debt does not disappear and become technical debt. Inadequate understanding and the faulty code it enables can remain together.
+The diagram shows a possible path when a team accepts code before understanding it. Cognitive debt does not disappear and become technical debt. Inadequate understanding and the faulty code it enables can remain together.
 
 ## 3. Team velocity is constrained by the slower verification stage
 
-Once generation is sufficiently fast, the next constraint to examine is verification capacity. Microsoft's guidance on system bottlenecks states this principle for sustainable throughput.[^27]
+To avoid leaving cognitive debt, we need to ask how many changes the team can process while completing the necessary understanding and verification. Once generation is sufficiently fast, that verification capacity can constrain team velocity. Microsoft's guidance on system bottlenecks states this principle for sustainable throughput.[^27]
 
 > “a system can only process as fast as its slowest performing component.”
 >
@@ -135,9 +135,11 @@ human review velocity = H / (p × C)
 
 This is the total change volume supported by human capacity, not the number of reviews people personally perform.
 
-C includes reading code, reconstructing context, checking assumptions in architecture and documentation, and exploring exceptions. **This human-time cost is how I interpret cognitive load acting inversely to team velocity here.** It is not the reciprocal of a psychological load score.
+C includes reading code, reconstructing context, checking assumptions in architecture and documentation, and exploring exceptions. When unfamiliar context and complex conditions take longer to understand and judge, C grows. With available review time H and the fraction requiring human review p held constant, a larger C means fewer changes can be processed.
 
-For a hypothetical example, 240 available review minutes per day and 30 minutes per change give human capacity of eight changes per day. Reducing familiarity-building cost enough to review at the same quality in 15 minutes raises it to sixteen. But if automated checks can process only twelve changes per day, the team cannot sustainably exceed twelve.
+This is why I think **cognitive load can act inversely to team velocity**. Here, I connect cognitive load to throughput through the time needed for understanding and judgment. I am not claiming an exact inverse relationship between a psychological load score and team velocity; the relationship constrains team velocity when human review is the bottleneck.
+
+For a hypothetical example, assume every change requires human review. With 240 available review minutes per day and 30 minutes per change, human capacity is eight changes per day. Reducing familiarity-building cost enough to review at the same quality in 15 minutes raises it to sixteen. But if automated checks can process only twelve changes per day, the team cannot sustainably exceed twelve.
 
 Holding staffing and available time constant leaves C and p as the human-side levers: reduce the cost of understanding and judgment, or reduce the fraction needing direct human review. For a route with no human review, remove that stage from the capacity model rather than divide by zero.
 
@@ -145,7 +147,7 @@ Holding staffing and available time constant leaves C and p as the human-side le
 
 The first direction is to make necessary human reviews less burdensome. C grows when people must reconstruct purpose and assumptions from scratch for every code, architecture, or requirements-document review.
 
-I would establish the contract before implementation and connect the result to before-and-after behavior, failure conditions, and verification evidence. A contract is the basis for judging acceptance: observable behavior, conditions that must hold, and permission or data boundaries.
+I would establish the contract before implementation and connect the result to before-and-after behavior, failure conditions, and verification evidence. That contract should cover observable behavior, conditions that must hold, and who may read or change which data.
 
 For the payment example, a passing-tests summary is less useful than knowing which retries were checked, how record loss and concurrent requests were covered, and which decisions remain open. Explanations should lead directly to code and executed tests to reduce the cost of recovering context.
 
@@ -153,9 +155,9 @@ The amount to learn at once can also shrink. Implement one requirement slice, un
 
 ![Conceptual diagram distributing understanding and verification across smaller development cycles](/assets/img/2026/0818/small-cycle-cognitive-load-en.svg)
 
-The diagram represents restoring understanding work between implementation steps, rather than doing less work. Familiarity with the current small change becomes the starting point for the next one.
+The diagram shows time for building understanding between small implementation steps. Familiarity with the current small change becomes the starting point for the next one.
 
-Existing cognitive debt still needs repayment. Tracing code and design together, finding missed assumptions and failure conditions, and repairing faulty implementation take time. The goal is to avoid repeating the same reconstruction and overload on later tasks, not to eliminate that necessary concentration.
+Existing cognitive debt still needs repayment. Tracing code and design together, finding missed assumptions and failure conditions, and repairing faulty implementation take time. Recording the behavior and assumptions in code, documentation, and tests reduces the need to reconstruct that context from scratch on the next task.
 
 In the [ALPS Writer Plugins](https://github.com/haandol/alps-writer-plugins) I maintain, I have built in criteria for dividing work and reviewing evidence against contracts. Lasting decisions go into Architecture Decision Records (ADRs), and implementation explanations connect request and failure paths to code and tests.[^3]
 
@@ -165,7 +167,7 @@ The presence of documentation does not establish understanding. Maintainers need
 
 The second direction is to stop requiring the same human review for every change. If people repeatedly reread conditions automated checks can verify, p remains high.
 
-Repeated comments on module dependency direction should become architecture tests. Repeated checks for duplicate requests should become regression tests. Accumulating such decisions in the harness—the working instructions, tools, and verification environment—makes them reusable.[^5]
+If reviews repeatedly flag which modules may depend on others, architecture tests can check those relationships. If reviewers repeatedly check that the same request is not processed twice, regression tests can check that later changes do not reintroduce the problem. Accumulating such decisions in the harness—the working instructions, tools, and verification environment—makes them reusable.[^5]
 
 In the normal path I want, sufficient automated verification of an agreed contract removes the need for repetitive human approval. People decide new product behavior, contract changes, high-risk conditions, and assumptions automation could not verify.
 
@@ -175,7 +177,7 @@ Automating verification is also separate from maintaining necessary understandin
 
 While this transition is incomplete, control new work entering the process. Reducing arrivals alone does not lower the understanding cost of one review. Use the available time to improve explanations, contracts, tests, and tools so later capacity can grow.
 
-After automation, reassess the difficulty of remaining human reviews. Removing routine changes can lower p while increasing C for the harder decisions left behind. Check actual review time and quality; evaluate cost against customer-delivered units, as CTS-SW does.[^19]
+After automation, reassess the difficulty of remaining human reviews. Removing routine changes can lower p while increasing C for the harder decisions left behind. Check actual review time and quality. Automated verification also incurs tooling and operating costs, so use CTS-SW—the cost of delivering one software unit to customers—to examine whether overall cost has fallen too.[^19]
 
 ## Conclusion
 
