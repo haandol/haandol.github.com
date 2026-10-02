@@ -169,8 +169,11 @@ Do not "fix" this by adding a `permalink` to `_config.yml`: 123 URLs are already
 
 ### Korean and English Versions
 
+- After completing or revising Korean blog copy, always create or update the full English version in the same task and review both before completion. Do not wait for a separate translation request. Explicit language restrictions and review-only requests take precedence.
+- Validate the completed Korean file with `.agents/scripts/post-lint.sh --require-english <Korean-file>` and lint its English counterpart. This requirement applies to the current task, not a retroactive translation of every legacy post.
 - Korean originals remain in `_posts/` at the existing `/YYYY/MM/DD/slug.html` URL.
 - English translations live in `_en/` and use `/en/YYYY/MM/DD/slug.html`.
+- Draft counterparts in `_en/` set both `publish: false` and `published: false` so the output collection does not expose them. Set both to true when publication is authorized. Translation alone does not authorize a commit, push, or deployment.
 - A translated Korean post sets `lang: ko`, `translation_key`, and `english_url`.
 - Its English counterpart sets the same `translation_key`, plus `lang: en`,
   `korean_url`, an explicit `date`, `last_modified_at`, and an explicit

@@ -6,6 +6,9 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent mcp personalization headless-saas business-model
 publish: true
+lang: ko
+translation_key: headless-community-business-model
+english_url: /en/2026/10/02/headless-community-business-model.html
 ---
 
 ## TL;DR

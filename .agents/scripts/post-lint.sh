@@ -3,11 +3,22 @@
 # Usage:
 #   .agents/scripts/post-lint.sh                    # all Korean/English posts and drafts
 #   .agents/scripts/post-lint.sh _posts/2026-07-25-foo.md ...
+#   .agents/scripts/post-lint.sh --require-english _posts/2026-07-25-foo.md _en/2026-07-25-foo.md
 #
 # Exits 1 if any check fails. Rules come from AGENTS.md; keep both in sync.
 
 set -uo pipefail
 cd "$(dirname "$0")/../.." || exit 1
+
+require_english=0
+if [ "${1:-}" = "--require-english" ]; then
+  require_english=1
+  shift
+  if [ "$#" -eq 0 ]; then
+    echo "--require-english needs explicit target files." >&2
+    exit 2
+  fi
+fi
 
 if [ "$#" -gt 0 ]; then
   files=("$@")
@@ -20,9 +31,60 @@ fi
 fail=0
 report() { echo "$1: $2"; fail=1; }
 
+front_matter_value() {
+  awk -v key="$2" '
+    /^---$/ { section++; next }
+    section == 1 && index($0, key ":") == 1 {
+      sub(/^[^:]+:[[:space:]]*/, "")
+      sub(/[[:space:]]*$/, "")
+      gsub(/^["\047]|["\047]$/, "")
+      print; exit
+    }
+    section > 1 { exit }
+  ' "$1"
+}
+
 for f in "${files[@]}"; do
-  [ -e "$f" ] || continue
+  f="${f#"$PWD"/}"
+  f="${f#./}"
+  if [ ! -e "$f" ]; then
+    report "$f" "file does not exist"
+    continue
+  fi
   case "$f" in *.md) ;; *) continue ;; esac
+
+  if [ "$require_english" -eq 1 ] && [[ "$f" == _posts/* || "$f" == _drafts/* ]]; then
+    english_url=$(front_matter_value "$f" english_url)
+    translation_key=$(front_matter_value "$f" translation_key)
+    if [ -z "$english_url" ] || [ -z "$translation_key" ]; then
+      report "$f" "completed Korean post needs english_url and translation_key"
+    else
+      counterpart=""
+      for candidate in _en/*.md; do
+        [ -e "$candidate" ] || continue
+        if [ "$(front_matter_value "$candidate" permalink)" = "$english_url" ]; then
+          if [ -n "$counterpart" ]; then
+            report "$f" "multiple English posts use $english_url"
+          fi
+          counterpart="$candidate"
+        fi
+      done
+      if [ -z "$counterpart" ]; then
+        report "$f" "English counterpart not found for $english_url"
+      else
+        [ "$(front_matter_value "$counterpart" translation_key)" = "$translation_key" ] ||
+          report "$f" "English counterpart has a different translation_key"
+        [ "$(front_matter_value "$counterpart" korean_url)" = "${english_url#/en}" ] ||
+          report "$f" "English counterpart has an incorrect korean_url"
+        if [[ "$f" == _drafts/* ]] || [ "$(front_matter_value "$f" publish)" = "false" ]; then
+          if [ "$(front_matter_value "$counterpart" publish)" != "false" ] ||
+             [ "$(front_matter_value "$counterpart" published)" != "false" ]; then
+            report "$f" "draft English counterpart needs publish: false and published: false"
+          fi
+        fi
+      fi
+    fi
+  fi
 
   # TL;DR: at most 3 bullets
   n=$(awk '/^## TL;DR/{f=1;next} /^## /{f=0} f&&/^- /{c++} END{print c+0}' "$f")
