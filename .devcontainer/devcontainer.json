@@ -1,12 +1,28 @@
 {
-	"name": "Jekyll",
-	"image": "mcr.microsoft.com/devcontainers/jekyll:2-bullseye",
-	"features": {
-		"ghcr.io/devcontainers/features/git:1": {},
-		"ghcr.io/devcontainers/features/sshd:1": {},
-		"ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2": {}
-	},
-	"customizations": {
+  "name": "Haandol Blog",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "vscode",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/sshd:1": {},
+    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2": {}
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "waitFor": "postCreateCommand",
+  "forwardPorts": [4000, 35729],
+  "portsAttributes": {
+    "4000": {
+      "label": "Jekyll",
+      "onAutoForward": "notify"
+    },
+    "35729": {
+      "label": "Jekyll LiveReload",
+      "onAutoForward": "silent"
+    }
+  },
+  "customizations": {
     "vscode": {
       "settings": {
         "extensions.verifySignature": false
@@ -15,10 +31,5 @@
         "bierner.github-markdown-preview"
       ]
     }
-  },
-
-  "mounts": [
-    "source=${env:HOME}${env:USERPROFILE}/.ssh,target=/root/.ssh,type=bind",
-    "source=${env:HOME}${env:USERPROFILE}/.ssh,target=/root/.ssh,type=bind"
-  ]
+  }
 }

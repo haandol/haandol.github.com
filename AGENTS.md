@@ -193,6 +193,7 @@ Do not "fix" this by adding a `permalink` to `_config.yml`: 123 URLs are already
 
 - Written in Korean; technical terms remain in English
 - Essay style with personal experience and opinions
+- Omit obvious commentary and excessive elaboration. When `예를 들어` or a conditional already makes an example clear, do not add a sentence explaining that it is an example. Avoid repeated summaries and caveats; retain context and conditions that affect meaning.
 - **Short paragraphs** — often one or two sentences per paragraph, separated by blank lines, rather than dense blocks. This is the current cadence; match it.
 - Explanations use analogies and real-world examples
 - **Bold** for key messages
