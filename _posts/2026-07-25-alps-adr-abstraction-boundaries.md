@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "PRD·ADR·코드를 왜 나눠야 할까 — 추상화 계층 하나만 읽고 판단하기"
-excerpt: How abstraction boundaries reduce drift and review load
+excerpt: Keep intent independent of implementation details
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering prd adr alps agentic-development hexagonal-architecture
 publish: true
-last_modified_at: 2026-09-11 16:33:32 +0900
+last_modified_at: 2026-10-03 17:59:53 +0900
 lang: ko
 translation_key: alps-adr-abstraction-boundaries
 english_url: /en/2026/07/25/alps-adr-abstraction-boundaries.html
@@ -14,23 +14,25 @@ english_url: /en/2026/07/25/alps-adr-abstraction-boundaries.html
 
 ## TL;DR
 
-- PRD·ADR·코드는 같은 시스템에 관한 서로 다른 질문에 답한다.
+- 추상화 계층은 구현 디테일의 변화로부터 구현 의도를 보호한다.
 - 요구사항을 ADR로 이관한 뒤에는 ADR을 구현 기준으로 삼는다.
-- 계층 분리는 변경 전파와 사람이 검토할 범위를 줄인다.
+- 구현 검토 보고서는 상세 근거에 앞서 계약과 위험을 보여준다.
 
 ## 시작하며
 
-ALPS Writer Plugins에서 문서와 코드가 서로 어긋나는 문제를 줄이려고, 각 문서에 무엇을 남길지 정리했다.
+구현에서 선택한 라이브러리나 파일 구조가 바뀌었다고, 무엇을 왜 만들려는지까지 함께 바뀌어서는 안 된다고 생각한다. 그런데 그 세부사항을 기획과 설계 결정에 섞어두면, 코드 수정이 상위 문서의 수정으로 이어지고 어느 내용이 여전히 유효한지 다시 판단하게 된다.
+
+ALPS Writer Plugins에서 추상화 계층을 나눈 목적은 **구현 의도가 구현 디테일의 영향을 받지 않도록 하는 것**이다. 요구사항이 구현을 이끌고, 구현 방법은 그 요구사항을 만족하는 범위에서 선택할 수 있게 하려는 것이다.
 
 제품 요구사항 문서(PRD), 아키텍처 결정 기록(ADR), 코드를 **같은 시스템을 서로 다른 해상도로 본 결과**로 구분하는 방식이다. 저장소의 `AGENTS.md`에도 이 원칙을 적어뒀다.[^1]
 
 여기서 해상도는 얼마나 구체적으로 설명하느냐를 뜻한다. PRD에는 사용자가 얻을 결과를, ADR에는 구현이 지켜야 할 결정과 요구사항을, 코드에는 실제 동작을 담는다. 이 글에서 말하는 계약은 허용할 상태와 권한, 정확한 제한값처럼 구현을 바꿔도 지켜야 할 요구사항이다.
 
-직접 적용해보니 문서 정리 외에도 체감한 변화가 있었다.
+이 글에서 ALPS Writer Plugins는 두 독립 플러그인을 함께 가리킨다. ALPS Writer는 PRD 작성과 기획 인계를, ADR Writer는 ADR 작성과 구현·리뷰·동기화를 맡는다.
 
-Agent가 작업마다 모든 문서를 읽지 않아도 됐다. 코드 리팩터링이 상위 문서 수정으로 번지지 않았고, 구현 방법을 미리 고정하지 않으면서도 사람은 계약과 위험을 검토할 수 있었다.
+직접 적용해보니 Agent가 작업마다 모든 문서를 읽지 않아도 됐다. 코드 리팩터링이 상위 문서 수정으로 번지지 않았고, 구현 방법을 미리 고정하지 않으면서도 사람은 계약과 위험을 검토할 수 있었다.
 
-이 글에서는 현재 ALPS Writer Plugins의 설계를 기준으로, 추상화 계층을 구별하면 실제로 무엇이 좋아지는지 정리한다.
+이 글에서는 ALPS Writer Plugins의 설계를 기준으로, 구현 의도를 보호하는 경계와 그로부터 얻는 효과를 정리한다.
 
 ## 1. 같은 시스템을 세 가지 해상도로 본다
 
@@ -48,7 +50,7 @@ C4 모델은 시스템과 외부의 관계(Context), 내부 애플리케이션�
 
 시스템과 외부의 관계를 묻는 그림에 클래스까지 넣으면 자세해지기는 하지만, 필요한 관계를 찾기는 어려워진다. 문서도 마찬가지다. 자기 수준의 질문에 답하는 데 필요 없는 내용은 아래 계층에 남겨두는 편이 낫다.
 
-ALPS Writer에서는 이를 문서 하나만 읽어보는 검사(`single-level read test`)로 확인한다.
+두 플러그인은 이를 문서 하나만 읽어보는 검사(`single-level read test`)로 확인한다.
 
 > 이 계층 하나만 읽고 자신의 질문에 답할 수 있는가? 아래 계층의 내용이 섞이지 않았고, 다른 어느 곳에도 없는 계약이 빠지지 않았는가?
 
@@ -56,7 +58,7 @@ ALPS Writer에서는 이를 문서 하나만 읽어보는 검사(`single-level r
 
 Clean Architecture의 Use Case나 Hexagonal Architecture의 Application Service는 요청을 받아 업무 규칙을 실행하고, 필요한 데이터를 읽거나 저장하는 작업을 조율한다.[^2] 이때 특정 데이터베이스 제품에 직접 맞추기보다, 저장이나 조회에 필요한 동작을 약속한 인터페이스에 의존하게 만든다. 그러면 데이터베이스를 연결하는 코드를 바꿔도 업무 규칙은 유지할 수 있다.
 
-ALPS Writer에서는 Agent가 비슷한 역할을 맡는다.
+ALPS Writer Plugins에서는 Agent가 비슷한 역할을 맡는다.
 
 Agent는 기획을 넘기는 단계에서 PRD를 읽고, 오래 유지할 결정과 요구사항을 ADR에 옮기며 나머지는 구현자가 고를 수 있는 선택으로 구분한다. 이후 구현할 때는 ADR을 기준으로 현재 코드를 찾는다. 작업 지침인 Skill과 외부 도구를 연결하는 MCP, 명령줄 도구(CLI)를 사용해 코드를 수정하고 테스트한 뒤 검토할 결과를 남긴다.
 
@@ -82,7 +84,11 @@ Clean Architecture에서 추상화 계층이 복잡도를 추가하듯이 이 �
 
 각 문서가 자기 질문에 혼자 답하면 Agent도 작업에 필요한 계층만 읽고 멈출 수 있다.
 
-ALPS Writer의 `/feature-to-adr`는 PRD의 구현 관련 요구사항을 ADR로 이관하는 작업이다. 이관이 끝난 뒤의 일반 구현과 리뷰는 PRD를 다시 읽지 않는다. ADR 목록인 `.mapping.json`에는 각 ADR의 경로, 상태, 요약과 먼저 충족해야 할 다른 ADR의 요구사항 관계만 기록한다. PRD 경로나 코드 경로는 저장하지 않는다.
+ALPS Writer의 `/feature-to-adr`는 PRD의 구현 관련 요구사항을 ADR로 이관하는 작업이다. 이관이 끝난 뒤의 일반 구현과 리뷰는 PRD를 다시 읽지 않는다.
+
+ADR 목록인 `.mapping.json`에는 각 ADR의 경로, 상태, 요약을 기록한다. 선행 관계인 `dependsOn`은 개별 ADR이 아니라 ADR을 묶은 카테고리 단위로 저장한다. 어떤 결정이 어떤 보장을 먼저 필요로 하는지는 ADR 본문과 검토 자료에서 설명한다.[^4]
+
+PRD 참조나 일반 구현 코드와 ADR을 연결하는 경로 매핑은 두지 않는다.
 
 ADR 본문에도 PRD의 Section 번호, Feature ID, 함수와 파일 경로를 넣지 않는다. 관련 코드는 ADR을 읽은 Agent가 현재 저장소에서 다시 찾는다.
 
@@ -94,7 +100,7 @@ ADR 본문에도 PRD의 Section 번호, Feature ID, 함수와 파일 경로를 �
 
 세 계층의 변경 빈도는 같지 않다.
 
-함수와 모듈은 자주 바뀌고, 아키텍처 결정은 가끔 바뀌며, 사용자 문제와 제품 목표는 상대적으로 오래간다. ALPS Writer의 `Code >> ADR >> PRD`는 기획 단계에서 이렇게 변경 빈도가 다르다는 뜻이다. 이관 이후의 구현은 코드와 ADR을 기준으로 진행하며, PRD 수정은 명시적으로 다시 가져올 때만 검토한다.
+함수와 모듈은 자주 바뀌고, 아키텍처 결정은 가끔 바뀌며, 사용자 문제와 제품 목표는 상대적으로 오래간다. 이 프로젝트의 `Code >> ADR >> PRD`는 기획 단계에서 이렇게 변경 빈도가 다르다는 뜻이다. 이관 이후의 구현은 코드와 ADR을 기준으로 진행하며, PRD 수정은 명시적으로 다시 가져올 때만 검토한다.
 
 계층이 잘 나뉘면 구현만 바꾼 일이 제품 문서 수정까지 번지지 않는다. 반대로 요구사항이 바뀌면 그에 맞춰 코드를 고쳐야 한다.
 
@@ -130,7 +136,7 @@ ADR로 남길 결정에도 기준을 둔다. 요구사항 계약, 데이터·보
 
 추상화 계층을 나누면 Agent에게 구현 재량을 더 줄 수 있다.
 
-ALPS Writer에서는 ADR의 내용을 확인할 때, 코드를 전부 지우더라도 같은 요구사항과 경계를 지키는 구현을 다시 만들 수 있는지 묻는다. 이를 `regeneration test`라고 부른다. 파일이나 함수까지 예전과 똑같이 만들 필요는 없다.
+ADR Writer에서는 ADR의 내용을 확인할 때, 코드를 전부 지우더라도 같은 요구사항과 경계를 지키는 구현을 다시 만들 수 있는지 묻는다. 이를 `regeneration test`라고 부른다. 파일이나 함수까지 예전과 똑같이 만들 필요는 없다.
 
 예를 들어 `갱신 토큰은 7일 동안 유효하다`가 정해진 보안 정책이라면 정확한 7일과 그 근거를 ADR에 남긴다.
 
@@ -150,16 +156,20 @@ ALPS Writer에서는 ADR의 내용을 확인할 때, 코드를 전부 지우더�
 
 계층을 구별하면 리뷰도 코드 전체에서 시작하지 않아도 된다.
 
-ALPS Writer의 ADR은 요구사항을 독립적인 행으로 나누고, 특정 테스트 파일이나 함수 대신 구현과 무관하게 관찰할 수 있는 증거를 함께 적는다.
+ADR Writer가 다루는 ADR은 요구사항을 독립적인 행으로 나누고, 특정 테스트 파일이나 함수 대신 구현과 무관하게 관찰할 수 있는 증거를 함께 적는다.
 
 Agent는 이 계약을 기준으로 구현과 테스트를 진행한 뒤, 계약별 상태와 증거, 구현 중 선택한 내용과 남은 위험을 구현 검토 보고서(`Evidence Package`)로 만든다.
 
 이 보고서는 새로운 권위 문서가 아니라 ADR과 코드에서 파생한 일시적인 검토 자료다. 다음 구현의 기준으로 쌓지 않는다.
 
+긴 변경 내역과 검증 결과를 한꺼번에 읽으면, 어떤 근거가 어떤 판단을 뒷받침하는지 머릿속에서 다시 조합해야 한다. 사람이 검토할 때 이런 인지부하를 줄이려고 ADR Writer에 `report-writer` 스킬을 두었다.
+
+보고서는 요청의 배경과 전체 판단을 먼저 보여주고, 업무 영역별 동작과 검증 결과, 상세 근거로 내려가도록 구성한다. 필요한 부분을 펼쳐 읽고, 관계를 이해하는 데 도움이 되는 다이어그램과 핵심 내용을 스스로 확인하는 질문을 제공한다. 구현 리뷰에서는 전체 의도와 계약에서 기능별 동작, 구성 요소, 필요한 코드 근거로 내려간다.
+
 사람은 먼저 아래 내용을 본다.
 
 - 승인한 계약이 모두 검증됐는가
-- Agent가 계약 밖에서 선택한 구현 재량은 무엇인가
+- 계약을 지키는 범위에서 Agent가 고른 구현 방법은 무엇인가
 - 새 계약이나 사람의 판단이 필요한 위험이 남았는가
 
 증거가 부족하거나 보안, 결제와 데이터 변경처럼 구현 방식 자체가 위험한 부분만 코드로 내려가면 된다.
@@ -168,9 +178,13 @@ Agent는 이 계약을 기준으로 구현과 테스트를 진행한 뒤, 계약
 
 이 경계가 없으면 Agent가 구현에서 줄인 시간을 사람이 전체 diff를 이해하는 데 다시 쓴다. 경계가 있으면 반복적인 구현 계획 승인을 줄이고, 사람의 판단을 계약 변경, 모순과 검증하지 못한 위험에 집중할 수 있다.
 
+일반적인 설명과 리뷰에서는 이해에 필요한 복잡도에 따라 전달 방식을 고른다. 복잡한 내용은 보고서로 만들고, 짧고 단순한 내용은 채팅으로 전달하며, 보고서가 도움이 될지 애매하면 먼저 확인한다. 사용자가 명시한 보고서 요청과 전달 조건이 우선한다.
+
+구현 검토 명령인 `/adr-impl-review`는 표준(`standard`)·전체(`full`) 검토 모두 HTML 보고서가 필수다. 보고서의 코드 판정과 읽는 사람이 구현을 이해했는지는 구분한다. 이해 확인 질문은 그 이해를 돕는 수단이며, 보고서가 생성됐다는 사실만으로 인지부하가 줄었다고 측정할 수는 없다.[^5]
+
 ## 7. 계층을 나눌 때 쓰는 세 가지 질문
 
-ALPS Writer에서는 정보를 어느 계층에 둘지 아래 순서로 확인한다.
+두 플러그인에서는 정보를 어느 계층에 둘지 아래 순서로 확인한다.
 
 1. **이 내용이 사라지면 다시 만든 코드가 요구사항을 위반할 수 있는가?**
 
@@ -196,12 +210,16 @@ ALPS Writer에서는 정보를 어느 계층에 둘지 아래 순서로 확인�
 
 지금은 코드 리팩터링이 ADR 수정을 요구하면 먼저 ADR의 해상도가 너무 낮은지 확인한다. 구현을 시작할 때 PRD를 다시 읽어야 한다면 handoff에서 계약이 빠졌는지 본다. 코드의 값이 계약인지 우연한 선택인지 구분할 수 없다면 ADR에 근거가 부족한지 확인한다.
 
-이렇게 점검하니 **한 번에 읽을 범위와 변경이 번질 범위가 줄었다.** 문서를 나눌 때도 각 문서가 혼자 답해야 할 질문부터 정하는 편이 도움이 된다고 생각한다.
+이렇게 점검하니 **한 번에 읽을 범위와 변경이 번질 범위가 줄었다.** 문서를 나눌 때도 각 문서가 혼자 답해야 할 질문과, 구현 방법이 바뀌어도 지켜야 할 의도부터 정하는 편이 도움이 된다고 생각한다.
 
 ---
 
-[^1]: [ALPS Writer Plugins](https://github.com/haandol/alps-writer-plugins)의 현재 설계 원칙은 [AGENTS.md](https://github.com/haandol/alps-writer-plugins/blob/main/AGENTS.md), [ADR concepts](https://github.com/haandol/alps-writer-plugins/blob/main/plugins/adr-writer/templates/adr/concepts.md), [Dependency model](https://github.com/haandol/alps-writer-plugins/blob/main/docs/dependency-model.md)에 정리되어 있다.
+[^1]: [ALPS Writer Plugins](https://github.com/haandol/alps-writer-plugins)의 설계 원칙은 [AGENTS.md](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/AGENTS.md), [ADR concepts](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/plugins/adr-writer/templates/adr/concepts.md), [Dependency model](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/docs/dependency-model.md)에 정리되어 있다.
 
 [^2]: [쉽게 설명한 클린 / 헥사고날 아키텍쳐](/2022/02/13/demystifying-hexgagonal-architecture.html) — 추상화 계층으로 의존성을 줄이는 방식과 그에 따른 복잡도를 설명한 이전 글.
 
 [^3]: [AI로 코드는 빨리 만들었는데 왜 리뷰는 더 힘들까](/2026/08/18/ai-coding-review-cognitive-load.html) — 계약과 검증 결과를 먼저 보고 위험한 부분만 코드로 내려가는 리뷰 방식을 다룬다.
+
+[^4]: 구현 설명은 [0.9.5](https://github.com/haandol/alps-writer-plugins/releases/tag/v0.9.5)를 기준으로 확인했다. [인덱스 스키마](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/plugins/adr-writer/templates/adr/mapping.schema.json)와 [기존 프로젝트 가져오기 지침](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/plugins/adr-writer/skills/adr-import/SKILL.md)은 카테고리 단위의 선행 관계를 구분한다. 스키마·테이블 문서의 보조 참조인 `tableDocs`는 별도로 허용한다.
+
+[^5]: [report-writer](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/shared/report-writer/SKILL.md)는 보고서의 읽기 구조와 적용 범위를 정한다. [구현 리뷰](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/plugins/adr-writer/skills/adr-impl-review/SKILL.md)는 두 검토 방식 모두 HTML을 요구하며, [보고서 계약](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/plugins/adr-writer/skills/adr-impl-review/references/artifact-contract.md)은 코드 판정과 사람의 이해를 구분한다.

@@ -10,7 +10,7 @@
     </marker>
   </defs>
 
-  <text x="380" y="30" fill="#2f3740" font-size="17" font-weight="700" text-anchor="middle">ALPS Writer — 추상화 계층과 Agent</text>
+  <text x="380" y="30" fill="#2f3740" font-size="17" font-weight="700" text-anchor="middle">ALPS Writer Plugins — 추상화 계층과 Agent</text>
 
   <!-- Clean Architecture-style target -->
   <circle cx="250" cy="245" r="185" fill="#eef3f8" stroke="#8da4b7" stroke-width="2"/>

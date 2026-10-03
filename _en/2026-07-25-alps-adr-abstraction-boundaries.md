@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Why Separate PRDs, ADRs, and Code? — Reading One Abstraction Level at a Time"
-excerpt: How abstraction boundaries reduce drift and review load
+excerpt: Keep intent independent of implementation details
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent harness-engineering prd adr alps agentic-development hexagonal-architecture
 publish: true
 lang: en
 date: 2026-07-25 00:00:00 +0900
-last_modified_at: 2026-09-11 16:33:32 +0900
+last_modified_at: 2026-10-03 17:59:53 +0900
 translation_key: alps-adr-abstraction-boundaries
 korean_url: /2026/07/25/alps-adr-abstraction-boundaries.html
 permalink: /en/2026/07/25/alps-adr-abstraction-boundaries.html
@@ -16,23 +16,25 @@ permalink: /en/2026/07/25/alps-adr-abstraction-boundaries.html
 
 ## TL;DR
 
-- PRDs, ADRs, and code answer different questions about the same system.
+- Abstraction boundaries protect intent from changes in implementation details.
 - After requirements are transferred, ADRs become the implementation reference.
-- Clear levels reduce change propagation and human review scope.
+- Review reports show contracts and risks before detailed evidence.
 
 ## Introduction
 
-In ALPS Writer Plugins, I clarified what should remain in each document to reduce mismatches between documentation and code.
+I do not think changing a library or file structure should change what we intend to build or why. When those details are mixed into product plans and architectural decisions, a code change can force changes to higher-level documents, leaving us to work out which statements still hold.
+
+The purpose of separating abstraction levels in ALPS Writer Plugins is to **keep implementation details from redefining intent**. Requirements should guide implementation, while the means of implementation remain choices within those requirements.
 
 The approach treats the product requirements document (PRD), architecture decision records (ADRs), and code as **views of the same system at different resolutions**. I also recorded this principle in the repository's `AGENTS.md`.[^1]
 
 Resolution here means the level of detail. The PRD describes what users should get, ADRs hold the decisions and requirements an implementation must honor, and code provides the behavior. By a contract, I mean requirements such as allowed states, permissions, and exact limits that must survive an implementation change.
 
-After applying it, I noticed changes beyond cleaner documentation.
+In this post, ALPS Writer Plugins refers to two independent plugins. ALPS Writer handles PRD authoring and handoff; ADR Writer handles ADR authoring, implementation, review, and synchronization.
 
-An agent no longer had to read every document for each task. Code refactoring stopped propagating into higher-level documents, and implementation remained open while humans could still review contracts and risks.
+When I applied these boundaries, the agent no longer had to read every document for each task. Code refactoring stopped propagating into higher-level documents, and implementation remained open while humans could still review contracts and risks.
 
-This post uses the current ALPS Writer Plugins design to explain the practical benefits of separating abstraction levels.
+This post uses the ALPS Writer Plugins design to explain the boundaries that protect intent and the benefits that follow from them.
 
 ## 1. View the same system at three resolutions
 
@@ -50,7 +52,7 @@ When planning moves to implementation, every required obligation is transferred 
 
 A diagram of the system's external relationships becomes harder to read if it also includes every class. Documents have the same problem: details that do not help answer their question are better left at a lower level.
 
-ALPS Writer checks this by reading one document on its own, a `single-level read test`:
+Both plugins check this by reading one document on its own, a `single-level read test`:
 
 > Can this level answer its own question by itself, without lower-level details and without omitting a contract held nowhere else?
 
@@ -58,7 +60,7 @@ ALPS Writer checks this by reading one document on its own, a `single-level read
 
 A Clean Architecture Use Case or Hexagonal Architecture Application Service coordinates work: receive a request, apply business rules, and read or store the necessary data.[^2] It depends on an interface describing the storage operations it needs rather than on a particular database product. The database connection code can then change without changing the business rules.
 
-The agent plays a similar role in ALPS Writer.
+The agent plays a similar role in ALPS Writer Plugins.
 
 During handoff, it reads the PRD, transfers lasting decisions and requirements into ADRs, and identifies choices that can be left to the implementer. Later implementation uses ADRs to locate the current code. The agent follows task instructions in Skills, connects external tools through MCP, and uses command-line tools (CLIs) to modify and test code and produce results for review.
 
@@ -84,7 +86,11 @@ For example, read the ADR to understand why a refresh token, used to maintain a 
 
 When each artifact answers its own question, an agent can load the required level and stop.
 
-ALPS Writer's `/feature-to-adr` transfers implementation requirements from a PRD into ADRs. After handoff, normal implementation and review no longer read the PRD. The ADR index, `.mapping.json`, stores each ADR's path, status, summary, and requirements from other ADRs that must be satisfied first. It stores neither PRD paths nor code paths.
+ALPS Writer's `/feature-to-adr` transfers implementation requirements from a PRD into ADRs. After handoff, normal implementation and review no longer read the PRD.
+
+The ADR index, `.mapping.json`, records each ADR's path, status, and summary. Prerequisites in `dependsOn` reference categories that group ADRs, rather than individual ADRs. The ADR bodies and review material explain which guarantees each decision needs from another.[^4]
+
+The index holds neither PRD references nor a mapping between ADRs and the paths of their implementation code.
 
 ADR bodies also omit PRD section numbers, Feature IDs, functions, and file paths. An agent reads the ADR and searches the current repository for relevant code.
 
@@ -96,7 +102,7 @@ Searching when needed resolves against current code. It reduces loaded context a
 
 The three levels do not change at the same frequency.
 
-Functions and modules change often, architectural decisions change occasionally, and user problems and product goals usually last longer. ALPS Writer's `Code >> ADR >> PRD` describes those different change frequencies during planning. After handoff, implementation follows code and ADRs; PRD revisions are considered only through an explicit re-import.
+Functions and modules change often, architectural decisions change occasionally, and user problems and product goals usually last longer. The project's `Code >> ADR >> PRD` describes those different change frequencies during planning. After handoff, implementation follows code and ADRs; PRD revisions are considered only through an explicit re-import.
 
 With clear levels, an implementation-only change does not force a product-document edit. A changed requirement, however, must be reflected in code.
 
@@ -132,7 +138,7 @@ Document churn no longer scales with code churn.
 
 Separating abstraction levels gives the agent more implementation discretion.
 
-ALPS Writer checks whether an implementation honoring the same requirements and boundaries could be rebuilt if all code disappeared. It calls this the `regeneration test`. The files and functions need not be identical.
+ADR Writer checks whether an implementation honoring the same requirements and boundaries could be rebuilt if all code disappeared. It calls this the `regeneration test`. The files and functions need not be identical.
 
 For example, if `refresh tokens remain valid for seven days` is an established security policy, the ADR records that exact value and its rationale.
 
@@ -152,16 +158,20 @@ As long as the contract holds, an agent can refactor, select a more suitable lib
 
 Clear abstraction levels also let review begin somewhere other than the full code diff.
 
-ALPS Writer writes ADR requirements as independently reviewable rows with implementation-independent observable evidence rather than named test files or functions.
+ADR Writer writes ADR requirements as independently reviewable rows with implementation-independent observable evidence rather than named test files or functions.
 
 After implementation and tests, the agent derives an implementation review report (`Evidence Package`) with each contract's status and evidence, implementation choices, and remaining risks.
 
 The report is temporary review material derived from ADRs and code, not another authoritative document. It does not become the reference for the next implementation.
 
+Reading a long diff and a set of verification results at once means mentally reconstructing which evidence supports each judgment. I added the `report-writer` skill to ADR Writer to reduce this cognitive load during human review.
+
+Reports start with the request's background and the overall assessment, then move through behavior and verification results by business responsibility to detailed evidence. Readers can expand the parts they need, use diagrams to understand relationships, and answer questions that check core concepts. Implementation reviews move from overall intent and contracts to individual capabilities, components, and relevant code evidence.
+
 Humans first inspect:
 
 - whether every approved contract has evidence
-- which choices the agent made within implementation discretion
+- which implementation choices the agent made while honoring the contract
 - whether a new contract or unresolved risk needs human judgment
 
 Only areas with weak evidence or implementation-sensitive risk—such as security, payments, or data changes—need a deeper code review.
@@ -170,9 +180,13 @@ This does not eliminate code reading. **It lets contracts and risk determine whe
 
 Without this boundary, humans pay back the implementation time saved by the agent while reconstructing the entire diff. With it, routine plan approval can shrink while human judgment focuses on contract changes, contradictions, and unverified risks.
 
+For general explanations and reviews, the delivery format depends on the complexity of what the reader needs to understand. Complex content gets a report; short, simple content stays in chat; unclear usefulness prompts a question first. Explicit requests for a report and the user's delivery constraints take precedence.
+
+The implementation-review command, `/adr-impl-review`, requires an HTML report in both `standard` and `full` modes. Its code verdict is separate from whether the reader understands the implementation. Comprehension questions support that understanding; producing a report does not by itself demonstrate a reduction in cognitive load.[^5]
+
 ## 7. Use three questions to place a fact
 
-ALPS Writer routes information through these questions:
+Both plugins route information through these questions:
 
 1. **If this fact disappeared, could regenerated code violate a requirement?**
 
@@ -198,12 +212,16 @@ Finally, apply the single-level read test again. If one artifact cannot answer i
 
 I now treat a code refactor requiring an ADR edit as a sign that the ADR may be too low-level. If implementation must reread the PRD, I check whether handoff lost a contract. If code cannot distinguish a contract value from an incidental choice, I check whether the ADR lacks its rationale.
 
-These checks reduced **how much I need to read at once and how far changes spread**. When separating documents, I find it helpful to start with the question each document must answer on its own.
+These checks reduced **how much I need to read at once and how far changes spread**. When separating documents, I find it helpful to start with the question each document must answer on its own and the intent that must survive changes to implementation methods.
 
 ---
 
-[^1]: The current design principles of [ALPS Writer Plugins](https://github.com/haandol/alps-writer-plugins) are documented in [AGENTS.md](https://github.com/haandol/alps-writer-plugins/blob/main/AGENTS.md), [ADR concepts](https://github.com/haandol/alps-writer-plugins/blob/main/plugins/adr-writer/templates/adr/concepts.md), and the [Dependency model](https://github.com/haandol/alps-writer-plugins/blob/main/docs/dependency-model.md).
+[^1]: The design principles of [ALPS Writer Plugins](https://github.com/haandol/alps-writer-plugins) are documented in [AGENTS.md](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/AGENTS.md), [ADR concepts](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/plugins/adr-writer/templates/adr/concepts.md), and the [Dependency model](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/docs/dependency-model.md).
 
 [^2]: [Demystifying Clean and Hexagonal Architecture](/2022/02/13/demystifying-hexgagonal-architecture.html) (Korean) — explains how abstraction layers reduce dependencies and the complexity they add.
 
 [^3]: [Why Does AI-Generated Code Make Review Harder?](/en/2026/08/18/ai-coding-review-cognitive-load.html) — describes reviewing contracts and evidence first, then reading only the risky code paths.
+
+[^4]: The implementation described here was checked against [0.9.5](https://github.com/haandol/alps-writer-plugins/releases/tag/v0.9.5). The [index schema](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/plugins/adr-writer/templates/adr/mapping.schema.json) and [existing-project import instructions](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/plugins/adr-writer/skills/adr-import/SKILL.md) distinguish category-level prerequisites. Optional `tableDocs` references to schema and table documents are also allowed.
+
+[^5]: [report-writer](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/shared/report-writer/SKILL.md) defines the report's reading structure and when to use it. [Implementation review](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/plugins/adr-writer/skills/adr-impl-review/SKILL.md) requires HTML in both modes, and its [artifact contract](https://github.com/haandol/alps-writer-plugins/blob/v0.9.5/plugins/adr-writer/skills/adr-impl-review/references/artifact-contract.md) distinguishes the code verdict from human comprehension.
