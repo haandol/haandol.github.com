@@ -5,10 +5,10 @@ excerpt: Building useful evaluations from the first working prototype
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent evaluation encbird tracing llm-as-a-judge
-publish: false
-published: false
+publish: true
+published: true
 date: 2026-10-05 00:00:00 +0900
-last_modified_at: 2026-10-05 10:32:10 +0900
+last_modified_at: 2026-10-05 10:55:17 +0900
 lang: en
 translation_key: evaluating-new-agent-applications
 korean_url: /2026/10/05/evaluating-new-agent-applications.html
