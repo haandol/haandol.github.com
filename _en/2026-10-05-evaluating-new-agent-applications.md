@@ -8,7 +8,7 @@ tags: ai agent evaluation encbird tracing llm-as-a-judge
 publish: true
 published: true
 date: 2026-10-05 10:55:17 +0900
-last_modified_at: 2026-10-05 10:55:17 +0900
+last_modified_at: 2026-10-05 14:18:07 +0900
 lang: en
 translation_key: evaluating-new-agent-applications
 korean_url: /2026/10/05/evaluating-new-agent-applications.html
@@ -18,8 +18,8 @@ permalink: /en/2026/10/05/evaluating-new-agent-applications.html
 ## TL;DR
 
 - Start with one user journey and minimum success criteria.
-- Turn failures in execution records into specific evaluation criteria.
-- Compare changes on the same cases and add new production failures.
+- Automate trace classification and repeated evaluation wherever possible.
+- Judge improvements using both target metrics and tension metrics.
 
 ## Introduction
 
@@ -33,16 +33,18 @@ For this post, **imagine EncBird's DiaryChat has just become a working prototype
 
 My earlier [post on building a harness](/en/2026/06/16/harness-engineering-in-practice.html) covered the environment for delegating development to agents. This playbook evaluates the agent behavior inside the resulting app.
 
-The overall sequence looks like this. Error analysis and improvements continue while the initial small tests are running.
+I want an evaluation process that can run without someone reading every conversation. Collecting traces, classifying them, scoring outputs, and comparing changes should be automated wherever possible. I would rather spend human attention on defining the goal and checking where automated judgment goes wrong.
+
+That makes the numbers we ask the agent to improve just as important as the evaluation procedure. I would include **tension metrics**: measures that check whether improving the target metric makes another important quality worse. The overall sequence looks like this.
 
 {% raw %}
 ```mermaid
 flowchart TD
     A["User journey and minimum success criteria"] --> B["Prototype with small tests and traces"]
-    B --> C["Use the app and analyze failures"]
-    C --> D["Task categories and failure modes"]
-    D --> E["Code checks and task-specific criteria"]
-    E --> F["Validate evaluators against human labels"]
+    B --> C["Automatically find and classify suspected failures"]
+    C --> D["Check representative and ambiguous cases"]
+    D --> E["Task evaluation and tension metrics"]
+    E --> F["Validate automated evaluation on samples"]
     F --> G["Compare changes on regression cases"]
     G --> H["Review production samples after release"]
     H --> C
@@ -98,7 +100,7 @@ expected:
 source: handwritten_synthetic
 ```
 
-Automate conditions that code can already check, and let a person review conversational appropriateness. This combines OpenAI's recommendation to evaluate early with Hamel Husain and Shreya Shankar's advice not to build elaborate evaluators before examining actual failures.[^3][^4]
+Automate conditions that code can check. For semantic judgments, give a model the actual input and product criteria, then verify its decisions on a sample. OpenAI recommends early scoped evaluation and automation; Hamel Husain and Shreya Shankar emphasize grounding evaluation in actual failures.[^3][^4] I would apply these principles by starting with minimal tests and extending them as failures emerge.
 
 ### 1-3. Connect What Went into the Model with What Came Out
 
@@ -121,13 +123,15 @@ Keep evaluation material requiring source text in restricted storage, while ordi
 
 ## 2. Discover the Failures Worth Evaluating
 
-### 2-1. Use the Prototype and Read One Session at a Time
+### 2-1. Find Suspected Failures with Automated Analysis
 
 Write diaries with the prototype and invite others to try it. Collect different usage patterns: short answers, detailed answers, uneventful days, and requests to change the subject. Avoid collecting only one proficiency level.
 
-Hamel and Shankar recommend an initial pool of roughly 100 diverse traces, with about the first 30 read manually before reviewing automated suggestions.[^4] Write freely about what went wrong instead of forcing observations into an existing scorecard. Keep reading while new failures keep appearing.
+Have AI extract the requested task, evidence used, response and tool results, suspected failure, and supporting source passages from each trace. Supply EncBird's product intent and rules for closing, corrections, and memory. A model cannot apply product conditions it was never given merely by inspecting an answer.
 
-Review learner messages, coach replies, and the correction panel together in a presentation similar to the app. A JSON dump can make it easy to miss a bad correction attached to an otherwise reasonable conversation.
+I would not require a person to label every record before starting. Run automated analysis first, then inspect representative cases from each category, disputed judgments, and rare but consequential cases. Also sample automatically passed records to find missed failures.
+
+During review, show learner messages, coach replies, and the correction panel as the app does. Feed human corrections back into the next classification and evaluation run. Expand automation without treating its classifications as established truth.
 
 Suppose the earlier statement about a friend produces the following hypothetical failure.
 
@@ -155,7 +159,7 @@ EncBird's memory code links evidence to actual learner statements and excludes s
 
 ### 2-2. Record Task Category and Failure Mode Separately
 
-Review notes can be organized by task category and failure mode. The task describes what the learner wanted to do; the failure mode describes how processing went wrong.
+Organize automated results and checked cases by task category and failure mode. The task describes what the learner wanted to do; the failure mode describes how processing went wrong.
 
 | Task category | Possible failure | First place to inspect |
 | --- | --- | --- |
@@ -168,9 +172,9 @@ Review notes can be organized by task category and failure mode. The task descri
 
 Changing the subject of a statement can happen in both corrections and memory extraction. Keep task category and failure mode in separate fields. Label multiple independent failures when needed, while noting whether an earlier failure caused a later result.
 
-A spreadsheet is enough initially. When thousands of records make similar cases hard to find, extract the requested task, required evidence, and constraints, then compare them as numerical embedding vectors. If useful, reduce dimensions with UMAP and group nearby records with HDBSCAN to narrow the human review pool.
+With little data, start by asking a model for a structured classification table. When thousands of records make similar cases hard to find, represent the requested task, required evidence, and constraints as embedding vectors. If useful, reduce dimensions with UMAP, group nearby records with HDBSCAN, and have an LLM propose group names, merges, and splits.
 
-Clustering is an optional exploration tool. Comparing whole conversations may group records by place name, so extract task features first and decide category names and merges by reading the originals. Keep unusual failures outside the clusters in view.
+These tools need not all be in place from the start. Comparing whole conversations may group records by place name, so extract task features first. Preserve original trace IDs and evidence, and route ambiguous or changed classifications for human review. Keep unusual failures outside the clusters in view.
 
 ### 2-3. Choose the Next Fix by Recurrence and Consequence
 
@@ -182,7 +186,7 @@ Even two memory errors could affect several later conversations. Consider recurr
 
 By the end of this phase, keep **reproducible cases, task and failure labels, and the next issue to fix**. Mark a suspected cause as a hypothesis and identify the change that will test it.
 
-## 3. Build Evaluators and Align Them with Human Judgment
+## 3. Design Evaluations and Tension Metrics
 
 ### 3-1. Separate Code Checks from Judgment
 
@@ -221,7 +225,7 @@ EncBird's repository includes a conversation where the learner describes visitin
 
 Criteria for that case could look like this:
 
-| Criterion | Pass condition |
+| Criterion | What to judge |
 | --- | --- |
 | Use of prior conversation | Do not ask again for the choice or reason already explained |
 | Next opportunity to express a thought | Move to one contextually appropriate preference, similar experience, or subsequent event |
@@ -230,23 +234,27 @@ Criteria for that case could look like this:
 
 “Does it contain one question mark?” is only a supporting check. One question mark can hide three tasks. “Write about your next experience, too” can assign new work without a question mark.
 
-Test the rubric with passing and failing replies attached to the same history. Asking “Why did you choose that drink?” after the learner explained the reason fails. “Could you write in English about what you usually look for in a cafe?” could broaden the conversation to a related preference.
+Test the rubric with replies of differing quality attached to the same history. Asking “Why did you choose that drink?” after the learner explained the reason fails. “Could you write in English about what you usually look for in a cafe?” could broaden the conversation to a related preference.
 
 If the learner already explained that preference, the second question needs reconsideration too. Judge **whether the response fits that point in the conversation**, rather than teaching the evaluator to recognize a particular sentence or question word.
 
-Use separate meaning-preservation criteria for corrections and evidence, subject, and time criteria for memory. When expanding to PictoChat descriptions or FreeChat roleplay, add checks that fictional or pictured events do not become the learner's biography.[^5]
+Evaluation need not be limited to pass/fail. Check required fields and closing rules with binary judgments, fact extraction with precision and recall, and conversational appropriateness with scores or comparisons between candidates.
 
-### 3-3. Reserve Separate Data to Validate the Judge
+For example, a five-point scale for the next question could use these anchors: 1 for a question unrelated to the history, 3 for a related question that only asks for an item or name, and 5 for an opportunity to express one thought at the learner's level. Apply separate criteria for necessary clarification and final turns. With concrete examples for the score levels, distributions and actual responses can reveal differences between candidates that would otherwise all be labeled failures.
+
+One model call can evaluate several dimensions. Preserve each value and its evidence so improvements and regressions remain visible. Use separate meaning-preservation criteria for corrections and evidence, subject, and time criteria for memory. When expanding to PictoChat descriptions or FreeChat roleplay, add checks that fictional or pictured events do not become the learner's biography.[^5]
+
+### 3-3. Validate Automated Judgments on Samples
 
 A plausible explanation from the judge is not enough to establish a reliable verdict. Compare its decisions with human labels to check whether it actually applies the criteria you wrote.
 
-Have a person read each trace and apply the criteria first. Resolve disagreements by revisiting the source and product intent. Leave cases inconclusive when evidence is insufficient to decide.
+Have a person independently judge the validation sample. Compare pass/fail decisions for binary checks, score anchors for rating scales, and candidate preferences for comparative evaluation. Revisit source material where automated results differ substantially or the criteria are ambiguous. Leave cases inconclusive when evidence is insufficient.
 
 Split labeled data into prompt examples, judge-development cases, and final validation cases. Keep turns from the same diary in one group. EncBird's evaluation tools use groups to keep cases derived from the same session or expression from crossing development and validation sets.[^8]
 
-Hamel and Shankar suggest 100–200 human-labeled examples per failure mode that requires semantic judgment.[^4] This does not mean discarding the original 12 seed cases. It means a reusable judge needs separate validation data containing both passes and failures.
+Expand validation data according to task diversity and the consequences of failure. Rather than requiring the same number of manual labels for every category upfront, I would start with a small human-checked reference set and fresh samples to see where automated judgments diverge. Reusing the same judge's labels as its validation truth can merely reinforce its errors.
 
-Suppose we validate a repeated-question judge and **define detecting a failure as positive**.
+As a binary-check example, suppose we validate a repeated-question judge and **define detecting a failure as positive**.
 
 | Human judgment | Judge: failure | Judge: success |
 | --- | --- | --- |
@@ -257,7 +265,55 @@ Overall agreement is `(16 + 72) / 100 = 88%`. But recall for actual failures is 
 
 The four missed failures are false negatives; the eight normal replies flagged as failures are false positives. The previous section counted memory facts. This section counts cases classified by the judge. Keep the scores separate.
 
-Read the mistakes to see whether the judge misses repetition or rejects necessary clarification. Refine the criteria accordingly. Once validation results inform a change, those cases are no longer unseen validation data. Prepare fresh cases for the final check.
+Read the mistakes to see whether the judge misses repetition or rejects necessary clarification. For ratings, check whether it gives high scores to answers a person judged poorly; for comparisons, inspect reversed preferences. Once validation results inform a change, use fresh cases for the final check.
+
+EncBird's current feature-level semantic evaluation runner uses 0/1 judgments.[^8] Rating scales and comparative evaluations described here are proposed extensions, not features already implemented in that tool.
+
+### 3-4. Pair Target Metrics with Tension Metrics
+
+Once evaluation results drive automated prompt and model improvements, the agent looks for ways to score well. If the number does not adequately represent the real goal, the score can rise while the product gets worse.
+
+This connects to **Goodhart's law**: strongly optimizing a useful proxy can make further gains in that proxy cease to represent gains in the underlying goal.[^9] AI behavior that exploits the specification to score well without achieving the intended result is also called specification gaming.[^10]
+
+#### Measure Delivery and Stability Together
+
+Suppose a development agent's KPI—its performance target—is deployment count alone. It could split meaningless changes into many deployments. In an extreme case, it could have an incentive to introduce minor faults and then inflate the count by redeploying fixes. This is a hypothetical behavior to guard against under that reward scheme, not an incident observed in EncBird.
+
+If the real goal is to deliver valuable changes frequently and reliably, track rollbacks, incidents, and rework alongside deployment frequency. **A shortcut that improves the target metric should show up as a worse result elsewhere.** That is the role of a tension metric.
+
+DORA, the software delivery research program, measures deployment frequency alongside change fail rate—the share of deployments requiring immediate intervention—and deployment rework rate, the share of deployments that are unplanned responses to production incidents. It also advises using metrics with healthy tension instead of making one number the goal.[^11]
+
+“Working in the opposite direction” does not mean more deployments must cause more incidents. We want smoother delivery and fewer failures; a good improvement can achieve both.[^11]
+
+Amazon likewise pairs its cost-to-serve-software metric, CTS-SW, with tension metrics such as security and resilience.[^12] In my earlier [post on CTS-SW](/en/2026/08/14/cts-sw-software-delivery-cost.html), I argued for tracking quality and unfinished work alongside cost.
+
+#### Apply the Pairing to Corrections and Memory
+
+For EncBird, I would measure different aspects of the same product goal together.
+
+| Goal | Primary metric | Tension metrics | Shortcut to expose |
+| --- | --- | --- | --- |
+| Correct genuine English errors accurately | Share of actual errors corrected | Unnecessary correction rate on valid sentences, meaning distortion rate | Edit every sentence to inflate correction activity |
+| Remember useful facts | Recall of required facts | Precision of extracted facts, incorrect personalization rate | Store more claims simply to reduce omissions |
+| Complete meaningful practice in a short session | Session completion rate recorded by the system | Premature ending or task omission rate, appropriateness of expression opportunities | Close sessions early just to raise completion |
+
+Compare recorded completion with the actual learning conditions. The measurement needs to distinguish genuine completion from emitting more completion events while skipping practice.
+
+Consider a fixed evaluation set of 100 sentences: 40 contain errors and 60 are already correct. Assume each erroneous sentence contains one target error. If the baseline fixes 30 errors and needlessly changes three correct sentences, its error-correction rate is `30/40 = 75%` and its unnecessary-correction rate is `3/60 = 5%`.
+
+If a new model fixes 36 errors but changes 18 correct sentences, those rates become `36/40 = 90%` and `18/60 = 30%`. The primary metric improves, while treating valid writing as erroneous becomes much more common. Both values belong in the acceptance criteria.
+
+For automated experiments, I would advance **candidates that improve the primary metric while keeping tension metrics within agreed limits**. Suppose the limits on this fixed set are at least 80% error correction and at most 5% unnecessary correction. The new candidate would not qualify. These are illustrative limits; actual thresholds depend on error costs and sample variability.
+
+Hiding everything inside one weighted score can let throughput gains offset unacceptable quality loss. Start with one important primary metric and one or two tension metrics that expose its likely shortcuts, then add measures when actual problems justify them.
+
+#### Keep Measurement Definitions Stable During Automated Comparison
+
+Metric definitions need care too. Small deployments can make changes easier to understand and recover, so size alone does not establish that a change is meaningless.[^11] Conversely, stable but meaningless deployments will not trigger incident metrics. Also connect delivery to completion of user requirements agreed in advance.
+
+One failed deployment out of 10 gives a 10% change fail rate. Add 90 meaningless successful deployments, and the same failure becomes 1%. Track failure counts and user impact over the same period, and do not count redeployment as newly delivered value. Track recovery time too, so reducing rollback count does not encourage delayed recovery.
+
+**Tension metrics make known forms of metric gaming harder; they do not guarantee that Goodhart's law disappears.** Keep the improving agent from unilaterally changing validation expectations, measurement definitions, or exclusion rules to raise its score. Collect observations from deployment, error, and usage records. Human reviewers can focus on conflicting metrics and newly discovered shortcuts rather than reading every run.
 
 ## 4. Connect Improvement Experiments to Regression Testing and Production
 
@@ -297,7 +353,7 @@ Reusing the service's request-building path makes comparison more useful than re
 
 Suppose we edit the DiaryChat prompt to reduce repeated questions. Save results from the old prompt first, then run the same cases with the new prompt while keeping inputs, model, settings, and evaluator criteria unchanged.
 
-Apply code checks and the validated judge to each candidate's conversational replies and tool outputs. Preserve failures and inconclusive cases, and compare which cases changed instead of only average scores. If the model changes too, do not attribute the difference to the prompt alone.
+Apply code checks and the validated judge to each candidate's conversational replies and tool outputs, calculating the primary and tension metrics together. Preserve failures and inconclusive cases, and compare which cases changed instead of only average scores. If the model changes too, do not attribute the difference to the prompt alone.
 
 EncBird uses `pnpm eval:llm run` for actual runs. Supply the prepared inputs, generation model and judge, repeat count, and a fresh output directory, and explicitly enable bounded model calls with `--live` and `--max-calls`. Without a judge, distinguish output-format checks from semantic quality.[^8]
 
@@ -311,7 +367,7 @@ Suppose we prepare 40 hypothetical cases, each generating one next reply from fi
 | Corrections that change meaning | 2/40 | 2/40 |
 | New tasks on the final turn | 0 of 10 final-turn cases | 1 of 10 final-turn cases |
 
-Repetition improved, but closing behavior regressed. I would inspect the final-turn case and revise the prompt again before releasing it. Important cases also need repeated runs because outputs can vary; report sample sizes and repeat counts alongside results.
+Repetition improved, but closing behavior regressed. If closing violations are disallowed, the automated comparison rejects this candidate and feeds the relevant trace into the next revision. Important cases also need repeated runs because outputs can vary; report sample sizes and repeat counts alongside results.
 
 To change context selection, hold extracted facts fixed and compare from the selection stage onward. To evaluate the whole journey, rerun from extraction. Also distinguish a single next reply evaluated against fixed history from a conversation that feeds generated replies into subsequent turns.
 
@@ -323,7 +379,7 @@ Connect repeatable pre-release checks to CI, or Continuous Integration, which ru
 
 Keep critical failures separate from aggregate scores in release criteria. For example, investigate and fix a confirmed case of storing someone else's biography as the learner's or reversing negation in a correction before release. Do not convert inconclusive semantic judgments into passes.
 
-Production introduces new diaries and unexpected phrasing. Sample sessions over a defined period, read them in the same review interface, and compare existing judge decisions with user reactions. Read some automatically passed traces too, to discover failures not covered by the current criteria.
+Production introduces new diaries and unexpected phrasing. Automatically evaluate session samples over a defined period, tracking the primary metric, tension metrics, and user reactions together. Route conflicting signals and new failure categories to a person for source review. Also inspect some automatically passed traces for failures outside the existing criteria.
 
 Distinguish random samples for estimating general behavior from samples selected for complaints, retries, or long latency. Do not report the failure rate of a deliberately difficult sample as the overall user failure rate. Keep case counts and unevaluated scope visible.
 
@@ -331,10 +387,10 @@ Distinguish random samples for estimating general behavior from samples selected
 ```mermaid
 flowchart TD
     A["Production DiaryChat"] --> B["Session samples and user reactions"]
-    B --> C["Human error analysis"]
-    C --> D["Add cases and refine task criteria"]
-    D --> E["Revalidate the judge when criteria change"]
-    E --> F["Compare changes on regression cases"]
+    B --> C["Automated evaluation and failure classification"]
+    C --> D["Review conflicting metrics and new categories"]
+    D --> E["Update cases and evaluators, then revalidate"]
+    E --> F["Compare primary and tension metrics on regression cases"]
     F --> G["Check release criteria"]
     G --> A
 ```
@@ -348,19 +404,24 @@ Response evaluation and product outcomes also differ. This playbook checks appro
 
 ## Closing Thoughts
 
-If I were restarting EncBird from its first prototype, I would begin with DiaryChat success criteria, a few small tests, and traces. Then I would write diaries and read where questions stall the conversation or corrections change the intended meaning.
+If I were restarting EncBird from its first prototype, I would begin with DiaryChat success criteria, small tests, and traces. I would automate classification and repeated evaluation, feeding human corrections back into subsequent runs.
 
-There is no need to begin with a platform that judges every possible failure. Start by reproducing today's problem, comparing a fix on consistent criteria, and preserving a test that catches its return after the next change.
+More automation requires a clearer account of what the agent should improve. Ask it to fix genuine errors, rather than increase the number of sentences edited, and measure whether it damages valid writing or changes the learner's meaning in the process.
 
-When those evaluations help answer “Can I switch models?”, “Which prompt should I fix?”, and “Can I expand to another learning feature?”, the evaluation process has become part of development.
+I think pairing what should improve with what must not deteriorate is essential to reducing constant human supervision. I would start with that small evaluation process and expand it around failures we actually discover.
 
 ---
 
 [^1]: EncBird's `docs/product-intent.md`. Establishes the expression dictionary's central role, thought expression in DiaryChat and PictoChat, and situational practice in FreeChat.
 [^2]: DiaryChat's `prompt/sol_chat.go` and `prompt/template/sol_chat_system.txt`, relative to `packages/api-infra/functions/main/internal/feature/diarychat/`. Define the reply followed by `provide_feedback`, source preservation, and final-turn behavior.
 [^3]: OpenAI, [Evaluation best practices](https://developers.openai.com/api/docs/guides/evaluation-best-practices). Recommends early scoped evaluation and continuous refinement using real task records and human judgment.
-[^4]: Hamel Husain and Shreya Shankar, [AI Evals: Everything You Need to Know](https://hamel.dev/blog/posts/evals-faq/). Covers error analysis, evaluator selection and calibration, and CI and production evaluation. The 100, 30, and 100–200 example counts in this post are heuristics.
+[^4]: Hamel Husain and Shreya Shankar, [AI Evals: Everything You Need to Know](https://hamel.dev/blog/posts/evals-faq/). Covers error analysis, evaluator selection and calibration, and CI and production evaluation. This post draws on grounding evaluation in actual failures without making a particular manual coding procedure or binary-only evaluation mandatory.
 [^5]: EncBird's `docs/memory-system-explained.md`, memory extraction prompt, `memory/handler/api/fact-repository.go`, and `memory/domain/memory.go`. Cover learner evidence, storage and reprocessing, current facts, and context selection. Code paths are relative to `packages/api-infra/functions/main/internal/feature/`.
 [^6]: EncBird's `scripts/memory_eval/README.md`. Explains fact and evidence alignment, stage-specific TP/FP/FN calculations, and the distinction between pending review and unexecuted evaluations.
 [^7]: EncBird's `scripts/llm_eval/fixtures/diary-thought-expression.json` and the README in the same directory. Test opportunities to express thoughts and repeated questions against fixed history, separately from full sessions that feed generated replies forward.
-[^8]: EncBird's `scripts/llm_eval/README.md`, `cli.py`, and root `package.json`. Describe service request preparation, source-group splits, execution, comparison, and evaluation scope. No production data retrieval or model evaluation was run while writing this post.
+[^8]: EncBird's `scripts/llm_eval/README.md`, `cli.py`, `grading.py`, and root `package.json`. Describe service request preparation, source-group splits, execution, comparison, and evaluation scope. No production data retrieval or model evaluation was run while writing this post.
+
+[^9]: David Manheim and Scott Garrabrant, [Categorizing Variants of Goodhart's Law](https://arxiv.org/abs/1803.04585). Distinguishes mechanisms through which overoptimizing metrics becomes ineffective or harmful.
+[^10]: Google DeepMind, [Specification gaming: the flip side of AI ingenuity](https://deepmind.google/blog/specification-gaming-the-flip-side-of-ai-ingenuity/). Explains AI behavior that satisfies a specification without achieving the intended outcome, and reward tampering. The deployment-fault scenario in this post is a hypothetical application of that concern.
+[^11]: DORA, [DORA’s software delivery performance metrics](https://dora.dev/guides/dora-metrics/). Measures throughput and instability together, cautions against targeting a single metric and gaming it, and explains that speed and stability can improve together.
+[^12]: Jim Haughwout, AWS, [Quantifying the Impact of Developer Experience: Amazon’s 15.9% Breakthrough](https://aws.amazon.com/blogs/enterprise-strategy/business-value-of-developer-experience-improvements-amazons-15-9-breakthrough/). Describes pairing CTS-SW with tension metrics such as security and resilience.
