@@ -53,6 +53,8 @@ Search may locate candidates but cannot establish a defect or a pass. Do not add
 
 Separate source verification from comprehension review. The brief and conversation establish what is true and what the author intends; they cannot supply context missing from the reader's text.
 
+For each language version, read the body from its introduction with the title, excerpt, and TL;DR set aside. Check that the body establishes the subject, terms, and situation it needs. Review the summaries separately for accuracy; do not count information found only there as context already given to a body reader.
+
 Read in article order, paying particular attention to section openings, new episodes, and transitions changed in the current revision:
 
 1. Identify what the reader knows at that point and what the opening assumes. Locate the earlier passage that supplies the needed situation or referent. Merely finding the same noun in the introduction is not enough if the task, constraint, or reason needed here is still unexplained.
@@ -60,9 +62,11 @@ Read in article order, paying particular attention to section openings, new epis
 3. Try removing the opening. If the passage becomes clearer without losing meaning or useful orientation, flag the unnecessary setup. “The next paragraph explains it” is not sufficient grounds to pass it.
 4. Distinguish missing context from deliberate storytelling. A concrete result can make a good opening before its cause is explained. Do not flag every new subject, pronoun, or delayed explanation, and do not require full background at every boundary.
 
+When personal experience or choices support the argument, briefly reconstruct what happened, why the author made the choice, and why it matters now using only the body. Locate the passages supporting the necessary links, then compare that account with the supplied facts for changes in role, motive, timing, or belief. Preserve the distinction between what the author thought then and thinks now. This check does not require every post to include personal history or follow chronological order.
+
 For a finding, identify the assumed context, whether and where the article supplies it, and how the current order or empty setup affects the reader. Classify using the existing severity criteria: disruption at a meaningful transition can be Medium even when the individual sentence is grammatical; a dispensable phrase with no disruption may be Low. Do not classify by wording alone.
 
-In the connection assessment, cite a concrete transition and briefly describe the reader's prior context and the opening's contribution, including when no issue is found. A full paragraph-by-paragraph table is unnecessary. Re-check changed transitions after fixes; do not carry forward an earlier zero count as evidence.
+In the connection assessment, cite a concrete transition and briefly describe the reader's prior context and the opening's contribution, including when no issue is found. A full paragraph-by-paragraph table is unnecessary. If an important event or reason still has to be guessed, keep the finding unresolved even when the sentences sound natural. Re-check changed transitions after fixes; do not carry forward an earlier zero count as evidence.
 
 ## 3. List Concrete Findings Before Fixing
 
@@ -98,7 +102,7 @@ For tasks that authorize editing:
 2. Resolve unsupported statements using available evidence. If the author's intended position stays intact, narrow the claim, mark it as a proposal, or remove unsupported embellishment. Never invent a fact, personal experience, causal link, measurement, or outcome to make a sentence concrete.
 3. If a necessary repair would change the user's intended thesis or requires an unavailable firsthand fact, finish independent edits and ask only for that missing decision or fact. Report the unresolved passage rather than guessing.
 4. Compare the revised text with the original for negation, conditions, quantities, citations, technical meaning, and author position. Update affected diagrams and translations within scope; disclose related material that remains out of scope.
-5. Re-read the whole revised article across all six axes, including new issues introduced or exposed by edits. Report each round's remaining High/Medium counts and the new or unresolved findings. Repeat supported fixes and full re-review until the latest article has **High: 0 and Medium: 0**. A finding is resolved only when the revised passage no longer has the stated problem; fixing wording must not introduce a new loss of voice, evidence, or meaning. There is no fixed round limit; neither partial improvement nor a passing lint ends this loop.
+5. Re-read the whole revised article across all six axes, including new issues introduced or exposed by edits. Repeat the reading without summaries and, where applicable, the reconstruction of the author's choices above before updating the findings. Report each round's remaining High/Medium counts and the new or unresolved findings. Repeat supported fixes and full re-review until the latest article has **High: 0 and Medium: 0**. A finding is resolved only when the revised passage no longer has the stated problem; fixing wording must not introduce a new loss of voice, evidence, or meaning. There is no fixed round limit; neither partial improvement nor a passing lint ends this loop.
 6. Run the writing skill's applicable validation on changed article files, including `post-lint.sh` and `git diff --check`. Re-run affected checks after further edits. A passing script does not replace editorial review; disclose unavailable checks accurately.
 
 Low findings alone do not require another round. Apply useful low-risk polish when warranted, but do not churn wording or optimize for zero search matches. If a necessary fix is genuinely blocked by missing evidence, a user decision, or a narrower authorized edit scope, complete independent fixes and report the remaining severity, passage, and needed input. Do not repeat an unchanged blocked review or present it as a completed article.
