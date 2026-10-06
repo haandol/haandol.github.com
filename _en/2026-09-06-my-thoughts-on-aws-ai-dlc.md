@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "AWS AI-DLC — Where It Differs from My View of Agentic Development"
+title: "My Thoughts on AWS AI-DLC — The Direction I Believe Agentic Development Should Take"
 excerpt: Where AI-DLC diverges from my view of agentic development
 author: haandol
 email: ldg55d@gmail.com
@@ -8,7 +8,7 @@ tags: career ai agent agentic-development ai-dlc harness-engineering hitl soluti
 publish: true
 lang: en
 date: 2026-09-06 09:00:00 +0900
-last_modified_at: 2026-09-11 16:05:06 +0900
+last_modified_at: 2026-10-06 10:53:43 +0900
 translation_key: aws-ai-dlc-thoughts
 korean_url: /2026/09/06/my-thoughts-on-aws-ai-dlc.html
 permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -20,27 +20,21 @@ permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
 
 ## Introduction
 
-I have long been thinking about how my current role differs from the direction I believe in.
+The views in this post are my own and do not represent AWS. They are based on public sources and my personal experience.
 
-The people I work with are still exceptionally capable and kind, and the company offers substantial stability and opportunity, which is precisely why I have thought about it for so long.
+I first encountered AI-DLC (AI-Driven Development Life Cycle), an approach to developing software with AI, two years ago while I was in AWS PACE (Prototyping and Cloud Engineering). Its original author gave me a brief introduction.
 
-For the past year, I managed to avoid taking the lead in communicating ideas far from my own perspective. I chose other topics, explained only the parts I agreed with, or shared my different view only with a few people close to me.
+At the time, my attention as a developer was entirely on reducing the time and effort development required and making the process more efficient. I listened without giving AI-DLC much thought.
 
-Then AI-DLC (AI-Driven Development Life Cycle), AWS's approach to developing software with AI, began spreading with more detailed procedures and tools. It became increasingly difficult to avoid.[^1][^2]
+Early last year, a team dedicated to AI-DLC was formed, and I was supposed to move to that team.
 
-Senior employees are expected to understand the company's direction, help junior colleagues act on it, and deliver the results the company wants.
+In the meantime, my own views on agentic engineering—giving development work to AI agents—had taken shape. I had come to believe we should remove the reasons people have to keep stepping in, so agents can finish the work on their own.
 
-The problem is that I cannot find the motivation to actively advocate ideas that remain far from my own perspective.
+But the AI-DLC processes I had encountered emphasized having people review and approve results at each stage of development. I found that direction difficult to agree with, so I moved to my current account team to avoid working on AI-DLC.
 
-Staying for title and stability while lacking confidence in the direction—doubting it in private while asking colleagues to pursue it in public—would not be honest with either the team or myself.
+Even on the account team, though, I increasingly found myself having to explain AI-DLC. I expect that work to become more common across the company as well.
 
-**If I cannot actively communicate a direction I do not believe in, I am not fulfilling the role expected of me as a senior employee.**
-
-I want to explain where AI-DLC and my own view diverge, and why that difference has led me to reconsider my current role. These are my personal views, based on public material and my experience, not an official AWS position.
-
-I began as a developer. Even after becoming a Solutions Architect (SA), helping customers choose technologies and design systems, I continued to build, deploy, and operate my own services. I tend to feel a stronger need to run one product over time and live with the consequences of my decisions than to observe a broad range of customer problems.
-
-An SA with a different background and set of strengths may interpret the same role very differently.
+That is why I want to write down which parts of AI-DLC I find difficult to agree with. Writing this post is a way to examine my own views and think about what work I want to do next and how I want to do it.
 
 My view differs from AI-DLC in three areas: **Concept → Process → Implementation**.
 
@@ -258,7 +252,7 @@ Whenever I hear similar stories, I wonder whether I have missed another reason f
 
 At times, I cannot tell whether I am overvaluing my experience or undervaluing the results described inside the organization.
 
-I do not think I can resolve that question from my current position, because my role is closer to explaining AI-DLC and helping customers adopt it than to running one product and team for years and taking responsibility for the results.
+I currently work as a Solutions Architect (SA), helping customers choose technologies and design systems. My role does not involve running one product and team for years and taking responsibility for the results, which limits my ability to see firsthand which approach works better.
 
 I do not want to decide which approach works better under which conditions from presentations and workshop reactions alone.
 
@@ -276,7 +270,9 @@ Jobs argues that seeing many companies is not enough if you never implement your
 
 I do not want to turn that into a judgment of every SA. Working with customers over time and revealing recurring patterns and options across companies are real forms of expertise.
 
-But one question remains for me: `Do I experience the operational consequences of my recommendation?` I invest my own time and money in services with roughly 200,000 and 100,000 lines of code and take responsibility for their operations, but they are not official customer cases.
+But one question remains for me: `Do I experience the operational consequences of my recommendation?`
+
+I began my career as a developer and continued to build, deploy, and operate my own services after becoming an SA. I invest my own time and money in services with roughly 200,000 and 100,000 lines of code and take responsibility for their operations, but they are not official customer cases.
 
 Working on a range of customer problems as an SA has been valuable. What I need now is the experience of leading a team and running a product over time, then using the failures and operational results to inform my next decisions.
 
