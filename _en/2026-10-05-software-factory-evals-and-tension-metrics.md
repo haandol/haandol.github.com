@@ -8,7 +8,7 @@ tags: ai agent software-factory evaluation observability harness-engineering hit
 publish: true
 published: true
 date: 2026-10-05 15:54:40 +0900
-last_modified_at: 2026-10-07 19:56:17 +0900
+last_modified_at: 2026-10-07 20:15:09 +0900
 lang: en
 translation_key: software-factory-evals-and-tension-metrics
 korean_url: /2026/10/05/software-factory-evals-and-tension-metrics.html
@@ -55,7 +55,17 @@ For this process to work, agents need to reproduce the environment, find the nec
 
 Factory's published account of its internal Signals system offers an example: it identifies recurring problems in session records, creates tasks, and has Droid implement fixes. That account retains human approval before merge.[^7] Automating problem discovery and task assignment is progress toward autonomy; it does not establish that the entire process already runs without people.
 
-The decision to automate extends from “is the task complete?” to “should later runs use this change?” Delegating that decision requires defining success and the evidence needed to accept an improvement.
+### 1.1. Transitional services on the way to Software Factories
+
+Services that keep working toward a goal while retaining context are appearing in both software development and everyday work.
+
+- **OpenAI Dots** are always-on agents that continue assigned work between conversations and delegate tasks to background agents. They retain preferences and decisions for subsequent work.[^17]
+- **Anthropic Projects**, redesigned in September 2026, divides a goal into tasks and coordinates parallel execution, output review, and integration. The tasks draw on shared memory to maintain project context.[^18]
+- **Meta Muse** is a personal agent that uses a browser and connected services to carry out multistep tasks such as reservations and purchases. Sensitive actions such as payments still require user approval.[^19]
+
+I think these can be understood as **transitional services on the way to Software Factories**. Their focus on software development varies, but they share a direction: giving agents a goal to work toward with fewer human instructions at each step.
+
+Turning failures and human interventions from actual work into evaluation cases, then using that evidence to improve the harness, could connect these services to the self-improvement process described above. Long-running execution and memory alone do not complete it: the system also needs to judge success and decide which changes should carry into subsequent runs.
 
 ## 2. Closing the development loop with Evals and observability
 
@@ -237,3 +247,6 @@ The direction I want from a Software Factory is the same one I described in the 
 [^14]: Vivek Trivedy, LangChain, [Better Harness: A Recipe for Harness Hill-Climbing with Evals](https://www.langchain.com/blog/better-harness-a-recipe-for-harness-hill-climbing-with-evals) (April 8, 2026). Uses evaluations as harness improvement signals, alongside held-out validation and human review.
 [^15]: Qizheng Zhang et al., [Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models](https://arxiv.org/abs/2510.04618), ICLR 2026. Research on offline and online adaptation through context updates rather than weight updates.
 [^16]: Anthropic, [Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) (January 9, 2026). Covers repeated evaluation of nondeterministic runs and calibration of model judgments against human judgments.
+[^17]: OpenAI, [Tasks and memory](https://learn.chatgpt.com/docs/dots/tasks-and-memory). Describes ongoing work, background delegation, and memory in Dots.
+[^18]: Anthropic, [Projects redesigned: from folder to conversation](https://claude.com/resources/articles/projects-redesigned) (September 17, 2026). Introduces coordination, parallel execution, and shared memory in redesigned Projects.
+[^19]: Meta, [Muse Connector guidelines](https://muse.ai/platform/docs). Describes task completion through browsers and connected tools, follow-up actions, and user approval requirements.

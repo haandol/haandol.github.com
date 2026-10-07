@@ -8,7 +8,7 @@ tags: ai agent software-factory evaluation observability harness-engineering hit
 publish: true
 published: true
 date: 2026-10-05 15:54:40 +0900
-last_modified_at: 2026-10-07 19:56:17 +0900
+last_modified_at: 2026-10-07 20:15:09 +0900
 lang: ko
 translation_key: software-factory-evals-and-tension-metrics
 english_url: /en/2026/10/05/software-factory-evals-and-tension-metrics.html
@@ -54,7 +54,17 @@ StrongDM은 이 방향을 더 직접적으로 표현한다. 사람이 코드를 
 
 Factory가 공개한 내부 시스템 Signals는 실행 기록에서 반복되는 문제를 찾아 작업을 만들고, Droid가 수정안을 구현하는 사례다. 해당 설명에서는 병합 전 사람의 승인이 남아 있다.[^7] 매번 사람이 문제를 찾아 일을 배정하던 부분부터 자동화하고 있다는 점과, 전체 과정의 무인화가 끝났다는 주장은 구분할 필요가 있다.
 
-이 과정에서 자동화해야 할 판단은 “작업이 끝났는가”에 더해 “이 변경을 다음 실행에도 쓰는 편이 나은가”까지 이어진다. 그 판단을 맡기려면 무엇을 성공으로 인정하고 어떤 근거로 개선을 채택할지 먼저 정해야 한다.
+### 1.1. 소프트웨어 팩토리로 가는 과도기적 서비스들
+
+최근에는 소프트웨어 개발뿐 아니라 일반 업무에서도 목표와 맥락을 유지하며 일을 이어가는 서비스가 나오고 있다.
+
+- **OpenAI Dots**는 대화 사이에도 맡은 일을 계속하고, 필요한 작업을 배경 에이전트에 나누어 맡기는 상시 실행 에이전트다. 사용자의 선호와 결정을 기억해 후속 작업에 활용한다.[^17]
+- **Anthropic Projects**는 2026년 9월 개편을 통해 목표를 여러 작업으로 나누고, 병렬 실행과 결과 검토·통합을 조율하는 기능을 제공한다. 작업들은 공유 기억을 통해 프로젝트의 맥락을 이어간다.[^18]
+- **Meta Muse**는 브라우저와 외부 서비스 연동으로 예약·구매 같은 여러 단계의 업무를 수행하는 개인 에이전트다. 결제처럼 민감한 작업에는 사용자 승인을 남겨두고 있다.[^19]
+
+나는 이들을 **Software Factory로 가는 과도기적 서비스**로 볼 수 있다고 생각한다. 개발에 특화된 정도는 다르지만, 사람이 매 단계에서 다음 행동을 지시하던 일을 목표 단위로 에이전트에 맡기려는 흐름이라는 점에서 그렇다.
+
+실제 업무에서 드러난 실패와 사람의 개입을 평가 사례로 바꾸고, 그 근거로 하네스를 개선한다면 앞서 설명한 자기 개선으로 이어질 수 있다. 장기 실행과 기억만으로 이 과정이 완성되는 것은 아니며, 무엇을 성공으로 인정하고 어떤 변경을 다음 실행에 남길지 판단하는 과정까지 연결해야 한다.
 
 ## 2. Eval과 observability로 개발 루프 닫기
 
@@ -236,3 +246,6 @@ ADR Writer의 구현 지침에도 미리 정한 근거로 결과를 판단하고
 [^14]: Vivek Trivedy, LangChain, [Better Harness: A Recipe for Harness Hill-Climbing with Evals](https://www.langchain.com/blog/better-harness-a-recipe-for-harness-hill-climbing-with-evals) (2026.04.08). 평가를 하네스 개선 신호로 사용하며, 별도 검증 집합과 사람 리뷰를 함께 둔다.
 [^15]: Qizheng Zhang 외, [Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models](https://arxiv.org/abs/2510.04618), ICLR 2026. 모델 가중치 대신 컨텍스트를 갱신하는 오프라인·온라인 적응 연구다.
 [^16]: Anthropic, [Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) (2026.01.09). 비결정적인 실행의 반복 평가와 모델 평가의 사람 판단 기준 점검을 설명한다.
+[^17]: OpenAI, [Tasks and memory](https://learn.chatgpt.com/docs/dots/tasks-and-memory). Dots의 지속적인 작업, 배경 에이전트 위임과 기억을 설명한다.
+[^18]: Anthropic, [Projects redesigned: from folder to conversation](https://claude.com/resources/articles/projects-redesigned) (2026.09.17). 작업 조율, 병렬 실행과 공유 기억을 갖춘 Projects 개편 소개다.
+[^19]: Meta, [Muse Connector guidelines](https://muse.ai/platform/docs). 브라우저와 연결 도구를 통한 업무 완료, 후속 처리와 사용자 승인 조건을 설명한다.
