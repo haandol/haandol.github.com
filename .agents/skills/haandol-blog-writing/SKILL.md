@@ -10,7 +10,7 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 ## Workflow
 
 1. Read the entire target post or supplied material. Identify the reader's question, the author's answer, the audience, and which claims are observations, inferences, or proposals. For review-only requests, use [haandol-blog-review](../haandol-blog-review/SKILL.md) in report-only mode.
-2. Read 2-4 related recent posts before changing definitions, terminology, or the author's recurring argument. Also compare at least two older author posts for voice; reuse suitable posts already read. Note their paths and relevant recurring traits so the review can assess the author's style against actual passages. Current user preferences take priority over old habits. Prefer internal links for ideas established elsewhere.
+2. Read 2-4 related recent posts before changing definitions, terminology, or the author's recurring argument. Also compare at least two older author posts for voice; reuse suitable posts already read. Note their paths and relevant recurring traits so the review can assess the author's style against actual passages. Current user preferences take priority over old habits. Bring any necessary context from references into the article, then cite its source; follow **Make Each Article Self-Contained** below.
 3. Draft toward that question and answer. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it. Before drafting the introduction or starting a new episode or topic, apply **Establish the Reader's Context** below.
 4. Apply "Remove AI Slop" and "Write for Junior Developers and Interested Non-Developers" while composing, not only after drafting. Edit paragraphs and diagrams together so they express the same causal model.
 5. After completing the Korean text, create or update its complete English version in the same task without waiting for a separate translation request. Follow **Complete Both Language Versions** below.
@@ -49,6 +49,13 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 - Test a paragraph's opening against the preceding text: what does it refer to, and what new information or useful question does it add? Naming a vague category such as “other reasons” or “thoughts about work” does not by itself explain the connection.
 - Try reading the passage without the opening sentence. If the next sentence establishes the situation more clearly and nothing useful is lost, delete the opening instead of adding a smoother connector. A later explanation does not automatically justify an empty announcement before it.
 - Preserve useful result-first openings, intentional suspense, and concise transitions when they orient the reader or raise a specific question. Do not force every paragraph into background → event → opinion, or repeat context that is already clear. After inserting or moving material, re-read the entry into the changed section and its exit into the next one.
+
+### Make Each Article Self-Contained
+
+- Treat each article as a complete bounded context: its intended reader can understand the author's question, reasoning, and conclusion from this article alone. Assume no prior reading of any reference, including internal posts, other installments in a series, external articles, documentation, papers, books, or videos.
+- When a reference supplies a necessary definition, premise, mechanism, example, or limitation, read the relevant source and explain that material where the current argument needs it. Preserve attribution, conditions, and claim strength. Naming a source, quoting an unexplained passage, or replacing "the previous post" with its title does not supply the missing explanation.
+- Keep citations for provenance, verification, and optional depth. Import only the context needed for this article's own purpose; do not reproduce whole sources or unrelated background. Necessary facts must come from evidence, not invented connective material. The rule is about comprehension, not proving every cited fact inside the article.
+- Read each language version without opening any link or treating linked content as known. The reader should still be able to explain what is being claimed, how the mechanism or example works, why the conclusion follows, and which conditions limit it. Repair missing context in prose, tables, or diagrams; removing a link or changing a reference phrase alone is not a repair.
 
 ## Match The Author's Voice
 
@@ -214,7 +221,7 @@ Inspect the rendered PNG for clipping, overlap, axis direction, and semantic con
 
 - Use footnotes for external evidence and internal related posts.
 - Prefer official or primary sources for product behavior, company practices, benchmarks, and frameworks.
-- Link previous Haandol posts when they establish the definition or vision used by the current post.
+- Cite internal and external sources after explaining the material needed by the current argument; apply **Make Each Article Self-Contained** to every reference type.
 - Do not present a conceptual curve, proposed index, or maturity model as validated evidence.
 
 ## Validate
@@ -257,6 +264,7 @@ rg -o '^\[\^[0-9]+\]:' "$POST"
 Also verify:
 
 - a junior developer or interested non-developer can follow the argument without looking up unexplained terminology; source paraphrases and English translations use the same plain reading level and natural sentence flow, rather than chopping explanations into short statements;
+- both language versions pass the reading without opening references described in **Make Each Article Self-Contained**; a valid link or a familiar title does not establish comprehension;
 - the AI-slop prose pass is complete; rewrites preserve factual meaning and the author's position without fabricated detail;
 - `haandol-blog-review` has assessed all six axes, grounded author-style judgments in reference posts and current preferences, listed findings with High/Medium/Low severity, applied supported in-scope fixes, and reviewed the latest whole article until High and Medium findings both reach zero; an explicit review-only request reports findings without editing;
 - required front matter exists and `excerpt` is English;

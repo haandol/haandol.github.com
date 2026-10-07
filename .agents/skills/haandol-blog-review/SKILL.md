@@ -55,6 +55,10 @@ Separate source verification from comprehension review. The brief and conversati
 
 For each language version, read the body from its introduction with the title, excerpt, and TL;DR set aside. Check that the body establishes the subject, terms, and situation it needs. Review the summaries separately for accuracy; do not count information found only there as context already given to a body reader.
 
+Apply the writing skill's **Make Each Article Self-Contained** rule to all references, including internal posts, external articles, documentation, papers, books, and videos. During the comprehension pass, do not open references or use knowledge gained from reading them to fill gaps. Locate whatever definitions, premises, mechanisms, examples, and conditions the reader needs for the current argument within the article itself. The source may support the explanation; it must not be the only place where a reader can find it. Do not demand an exhaustive account of material outside the article's purpose.
+
+In the review assessment, identify at least one consequential reference and explain whether its necessary context is present in the article. If a reader must follow it to understand a key step, record the missing context under the existing severity criteria and repair the explanation within scope. A renamed reference or removed link does not resolve that finding by itself. Repeat this check after edits, including for translated text and diagram labels.
+
 Read in article order, paying particular attention to section openings, new episodes, and transitions changed in the current revision:
 
 1. Identify what the reader knows at that point and what the opening assumes. Locate the earlier passage that supplies the needed situation or referent. Merely finding the same noun in the introduction is not enough if the task, constraint, or reason needed here is still unexplained.
