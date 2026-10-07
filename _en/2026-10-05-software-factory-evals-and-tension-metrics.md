@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "What to Decide Before Running a Software Factory"
-excerpt: Define success before agents start optimizing for it
+excerpt: Evals drive the software factory's self-improvement loop
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent software-factory evaluation tension-metrics alps
 publish: true
 published: true
 date: 2026-10-05 15:54:40 +0900
-last_modified_at: 2026-10-05 15:54:40 +0900
+last_modified_at: 2026-10-07 15:21:26 +0900
 lang: en
 translation_key: software-factory-evals-and-tension-metrics
 korean_url: /2026/10/05/software-factory-evals-and-tension-metrics.html
@@ -17,55 +17,64 @@ permalink: /en/2026/10/05/software-factory-evals-and-tension-metrics.html
 
 ## TL;DR
 
-- A Software Factory repeats development, validation, and operational feedback.
-- Eval matters more as agents take on more autonomous work.
-- Pair target metrics with tension metrics that reveal quality losses.
+- Automated self-improvement is central to a Software Factory.
+- Evals provide evidence for automating repeated human judgments.
+- Tension metrics reveal quality losses during improvement.
 
 ## Introduction
 
 In today's [Agent Application Evaluation Playbook](/en/2026/10/05/evaluating-new-agent-applications.html), I wrote about choosing which numbers to ask an agent to improve. In EncBird, my English practice app, maximizing the number of corrections can lead to changing sentences that were already correct. Maximizing the number of remembered facts can lead to storing incorrect information.
 
-The same problem appears when building the app. As development agents work longer and produce more changes, we need a basis for accepting their results and assigning the next task.
+The need for these improvement criteria becomes clearer when we delegate work to a development agent. Without them, a person must read every proposed change, decide what to fix next, and issue another instruction. Improvement remains limited by how quickly that person can make those decisions.
 
-In her talk, “What It Actually Takes to Build a Software Factory,” Factory's Tereza Tížková extends this problem across the development process.[^1] Agents carry work from requirements through implementation and validation, then use operational feedback to make further changes.
+In her talk, “What It Actually Takes to Build a Software Factory,” Factory's Tereza Tížková describes a system in which agents carry work through the whole development process.[^1] That includes implementing requirements, validating results, and using operational feedback to make further changes.
 
-I think **Eval—checking whether a result satisfies its intended conditions—is becoming much more important** in this process. I have been updating ALPS, which I use for planning development, to reflect this direction.
+What matters to me here is **automated self-improvement: using execution results to find problems, produce changes, and verify that those changes help**. The goal is to remove individual human judgments from the repeated process of proposing and accepting improvements, so it can continue without waiting for another instruction.
 
-## 1. What does a Software Factory cover?
+That makes Eval—checking whether results meet their intended conditions and improve on the previous version—much more important. Evaluation results guide the next change. I have been updating ALPS, which I use for planning development, to define those improvement criteria in advance.
 
-Here, a Software Factory means a development system in which AI agents repeatedly connect requirements, implementation, validation, deployment, and operational feedback. It covers the software development lifecycle, or SDLC, from building software to running it.
+## 1. What it means for a Software Factory to improve itself
+
+Here, a Software Factory means a system in which AI agents connect requirements, implementation, validation, deployment, and operational feedback, then use the results to improve both the product and how it is developed. It covers the software development lifecycle, or SDLC, from building software to running it.
+
+Factory's official introduction names continual learning and self-improvement as a core requirement. Information from agent runs, code reviews, and resolved incidents should feed into subsequent work so that the system itself improves.[^5]
 
 Suppose users report repeated failures during signup. The system finds the relevant execution records, prioritizes the problem, changes the code, and checks whether signup actually works. After deployment, it looks for a reduction in the same failure and turns remaining problems into further work.
 
-A process guided by agreed criteria takes over the steps where a person previously supplied each next instruction. People choose the problem and the allowed scope of changes, and step in when criteria conflict or a new decision is needed.
+**The development agent's own working methods are also candidates for improvement.** If an agent repeatedly skips signup tests, for example, it can propose a change to the test procedure or reusable instructions as well as the application code. Evaluate whether that change reduces omissions on other tasks, then use the validated instructions in future runs.
+
+Fixing a failure within one run can still leave the next run making the same mistake. Improvements need to persist in something that later runs use: corrected code, tests that reproduce the failure, or validated working instructions. This kind of self-improvement does not require retraining the model itself.[^6]
+
+My goal is for an evaluation-and-revision loop to take over the steps where a person previously supplied each next instruction. People set the goals, the allowed scope of changes, and success criteria. Within those boundaries, generating, comparing, and accepting improvements should be automated as far as possible. People step in when criteria conflict or a new product decision is needed.
 
 {% raw %}
 ```mermaid
 flowchart TD
-    A["User feedback and operational records"] --> B["Define the problem and success criteria"]
-    B --> C["Agent implements changes"]
-    C --> D["Evaluate results"]
-    D -->|Existing condition violated| C
-    D -->|Required conditions met| E["Deploy within granted authority"]
+    H["People set goals, authority, and success criteria"] --> B
+    A["Operational feedback and agent run records"] --> B["Find recurring problems and propose improvements"]
+    B --> C["Change product code or working methods"]
+    C --> D["Use Evals to compare with the existing version"]
+    D -->|Falls short: revise using failure evidence| B
+    D -->|Improvement verified and required conditions met| E["Apply within granted authority<br/>Use the change in later runs"]
     E --> A
     D -->|Conflicting criteria or execution limit reached| F["Stop and request human judgment"]
-    F --> B
+    F --> H
 ```
 {% endraw %}
 
 For this process to work, agents need to reproduce the environment, find the necessary information, and rerun tests. If the project only runs on one person's laptop, or there are no records to investigate a failure, a person has to intervene at each transition.
 
-The talk proposes three principles: independence from a particular model or tool, execution without constant supervision, and carrying knowledge gained from one run into the next.[^1] Model selection and context management help sustain that process.
+Factory's published account of its internal Signals system offers an example: it identifies recurring problems in session records, creates tasks, and has Droid implement fixes. That account retains human approval before merge.[^7] Automating problem discovery and task assignment is progress toward autonomy; it does not establish that the entire process already runs without people.
 
-But a long agent run alone does not make the process complete. The system needs to judge what counts as success, what to fix after failure, and when to stop.
+The decision to automate extends from “is the task complete?” to “should later runs use this change?” Delegating that decision requires defining success and the evidence needed to accept an improvement.
 
 ## 2. Eval determines the next action
 
 When a person reads every development agent result, they can notice and fill gaps in the specification afterward. As agents take on more autonomous work, some of that judgment has to move into evaluation criteria and executable checks.
 
-A pass leads to the next task or deployment; a failure leads back to revision. **Eval determines the development process's next action.** A false pass allows subsequent work to build on a defective result. Treating a correct result as a failure causes unnecessary revisions.
+Evaluation returns failed cases and violated conditions as inputs to the next revision. The agent uses that evidence to propose a change, evaluates it again, and adopts it within its authority if it improves on the existing version while meeting required conditions. **Eval connects failure discovery, revision, and the acceptance of improvements.** A false pass allows subsequent work to build on a defective result. Treating a correct result as a failure causes unnecessary revisions.
 
-Factory creates a Validation Contract before dividing the implementation into features. It specifies which observable behaviors count as completion. An agent coordinating the work prepares it, and validation agents check results separately from the agents implementing them.[^2]
+Factory Missions creates a Validation Contract before dividing the implementation into features. It specifies which observable behaviors count as completion. An agent coordinating the work prepares it, and validation agents check results separately from the agents implementing them. Problems found in validation become fix tasks, followed by another check against the same completion criteria.[^2]
 
 For signup, “a user can sign up through the interface and then log in” is closer to a completion criterion than “the signup API exists.” If duplicate registrations must be prevented, that condition also needs checking. Code checks and user journey validation find different failures.
 
@@ -73,7 +82,11 @@ In one published Factory run, validation took 6.14 of the total 16.5 hours, abou
 
 Evaluation does not have to rely entirely on language models. Tests can check explicit conditions such as stored values and permissions. Model evaluation can address questions that require judgment, such as preserved meaning or response appropriateness. User journey checks establish whether the interface and subsequent processing work together.
 
-Consider the EncBird corrections discussed in today's post. Code can check whether feedback was delivered. Determining whether “might go” was changed to “went” requires comparing the original sentence with the correction. A development agent changing this feature needs to check both conditions.
+Consider the EncBird corrections discussed in today's post. Code can check whether feedback was delivered. Determining whether “might go” was changed to “went” requires comparing the original sentence with the correction.
+
+To turn that failure into improvement work, an agent could retain the original sentence and incorrect correction as a reproducible case, then change the prompt or processing code. Compare both versions on the same evaluation cases, and check whether meaning preservation also improves on separate cases not used to develop the change.
+
+If feedback still fails to arrive or meaning is still distorted, those failures guide another revision. Also compare whether unnecessary corrections of valid sentences have increased. This evaluation-and-revision process is where I want to move the work of reading every correction and issuing another instruction.
 
 Evaluation models can also be wrong. Compare their judgments with cases people have checked to see whether they miss actual failures or reject correct results. Separating implementation and validation agents does not remove errors if both share the same faulty criteria.
 
@@ -81,7 +94,7 @@ When a new failure appears in operation, retain a reproducible case and add it t
 
 ## 3. What might get worse while the target metric improves?
 
-Once evaluation is repeatable, we can give agents metrics and ask them to find better results. Even if the evaluation computes those metrics correctly, whether they adequately represent the product's purpose is a separate question.
+In a self-improvement process, metrics repeatedly influence which changes are retained. Even if the evaluation computes them correctly, whether they adequately represent the product's purpose is a separate question. A change accepted under flawed criteria becomes the starting point for the next improvement.
 
 An instruction to increase deployment frequency can encourage splitting meaningless changes into smaller releases. An instruction to raise the test pass rate can encourage removing failing tests. The numbers improve while the user's outcome stays the same or gets worse.
 
@@ -103,7 +116,7 @@ Combining everything into a weighted score can conceal those violations. I think
 
 ## 4. Connecting completion and improvement criteria in ALPS
 
-If we choose these criteria after implementation, it becomes easy to explain the result we already have as a success. This is why I have been updating ALPS, or Agentic Lean Product Spec, which I use to clarify the user's problem and required behavior before assigning development to agents.
+Delegating self-improvement requires both the conditions for completing a feature and criteria for accepting later changes as improvements. If we choose these after implementation, it becomes easy to explain the result we already have as a success. This is why I have been updating ALPS, or Agentic Lean Product Spec, which I use to clarify the user's problem and required behavior before assigning development to agents.
 
 ALPS is a format for writing a product requirements document, or PRD. In the 0.9.6 update to ALPS Writer Plugins, which I develop, I added guidance that separates the conditions for initially accepting a feature from the criteria for judging later improvement.[^4]
 
@@ -117,11 +130,14 @@ Criteria chosen during planning need to survive the transition to implementation
 
 {% raw %}
 ```mermaid
-flowchart LR
+flowchart TD
     P["ALPS PRD<br/>User problem and acceptance / improvement criteria"] -->|Transfer implementation-relevant contracts| A["ADR<br/>Conditions the implementation must honor"]
     A --> C["Code, tests, and evaluators"]
-    C --> E["Compare run evidence with conditions"]
-    E -->|Fix existing contract violations| C
+    C --> E["Evaluate results and compare versions"]
+    E -->|Contract violation or insufficient improvement| C
+    E -->|Improvement verified and required conditions met| K["Apply validated code and reusable instructions"]
+    K --> N["Use in the next task"]
+    N --> E
     E -->|New product decision needed| H["Person decides the contract change"]
     H --> A
 ```
@@ -133,13 +149,16 @@ What I have updated so far is the judgment guidance agents follow during plannin
 
 ## Closing thoughts
 
-Delegating more work to a Software Factory also requires reducing the time people spend checking its results again. Faster code generation does not expand delegation very far if every completion decision has to be reconstructed from scratch.
+When building a Software Factory, I want to know **whether problems found during execution lead to validated improvements without another human instruction**. Those improvements need to carry into later tasks and reduce repeated failures and human intervention. That is how I think the development system should get better as it runs.
 
-I expect to spend more time on **which Evals justify accepting an agent's result and which tension metrics help judge improvement**, alongside what the agent can build. Updating ALPS is part of keeping the user's purpose intact as work moves from planning to implementation and repeated improvement.
+Alongside deciding what to build, I expect to spend more time choosing the Evals and tension metrics that justify delegating improvement. Updating ALPS is part of keeping the user's purpose in that process without requiring a person to intervene every time.
 
 ---
 
-[^1]: Tereza Tížková, [What It Actually Takes to Build a Software Factory](https://ai.engineer/talks/vGCJ7diEtrw-what-it-actually-takes-build-software-factory), AI Engineer. Describes autonomy across the software lifecycle and the three principles.
+[^1]: Tereza Tížková, [What It Actually Takes to Build a Software Factory](https://ai.engineer/talks/vGCJ7diEtrw-what-it-actually-takes-build-software-factory), AI Engineer. Describes autonomous execution and validation across the software lifecycle.
 [^2]: Theo Luan, Factory, [How Missions Work](https://factory.com/news/missions-architecture). Source for defining the Validation Contract before implementation, separating implementation and validation roles, and validation time in one run.
 [^3]: DORA, [DORA’s software delivery performance metrics](https://dora.dev/guides/dora-metrics/). Covers throughput and instability together, and cautions against optimizing a single metric or comparing unlike contexts.
 [^4]: [ALPS Writer Plugins](https://github.com/haandol/alps-writer-plugins)
+[^5]: Matan Grinberg, Eno Reyes, [Factory 2.0: From coding agents to software factories](https://factory.com/news/software-factory). Names continual learning and self-improvement as a core requirement for a Software Factory.
+[^6]: Factory, [Self-improving software architecture in practice](https://factory.com/articles/self-improving-software-architecture). Discusses changes that persist in code, tests, tools, and instructions for later runs, and evaluation beyond the cases used to develop a correction.
+[^7]: Factory, [Signals: Toward a Self-Improving Agent](https://factory.com/news/factory-signals). An internal example connecting recurring problems to implemented fixes. At publication, human approval remained necessary before merge.
