@@ -8,7 +8,7 @@ tags: ai agent software-factory evaluation tension-metrics alps
 publish: true
 published: true
 date: 2026-10-05 15:54:40 +0900
-last_modified_at: 2026-10-07 15:21:26 +0900
+last_modified_at: 2026-10-07 15:32:02 +0900
 lang: en
 translation_key: software-factory-evals-and-tension-metrics
 korean_url: /2026/10/05/software-factory-evals-and-tension-metrics.html
@@ -23,7 +23,7 @@ permalink: /en/2026/10/05/software-factory-evals-and-tension-metrics.html
 
 ## Introduction
 
-In today's [Agent Application Evaluation Playbook](/en/2026/10/05/evaluating-new-agent-applications.html), I wrote about choosing which numbers to ask an agent to improve. In EncBird, my English practice app, maximizing the number of corrections can lead to changing sentences that were already correct. Maximizing the number of remembered facts can lead to storing incorrect information.
+In my earlier [Agent Application Evaluation Playbook](/en/2026/10/05/evaluating-new-agent-applications.html), I wrote about choosing which numbers to ask an agent to improve. In EncBird, my English practice app, maximizing the number of corrections can lead to changing sentences that were already correct. Maximizing the number of remembered facts can lead to storing incorrect information.
 
 The need for these improvement criteria becomes clearer when we delegate work to a development agent. Without them, a person must read every proposed change, decide what to fix next, and issue another instruction. Improvement remains limited by how quickly that person can make those decisions.
 
@@ -82,7 +82,7 @@ In one published Factory run, validation took 6.14 of the total 16.5 hours, abou
 
 Evaluation does not have to rely entirely on language models. Tests can check explicit conditions such as stored values and permissions. Model evaluation can address questions that require judgment, such as preserved meaning or response appropriateness. User journey checks establish whether the interface and subsequent processing work together.
 
-Consider the EncBird corrections discussed in today's post. Code can check whether feedback was delivered. Determining whether “might go” was changed to “went” requires comparing the original sentence with the correction.
+Consider the EncBird corrections discussed in that earlier evaluation playbook. Code can check whether feedback was delivered. Determining whether “might go” was changed to “went” requires comparing the original sentence with the correction.
 
 To turn that failure into improvement work, an agent could retain the original sentence and incorrect correction as a reproducible case, then change the prompt or processing code. Compare both versions on the same evaluation cases, and check whether meaning preservation also improves on separate cases not used to develop the change.
 
@@ -98,7 +98,7 @@ In a self-improvement process, metrics repeatedly influence which changes are re
 
 An instruction to increase deployment frequency can encourage splitting meaningless changes into smaller releases. An instruction to raise the test pass rate can encourage removing failing tests. The numbers improve while the user's outcome stays the same or gets worse.
 
-That is why today's post emphasized **tension metrics: measures that reveal whether another aspect of quality deteriorates while a target metric improves**. They help expose shortcuts that achieve the measured target at the expense of its purpose.
+That is why my earlier [evaluation playbook](/en/2026/10/05/evaluating-new-agent-applications.html) emphasized **tension metrics: measures that reveal whether another aspect of quality deteriorates while a target metric improves**. They help expose shortcuts that achieve the measured target at the expense of its purpose.
 
 | Intended improvement | Tension metrics to examine alongside it | Problem to look for |
 | --- | --- | --- |
