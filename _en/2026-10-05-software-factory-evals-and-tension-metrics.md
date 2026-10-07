@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "What to Decide Before Running a Software Factory"
-excerpt: Evals drive the software factory's self-improvement loop
+excerpt: Evals and observability move human review out of the loop
 author: haandol
 email: ldg55d@gmail.com
-tags: ai agent software-factory evaluation tension-metrics alps
+tags: ai agent software-factory evaluation observability harness-engineering hitl tension-metrics alps
 publish: true
 published: true
 date: 2026-10-05 15:54:40 +0900
-last_modified_at: 2026-10-07 15:49:17 +0900
+last_modified_at: 2026-10-07 19:56:17 +0900
 lang: en
 translation_key: software-factory-evals-and-tension-metrics
 korean_url: /2026/10/05/software-factory-evals-and-tension-metrics.html
@@ -17,48 +17,39 @@ permalink: /en/2026/10/05/software-factory-evals-and-tension-metrics.html
 
 ## TL;DR
 
-- Automated self-improvement is central to a Software Factory.
-- Evals provide evidence for automating repeated human judgments.
-- Tension metrics reveal quality losses during improvement.
+- Software Factories move toward removing the human review bottleneck.
+- Evals and observability supply the evidence for automated improvement.
+- Updating a harness from execution experience can be understood as online learning.
 
 ## Introduction
 
 A development agent may be able to change code and run tests, but if a person must read every proposed change and assign the next task, improvement remains limited by how quickly that person can decide. Connecting failure discovery to the work needed to fix those failures allows improvement to continue while the person is away.
 
-Factory is the company behind the development agent Droid. In “What It Actually Takes to Build a Software Factory,” its speaker Tereza Tížková describes this kind of development system.[^1] Agents carry work from implementing requirements through validation, then turn problems found in operation into further changes.
+In earlier posts, I described the long-term direction of agentic engineering as **removing HITL, or human in the loop: the person who repeatedly intervenes during execution**. In particular, I argued that faster code generation can still leave overall throughput limited by review speed if every change needs human review.[^10]
 
-What matters to me here is **automated self-improvement: using execution results to find problems, produce changes, and verify that those changes help**. The goal is to remove individual human judgments from the repeated process of proposing and accepting improvements, so it can continue without waiting for another instruction.
+Factory is the company behind the development agent Droid. In “What It Actually Takes to Build a Software Factory,” its speaker Tereza Tížková describes a system that continues development without waiting for a person's next instruction.[^1] Agents carry work from implementing requirements through validation, then turn problems found in operation into further changes.
 
-That makes Eval—checking whether results meet their intended conditions and improve on the previous version—much more important. Evaluation results provide the evidence an agent uses to decide which changes to retain and what to revise again.
+I understand Software Factories as a continuation of that HITL argument. They attempt to remove the human review bottleneck by automating **self-improvement: using execution results to find problems, produce changes, and verify that those changes help**.
 
-## 1. What it means for a Software Factory to improve itself
+That makes both Eval—checking whether results meet their intended conditions and improve on the previous version—and observability, which makes actual execution visible, essential. To take over the work of reading results and judging them, agents need to establish what happened and whether it matches the original intent.
+
+## 1. Moving human review out of the loop
 
 Here, a Software Factory means a system in which AI agents connect requirements, implementation, validation, deployment, and operational feedback, then use the results to improve both the product and how it is developed. It covers the software development lifecycle, or SDLC, from building software to running it.
 
 Factory's official introduction names continual learning and self-improvement as a core requirement. Information from agent runs, code reviews, and resolved incidents should feed into subsequent work so that the system itself improves.[^5]
 
+StrongDM expresses this direction more directly. It published a Software Factory approach built around a rule that people neither write nor review code; specifications and user scenarios guide agents and validate their results. Scenarios kept apart from the implementation help address the risk of agents tailoring code merely to pass the tests in front of them.[^11]
+
 Suppose users report repeated failures during signup. The system finds the relevant execution records, prioritizes the problem, changes the code, and checks whether signup actually works. After deployment, it looks for a reduction in the same failure and turns remaining problems into further work.
 
 **The development agent's own working methods are also candidates for improvement.** If an agent repeatedly skips signup tests, for example, it can propose a change to the test procedure or reusable instructions as well as the application code. Evaluate whether that change reduces omissions on other tasks, then use the validated instructions in future runs.
 
+In this article, I call the combined instructions, tools, execution environment, and validation and recovery procedures the **harness**. When I wrote about building EncBird's harness, I described turning recurring failures into rules in `AGENTS.md`, tools, and tests.[^12] Now I want to automate the work of reading those failures and telling the agent to improve its harness too.
+
 Fixing a failure within one run can still leave the next run making the same mistake. Improvements need to persist in something that later runs use: corrected code, tests that reproduce the failure, or validated working instructions. Even with the same model, changing its instructions and tools can change how later tasks run. This kind of self-improvement does not require retraining the model itself.[^6]
 
 My goal is for an evaluation-and-revision loop to take over the steps where a person previously supplied each next instruction. People set the goals, the allowed scope of changes, and success criteria. Within those boundaries, generating, comparing, and accepting improvements should be automated as far as possible. People step in when criteria conflict or a new product decision is needed.
-
-{% raw %}
-```mermaid
-flowchart TD
-    H["People set goals, authority, and success criteria"] --> B
-    A["Operational feedback and agent run records"] --> B["Find recurring problems and propose improvements"]
-    B --> C["Change product code or working methods"]
-    C --> D["Use Evals to compare with the existing version"]
-    D -->|Falls short: revise using failure evidence| B
-    D -->|Improvement verified and required conditions met| E["Apply within granted authority<br/>Use the change in later runs"]
-    E --> A
-    D -->|Conflicting criteria or execution limit reached| F["Stop and request human judgment"]
-    F --> H
-```
-{% endraw %}
 
 For this process to work, agents need to reproduce the environment, find the necessary information, and rerun tests. If the project only runs on one person's laptop, or there are no records to investigate a failure, a person has to intervene at each transition.
 
@@ -66,11 +57,72 @@ Factory's published account of its internal Signals system offers an example: it
 
 The decision to automate extends from “is the task complete?” to “should later runs use this change?” Delegating that decision requires defining success and the evidence needed to accept an improvement.
 
-## 2. Eval determines the next action
+## 2. Closing the development loop with Evals and observability
 
 When a person reads every development agent result, they can notice and fill gaps in the specification afterward. As agents take on more autonomous work, some of that judgment has to move into evaluation criteria and executable checks.
 
 Evaluation returns failed cases and violated conditions as inputs to the next revision. The agent uses that evidence to propose a change, evaluates it again, and adopts it within its authority if it improves on the existing version while meeting required conditions. **Eval connects failure discovery, revision, and the acceptance of improvements.** A false pass allows subsequent work to build on a defective result. Treating a correct result as a failure causes unnecessary revisions.
+
+This is why I think **developing software through a Software Factory is itself an Eval process**. Define criteria from user intent, execute, observe the results, evaluate the gap, revise, and execute again. Here, the Eval process means the whole cycle in which evaluation determines the next change, beyond calculating a score once.
+
+### 2.1. Collecting traces and evaluation cases from a prototype
+
+The loop needs a usable prototype to get started. We cannot anticipate every failure, but we should establish whose problem we are solving and which outcomes must hold. Then we use the prototype ourselves and let actual users try it, collecting execution records along the way.
+
+Observability is the ability to use those records to understand what happened inside the system. A **trace** records how a request moved through processing steps and tool calls to reach its result. **Metrics** capture quantities such as failure rates and response times that let us compare runs. Logs supply details about errors and intermediate states.
+
+Both the product and the process that develops it need observation. A failed signup trace can reveal a product defect; the development agent's record of fixing that code can reveal skipped tests or incorrect tool use. Recording product and harness versions alongside these records makes it possible to compare behavior across changes.
+
+**Observability reveals actual behavior; Eval compares it with user intent.** A faster response time alone does not establish that the user got the job done. Connecting execution records to the expected outcome turns that gap into a problem to fix.
+
+LangChain describes a similar development process: collect traces, enrich them with evaluations and feedback, turn failures into reproducible evaluation cases, and compare behavior before and after changes. Automated evaluations on production runs supply material for subsequent improvements.[^13]
+
+The automation I want to build needs to cover that path. If it stops at collecting records and displaying a dashboard, a person must still read them and select the next fix. Agents need a way to retrieve relevant traces, add violations of established conditions to evaluations, and run and compare proposed changes.
+
+{% raw %}
+```mermaid
+sequenceDiagram
+    participant H as People
+    participant F as Development agent and harness
+    participant P as Product
+    participant E as Observation and evaluation
+    H->>F: Set intent, success criteria, and change authority
+    F->>P: Build an observable prototype
+    H->>P: Use it and provide feedback from actual use
+    loop Improve through use and evaluation
+        P->>E: Product traces and metrics
+        F->>E: Development run records and versions
+        E->>F: Failed cases, violations, and comparisons
+        F->>F: Propose a product or harness change
+        F->>E: Evaluate baseline and candidate under the same conditions
+        alt Improvement verified and required conditions met
+            E-->>F: Evidence for acceptance
+            F->>P: Apply product changes within granted authority
+            F->>F: Use the validated harness in later tasks
+        else Conditions violated or insufficient improvement
+            E-->>F: Failure evidence for another revision
+        else New product decision needed or execution limit reached
+            F->>H: Stop automatic execution and request judgment
+        end
+    end
+```
+{% endraw %}
+
+### 2.2. Online learning through harness updates
+
+Because new execution experience changes how subsequent work runs, I think a Software Factory can also be understood as **online learning at the harness level**. Online here means adapting to incoming data while the system is in use; it does not refer to an internet connection.
+
+Each run produces product code, while experience accumulates in an improving **harness that builds deterministic and nondeterministic software**. Its output can include ordinary processing code that follows fixed rules for the same input and state, as well as AI features whose responses can vary between runs. What it learns persists in instructions, tools, tests, and execution procedures rather than updates to model weights.
+
+LangChain's Better-Harness implements a process that proposes and validates harness changes using evaluation results and traces. It separates cases used for optimization from held-out validation cases to check whether changes merely fit known examples. Its published workflow still includes final human review.[^14]
+
+The ACE, or Agentic Context Engineering, research studies how execution feedback can accumulate in a context containing instructions and strategies without updating model weights. It also evaluates online adaptation, where that context changes as new tasks are processed.[^15] Learning from execution to change later behavior need not be confined to retraining a model's internals.
+
+These sources do not demonstrate an entirely unattended Software Factory. My interpretation extends the approaches explored in harness improvement and context adaptation to the whole environment that develops software. Recording evaluation scores during use is not enough: the evidence needs to change the harness and affect subsequent tasks for learning, in this sense, to occur.
+
+### 2.3. Defining the outcome to evaluate
+
+Even as execution experience changes the harness, the evidence for accepting changes must remain connected to the original user intent. If the criteria are vague, an agent can end up optimizing for easy checks instead of better software.
 
 Factory Missions is a feature that divides development work into tasks and carries them out autonomously. Before dividing the implementation into features, it creates a Validation Contract: the observable behaviors required for completion. An agent coordinating the work prepares it, and validation agents check results separately from the agents implementing them. Problems found in validation become fix tasks, followed by another check against the same completion criteria.[^2]
 
@@ -86,11 +138,15 @@ Suppose a user says `I might visit Busan, but I haven't decided yet.`, and the a
 
 The development agent fixing this failure records the original sentence, the incorrect correction, and the expected condition: preserve the possibility of a visit and the fact that the user has not decided. It can then change the app's prompt—the instructions its AI follows—or processing code, and compare the existing and revised versions on the same input.
 
-An evaluation model receives the original sentence, the expected condition, and the correction, then returns a judgment about meaning preservation with its supporting reasons. Code checks whether the feedback was delivered. Separate cases not used to develop the change help detect a fix tailored to just one sentence.
+An evaluation model receives the original sentence, the expected condition, and the correction, then returns a judgment about meaning preservation with its supporting reasons. Code checks whether the feedback was delivered.
+
+Separate cases not used to develop the change help detect a fix tailored to just one sentence. Where model responses can vary, compare failure rates over repeated runs under the same conditions rather than accepting a single success as evidence of improvement.
 
 If feedback still fails to arrive or meaning is still distorted, those failures guide another revision. Also compare whether unnecessary corrections of valid sentences have increased. This evaluation-and-revision process is where I want to move the work of reading every correction and issuing another instruction.
 
-Evaluation models can also be wrong. Compare their judgments with cases people have checked to see whether they miss actual failures or reject correct results. Separating implementation and validation agents does not remove errors if both share the same faulty criteria.
+Evaluation models can also be wrong. Compare their judgments with cases people have checked to see whether they miss actual failures or reject correct results. Anthropic's agent evaluation guide also explains the need for repeated trials and calibration of model judgments against human judgments.[^16]
+
+Separating implementation and validation agents does not remove errors if both share the same faulty criteria. This calibration can be designed separately from a process that makes people read and approve every change.
 
 When a new failure appears in operation, retain a reproducible case and add it to subsequent evaluation. Distinguish a violation of an existing condition from a situation that needs a previously undecided product rule. In the latter case, the agent should not invent an answer and make it part of the evaluation.
 
@@ -161,7 +217,7 @@ What I have updated so far is the judgment guidance agents follow during plannin
 
 When building a Software Factory, I want to know **whether problems found during execution lead to validated improvements without another human instruction**. Those improvements need to carry into later tasks and reduce repeated failures and human intervention. That is how I think the development system should get better as it runs.
 
-Alongside deciding what to build, I expect to spend more time choosing the Evals and tension metrics that justify delegating improvement. Updating ALPS is part of keeping the user's purpose in that process without requiring a person to intervene every time.
+The direction I want from a Software Factory is the same one I described in the earlier HITL posts. I want observation, evaluation, and harness revision to take over the steps that used to wait for human review. Alongside deciding what to build, I expect to spend more time choosing which records to collect and which Evals and tension metrics should justify accepting an improvement.
 
 ---
 
@@ -174,3 +230,10 @@ Alongside deciding what to build, I expect to spend more time choosing the Evals
 [^7]: Factory, [Signals: Toward a Self-Improving Agent](https://factory.com/news/factory-signals). An internal example connecting recurring problems to implemented fixes. At publication, human approval remained necessary before merge.
 [^8]: [Agent Application Evaluation Playbook](/en/2026/10/05/evaluating-new-agent-applications.html). Source for the meaning-preservation condition and correction-rate example. The numbers are hypothetical, not production measurements. The linked article covers evaluation record collection and judgment validation in more detail.
 [^9]: [Why Separate PRDs, ADRs, and Code? — Reading One Abstraction Level at a Time](/en/2026/07/25/alps-adr-abstraction-boundaries.html). Further explanation of separating planning intent, current requirements, and replaceable implementation choices.
+[^10]: [Agentic Engineering and Transitional Technologies](/en/2026/05/11/direction-of-agentic-engineering.html), [A Lens for Interpreting Phenomena—and Agentic Engineering](/en/2026/06/12/lens-for-agentic-engineering.html). Earlier posts on HITL removal as a long-term direction and repeated review and approval as bottlenecks.
+[^11]: Justin McCarthy, StrongDM, [Software Factories And The Agentic Moment](https://factory.strongdm.ai/) (February 6, 2026). Describes excluding human code writing and review, with separate scenarios for validation.
+[^12]: [How I Built the EncBird Harness Layer by Layer — Harness Engineering in Practice](/en/2026/06/16/harness-engineering-in-practice.html). Describes turning failures discovered during execution into rules, tools, and validation.
+[^13]: Sam Crowder, LangChain, [The agent improvement loop starts with a trace](https://www.langchain.com/blog/traces-start-agent-improvement-loop) (March 31, 2026). Connects execution records, online evaluation, evaluation case creation, and validation before deployment.
+[^14]: Vivek Trivedy, LangChain, [Better Harness: A Recipe for Harness Hill-Climbing with Evals](https://www.langchain.com/blog/better-harness-a-recipe-for-harness-hill-climbing-with-evals) (April 8, 2026). Uses evaluations as harness improvement signals, alongside held-out validation and human review.
+[^15]: Qizheng Zhang et al., [Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models](https://arxiv.org/abs/2510.04618), ICLR 2026. Research on offline and online adaptation through context updates rather than weight updates.
+[^16]: Anthropic, [Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) (January 9, 2026). Covers repeated evaluation of nondeterministic runs and calibration of model judgments against human judgments.
