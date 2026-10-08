@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Why Jev was created."
-excerpt: Why I expect automation models to move toward RLCD
+excerpt: Why decision accuracy and calibration matter for automation
 author: haandol
 email: ldg55d@gmail.com
 tags: ai jev decision-model reinforcement-learning rlcd evaluation robotics
 publish: true
 published: true
 date: 2026-10-08 11:23:38 +0900
-last_modified_at: 2026-10-08 11:32:20 +0900
+last_modified_at: 2026-10-08 12:35:20 +0900
 lang: en
 translation_key: jev-decision-models-and-rlcd
 korean_url: /2026/10/08/jev-decision-models-and-rlcd.html
@@ -18,8 +18,8 @@ permalink: /en/2026/10/08/jev-decision-models-and-rlcd.html
 ## TL;DR
 
 - I suspect RLCD contributes substantially to Jev's practical advantage.
-- I think alternatives without RLCD will hit limits in automation.
-- I expect models built for automation to eventually move to RLCD.
+- I expect more models to train directly for decision accuracy and calibration.
+- I see RLCD as a promising approach to that training.
 
 ## Introduction
 
@@ -33,7 +33,7 @@ It is similar to cases where an open model beats a commercial model on a benchma
 
 That gap made me interested in RLCD, Jev's training approach. TypeSafe, the company behind Jev, argues that responses people prefer and decisions software can act on need different training objectives. I agree, and **I suspect RLCD contributes substantially to the practical gap between Jev and other decision models.**
 
-I think alternatives without RLCD will hit limits in automation, and models built for automation will eventually move to RLCD. Product and implementation details reflect the material available on October 8, 2026.
+I expect more models to be trained directly for decision accuracy and calibrated probabilities. I see RLCD as a promising approach in that direction. Product and implementation details reflect the material available on October 8, 2026.
 
 ## 1. A benchmark can change when you reverse the question
 
@@ -128,7 +128,7 @@ Laya's documentation also says its base checkpoints are overconfident as shipped
 
 As automation takes on more decisions, overconfidence in ambiguous situations becomes a practical problem alongside accuracy on ordinary inputs. If a person must check every decision to prevent an error from reaching the next step, that limits how much work can be automated.
 
-I think alternatives without RLCD will run into limits here. That is why **I expect models built for automation to eventually move to RLCD, training directly for decisions and calibrated probabilities**. Open-source projects such as Laya pursuing the same objective also fit that direction, in my view.
+I expect **more models to be trained directly for decision accuracy and calibrated probabilities**. I see RLCD as a promising approach in that direction. Other approaches, such as Jeff's additional training followed by probability calibration, also exist, so I want to see which training methods prove strongest in practice.
 
 ## 4. From multimodal decisions to robot action selection
 
@@ -163,9 +163,9 @@ The development I would like to see is **training for calibrated decisions becom
 
 ## Closing thoughts
 
-I suspect RLCD contributes substantially to Jev's practical performance advantage. And **I think alternatives without RLCD will hit limits in automation, while models built for automation will eventually move to RLCD**.
+I suspect RLCD contributes substantially to Jev's practical performance advantage. I expect **more models to be trained directly for decision accuracy and calibrated probabilities**.
 
-I want to see how model training changes to target decisions and calibrated probabilities. In particular, I expect that shift to extend to multimodal decisions and robot action selection.
+In particular, I expect that shift to extend to multimodal decisions and robot action selection.
 
 ---
 
