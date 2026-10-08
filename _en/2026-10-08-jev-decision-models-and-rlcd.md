@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Why Jev was created."
-excerpt: What similar benchmark scores miss about decision models
+excerpt: Why I expect automation models to move toward RLCD
 author: haandol
 email: ldg55d@gmail.com
 tags: ai jev decision-model reinforcement-learning rlcd evaluation robotics
 publish: true
 published: true
 date: 2026-10-08 11:23:38 +0900
-last_modified_at: 2026-10-08 11:28:13 +0900
+last_modified_at: 2026-10-08 11:30:26 +0900
 lang: en
 translation_key: jev-decision-models-and-rlcd
 korean_url: /2026/10/08/jev-decision-models-and-rlcd.html
@@ -17,9 +17,9 @@ permalink: /en/2026/10/08/jev-decision-models-and-rlcd.html
 
 ## TL;DR
 
-- Test decision models with different question wordings.
-- RLCD targets decisions and calibrated probabilities.
-- RLCD's individual contribution to Jev's performance remains unclear.
+- I suspect RLCD contributes substantially to Jev's practical advantage.
+- I think alternatives without RLCD will hit limits in automation.
+- I expect models built for automation to eventually move to RLCD.
 
 ## Introduction
 
@@ -27,11 +27,11 @@ After Jev came out, models and APIs such as Kev, Jeff, Strands Decider, and Open
 
 Some projects published benchmarks suggesting a small gap from Jev, but Jev felt considerably better on the tasks I tried. It reminded me of trying an open model after reading that it had beaten a commercial one, then watching it behave unexpectedly as soon as I gave it something a little harder.
 
-I would not extend that experience to every open model or newer competitor. Still, **despite similar benchmark scores, the alternatives I tried did not yet seem capable of replacing Jev.**
+**Despite similar benchmark scores, the alternatives I tried did not yet seem capable of replacing Jev.**
 
-That gap made me interested in RLCD, Jev's training approach. TypeSafe, the company behind Jev, argues that responses people prefer and decisions software can act on need different training objectives. I agree with that concern, but I do not think the performance gap can immediately be attributed to RLCD.
+That gap made me interested in RLCD, Jev's training approach. TypeSafe, the company behind Jev, argues that responses people prefer and decisions software can act on need different training objectives. I agree, and **I suspect RLCD contributes substantially to the practical gap between Jev and other decision models.**
 
-I want to separate what the public evidence establishes from what remains a hypothesis, then consider whether this direction could extend to multimodal models that process images and text together, and to robotic decisions. Product and implementation details reflect the material available on October 8, 2026.
+I think alternatives without RLCD will hit limits in automation, and models built for automation will eventually move to RLCD. From that perspective, I want to look at why Jev was created, how the implementations differ, and how this direction could extend to multimodal models that process images and text together, and to robotics. Product and implementation details reflect the material available on October 8, 2026.
 
 ## 1. A benchmark can change when you reverse the question
 
@@ -48,7 +48,7 @@ The experiment asks whether a response is supported by the supplied evidence. On
 
 These values are ROC AUC, not accuracy. Here, the metric measures how well the model's scores distinguish supported responses from unsupported ones; closer to 1 is better, while 0.5 is random performance. The B in model names indicates billions of parameters.
 
-Jev and OpenAI Decisions produced similar results under both wordings, while Kev and Strands Decider changed substantially. OpenAI handled this reversal well, so treating all newer competitors as substantially weaker would hide a meaningful difference.
+Jev and OpenAI Decisions produced similar results under both wordings, while Kev and Strands Decider changed substantially.
 
 The table reports Arize's experiment with particular models, questions, and data. It does not establish the cause of the gap I experienced, but it shows why **a score obtained with one wording may not represent the questions an application will actually use.**
 
@@ -68,7 +68,7 @@ His [talk before Jev's launch](https://www.youtube.com/watch?v=cJ0EOzey--o) make
 
 ### 2.2. Learning to produce responses people prefer
 
-His concern is less about the abilities acquired during pretraining, when a model learns patterns from large amounts of data, than about how those abilities are elicited. He argues that rewarding responses people prefer can push a model toward sounding confident instead of expressing uncertainty. That is Almeida's interpretation, not a general law explaining classification failures in every model.[^4]
+His concern is less about the abilities acquired during pretraining, when a model learns patterns from large amounts of data, than about how those abilities are elicited. In Almeida's interpretation, rewarding responses people prefer can push a model toward sounding confident instead of expressing uncertainty.[^4]
 
 Reinforcement learning, or RL, trains a model to **take actions that earn more of a specified reward**. What the reward evaluates changes what the model learns to do well.
 
@@ -92,17 +92,17 @@ Jev's API also distinguishes an option's `probability` from a separate `confiden
 
 What interests me about RLCD is that it treats uncertainty as an output software can use. If a person will not read every response, the way a model expresses the possibility of being wrong matters alongside its ability to select the right answer.
 
-### 2.4. Does that objective explain the performance gap?
+### 2.4. My hypothesis: RLCD accounts for a large part of the gap
 
-Understanding the objective does not tell us how much it contributed to performance. In the TypeSafe launch post and training explanation I checked, I did not find an ablation isolating RLCD's contribution. An ablation changes or removes one component while keeping other conditions comparable.[^5][^7]
+I think this difference in training objectives has had a substantial effect on Jev's practical performance. Training a model both to select the right answer and to express uncertainty could reduce overconfident judgments on ambiguous cases.
+
+This is still my hypothesis. In the TypeSafe launch post and training explanation I checked, I did not find an ablation isolating RLCD's contribution. An ablation changes or removes one component while keeping other conditions comparable.[^5][^7]
 
 To establish that contribution, we would need to compare training with and without RLCD using the same starting model, data, and evaluation conditions. Comparing Jev with another product also changes model size, data, architecture, and other post-training choices. TypeSafe itself introduced a new architecture, parallel output mechanism, and RLCD together.[^7]
 
 We also need to look at what the public evaluation treats as a correct answer. TypeSafe's workflow evaluation, which evaluates business workflows represented in code, uses the average predictions of large external models as reference probabilities. Agreement with that reference does not mean real outcomes were directly observed, and the evaluation description does not reveal RLCD's training data.[^7]
 
-I think decisions and probabilities are useful training targets for automation. But **public product comparisons do not isolate how much of Jev's current advantage comes from RLCD.**
-
-## 3. Similar APIs, different implementations
+## 3. What these implementations suggest about the future of automation models
 
 Before explaining product differences through training, we need to know what each product actually trained. Similar APIs returning fixed choices and probabilities do not imply identical implementations.
 
@@ -126,7 +126,9 @@ The open-source Laya project publishes its own RLCD approach aimed at calibrated
 
 Laya's documentation also says its base checkpoints are overconfident as shipped and need further probability calibration on the user's data. Including calibration in an objective does not automatically make probabilities reliable on a new task.
 
-These implementations make me reluctant to choose a model just because its training is called RLCD. Alongside what was trained, I want to check how accurately it predicts on my data and where it becomes overconfident.
+As automation takes on more decisions, overconfidence in ambiguous situations becomes a practical problem alongside accuracy on ordinary inputs. If a person must check every decision to prevent an error from reaching the next step, that limits how much work can be automated.
+
+I think alternatives without RLCD will run into limits here. That is why **I expect models built for automation to eventually move to RLCD, training directly for decisions and calibrated probabilities**. Open-source projects such as Laya pursuing the same objective also fit that direction, in my view.
 
 ## 4. From multimodal decisions to robot action selection
 
@@ -161,11 +163,9 @@ The development I would like to see is **training for calibrated decisions becom
 
 ## Closing thoughts
 
-Within the tasks I have tried, I still trust Jev more. But I would rather investigate where the differences appear and how much to trust the associated probabilities than explain the experience with “RLCD makes it better.”
+I suspect RLCD contributes substantially to Jev's practical performance advantage. And **I think alternatives without RLCD will hit limits in automation, while models built for automation will eventually move to RLCD**.
 
-As more fast decision models become available, trying them in an application should get cheaper. Beyond accuracy, consistency under rewording and overconfident failures will help determine how much work can be delegated without someone reading every result.
-
-What I most want to see next is a controlled comparison isolating RLCD's contribution, followed by calibration that includes images and action outcomes. Those results could help explain the gap I feel today and make my expectations for robotics more concrete.
+I want to see how model training changes to target decisions and calibrated probabilities. In particular, I expect that shift to extend to multimodal decisions and robot action selection.
 
 ---
 
