@@ -8,7 +8,7 @@ tags: ai jev decision-model reinforcement-learning rlcd evaluation robotics
 publish: true
 published: true
 date: 2026-10-08 11:23:38 +0900
-last_modified_at: 2026-10-08 11:23:38 +0900
+last_modified_at: 2026-10-08 11:28:13 +0900
 lang: ko
 translation_key: jev-decision-models-and-rlcd
 english_url: /en/2026/10/08/jev-decision-models-and-rlcd.html
@@ -26,7 +26,7 @@ Jev가 나오고 Kev, Jeff, Strands Decider, OpenAI Decisions처럼 분류나 �
 
 그런데 일부 프로젝트가 공개한 벤치마크에서는 Jev와의 차이가 작아 보이는데, 내가 써본 과제에서는 Jev 쪽이 꽤 더 잘된다는 느낌을 받았다. 오픈모델이 상용모델을 이겼다는 발표를 보고 써봤다가, 조금만 어려운 일을 맡겨도 기대와 다르게 동작했던 경험과 비슷했다.
 
-그 경험을 모든 오픈모델이나 후발 모델의 한계로 넓히려는 것은 아니다. 다만 **벤치마크 점수가 비슷하다는 것만으로 내가 쓰던 모델을 대체할 수 있다고 생각하기는 어려웠다.**
+그 경험을 모든 오픈모델이나 후발 모델의 한계로 넓히려는 것은 아니다. 다만 **벤치마크 점수가 비슷하더라도, 내가 써본 범위에서는 아직 Jev를 대체하기 어려워 보였다.**
 
 이 차이를 보면서 관심이 생긴 것이 Jev의 학습 방식인 RLCD다. Jev를 만든 TypeSafe는 사람이 선호하는 답변과 소프트웨어가 바로 사용할 판단에 서로 다른 학습 목표가 필요하다고 주장한다. 나는 이 문제의식에 동의하지만, 지금의 성능 차이를 곧바로 RLCD의 효과라고 설명할 수는 없다고 생각한다.
 

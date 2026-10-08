@@ -8,7 +8,7 @@ tags: ai jev decision-model reinforcement-learning rlcd evaluation robotics
 publish: true
 published: true
 date: 2026-10-08 11:23:38 +0900
-last_modified_at: 2026-10-08 11:23:38 +0900
+last_modified_at: 2026-10-08 11:28:13 +0900
 lang: en
 translation_key: jev-decision-models-and-rlcd
 korean_url: /2026/10/08/jev-decision-models-and-rlcd.html
@@ -27,7 +27,7 @@ After Jev came out, models and APIs such as Kev, Jeff, Strands Decider, and Open
 
 Some projects published benchmarks suggesting a small gap from Jev, but Jev felt considerably better on the tasks I tried. It reminded me of trying an open model after reading that it had beaten a commercial one, then watching it behave unexpectedly as soon as I gave it something a little harder.
 
-I would not extend that experience to every open model or newer competitor. Still, **similar benchmark scores were not enough to convince me that I could replace the model I was using.**
+I would not extend that experience to every open model or newer competitor. Still, **despite similar benchmark scores, the alternatives I tried did not yet seem capable of replacing Jev.**
 
 That gap made me interested in RLCD, Jev's training approach. TypeSafe, the company behind Jev, argues that responses people prefer and decisions software can act on need different training objectives. I agree with that concern, but I do not think the performance gap can immediately be attributed to RLCD.
 
