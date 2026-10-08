@@ -8,7 +8,7 @@ tags: ai jev decision-model reinforcement-learning rlcd evaluation robotics
 publish: true
 published: true
 date: 2026-10-08 11:23:38 +0900
-last_modified_at: 2026-10-08 11:30:26 +0900
+last_modified_at: 2026-10-08 11:32:20 +0900
 lang: en
 translation_key: jev-decision-models-and-rlcd
 korean_url: /2026/10/08/jev-decision-models-and-rlcd.html
@@ -25,13 +25,15 @@ permalink: /en/2026/10/08/jev-decision-models-and-rlcd.html
 
 After Jev came out, models and APIs such as Kev, Jeff, Strands Decider, and OpenAI Decisions offered quick ways to add classification and scoring to an application. Returning fixed choices and probabilities instead of long responses made them look useful for putting AI decisions into an early product.
 
-Some projects published benchmarks suggesting a small gap from Jev, but Jev felt considerably better on the tasks I tried. It reminded me of trying an open model after reading that it had beaten a commercial one, then watching it behave unexpectedly as soon as I gave it something a little harder.
+Some projects published benchmarks suggesting a small gap from Jev. But Jev felt considerably better on the tasks I tried.
+
+It is similar to cases where an open model beats a commercial model on a benchmark but starts failing when given something a little harder in practice.
 
 **Despite similar benchmark scores, the alternatives I tried did not yet seem capable of replacing Jev.**
 
 That gap made me interested in RLCD, Jev's training approach. TypeSafe, the company behind Jev, argues that responses people prefer and decisions software can act on need different training objectives. I agree, and **I suspect RLCD contributes substantially to the practical gap between Jev and other decision models.**
 
-I think alternatives without RLCD will hit limits in automation, and models built for automation will eventually move to RLCD. From that perspective, I want to look at why Jev was created, how the implementations differ, and how this direction could extend to multimodal models that process images and text together, and to robotics. Product and implementation details reflect the material available on October 8, 2026.
+I think alternatives without RLCD will hit limits in automation, and models built for automation will eventually move to RLCD. Product and implementation details reflect the material available on October 8, 2026.
 
 ## 1. A benchmark can change when you reverse the question
 
@@ -72,7 +74,7 @@ His concern is less about the abilities acquired during pretraining, when a mode
 
 Reinforcement learning, or RL, trains a model to **take actions that earn more of a specified reward**. What the reward evaluates changes what the model learns to do well.
 
-For example, someone who knows their Korean textbook well might address a friend with “My friend Cheolsu, have you eaten?” The sentence is not wrong, but it sounds awkward. Reinforcement learning from human feedback, or RLHF, can help adapt that kind of language to the situation.
+For example, a model that has learned expressions from Korean textbooks might write “My friend Cheolsu, have you eaten?” in a conversation between friends. The sentence is not wrong, but it sounds awkward. Reinforcement learning from human feedback, or RLHF, can adjust the model's phrasing by rewarding responses that people judge natural.
 
 But supervised fine-tuning, or SFT, can also improve it by training on examples of natural conversation. InstructGPT distinguishes training on demonstrations from reinforcement learning using human preferences.[^3] Making speech sound natural is not the purpose of all RL, and classification does not require RL to work in real situations.
 
@@ -96,23 +98,21 @@ What interests me about RLCD is that it treats uncertainty as an output software
 
 I think this difference in training objectives has had a substantial effect on Jev's practical performance. Training a model both to select the right answer and to express uncertainty could reduce overconfident judgments on ambiguous cases.
 
-This is still my hypothesis. In the TypeSafe launch post and training explanation I checked, I did not find an ablation isolating RLCD's contribution. An ablation changes or removes one component while keeping other conditions comparable.[^5][^7]
+However, in the TypeSafe launch post and training explanation I checked, I did not find an ablation isolating RLCD's contribution. An ablation changes or removes one component while keeping other conditions comparable.[^5][^7]
 
 To establish that contribution, we would need to compare training with and without RLCD using the same starting model, data, and evaluation conditions. Comparing Jev with another product also changes model size, data, architecture, and other post-training choices. TypeSafe itself introduced a new architecture, parallel output mechanism, and RLCD together.[^7]
 
-We also need to look at what the public evaluation treats as a correct answer. TypeSafe's workflow evaluation, which evaluates business workflows represented in code, uses the average predictions of large external models as reference probabilities. Agreement with that reference does not mean real outcomes were directly observed, and the evaluation description does not reveal RLCD's training data.[^7]
+TypeSafe evaluates business workflows represented in code using the average predictions of large external models as reference probabilities. Agreement with that reference does not mean real outcomes were directly observed, and the evaluation description does not reveal RLCD's training data.[^7]
 
 ## 3. What these implementations suggest about the future of automation models
 
-Before explaining product differences through training, we need to know what each product actually trained. Similar APIs returning fixed choices and probabilities do not imply identical implementations.
-
-The initial OpenAI Decisions API is interesting here. In a DevDay interview, API lead Nikunj Handa said that OpenAI had not trained a new model for it and was using the existing Luna weights. He described an initial implementation that constrains outputs, processes questions in parallel, and optimizes inference speed. Its image understanding also comes from Luna.[^8]
+In a DevDay interview, OpenAI API lead Nikunj Handa said that the initial Decisions API used the existing Luna weights without training a new model. It constrains outputs, processes questions in parallel, and optimizes inference speed. Its image understanding also comes from Luna.[^8]
 
 He did not say whether the head, the component that turns internal representations into outputs, was replaced.
 
-The official documentation confirms that Decisions accepts text and images and returns a condition's probability, a choice, or a score.[^9] The training account above applies to the initial release.
+The official documentation confirms that Decisions accepts text and images and returns a condition's probability, a choice, or a score.[^9]
 
-The open projects do not share a single recipe either. Their public documentation described the following training scope when checked on October 8, 2026.
+Kev, Jeff, and Strands Decider apply additional training to existing models. Their public documentation describes the following training scope.
 
 | Project | Publicly described training |
 | --- | --- |
@@ -132,9 +132,9 @@ I think alternatives without RLCD will run into limits here. That is why **I exp
 
 ## 4. From multimodal decisions to robot action selection
 
-If a decision API built on existing multimodal weights is already useful, what might change when a model is trained specifically to make calibrated decisions from images and text? I think this direction could also connect to how robots choose actions.
+I also expect RLCD to help multimodal models such as Luna, which process images and text together.
 
-A vision-language-action model, or VLA, takes visual and language inputs and produces actions. VLA names a family of models, not a particular training method. A model trained with an objective resembling RLCD could still be a VLA.
+In robotics, a vision-language-action model, or VLA, takes visual and language inputs and produces actions. VLA names a family of models, not a particular training method. A model trained with an objective resembling RLCD could still be a VLA.
 
 A concrete connection is estimating the success probability of candidate actions. When a robot needs to move a cup, for example, it might compare “grasp it from here” with “change the viewpoint, then grasp it.”
 
