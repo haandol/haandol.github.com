@@ -8,7 +8,7 @@ tags: mcp model-context-protocol mcp-server ai agent skills
 publish: true
 lang: en
 date: 2026-03-02 00:00:00 +0900
-last_modified_at: 2026-08-27 19:21:43 +0900
+last_modified_at: 2026-10-11 10:07:45 +0900
 translation_key: considerations-before-developing-mcp-server
 korean_url: /2026/03/02/considerations-before-developing-mcp-server.html
 permalink: /en/2026/03/02/considerations-before-developing-mcp-server.html
@@ -16,99 +16,83 @@ permalink: /en/2026/03/02/considerations-before-developing-mcp-server.html
 
 ## TL;DR
 
-- I need to break the habit of reaching for the keyboard first.
-- Complex business logic is no longer a moat. Competitive advantage lies in customer data that cannot be replicated.
-- Whether to offload LLM processing to the client is the core design decision, and the cost is prompt conflicts and uncertainty about the token budget.
+- Identify what existing tools cannot solve before building your own.
+- Where the LLM runs changes the tool provider's responsibilities.
+- Delegating execution to the client requires handling interruptions and model differences.
 
 ## Introduction
 
-One thing that has happened to me in the age of agents is that I keep building tools that let me hand off as much of the work I really do not want to do as possible.
+One habit I have developed in the age of agents is building tools to hand off work I do not want to do.
 
-I recently needed to create a PowerPoint presentation. For most people, the most tedious part of making a presentation is probably turning the picture in their head into something drawn by hand. GenAI is an ideal tool for automating that kind of work.
+I recently needed to create a PowerPoint presentation. To avoid manually drawing what I had in mind, I tried Claude PowerPoint skills,[^3] a PowerPoint-generation MCP server,[^4] and paid tools.[^5][^6] The open-source tools either fell short of the quality I wanted for customer presentations or made precise slide edits difficult. Commercial tools generally produced good results, but I could not use them when internal material could not be sent outside the company.
 
-As part of my struggle to avoid doing the work myself, I tested Claude PowerPoint skills,[^3] a PowerPoint-generation MCP server,[^4] and other paid tools.[^5][^6] The open-source tools either produced quality that felt questionable for customer-facing material or made it difficult to revise exactly the part of a slide I wanted. The commercial tools generally produced good quality, but I could not use them when internal company material must not be exposed.
+I decided to build my own PowerPoint generator. One decision occupied much of my attention: who should execute the work that needs a model? The tool could call a model itself, or delegate that work to the coding agent the user already has.
 
-In the end, I decided to build my own vibe PowerPoint generator. I noticed several things while vibe coding it, and I will share one or two of them here.
+MCP, the Model Context Protocol, connects agents to external tools. Choosing to build an MCP server does not settle where the model runs. Here is what I learned while separating **the reason to build the tool from the choice of where to execute its model work**.
 
-## 1. Coding Has Little Value, and It Will Fall Further
+## 1. Identify the Unsolved Problem Before Implementing
 
-One thing I have been saying almost habitually lately is that the value of coding has fallen dramatically. Judging from my daily experience, I think that trend will continue downward.
+I often say that the value of coding itself is falling. What I experience is a declining cost of implementing the same feature. That makes me want to spend more time finding and validating what to build.
 
-If I stretch the idea slightly from coding to execution in general, execution now has less value than finding a meaningful problem. I therefore need to change how I think so that I spend more time finding and validating meaningful problems. As someone with the mindset of a traditional builder, this seems to require some training.
+Yet easier implementation makes me reach for the keyboard first. Even if execution costs less, it still consumes my time. Changing that traditional builder's habit takes practice.
 
-Perhaps the lower cost of execution actually makes me more likely to execute first. But the value of time has not changed, so I need to adjust how I think and spend that time on higher-value activities.
+For a business, I first look for `a problem worth paying to solve && a problem that has not yet been solved`. With the PowerPoint tool, precise editing and restrictions on sending material outside the company remained unsolved after I tried existing products. Those were my reasons to build it.
 
-There are many ways to define a meaningful problem, but I personally think it is `a problem worth paying to solve && a problem that has not yet been solved`. Most other problems are secondary and reduce the already diminished value of execution even further.
+I also feel that implementation complexity alone is becoming a weaker competitive advantage. An agent can investigate a service's visible behavior and inspect it with browser automation, reducing the cost of building similar features. Visible behavior, however, does not reveal every internal rule or lesson learned from operating the service.
 
-It is natural for a developer's hands to move toward code first. But as the value of coding falls, we need to practice holding back. **Let us ask one more time whether this truly needs to be built, and do much more research first.** Time has become the most important resource.
+That draws my attention toward unique customer data and how a service uses it. Copying screens does not tell you what actual customers want or which results they find useful.
 
-## 2. Complex Business Logic Is No Longer a Moat
+## 2. Decide Where the LLM Runs
 
-In the past, complex business logic itself was an important source of competitive advantage. Carefully designed logic was difficult to copy, and that became the service's moat. Advances in agent tools are breaking down that assumption. With agent tools such as deep research and Playwright, it has become entirely possible to analyze and reproduce a service's logic in detail. No matter how sophisticated the logic is, if an agent can observe and analyze its behavior, replication is only a matter of time.
+Once there is a clear reason to build, the next decision is who calls the LLM—a large language model—and manages execution.
 
-The data supporting that logic, however, cannot be copied. Only high-fidelity customer data acquired through agents remains genuinely impossible to reproduce. Accumulating this kind of data is what makes a service unique, and **competitive advantage is moving from implementation complexity to data uniqueness**.
+An MCP server or skill can make the tool available through an agent the user already uses. Here, I use offloading to mean **delegating LLM processing to that user's client**.
 
-## 3. The Form of Tools Is Changing
+I went through all three approaches below while building alps-writer,[^1] and intended to delegate LLM processing to the client in ppt-generator[^2] as well.
 
-As users change, the form of tools changes with them. Tools were previously developed and delivered mainly for developers. As Claude Desktop and vibe coding became more common, tools began to be built as MCP servers. Now Skills and plugins are becoming the mainstream approach.
+| Delivery approach | Where the LLM runs | What the tool handles |
+| --- | --- | --- |
+| A web service installed and run by the user | Inside the service | Web interface, model calls, and task state |
+| An MCP server that calls a model itself | Inside the MCP server | Model calls and result processing in response to tool requests |
+| Skills and MCP tools delegating execution to the client agent | In the user's client | Workflow instructions, state management, and data processing |
 
-Whether the tool is an MCP server or a Skill, the most important implementation decision is ultimately **whether to offload the LLM processing**.
+In the first two approaches, the provider controls the model and prompt flow. In the last, the user's existing agent handles reasoning, reducing the tool's burden of operating a separate model-calling path.
 
-For an MCP server, for example, the question is whether the server accepts an API key and calls the LLM itself, or whether a client such as Claude Code handles all LLM processing while the MCP server manages only state.
+Skills supply instructions for doing work; MCP connects tools. They can be used together. **How much direct control the model execution requires** has more impact on this design than the delivery format alone.
 
-The former was common when the target users were early-adopter developers. Recently, however, the number of non-developer and general developer users has grown, increasing cost pressure and making the latter approach—offloading LLM processing to the user's client—more common.
+## 3. Delegating Execution Reduces Control Over Its Conditions
 
-I went through all three approaches described below while building alps-writer,[^1] so I experienced the trial and error firsthand. I also tried to offload the LLM work in the ppt-generator[^2] I built this time.
+Offloading LLM processing can reduce the user's burden of configuring a model separately for each tool. It also means the provider cannot determine the entire execution environment.
 
-### Three Approaches to LLM Offloading
+### Conflicts with Existing Instructions
 
-1. **An installable web service that users must run themselves** — The server calls and processes the LLM directly. The user interacts through a web UI.
-2. **An agent-based MCP server with a third-party dependency** — The MCP server accepts an API key and calls the LLM directly. The user's client agent invokes the MCP server as a tool, but the actual LLM processing happens inside the MCP server.
-3. **The Claude Skills approach** — All LLM processing is offloaded to the client agent. The tool handles only state management and data processing, while prompts and workflow guidance direct the agent's behavior.
+A coding agent already has system instructions governing its role and behavior. The PowerPoint tool's instructions must operate within that environment.
 
-## 4. Problems with LLM Offloading
+Assigning a new role at length is not enough to obtain the desired behavior. Conflicting instructions can change how the task proceeds. The tool needs to specify its inputs, expected results, and next steps clearly.
 
-There are two major problems with LLM offloading.
+### Interruptions and Model Differences
 
-### System Prompt Conflicts
+The provider cannot always know the user's remaining execution allowance or how much information the client can process at once. State needs to be saved so work can resume after an interruption at any stage.
 
-It is difficult to make an agent perform the work I want when the client agent already has a strong system prompt holding it in place.
+With direct model calls, the provider can design caching around repeated prompt content. A client agent does not offer the same control over conversation construction and caching.
 
-This is the same reason behind the familiar advice, `Do not assign a role in an agent prompt.` A client agent such as Claude Code has already been assigned the role of coding agent through its system prompt. Adding another role in a prompt creates a conflict and reduces performance.
+Users also choose different models. A complex workflow tested with Claude Sonnet 4.6 needs separate validation on Gemini 3.1 Flash. Assuming that changing the model name is sufficient makes it hard to preserve the intended experience.
 
-No matter how general-purpose it is designed to be, the agent was still built for coding. Forcing it to behave as something else requires considerable effort.
+## 4. Define What the Tool Provider Still Owns
 
-### An Unpredictable Execution Environment
+Building these tools has made me feel that client agents are becoming part of the execution infrastructure. Instead of operating every model call and agent process ourselves, we can use capabilities supplied by the user's agent.
 
-LLM offloading itself can become a major obstacle.
+Cloud infrastructure does not disappear. Providing execution behind the scenes resembles serverless computing in that respect. The tool provider still needs to decide which responsibilities remain: state storage, file processing, and result validation, for example.
 
-First, I cannot know the remaining token budget, so I cannot know how far the work will progress before it stops. Every stage therefore has to be designed with interruption in mind.
+Adapting to model changes remains a responsibility, too. I left Cursor after feeling that its usability changed around the transition from Claude 3.5 v2 to 3.7. That experience made me wary of assuming a tool's instructions will keep working unchanged with external models.
 
-With prompt caching, I can optimize token usage by building the most efficient caching flow when I control the prompt and workflow. With an agent, I do not have that control.
-
-Model selection also depends on the user, so there is no way to guarantee that the tool will behave as its creator tested it. The probability that a `complex` prompt that worked well with Claude Sonnet 4.6 will behave the same way with Gemini 3.1 Flash is not high, though it will vary with the complexity of the prompt work.
-
-## 5. The Changing Role of Cloud Infrastructure
-
-After building several tools through this process, I began to think that the value proposition of cloud companies is changing.
-
-As offloading LLM processing to users' client agents becomes the mainstream approach, the traditional cloud proposition—which encourages customers to build their own agents and serve the infrastructure and models—will need a new form of support.
-
-Subscriptions to agent tools such as Claude Code, Codex, and Gemini are beginning to act as infrastructure in their own right. As these tools become available through the web, it feels as if **infrastructure abstraction is moving up another level**. Infrastructure is not disappearing. It is evolving into a form invisible to the user, which is also a natural extension of serverless computing.
-
-## 6. How Quickly Tool Providers Adapt to Models
-
-In this environment, the speed at which a tool provider adapts to changes in models is becoming increasingly important.
-
-When a new model behaves differently from the previous one, the tool must be aligned with it. A tool that depends on external models is much more likely to lose that connection.
-
-Cursor once took a major usability hit when Claude 3.7 arrived with a direction significantly different from Claude 3.5 v2, and many users left—I was one of them. Without a model of its own, a tool provider cannot obtain the insights that emerge from the internal training process, so it must always accept the risk of falling one or two steps behind the official tool. A multimodel approach such as Bedrock can be one strategy for reducing this risk.
-
-Further model advances may reduce these constraints, but for now they remain practical considerations.
+An environment offering several models, such as Bedrock, can help us try alternatives. Availability alone does not establish compatibility. For a PowerPoint tool, we should also be able to check whether the generated file opens and whether only the requested part was changed.
 
 ## Conclusion
 
-The form of tools is changing rapidly, and today's best choice can become tomorrow's legacy. The role of cloud infrastructure is changing with it, and the challenge ahead will be to find new areas of value that cannot be replaced by agent subscriptions. This seems like a time to spend more time finding meaningful problems and build only after validating them as thoroughly as possible.
+If I build another MCP server, I will first identify what existing tools leave unsolved. Then I will decide whether I need direct control over LLM execution or can delegate it to the user's agent.
+
+Delegating execution reduces what I need to build and operate. It makes resumable state and result criteria that remain checkable across models more important. **Deciding what to delegate and what the tool must own** is work to do before implementation begins.
 
 ---
 

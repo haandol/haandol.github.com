@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "Context Engineering — Static Context and Dynamic Context"
-excerpt: Context engineering for agentic development - static context vs dynamic context
+title: "Context Engineering — Letting Agents Handle the Work Between Requirements and Code"
+excerpt: Abstracting the work between requirements and code
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent context-engineering agentic-development vibe-coding prd adr
 publish: true
 lang: en
 date: 2026-03-11 00:00:00 +0900
-last_modified_at: 2026-09-11 16:33:32 +0900
+last_modified_at: 2026-10-11 10:07:19 +0900
 translation_key: context-engineering-static-vs-dynamic
 korean_url: /2026/03/11/context-engineering-static-vs-dynamic.html
 permalink: /en/2026/03/11/context-engineering-static-vs-dynamic.html
@@ -16,59 +16,81 @@ permalink: /en/2026/03/11/context-engineering-static-vs-dynamic.html
 
 ## TL;DR
 
-- PRDs and ADRs preserve criteria and constraints for future tasks.
-- Clean up temporary plans and exploration records once they are no longer needed.
-- Preserve code and tests as verifiable deliverables.
+- Organize context at the level needed for each decision.
+- Agents are taking on more of the work between requirements and code.
+- Separate lasting human decisions from task state managed by agents.
 
 ## Introduction
 
-As I work with agentic coding and vibe coding, I increasingly feel that we are returning to the essence of development: turning business requirements into code.
+Developing with agents makes me reconsider how much of the process between requirements and code a person needs to manage.
 
-I used to describe a framework that managed development context as a hierarchy that became progressively more concrete: [Requirement → Feature → Task → Code][^1].
+I used to describe a framework that organized development context into increasingly concrete layers: [Requirement → Feature → Task → Code][^1]. Requirements became features, features became tasks, and tasks became code.
 
-At the time, I thought it was important to divide the intermediate stages more finely, document more of them, and keep everything continuously up to date. Models and tools were weaker than they are now, so people had to manage more of the intermediate context themselves.
+At the time, I thought it was important to break down the intermediate stages, document them, and keep them up to date. Models and tools were less capable, so people had to oversee more of that process.
 
-My thinking has changed considerably.
+Watching agents find code and plan their work has changed my view. There is less need for a person to maintain every intermediate document. **Which information should last, and which steps of turning it into concrete work should the agent handle?** That has become the more useful question.
 
-## 1. Models and Tools Have Changed
+## 1. Intermediate Work Is Moving Into the Agent
 
-Models have become much smarter, and coding tools have advanced significantly. Agents can now find the information they need, create their own sequence of work, and construct the next execution path from the codebase on their own.
+TaskMaster and GSD (Get Shit Done) organize the work between requirements and code. TaskMaster breaks a product requirements document (PRD) into tasks and manages their dependencies and progress.[^3] GSD preserves requirements, plans, and state in files so development can continue across sessions.[^4]
 
-For that reason, I now think it is better to divide development context into **static context and dynamic context**.
+These tools address real needs. A large requirement is hard to implement in one step, and interrupted work needs a record of where it stopped. Better models do not make those needs disappear.
 
-## 2. Static Context
+What is changing is who handles them. Claude Code has a Plan Mode for inspecting code and proposing a plan, as well as tools for creating and updating task lists.[^5] Some planning and tracking capabilities supplied by separate tools now overlap with features built into the coding agent.
 
-Static context consists of criteria and constraints that persist across tasks. Static does not mean unchangeable; it means this information should outlast an individual work plan.
+I expect this absorption to accelerate. If an agent can read and modify code, then feed the results directly into its plan, a person has less work explaining those changes to another tool and reconciling its state. Better reasoning and tool use also let us entrust longer stretches of work to an agent.
 
-- A **product requirements document (PRD)** defines what must be built.
-- An **architecture decision record (ADR)** explains why a design was chosen and which constraints must be preserved.
+This does not mean every TaskMaster or GSD feature has already been replaced. What I consider transitional is **having people manually reconcile intermediate state across several tools**. I expect the creation of plans and state to become increasingly integrated into the agent's work.
 
-These are pieces of information that must remain available for reference throughout the life of a project. No matter how intelligent agents become, people still have to define and manage **what should be built** and **why the team decided to build it this way**. If those foundations shift, the agent will generate code in a different direction each time.
+## 2. Abstract the Criteria That Need to Last
 
-## 3. Dynamic Context
+Here, context means the requirements, design decisions, code, and task state an agent reads to make decisions. Abstracting that context means **organizing it at the level needed for the decision at hand**, while retaining the details that matter.
 
-Dynamic context is information we read and create while performing the current task. It includes both temporary execution records and deliverables that should remain.
+For example, when changing order cancellation, a person decides which orders can be canceled and which refund rules apply. The agent reads those rules and the current code, then plans which files to change and which tests to add. A change in editing order should not require redefining the refund policy.
 
-- **Tasks and exploration records** help organize and advance the current work. Temporary plans and search results that the next task does not need can be cleaned up.
-- **Code and tests** implement and validate requirements and constraints. They change during work but must remain in the repository after completion.
+I call information that persists across tasks **static context**. Static does not mean unchangeable. It means these criteria should outlast an individual work plan.
 
-Frequently changing information is not necessarily disposable. I think it is better to decide what to keep based on whether the next execution needs it and whether it can already be checked again in code and tests.
+- A **PRD** records what to build and which conditions it must satisfy.
+- An **architecture decision record (ADR)** records why a design was chosen and which constraints apply.
 
-## 4. Keep Temporary Execution Records Lightweight
+An agent can help draft and update these documents. People need to judge whether the business goals and constraints are right and keep those criteria consistent. This gives the agent a basis for choosing concrete steps without prescribing every task in advance.
 
-If agents keep reading plans and exploration records for completed tasks, context grows with each change. A summary of code that has already changed can also confuse decisions based on the current code.
+## 3. Let the Agent Manage the Details of the Current Task
 
-Clean up temporary records that the next task does not need, while retaining code and tests as deliverables. New requirements and lasting decisions made during work should be reflected in PRDs and ADRs.
+Applying those criteria to the current code requires locating changes, dividing the work, and checking results. The information read and created along the way is **dynamic context**: plans, exploration results, progress, code changes, and test results.
 
-There is no need to delete the state or unresolved issues needed to hand ongoing work to the next session. First check whether that information has served its purpose.
+In the order cancellation example, the agent might discover an unexpected dependency while reading the refund logic. It should update the work sequence using that code and the test results, rather than follow the original plan regardless of what it finds.
+
+{% raw %}
+```mermaid
+flowchart TB
+    R["Criteria judged by people<br/>Requirements · design reasons · constraints"] --> A
+    subgraph A["Intermediate work handled by the agent"]
+        READ["Find relevant code and documents"] --> PLAN["Break down work · update the plan"]
+        PLAN --> WORK["Implement · validate"]
+        WORK -->|Feed results back| PLAN
+    end
+    WORK --> C["Code · tests · state for continuing work"]
+    C -->|Read during the next task| READ
+```
+{% endraw %}
+
+People can then focus on whether the criteria and results are right, instead of maintaining every intermediate document. When requirements do not settle a policy question, the agent needs a person's judgment. That decision should remain available to future tasks.
+
+Dynamic context is not all disposable. Code and tests remain as deliverables; unfinished work and unresolved issues need to reach the next session. Cleaning up obsolete exploration records and temporary summaries that conflict with current code is part of managing this context.
 
 ## Conclusion
 
-I want to retain the requirements, decisions, code, and tests needed for future tasks, while cleaning up temporary plans and exploration records when they are no longer needed.
+I expect more task decomposition, planning, and state management between requirements and code to move into agents, and I expect that change to accelerate. The context people maintain should therefore make business intent and lasting decision criteria clear.
 
-For the retained code to help the next agent, it needs to reveal which workflow it handles. I discuss that in the [next post][^2].
+**A useful abstraction lets the agent decide the concrete steps.** I want to organize development around clear constraints and work I can delegate, rather than personally detailing every intermediate stage.
+
+The resulting code also becomes context for the next task. It needs to explain the business it implements so an agent can reconnect requirements with implementation. In the [next post][^2], I explore that idea as “screaming code.”
 
 ---
 
 [^1]: [RFTCR — A New SDLC Framework for Agent-Driven Software Development](/en/2025/05/11/rftcr-framework-for-agentic-dev.html).
-[^2]: [The Value of Developers Who Understand the Business in the Age of Agentic Development](/en/2026/03/13/agentic-dev-business-aligned-code.html).
+[^2]: [Good Code for Agents to Read — Code That Screams Its Business Purpose](/en/2026/03/13/agentic-dev-business-aligned-code.html).
+[^3]: [TaskMaster](https://github.com/eyaltoledano/claude-task-master) — requirements decomposition, task dependencies, and progress tracking.
+[^4]: [GSD](https://github.com/gsd-build/get-shit-done) — a development workflow that preserves requirements, plans, and state.
+[^5]: Claude Code's official documentation on [Plan Mode](https://code.claude.com/docs/en/common-workflows#plan-before-editing) and the [task list](https://code.claude.com/docs/en/interactive-mode#task-list). Task-tracking availability depends on the model and configuration.

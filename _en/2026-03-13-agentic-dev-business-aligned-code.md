@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "The Value of Developers Who Understand the Business in the Age of Agentic Development"
-excerpt: Helping agents find business meaning in code
+title: "Good Code for Agents to Read — Code That Screams Its Business Purpose"
+excerpt: Code that reveals business intent to the next agent
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development ddd business vibe-coding claude-code
 publish: true
 lang: en
 date: 2026-03-13 00:00:00 +0900
-last_modified_at: 2026-09-11 16:33:32 +0900
+last_modified_at: 2026-10-11 10:07:19 +0900
 translation_key: agentic-dev-business-aligned-code
 korean_url: /2026/03/13/agentic-dev-business-aligned-code.html
 permalink: /en/2026/03/13/agentic-dev-business-aligned-code.html
@@ -16,55 +16,81 @@ permalink: /en/2026/03/13/agentic-dev-business-aligned-code.html
 
 ## TL;DR
 
-- Business terminology in code helps agents locate what needs to change.
-- Knowledge of the business and organization matters when judging an agent's proposals.
-- As execution costs fall, deciding what to build becomes more important.
+- Code that explains its business intent matters in the age of agents.
+- Names and structure should reveal business concepts and rules.
+- Tests check that those rules hold in actual behavior.
 
 ## Introduction
 
-Now that Claude Code is available through Bedrock, I have been trying it for the first time, and GSD (Get Shit Done) seems to be widely used for managing project state. It keeps requirements, plans, and progress in documents that later tasks can read.[^2]
+I have been trying Claude Code for the first time now that it is available through Bedrock. GSD (Get Shit Done), a tool for managing project state, caught my attention. It records requirements, plans, and progress in documents that later tasks can read.[^2]
 
-Unlike tools such as TaskMaster or todo lists that track work within a session, I personally think managing development progress through documents, as GSD does, is a transitional technology.
+It made me think about who will manage the intermediate work between requirements and code. In the [previous post][^1], I argued that as planning and task tracking become part of the agent, people will have less intermediate state to reconcile manually.
 
-Code that reveals what it does helps an agent understand current behavior. That is also why I suggested in the previous post[^1] cleaning up temporary execution records while retaining code and tests: the current state can be checked again in those artifacts.
+An agent taking on more of that work also needs to read the current code to decide what has already been implemented. If the code obscures its business intent, the agent must first infer how requirements relate to implementation.
 
-Separate summary documents can miss updates or omit necessary details. If the agent must read the relevant code when making changes anyway, I start asking whether continuously maintaining a summary is worth the cost.
+That makes me interested in what good code should look like in the age of agents. **Code that explains its business purpose to the next agent reading it**—code that screams its business purpose.
 
-Then how can we make an agent understand the business simply by reading the code?
+## 1. Code Can Reveal the Business, Just as Architecture Can
 
-## 1. Aligning Business Processes and Code
+Robert C. Martin's “Screaming Architecture” argues that a repository's structure should reveal what the system does. In an accounting system, the accounting should be apparent before the web framework.[^3]
 
-To find the code to modify, an agent needs to connect business terms in the requirements to names in the code. **The more clearly the code shows which workflow it handles, the easier that connection becomes.**
+I think this perspective becomes important for code read by agents, too. If a requirement mentions “order cancellation” and “refund policy,” but the code presents only `Manager`, `Processor`, and `handle`, the agent has to locate and interpret the relevant files one by one.
 
-I think Domain-Driven Design (DDD), which organizes software around business concepts and rules, may become more important in requirements analysis and design. Domain experts and developers share words that also appear in class and method names—an approach called ubiquitous language. Those names give agents clues for connecting a business request to code.
+Names such as `OrderCancellation` and `RefundPolicy` provide a starting point for connecting business concepts with code. If the cancellation code visibly calls the refund policy, the workflow becomes readable along with the names.
 
-For example, given a request to change the refund policy for order cancellations, names such as `OrderCancellation` and `RefundPolicy` provide clues to the relevant logic. The agent still needs to read the code connected to those objects and verify the revised policy with tests.
+**Screaming code should reveal business concepts, rules, and their relationships.** Long comments explaining the implementation are not enough. Names must match actual responsibilities so the next change can rely on them.
 
-When business logic is scattered or names differ from business terminology, an agent may miss relevant code or create duplicate logic. I therefore think making the connection between workflows and code explicit also helps when developing with agents.
+## 2. Connect the Language of Requirements to Code and Tests
 
-## 2. Agents Propose, Humans Decide
+Domain-Driven Design (DDD), which organizes software around business concepts and rules, helps establish this connection. A starting point is “ubiquitous language”: using terms agreed on by domain experts and developers with the same meaning in code.[^4]
 
-Agents are often used only to execute work proposed by a person. But if you give the agent the role of proposing work as well as executing it, then provide feedback on those proposals as you proceed, you can see results that exceed expectations.
+For example, suppose a requirement says, “Canceling an order before shipment gives a full refund.” An agent modifying this policy should be able to connect three things.
 
-In the future, the knowledge that people will continue to understand better than agents will probably be domain knowledge and operational knowledge about the organization. A good developer may ultimately be someone who gives an agent enough domain information, lets it produce three or four proposals, and then makes a judgment informed by the organization, including the team's capabilities and the direction of the business.
+- **Names**: Find the cancellation and refund responsibilities in `OrderCancellation` and `RefundPolicy`.
+- **Structure**: Follow cancellation through the shipment-status check and application of the refund policy.
+- **Tests**: Distinguish cancellation before and after shipment to check the results against the policy.
 
-As agents take on more implementation and refactoring, I expect to spend more time deciding what to change. That requires understanding the domain and organizational circumstances, and communicating those decisions precisely to the agent.
+{% raw %}
+```mermaid
+flowchart TB
+    REQ["Requirement<br/>Full refund for cancellation before shipment"] --> CANCEL["OrderCancellation<br/>Check cancellation conditions"]
+    CANCEL --> POLICY["RefundPolicy<br/>Determine refund amount"]
+    POLICY --> TEST["Tests<br/>Compare behavior by status with requirements"]
+    REQ -.Validation criteria.-> TEST
+```
+{% endraw %}
 
-## 3. What Changes as Execution Costs Fall
+When the same business rule is copied into several places, good names alone do not make it clear which implementation to change. Keeping a responsibility in one place and making its connections to other workflows explicit helps reveal the scope of a change.
 
-Over the past few years of developing with AI, the cost of execution has steadily fallen. As a result, I have experienced having time for things I otherwise would not have done.
+Tests that merely repeat the implementation can also accept the wrong policy. They need to check the outcomes required by the business so we can trust both what the code says and what it does.
 
-Documentation, refactoring, and optimization are representative examples of work that is hard to make time for ordinarily but has become easy to try with AI. This effect is also expanding beyond code.
+## 3. Preserve Intent That Cannot Be Recovered from Code
 
-Even when execution costs fall, someone must decide which changes are needed and which should take priority now. I want to solicit the agent's proposals and use human knowledge to judge whether they fit the domain and the organization.
+Code shows how the system behaves now. It rarely explains why a policy was chosen, why alternatives were rejected, or what should be built next.
+
+For example, reading the refund calculation reveals the current policy. It may not reveal whether that policy follows a customer promise or a constraint imposed by an external payment system. Those reasons belong in requirements documents or architecture decision records (ADRs).
+
+Separate code summaries can miss updates or omit necessary detail. If an agent must read the code to confirm current behavior anyway, making the business understandable there is a worthwhile investment. I would use documentation to preserve intent and constraints that are difficult to reconstruct from code.
+
+This continues the context abstraction discussed in the previous post. People manage business goals and decision criteria; the agent connects those criteria to code responsibilities and plans the work. Clearer code reduces the effort of rebuilding intermediate summaries for the next task.
+
+## 4. Refactor with the Next Agent in Mind
+
+Over the past few years of developing with AI, I have felt execution costs steadily decline. I have more room to attempt documentation, refactoring, and optimization that I used to postpone. That change is also spreading beyond code.
+
+I want to use some of that room to clarify the relationship between business concepts and code. An agent can look for names used with different meanings or business rules scattered across the relevant code, then propose ways to organize them.
+
+People need to judge whether those proposals fit the business and organization. The same term can mean different things in different teams or workflows, so similar names do not automatically justify merging implementations. If an agent proposes three or four approaches, we can choose with the team's capabilities and business direction in mind, then reflect that choice in code and tests.
 
 ## Conclusion
 
-AI has given me room to attempt documentation and refactoring that I used to postpone. I also want to use that time to clarify the connection between business terminology and code.
+As agents take on more of the work between requirements and code, the next agent performing a task becomes one of the code's readers. Helping it avoid reconstructing the business from guesses will become an important criterion for good code.
 
-When evaluating an agent's changes, I want to start with which workflow is changing and why. As more things become feasible to execute, I think the domain knowledge needed for that judgment will matter more.
+I want names and structure that make the business readable, with tests that check its rules. **Just as screaming architecture reveals a system's purpose, screaming code explains the business it handles.** That code is easier for people to read and easier to entrust to an agent for the next change.
 
 ---
 
-[^1]: [Context Engineering — Static Context and Dynamic Context](/en/2026/03/11/context-engineering-static-vs-dynamic.html).
-[^2]: [GSD README](https://github.com/gsd-build/get-shit-done/blob/main/README.md) — a tool that preserves requirements, plans, and state in documents to carry work context across sessions.
+[^1]: [Context Engineering — Letting Agents Handle the Work Between Requirements and Code](/en/2026/03/11/context-engineering-static-vs-dynamic.html).
+[^2]: [GSD](https://github.com/gsd-build/get-shit-done) — a development workflow that preserves requirements, plans, and state in files.
+[^3]: Robert C. Martin, [Screaming Architecture](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html) (2011.09.30). “Screaming code” is my application of that perspective to code read by agents.
+[^4]: [What to Know When Starting to Learn DDD](/2021/10/11/thoughts-for-ddd-starters.html) (Korean).

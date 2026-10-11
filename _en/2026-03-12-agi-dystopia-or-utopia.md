@@ -8,7 +8,7 @@ tags: ai agi asi dystopia utopia competition
 publish: true
 lang: en
 date: 2026-03-12 00:00:00 +0900
-last_modified_at: 2026-09-11 16:33:32 +0900
+last_modified_at: 2026-10-11 10:08:00 +0900
 translation_key: agi-dystopia-or-utopia
 korean_url: /2026/03/12/agi-dystopia-or-utopia.html
 permalink: /en/2026/03/12/agi-dystopia-or-utopia.html
@@ -42,6 +42,8 @@ Most causes of failure are already well known. The important thing is therefore 
 
 I think success is closer to the result you obtain after refusing to give up on that process.
 
+What if participants in the AGI race reason similarly? If they worry about surviving after falling behind, as well as the gains from arriving first, they may struggle to stop competing even when success is uncertain.
+
 ## 2. The AGI Race Is Becoming an Infinite Game
 
 I worry about AGI competition extending beyond individual companies and hardening into something like an ideological contest between the United States and China. After committing enormous resources, stopping first may look like falling behind. I see it as a game that is difficult to end: participants keep investing to avoid being eliminated, rather than settling on a winner.
@@ -66,9 +68,11 @@ The utopian scenario I imagine, by contrast, looks different. It is a world in w
 
 Everyone would then keep running because "it might still be possible." In the end, however, many companies would burn through their capital and collapse. Only the few players able to keep raising capital would continue the research, yet they would never reach AGI.
 
-I think this scenario may be more utopian than one side monopolizing a decisive advantage.
+Capital could still concentrate in a few companies. The difference from the earlier scenario is that no participant has obtained AGI and can use it to prevent others from catching up. If tools and services developed along the way remain available to other companies and individuals, people can use the technology without competing in the race themselves.
 
-Even without reaching AGI, I think the technology developed along the way can continue to be useful in business and software development. Today's LLMs already let us attempt things that used to be difficult.
+It is a future under those conditions that I find more utopian. Failing to reach AGI does not automatically distribute the benefits of the technology widely.
+
+Even without reaching AGI, I think the technology developed along the way can continue to be useful in business and software development. Today's large language models (LLMs) already let us attempt things that used to be difficult.
 
 ## Conclusion
 
@@ -76,4 +80,4 @@ That is why I think **the process of reaching AGI and the competitive structure 
 
 Even so, I would personally like to see ASI at least once.
 
-So if there is a scenario in which AGI unfolds in a somewhat less dystopian way than total catastrophe, I would like to see the future move in that direction.
+Apart from that curiosity, I want a future in which arriving first does not let one side close off everyone else's possibilities. That is why a question about reaching AGI leads me to talk about the structure of competition.

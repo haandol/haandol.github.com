@@ -8,7 +8,7 @@ tags: ai agent multi-agent harness-engineering context-engineering agentic-devel
 publish: true
 lang: en
 date: 2026-03-31 00:00:00 +0900
-last_modified_at: 2026-09-11 16:33:32 +0900
+last_modified_at: 2026-10-11 10:08:00 +0900
 translation_key: multi-agent-without-harness-is-just-context-engineering
 korean_url: /2026/03/31/multi-agent-without-harness-is-just-context-engineering.html
 permalink: /en/2026/03/31/multi-agent-without-harness-is-just-context-engineering.html
@@ -16,7 +16,7 @@ permalink: /en/2026/03/31/multi-agent-without-harness-is-just-context-engineerin
 
 ## TL;DR
 
-- Each agent should be able to validate its work and recover from failures.
+- Each agent needs a path for validating results and handling failures.
 - Divide tool and context boundaries to match each role.
 - Stabilize one execution unit before increasing the number of agents.
 
@@ -24,7 +24,7 @@ permalink: /en/2026/03/31/multi-agent-without-harness-is-just-context-engineerin
 
 Reading Anthropic's article on designing harnesses for long-running agents[^1] helped me reorganize questions I had long held about multi-agent systems.
 
-Something had bothered me ever since I first heard the phrase "agent swarm." Does connecting several agents really improve performance dramatically? Human developers do not always reach better conclusions simply because more of them gather to discuss a problem, so why would agents be different? Today's LLMs are also fairly stubborn. Can they really complement one another just because we assign them different roles?
+Something had bothered me ever since I first heard the phrase "agent swarm." Does connecting several agents really improve performance dramatically? Human developers do not always reach better conclusions simply because more of them gather to discuss a problem, so why would agents be different? Today's large language models (LLMs) are also fairly stubborn. Can they really complement one another just because we assign them different roles?
 
 Earlier posts covered context engineering[^2] and harness engineering[^3] separately. This time, I want to connect those two perspectives and examine when multi-agent systems have real meaning—and when they are merely context engineering at a larger scale.
 
@@ -44,8 +44,8 @@ When building a multi-agent system, the first thing I want to check is **whether
 
 When dividing coding work among agents, I think we need to design the tools and information each can use, what happens after failure, and how results will be checked, alongside their role names. Creating an agent does not automatically provide these procedures.
 
-- **Tool boundaries**: Separate the tools each agent can access. For example, a coding agent gets the file system and a linter; a testing agent gets the test environment and coverage tools; a review agent gets diff tools and architecture-validation rules.
-- **Recovery loops**: Each agent should be able to recover from failures in its area. A coding agent fixes lint failures automatically; a testing agent analyzes failed tests and reports their causes.
+- **Tool boundaries**: Define the tools and access scope each agent needs for its work. For example, a coding agent gets the file system and a linter; a testing agent gets the test environment and coverage tools; a review agent gets diff tools and architecture-validation rules.
+- **Recovery loops**: Define who handles a failure. A coding agent can revise code after a lint failure; a testing agent can record the failing conditions and return them to the agent responsible for the fix. An agent assigned only to validation does not also need to edit code.
 - **Validation**: Before passing one agent's output to the next, check it with tests or architecture checks. Record conditions that could not be verified so the next stage can see them.
 - **Context boundaries**: Share common goals and requirements while defining the information and scope each role needs. Agents can read the same material and still perform different work and checks. Copying every exploration record, however, can pass along irrelevant information and errors in earlier judgments.
 
@@ -53,11 +53,13 @@ These four elements help agents **take responsibility for their own work and val
 
 ## 3. What to Do Before Adding More Agents
 
-At this point, increasing the number of agents matters less than **designing a harness that lets one agent work reliably to completion**.
+With these conditions in place, the reasons for dividing roles become more concrete. Agents might change separate modules in parallel, or a separate agent might review a result without inheriting the implementer's reasoning. Even if each change passes on its own, their combined behavior still needs checking.
 
-Can a single agent complete a long-running task reliably with linters, CI, structural tests, and retry loops? Only when the answer is "yes" does adding a second agent become meaningful.
+Before adding agents, I therefore want **an execution unit that can accept a task and produce a result we can check**.
 
-As Anthropic's article on harness design for long-running agents emphasizes,[^1] **limiting the agent to one feature at a time, recording state at the end of every session, and helping the next session understand the previous work quickly** are central to making even one agent reliable. Without this foundation, adding more agents merely combines unstable units into an even less stable system.
+First, check how linters, automated tests, and retry paths connect within one task. Then ask whether parallel execution or separate review provides more value than the cost of handing work over and integrating the results.
+
+As Anthropic's article on harness design for long-running agents emphasizes,[^1] **limiting the agent to one feature at a time, recording state at the end of every session, and helping the next session understand the previous work quickly** are central to making even one agent reliable. That case shows how work can continue across sessions. It does not establish whether concurrent agents perform better; the value of dividing roles needs to be checked on the work being assigned.
 
 ## Conclusion
 
@@ -68,5 +70,5 @@ If that path cannot be explained, I think it is better to strengthen tools and v
 ---
 
 [^1]: [Anthropic — Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
-[^2]: [Context Engineering — Static Context and Dynamic Context](/en/2026/03/11/context-engineering-static-vs-dynamic.html).
+[^2]: [Context Engineering — Letting Agents Handle the Work Between Requirements and Code](/en/2026/03/11/context-engineering-static-vs-dynamic.html).
 [^3]: [Demystifying Harness Engineering](/en/2026/03/15/harness-engineering-beyond-context-engineering.html).
