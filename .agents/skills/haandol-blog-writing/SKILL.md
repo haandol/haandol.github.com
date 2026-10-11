@@ -11,7 +11,7 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 
 1. Read the entire target post or supplied material. Identify the reader's question, the author's answer, the audience, and which claims are observations, inferences, or proposals. For review-only requests, use [haandol-blog-review](../haandol-blog-review/SKILL.md) in report-only mode.
 2. Read 2-4 related recent posts before changing definitions, terminology, or the author's recurring argument. Also compare at least two older author posts for voice; reuse suitable posts already read. Note their paths and relevant recurring traits so the review can assess the author's style against actual passages. Current user preferences take priority over old habits. Bring any necessary context from references into the article, then cite its source; follow **Make Each Article Self-Contained** below.
-3. Draft toward that question and answer. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it. Before drafting the introduction or starting a new episode or topic, apply **Establish the Reader's Context** below.
+3. Draft toward that question and answer using **Keep One Argument from Opening to Conclusion** below. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it. Before drafting the introduction or starting a new episode or topic, apply **Establish the Reader's Context** below.
 4. Apply "Remove AI Slop" and "Write for Junior Developers and Interested Non-Developers" while composing, not only after drafting. Edit paragraphs and diagrams together so they express the same causal model.
 5. After completing the Korean text, create or update its complete English version in the same task without waiting for a separate translation request. Follow **Complete Both Language Versions** below.
 6. After every draft, prose revision, or translation, read and execute [haandol-blog-review](../haandol-blog-review/SKILL.md) across its six evaluation axes. These cover sentence naturalness, flow, theme and composition, grounded explanation, AI slop, and author voice; the review skill defines them in one place. Cover both whole articles, including titles, excerpts, TL;DR, headings, diagrams, conclusions, and footnotes, and compare their meaning. Let the LLM judge passages in context rather than enforce scores or phrase counts. List findings, apply supported fixes within the user's scope, and re-review without asking for routine approval. This also applies to blog copy written in conversation.
@@ -28,6 +28,8 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 
 ## Build The Argument
 
+When writing about context abstraction, agents taking over intermediate development work, or code that explains business intent, read [the author's agentic-development thesis](references/agentic-development-thesis.md). It records the confirmed position behind the March series; apply it within that topic and defer to the current brief.
+
 - State the problem before naming the framework proposed to solve it.
 - Do not use framework terms before defining them. In an introductory section, explain the underlying concept without later labels such as `Shape`, `AHEAD`, or `LEVER`.
 - Keep an overview section concise. Move mechanisms, examples, organizational roles, and diagrams into a later detail section.
@@ -38,6 +40,13 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
   `evaluation criterion -> locally rational behavior -> organizational consequence`.
 - When a diagram or paragraph contrasts approaches, show both the failure mode and the proposed correction.
 - Treat boundaries carefully. Do not assume team, system, domain, and bounded-context boundaries coincide.
+
+### Keep One Argument from Opening to Conclusion
+
+- Establish the author's intended claim from the brief before choosing the title or outline. Check the opening's question, the explanation that develops it, the example or change in perspective that advances it, and the conclusion's answer. Use 기승전결 to check progression, not to require four sections or an artificial twist.
+- Make each section contribute to that answer. A useful side observation can remain, but connect its consequence to the main question. Do not let a discussion of good code end as an essay on developers' career value, or let a design decision end as an unrelated industry forecast.
+- When the draft has drifted, repair the reasoning and emphasis before aligning the title, excerpt, TL;DR, and conclusion. Do not rename the article around an accidental detour to make it appear consistent. Narrow unsupported factual claims without replacing the author's stated thesis with housekeeping advice or generic caution.
+- Give each installment in a series its own question and answer. Explain the premise it inherits, then develop the additional claim it owns. For a batch review or revision, assess every article individually; a shared topic does not justify giving them all the same conclusion.
 
 ### Establish the Reader's Context
 

@@ -20,7 +20,9 @@ Finish with a post that answers its intended reader's question in the author's v
 
 ## 1. Establish The Review Context
 
-Write a short review anchor: the reader's question, the author's current answer, the intended audience, and the kind of article (for example, a personal essay or a practical walkthrough). Infer this from the brief and article when clear; do not ask the user to repeat known context.
+Write a short review anchor: the reader's question, the author's intended claim, the claim the current draft actually develops, the intended audience, and the kind of article (for example, a personal essay or a practical walkthrough). Keep intended and actual claims distinct when they differ. Infer them from the brief and article when clear; do not ask the user to repeat known context.
+
+For context abstraction, agents taking over intermediate development work, or code that explains business intent, read [the author's agentic-development thesis](../haandol-blog-writing/references/agentic-development-thesis.md). Use it to recognize drift within that topic, not to impose that thesis on unrelated articles or override the current brief.
 
 Use the older author posts required above to identify a few recurring voice traits relevant to this article: paragraph rhythm, directness of opinion, how examples enter the explanation, vocabulary, and emphasis. Record the reference post paths and the observed traits. Reuse the writer's existing comparison when available. Compare representative passages, not just titles or word counts; do not infer the author's style from recent AI-related posts alone.
 
@@ -48,6 +50,13 @@ Use the writing skill's **Three Layers To Check While Writing** as examples of s
 Do not assign numerical scores, weights, sentence-length quotas, banned-word counts, or an “AI probability.” Do not require every axis to yield a finding. Judge a defect by the passage's role and effect on this reader, and explain the evidence for that judgment. Preserve a coherent author opinion even when another opinion is possible; do not replace the topic or erase useful detail merely to shorten the article.
 
 Search may locate candidates but cannot establish a defect or a pass. Do not add slang, deliberate errors, forced humor, or fabricated anecdotes to simulate human writing.
+
+### Check the Whole Argument Before Polishing Sentences
+
+- Read the opening's question and conclusion together, then trace the body that connects them. Explain what the reader learns between the two. Repeating the right thesis in the TL;DR and ending does not repair a body that develops a different claim.
+- Use 기승전결 as a reasoning check: a situation raises a question, the body develops it, an example or change in perspective adds something, and the ending answers it. Do not require fixed section counts, a dramatic reversal, or a personal anecdote in every article.
+- Judge thesis drift under the existing severity criteria. Replacing the author's central position can be High even when every sentence reads naturally; a missing bridge or distracting passage can be Medium while the main claim remains recoverable. Locate the change of subject and its effect rather than assigning severity from a phrase alone.
+- For each article in a series or batch, state its own question, resulting answer, and at least one consequential transition. Recheck this relationship after revisions and in the English version. Keep useful qualifications, but check that factual caution has not displaced the opinion the author asked to express.
 
 ### Read the Transitions as a First-Time Reader
 
