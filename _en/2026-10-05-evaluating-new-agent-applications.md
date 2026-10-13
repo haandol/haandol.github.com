@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "How I Added Evaluations to EncBird — An Agent App Playbook"
-excerpt: From a failed conversation to a repeatable evaluation
+title: "How Do You Evaluate AI That Remembers Users? — Memory and Conversation in EncBird"
+excerpt: Building evaluations around memory and conversation failures in EncBird
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent evaluation encbird tracing llm-as-a-judge
 publish: true
 published: true
 date: 2026-10-05 10:55:17 +0900
-last_modified_at: 2026-10-13 16:41:50 +0900
+last_modified_at: 2026-10-13 22:31:30 +0900
 lang: en
 translation_key: evaluating-new-agent-applications
 korean_url: /2026/10/05/evaluating-new-agent-applications.html
@@ -17,287 +17,188 @@ permalink: /en/2026/10/05/evaluating-new-agent-applications.html
 
 ## TL;DR
 
-- I stored failed conversations as inputs and acceptance criteria.
-- I separated format checks from semantic evaluation.
-- I compared improvements and side effects on the same cases.
+- Memory errors can carry into later conversations.
+- I preserved cases and criteria that reproduce unwanted behavior.
+- Evidence from each stage helps locate the fix.
 
 ## Introduction
 
-[EncBird](https://encbird.com), the service I run, helps learners practice expressing their thoughts in English. In DiaryChat, a learner writes about their day in English, and a coach provides a follow-up question and corrections.[^1]
+[EncBird](https://encbird.com), the service I build and run, helps learners practice expressing their thoughts in English. Learners collect expressions in a dictionary and use them in conversations based on diaries, photos, and roleplay.[^1]
 
-One conversation in the DiaryChat evaluation dataset goes like this: the learner describes visiting a cafe with their wife and explains why they ordered an iced latte. The model then asks what their wife ordered.[^2]
+When building an app like this, natural English responses are an obvious place to start checking quality. But once the app remembers what a learner said and uses it in later conversations, some problems become difficult to spot in a single reply. It might remember a roleplay occupation as the learner's real job, or keep bringing up an old employer after the learner has changed jobs.
 
-The question is grammatical and related to the conversation. But a sequence of questions like this turns practice expressing thoughts into a list of drink orders. “The response sounds natural” was not enough to catch that problem.
+Accurate memory does not guarantee useful practice, either. If a learner has already explained a choice and its reason, repeatedly asking for incidental details can produce a conversation that is grammatical but unappealing to continue.
 
-I built an evaluation dataset and runner in EncBird to check behavior like this. **I saved conversations that reproduce failures, wrote down the expected behavior, and made it possible to rerun models on the same inputs for comparison.**
+I built evaluations for EncBird to check memory and conversation behavior repeatedly. Here, an evaluation means **supplying the same conversation and memories, then checking whether the expected behavior follows**. This post explains the problems that made evaluation necessary and how I organized evaluations around them.
 
-This playbook presents that implementation in an order someone building their first evaluation can follow. It takes the cafe conversation from an evaluation case through automated judgment and result comparison. The dialogue comes from a synthetic regression case and the model output preserved with it in the repository. Numerical examples later in the post are hypothetical.
+## 1. How EncBird Remembers a Conversation
 
-{% raw %}
-```mermaid
-flowchart LR
-    A["Define the behavior<br/>Inputs and criteria"] --> B["Build evaluators<br/>Format and meaning"]
-    B --> C["Compare on the same inputs<br/>Baseline and candidate"]
-    C --> D["Keep failures for future evaluation<br/>Refine cases and criteria"]
-    D --> A
-```
-{% endraw %}
+EncBird's DiaryChat lets learners talk about their day in English. PictoChat starts a conversation from a photo, while FreeChat provides a partner in a given scenario. Their starting points differ, but they share a goal: helping learners use English at a level and in a situation that suits them.
 
-## 1. Turn One Conversation into an Evaluation Case
-
-### 1-1. Translate the Product Goal into Observable Conditions
-
-I scoped the evaluation to **generating one next response from a fixed conversation history**. Keeping the history fixed makes it easier to identify which inputs produce different behavior after a change.
-
-DiaryChat helps learners express experiences and thoughts about their day in English. Getting long or advanced answers is not the goal in itself. I broke that intent into conditions we can check in a conversation.
-
-| Area | Expected behavior |
-| --- | --- |
-| Conversation progress | Help the learner express one relevant thought without asking again for information they have already explained |
-| Response burden | Ask at the learner's level and accept short, meaningful answers |
-| Corrections | Repair only what needs correction, preserving subject, negation, tense, and uncertainty |
-| Closing | When the server marks the final turn, close without another question or task |
-
-Those conditions make the cafe problem concrete. The learner has already explained their choice and its reason. The next question has no need to collect another drink order.
-
-I also added a condition to DiaryChat's current criteria: once an activity has been sufficiently discussed, move to another part of the day or a topic the learner chooses. Being related to the conversation is not a reason to keep probing details of the same activity.[^2]
-
-### 1-2. Store the Context Before the Failure Separately from the Criteria
-
-Here is an abbreviated view of the cafe history. The coach rows translate only the question portions of the original Korean messages.
-
-| Turn | Message |
-| --- | --- |
-| Learner | I went to a cafe with my wife today. |
-| Coach | Could you write in English about what you ordered at the cafe? |
-| Learner | I ordered an iced latte. |
-| Coach | Could you write in English about why you chose that drink? |
-| Learner | It was hot, and I wanted something cold without much sweetness. |
-
-I ended the evaluation input here. The stored next response—“Could you write in English about what your wife ordered at the cafe?”—remained evidence of the failure. I did not show it to the model generating a new response.
-
-Supplying only the last sentence would change the task. The preceding questions and answers establish that the learner has already discussed the order and their reason. I also preserved context used in the actual request, such as proficiency level and the time.
-
-Each case keeps four groups of information. In the JSON, these are organized under fields such as `input`, `reference`, and `provenance`.[^2][^3]
-
-| Material | What the cafe case preserves |
-| --- | --- |
-| Input | Proficiency level, preceding conversation, current learner message |
-| Criteria | Avoid repeating the same explanation; offer an appropriate opportunity to express a thought |
-| Provenance | Whether the dialogue is synthetic or drawn from actual records, and the failure it reproduces |
-| Case management | Case ID, source group, development/validation split, evidence supporting the criteria review |
-
-I did not fix the answer to one particular question. Several follow-ups may be appropriate in the same situation. The cafe case therefore leaves `reference.output` empty and records allowed and prohibited behavior in `reference.criteria`.
-
-To apply this to a new app, choose one failed response and separately save **the input immediately before it and the conditions that explain why it failed**. You can preserve both even when writing a single correct answer is difficult.
-
-### 1-3. Add Normal Cases and Exceptions to Make a Small Dataset
-
-Alongside the cafe case, I included situations that require clarification. They distinguish when to ask a follow-up from when to move on.
-
-The dataset containing this case, `diary-thought-expression.json`, also includes short but meaningful answers, ambiguous references, learners who cannot think of anything to say, topic changes, and closing turns. As of October 13, 2026, it contains 14 synthetic cases, all assigned to development.[^2]
-
-For example, if context does not establish what “it” refers to in “I liked it,” clarification is useful. Asking again for a reason the learner has already explained is repetition. Including both prevents a crude fix that bans every follow-up on the same topic.
-
-I used this dataset for regression testing: checking whether a new change breaks existing behavior. Its purpose differs from a representative sample of users or a validation dataset whose answers have all been labeled by people.
-
-## 2. Turn the Criteria into Automated Evaluators
-
-### 2-1. Check Format in Code and Judge Meaning Separately
-
-An evaluator is code or a model that checks an expected condition. In DiaryChat, the visible conversation and the correction tool output are separate results, so I treated them separately.
-
-The model writes a conversational reply first, then calls `provide_feedback` once. I required `feedback.original` to contain the complete latest learner message unchanged, and valid writing to remain free of unnecessary corrections.[^4]
-
-| Conditions code can check | Conditions that require reading for meaning |
-| --- | --- |
-| Tool call order, count, and required fields | Does the question repeat something already explained? |
-| Exact match between `feedback.original` and source input | Is the correction necessary, and does it preserve meaning? |
-| Existence and overlap of source spans to correct | Does the question provide a suitable opportunity to express a thought? |
-| Closing state reflected in the request | Does the final response assign a new task? |
-
-Code can count question marks, but a sentence with one question mark may ask the learner to do three things. For conditions like this, I supplied a language model with the input, result, and criteria together. This is **LLM-as-a-Judge**; I refer to the model making the judgment as the judge.
-
-For the cafe case, I set `judgmentTarget: conversation`. The runner first checks whether the tool output has a valid format, then has the judge evaluate the coach's conversational text. The semantic quality of corrections is outside this case's score.[^3]
-
-### 2-2. Give the Judge Product Intent and Evidence of Failure
-
-“Evaluate whether this is a good answer” does not explain what good means for EncBird. I combined the actual input, generated answer, product intent, and case-specific criteria in the judge's input.
-
-A concise version of the cafe criteria reads like this:
-
-> The learner has already described the cafe visit, drink choice, and reason. Do not ask for the same explanation or merely collect more order details. Offer one opportunity to express a thought at the learner's level. Respect requests to change the topic and allow necessary clarification. On the final turn, close without a new question.
-
-A set of criteria specifying both the behavior and its exceptions is a rubric. If two people read it and reach different judgments, examine that disagreement before changing the judge model.
-
-I built EncBird's runner with the evaluation library DeepEval to return 1 when the criteria are satisfied, or 0 and a reason for a concrete violation. It treats text inside the input and model output as material to evaluate, rather than instructions to follow.[^3]
-
-### 2-3. Check Judgment Evidence on a Sample
-
-**Executing an evaluator does not establish that its judgment is correct.** If a person identifies a repeated question that the judge passes, read the judge's reason. It may have missed earlier dialogue or accepted relevance alone as success.
-
-To validate a judge, a person separately reviews flagged failures, ambiguous cases, and a sample of automatic passes. Suppose a human-labeled sample of 20 failures and 80 successes produces the following results.
-
-| Human judgment | Judge also says failure | Judge says success |
-| --- | --- | --- |
-| 20 failures | 16 | 4 |
-| 80 successes | 8 | 72 |
-
-Overall agreement is `(16 + 72) / 100 = 88%`. For a failure detector, recall—the share of actual failures found—is `16/20 = 80%`. Precision—the share of failure alerts that are correct—is `16/(16+8) ≈ 66.7%`. Reading the four missed failures and eight false alerts helps narrow down what needs repair.
-
-Cases examined while revising the criteria become development material. Use a separate sample for the final check, keeping turns derived from one diary in the same split. I added source-group splitting to EncBird's data preparation tools for this purpose. The 14 development cases above do not, by themselves, establish that the judge has been validated.[^3]
-
-### 2-4. Pair the Improvement Metric with Checks for Side Effects
-
-If the only goal is fewer repeated questions, a model could score better by dropping questions or ending conversations early. I therefore included appropriate expression opportunities, the learner's wish to change topics, and closing conditions alongside repetition in the criteria.
-
-A metric that checks whether improving the target damages another quality is a **tension metric**. This playbook pairs them as follows.
-
-| Behavior to improve | Primary metric | Tension metric |
-| --- | --- | --- |
-| Avoid requesting the same explanation again | Repeated-question failure rate | Rate of removing expression opportunities or ending sessions early |
-| Correct genuine English errors | Share of actual errors corrected accurately | Unnecessary correction rate on valid writing; meaning distortion rate |
-| Respect final turns | Rate of adding a task on the final turn | Rate of treating ordinary turns as final |
-
-Calculate each metric on cases where its condition can be assessed. Count new tasks on final turns among closing cases, and unnecessary corrections among cases containing valid writing. An overall pass rate does not reveal which quality deteriorated.
-
-The current cafe case returns one semantic 0/1 judgment for its conversation criteria as a whole. Producing the rates in this table requires separate violation labels for each output and aggregation of those labels. Correction metrics also need cases that evaluate the correction output.
-
-I discuss metrics displacing their original goals, and the pairing of delivery and stability metrics, in the [Software Factory post](/en/2026/10/05/software-factory-evals-and-tension-metrics.html). Here I focused on the conversation quality needed for the next comparison.
-
-## 3. Run and Compare on the Same Inputs
-
-### 3-1. Prepare the Requests the Service Actually Uses
-
-A separate copy of the prompt for evaluation can drift from the service. In EncBird, I made the evaluation tool call the service's actual prompt and request-building functions.
-
-`check` validates the dataset; `prepare` turns it into requests for the model. Run the following commands from the EncBird repository root with Python 3.11–3.13, Go, uv, and pnpm available.[^3]
-
-```bash
-pnpm eval:llm check \
-  --dataset packages/eval/python/llm_eval/fixtures/diary-thought-expression.json
-
-pnpm eval:llm prepare \
-  --dataset packages/eval/python/llm_eval/fixtures/diary-thought-expression.json \
-  --out output/llm-eval/diary-playbook-prepared
-```
-
-The resulting `prepared.json` contains the actual requests and hashes of relevant source files. A hash is an identifier used to detect changes in input or code. I excluded expected answers and evaluation criteria from generation requests, supplying them only to the later judge call.
+The conversation model receives the current message, earlier dialogue, learner information, and memories relevant to the feature. Memory does not mean appending every past conversation. After a session ends, EncBird extracts facts from the learner's messages and separately prepares context for later requests.[^2]
 
 {% raw %}
 ```mermaid
 sequenceDiagram
-    participant D as Evaluation dataset
-    participant P as Service request builder
-    participant M as Response model
-    participant V as Format checks
-    participant J as Judge
-    participant R as Run records
-    D->>P: History and current message
-    P->>M: Service prompt and input
-    M-->>V: Conversation and tool output
-    V-->>R: Format check results
-    alt Format checks pass
-        D->>J: Input and criteria
-        V->>J: Output to evaluate
-        J-->>R: Judgment and evidence
-    else Format checks fail
-        V-->>R: Reason for skipping semantic evaluation
-    end
+    participant U as Learner
+    participant C as Chat
+    participant M as Memory processing
+    participant S as Fact and evidence store
+    U->>C: Express experiences and thoughts in English
+    C-->>U: Contextual reply and corrections
+    Note over C,M: After the conversation ends
+    C->>M: Conversation record
+    M->>M: Extract learner facts and check evidence
+    M->>S: Store facts, source evidence and timestamps
+    Note over U,S: A later conversation
+    U->>C: New message
+    C->>M: Request memory for this conversation
+    M->>S: Retrieve stored facts
+    S-->>M: Facts and their history
+    M->>M: Select by current state, feature and length
+    M-->>C: Memory context
+    C-->>U: Reply using the message, dialogue and memory
 ```
 {% endraw %}
 
-### 3-2. Separate the Call Plan from Live Execution
+For example, if a learner describes their employer and commute, EncBird stores these as separate facts. When they later report changing jobs, only the employer information should change. Each fact also retains the message it came from and that message's timestamp.
 
-`run` takes the prepared requests, selected cases, repeat count, and output location. This command checks the execution plan without calling a model.
+For the next conversation, the app selects the current state from the available records and fits information allowed for that feature into a length budget. Excluding an old employer from current context does not delete the historical record.
 
-```bash
-pnpm eval:llm run \
-  --dataset packages/eval/python/llm_eval/fixtures/diary-thought-expression.json \
-  --prepared output/llm-eval/diary-playbook-prepared/prepared.json \
-  --feature diarychat.turn --split dev --repeat 2 \
-  --out output/llm-eval/diary-playbook-plan
-```
+In this structure, an incorrect memory can outlive one awkward reply. It becomes input to later conversations, allowing the same misunderstanding to recur. Alongside reading responses, I needed to check **what was stored and what was passed into the next conversation**.
 
-Without a generation model override, it uses the model and settings in the prepared service request. For live generation and semantic evaluation, specify the judge and call limit as follows. This command incurs costs because it includes `--live`; use a fresh output directory.
+## 2. Problems That Natural Responses Can Hide
 
-```bash
-pnpm eval:llm run \
-  --dataset packages/eval/python/llm_eval/fixtures/diary-thought-expression.json \
-  --prepared output/llm-eval/diary-playbook-prepared/prepared.json \
-  --feature diarychat.turn --split dev --repeat 2 \
-  --judge-model openai.gpt-6.1-sol \
-  --live --max-calls 56 \
-  --out output/llm-eval/diary-playbook-baseline
-```
+EncBird's repository contains synthetic evaluation cases for these behaviors. The roleplay and job-change cases below are test conversations with expected conditions. The cafe case also preserves a response actually generated by an earlier model.[^3][^4]
 
-Generating 14 cases twice takes 28 calls. Judging each output once adds 28, for a total of 56 calls. `--max-calls` caps generation and judgment calls together; it is not a dollar limit. The current runner uses the local Bedrock `default` profile in `us-east-1`.[^3]
+### 2-1. Remembering Roleplay as the Learner's Biography
 
-I preserved more than the response after each run. `run.json` stores inputs, prompts, settings, conversation and tool outputs, format checks, semantic judgments, and their reasons. Each generation and judgment call goes into `calls.jsonl`. These execution records are traces; I used them to work backward from a failed output to its input and judgment evidence.
+The roleplay case begins with this exchange:
 
-`NOT_RUN` means the model was not executed, and a run without a judge leaves semantic evaluation inconclusive. Call failures and missing criteria do not count as successes. Result files containing source text are kept in private output directories excluded from Git.
+> Coach: Pretend you are an airline captain who lives in Rome. Introduce yourself.
+>
+> Learner: I am an airline captain and I live in Rome.
+>
+> Coach: So you live in Rome?
+>
+> Learner: Yes.
 
-### 3-3. Change Only the Intended Variable and Read Case-Level Differences
+The learner said it directly and even confirmed it. Read in context, however, it belongs to the roleplay. The app should not extract these statements as the learner's actual occupation or residence.
 
-For comparisons, I held the dataset and criteria fixed and changed only the intended target. For a model comparison, rerun the same prepared requests with a different `--model` and output directory. For a prompt revision, preserve the old requests and results first, then run `prepare` again from the revised code.
+Checking whether the quoted sentence exists in the source cannot catch this problem. The evaluator must also consider **who the statement concerns and the situation in which it was said**. This case expects no personal memory about that occupation or residence.
 
-Compare the two run records with this command.
+Another case has the learner disclose their actual job—repairing bicycles—during a hospital roleplay. Discarding every message from a roleplay would lose that real disclosure. Evaluation needs examples of both what to remember and what to exclude.
 
-```bash
-pnpm eval:llm compare \
-  --baseline output/llm-eval/diary-playbook-baseline/run.json \
-  --candidate output/llm-eval/diary-playbook-candidate/run.json \
-  --out output/llm-eval/diary-playbook-comparison
-```
+### 2-2. Letting a Delayed Record Overwrite Current Information
 
-The current comparison tool rejects differences beyond the model by default. For a prompt experiment, `--allow-incompatible` produces comparison material that exposes those differences. When using it, check that the inputs and criteria did not change along with the intended prompt revision.[^3]
+The job-change case processes these three records in order. The company names come from the synthetic case.
 
-The following example shows how to read the results. Suppose we run 30 ordinary-turn cases and 10 closing cases once each, then label each output's violation types. These are not measured results from running the 14 cases above.
-
-| Check | Old prompt | Revised prompt |
+| Date of the recorded conversation | Statement | Processing order |
 | --- | --- | --- |
-| Repeated questions | 8 of 30 ordinary turns | 3 of 30 ordinary turns |
-| Early closing without an expression opportunity | 0 of 30 ordinary turns | 0 of 30 ordinary turns |
-| New task on the final turn | 0 of 10 closing turns | 1 of 10 closing turns |
+| September 1 | Works for Harbor Robotics | First |
+| September 12 | Works for Meadow Systems | Second |
+| September 5 | Works for Harbor Robotics | Arrives late and is processed last |
 
-Repetition decreased, but a closing violation appeared. If closing violations are disallowed, reject this candidate and use that case's input and response for the next revision. Combining different qualities into one average can hide the failure behind the improvement.
+Every employer can be extracted correctly, yet selecting the last processed value as the current employer would still be wrong. The September 5 record arrived late; the most recent statement remains the September 12 one about Meadow Systems.
 
-Model outputs can vary between runs, so repeat important cases and record case counts and repeat counts together. Evaluating one next response against fixed history does not establish whole-session quality. That requires a separate run that feeds generated responses into subsequent turns.
+This case therefore checks more than extracted company names. It checks **which employer reaches the next conversation after multiple records have been stored**. A system can pass separate session checks and fail when those sessions are connected.
 
-## 4. Add New Failures to Regression Evaluation
+### 2-3. Asking a Relevant Question That Does Little for Practice
 
-### 4-1. Distinguish the Task from the Failure Mode in Traces
+In the DiaryChat cafe case, the learner says they visited a cafe with their wife and ordered an iced latte. When the coach asks why, they answer:
 
-The cafe case concerns the task of continuing a conversation and the failure of collecting only more incidental details. Corrections or memory extraction from the same cafe story need different criteria. I therefore preserved both feature IDs and failure evidence in the evaluation cases.
+> It was hot, and I wanted something cold without much sweetness.
 
-Use this distinction when analyzing new records, too. Give AI the product intent and trace, then ask it to extract the task, suspected failure, and supporting passage. You can start by reviewing representative cases of recurring failures and ambiguous judgments, rather than requiring a person to classify every record first.
+The model's next response includes this question, translated from Korean:
 
-Also trace where the failure began. Suppose a learner says, “My friend moved to Busan; I live in Seoul,” and the next conversation asks, “How is life in Busan?” The fix depends on whether memory extraction stored the move as the learner's, or the conversation model misread a correctly stored fact.
+> Could you write in English about what your wife ordered at the cafe?
 
-EncBird has separate evaluation paths for memory extraction, storage, and context selection.[^5] Even if a failure appears in conversation, reproduce it using the inputs and expected results of the responsible stage. Changing only the next-question prompt can leave an incorrect stored fact intact.
+The question relates to the story. But the learner has already described what they did and why they made that choice. Continuing to collect someone else's order details leaves less room for the learner to express their own thoughts.
 
-### 4-2. Separate Repeatable Checks from Samples for Human Review
+I added criteria that discourage asking again for settled information and encourage moving to another part of the day or a topic the learner chooses once an activity has been sufficiently discussed. Necessary clarification and the learner's wish to continue remain valid exceptions.
 
-In EncBird, I added tests that check data format, request construction, and exclusion of evaluation criteria from generation inputs without calling a model. I separated these checks from semantic evaluation so new cases can pass them first.[^3]
+The memory cases concern preserving facts and time. This case concerns **what counts as a good conversation in this particular service**. General language ability could not stand in for that criterion.
 
-Use the same distinction when connecting evaluations to CI, the automated checks run when code changes. Check formats and request construction on each change; schedule model-based evaluation according to the feature changed and the consequences of failure. Fixing the baseline and candidate output paths also lets an agent continue from revision to reevaluation.
+## 3. Building Evaluations That Can Check These Problems Again
 
-The agent making improvements must not raise its score by changing validation expectations. If the product intent changes and the criteria are revised, reevaluate the old model under the new criteria for the comparison to remain useful.
+### 3-1. Separate the Scopes That Need Checking
 
-When adding production samples, distinguish random samples for estimating general behavior from records selected because of complaints or retries. A failure rate in deliberately selected problem cases is not the overall user failure rate. Read some automatically passed samples, too, to find problems outside the existing criteria.
+For DiaryChat, I fixed the preceding conversation and generated one next response. In the cafe case, that means supplying the same history through the learner's reason for choosing the latte, then comparing the next question.
 
-Feed confirmed failures back through **source review → reproduction input → criteria update → comparison with the baseline**. This checks response quality. Learning gains, speech recognition, pronunciation, and interruption handling each require their own usage evidence and evaluation.
+For memory, I separated extraction, storage, current-information selection, and use in a response. Fixing each stage's input helps narrow down where behavior goes wrong. Passing extracted results through the actual storage and retrieval code also makes it possible to check problems between stages.[^5]
+
+If an old employer appears in the next conversation, for example, the cause could be incorrect extraction, a mistake in selecting the current employer, or the response model misusing correct context. Each requires a different fix.
+
+![EncBird's evaluation UI connecting memory extraction and storage to retrieval and later responses](/assets/img/2026/1005/encbird-eval-map-en.png)
+
+*EncBird's actual evaluation UI displaying synthetic cases, with interface labels translated into English. Selecting a processing step reveals related cases. Counts belong to the screenshot dataset; they are not model performance results.*
+
+The map separates extraction and storage after a conversation from retrieval and response generation in a later request. I attached evaluation cases to the steps where the behavior occurs, rather than placing every check under the final reply.
+
+### 3-2. Write Expected Facts and Behavior Beside the Source
+
+Each evaluation case preserves the input immediately before the behavior being checked, including context that affects the result: conversation history, existing memory, proficiency level, and time. I kept expected results, prohibited behavior, and judgment evidence separate from that input.
+
+For memory, individual facts worked better than one reference summary. If the learner says they dislike coffee and enjoy peppermint tea, the evaluation checks both the negation about coffee and the preference for tea. Retaining only the tea preference is an omission; saying they also like coffee changes the meaning.
+
+![Cropped evaluation editor showing the source message, two expected facts and the evidence selection](/assets/img/2026/1005/encbird-eval-case-en.png)
+
+*Crops from the actual editor displaying a synthetic case, assembled to show source text, expected facts, and evidence selection. Interface labels are translated.*
+
+Several next questions can be appropriate in a conversation. The cafe case therefore does not require one exact answer. Its criteria ask whether the response avoids repeating settled explanations and provides an opportunity for expression at the learner's level.
+
+I also included more than failure cases: short but meaningful answers, genuinely ambiguous replies, requests to change topics, and final-turn closing. These help check whether a change intended to reduce repetition also removes necessary questions.
+
+### 3-3. Separate Code Checks from Judgments About Meaning
+
+Code can check whether a cited message exists and whether a stored fact can be retrieved. Deciding whether roleplay was mistaken for biography, or whether a question asks for an explanation already given, requires reading the context.
+
+For these semantic judgments, I used **LLM-as-a-Judge**: a language model acting as an evaluator. It receives the source, model output, and expected conditions, then records violations and their reasons. The model generating the answer does not receive the reference answers or evaluation criteria.[^5]
+
+The evaluations reuse service prompts and processing code. A separate simplified prompt could end up testing different behavior from the service. The memory tests for later responses are limited to memory use in text, however; they do not reproduce an entire voice call.
+
+Along with judgments, I recorded inputs and outputs at each stage. A connected record of one execution is a **trace**. It allows inspection backward from a failed reply to the memory supplied to it and the original source.
+
+The evaluator can also be wrong. It might reject a valid paraphrase or mistake an allowed fictional detail in roleplay for an unsupported personal memory. Before fixing a failed response, I therefore made it possible to compare **an actual behavior error with an error in the criteria or judgment**.[^6]
+
+Results without enough evidence remain inconclusive. A completed model call or a high score on some checks does not establish that every other condition passed.
+
+### 3-4. Read Before-and-After Differences on the Same Cases
+
+For comparisons, I held inputs and criteria fixed while changing the intended prompt or model. The checks cover both improvement on problem cases and regressions in behavior that previously worked.
+
+For memory, I look at both the necessary facts retained and the incorrect facts added. Remembering nothing would reduce false memories but also remove information needed for later conversations. Similarly, fewer repeated questions could reward a conversation model that simply stops asking questions.
+
+It helps to define the side effects to watch alongside the quality being improved. The tension metrics discussed in the [Software Factory post](/en/2026/10/05/software-factory-evals-and-tension-metrics.html) serve this purpose: checking whether one quality deteriorates as another metric improves.
+
+When a new failure is confirmed, its input and violated condition become a regression case for future changes. If the criteria themselves change, the old version must also be evaluated under the new criteria; comparing the old and new scores directly is insufficient.
+
+## 4. Applying the Process to Another Agent App
+
+EncBird's cases concern memory and English conversation, but I think the order of work applies to other apps. The starting point is a case you can explain as a failure in your own app, with evidence for that judgment.
+
+| Step | What to preserve | EncBird example |
+| --- | --- | --- |
+| Define the user's expected result | Success conditions and allowed exceptions | Exclude a roleplay occupation from biography while retaining an explicit real-life disclosure |
+| Fix the input that reproduces the problem | Dialogue, prior state, time, and source evidence | Records before and after a job change, plus an older conversation processed late |
+| Attach checks to the stages producing the result | Intermediate outputs, code checks, and semantic judgments | Fact extraction, storage, current-employer selection, and later conversation use |
+| Compare the same cases before and after a change | Improvements, new failures, and judgment reasons | Reduce repetition while preserving necessary clarification and final-turn behavior |
+
+There is no need to make every stage elaborate at the start. Begin with the problematic result and add enough input and intermediate evidence to distinguish its causes. The more concrete the judgment a person makes while reading a case, the clearer the condition that can be transferred to automated evaluation.
+
+Repeatedly tuning against the same cases can overfit them, so reserve separate cases for the final check. Keep cases derived from one conversation together, and read a sample of automatic passes to find failures the criteria miss.
 
 ## Closing Thoughts
 
-Asking what someone ordered at a cafe may suit another app. In EncBird, the problem was asking for another order after the learner had already finished their explanation. I had to make that distinction before writing the criteria.
+Building evaluations for EncBird required deciding what the app should remember and what kind of conversation it should continue. That meant turning the service's purpose into concrete conditions: keeping roleplay out of biography, preventing delayed records from changing the current employer, and leaving room for another topic once a learner has finished an explanation.
 
-For a first evaluation, I think it helps to start with one conversation you can explain as a failure in your own app. Preserve that judgment as an input and criteria, and the next change can be checked against the same problem.
+Those conditions and their source evidence make later changes assessable. When building an agent app, I think a useful starting point is **to preserve a disappointing result as a case that lets you check the reason for that disappointment again**. The cases collected this way help show what improved—and what was missed—when a prompt or model changes.
 
 ---
 
-[^1]: EncBird's `docs/product-intent.md`. Defines DiaryChat's purpose: organizing thoughts about actual experiences and expressing them in English.
-[^2]: EncBird's `packages/eval/python/llm_eval/fixtures/diary-thought-expression.json`. Contains the inputs and criteria for `diary-thought-wife-order-trap`, plus model output preserved in `observedFailure`. The cases are synthetic; a criteria-review record is not a human gold label.
-[^3]: EncBird's `packages/eval/python/llm_eval/README.md`, `grading.py`, `cli.py`, and `packages/eval/go/cmd/tools/prepare-llm-eval/README.md`. Cover request preparation, separation of generation input and evaluation criteria, the judge, data splits, execution, comparison, and scope. Commands and paths reflect the repository on October 13, 2026. No paid model calls or production data retrieval were performed while revising this post.
-[^4]: EncBird's `packages/api-infra/functions/main/internal/feature/diarychat/prompt/template/sol_chat_system.txt`. Defines feedback calls after conversational replies, preservation of the complete latest message, and minimal corrections.
-[^5]: EncBird's `packages/eval/python/memory_eval/README.md`. Covers alignment between facts and evidence and evaluation of individual memory stages. My [harness-building post](/en/2026/06/16/harness-engineering-in-practice.html) separately describes the environment I built for delegating development to agents.
+[^1]: EncBird's product-intent document and [the background to the side project](/2024/01/13/lean-startup-in-action-with-side-project.html) (Korean). The service centers on the expression dictionary and practice using English.
+[^2]: EncBird's memory design and implementation materials. Individual facts retain learner-message evidence, while later requests select current state and feature-specific context. This post reflects the repository as of October 13, 2026.
+[^3]: EncBird's memory regression cases for roleplay biography, real-life disclosures during roleplay, job changes processed out of order, and negated preferences. All use synthetic dialogue and do not measure the frequency of production incidents.
+[^4]: EncBird's DiaryChat thought-expression dataset. The cafe input is synthetic; the question about the wife's order is preserved output from an earlier model. Reviewing criteria is distinct from a human labeling the answer's correctness.
+[^5]: EncBird's conversation and memory evaluation implementations and local evaluation UI. They connect fixed inputs, service request construction, stage checks, semantic judgments, traces, and comparisons. Screenshots use synthetic data only; no new model inference was run to capture them.
+[^6]: EncBird's memory evaluation evidence design. It separates deterministic structural conditions from natural-language meaning and distinguishes permitted roleplay or faithful corrections from personal-memory errors. My [harness-building post](/en/2026/06/16/harness-engineering-in-practice.html) covers the development agent's execution environment separately.
