@@ -8,7 +8,7 @@ tags: ai jev decision-model reinforcement-learning rlcd evaluation
 publish: true
 published: true
 date: 2026-10-08 11:23:38 +0900
-last_modified_at: 2026-10-14 10:46:40 +0900
+last_modified_at: 2026-10-14 10:55:46 +0900
 lang: en
 translation_key: jev-decision-models-and-rlcd
 korean_url: /2026/10/08/jev-decision-models-and-rlcd.html
@@ -35,9 +35,11 @@ That gap made me interested in RLCD, Jev's approach to training decisions and th
 
 The difference I have in mind is between **producing responses that are good for people to read and producing decisions that help software complete a task**. Replacing the head, the component that produces a model's outputs, does not by itself align the training objective with the latter.
 
-That is why I think reinforcement learning that rewards the decisions needed for task completion is necessary. I would expect a model trained with RLCD to perform differently in production from an RLHF-trained model with only its head replaced. I have not isolated and demonstrated RLCD's contribution to that difference.
+That is why I think reinforcement learning that rewards the decisions needed for task completion is necessary. I would expect a model trained with RLCD to perform differently in production from an RLHF-trained model with only its head replaced.
 
-## 1. A benchmark can change when you reverse the question
+TypeSafe, however, introduced a new architecture, parallel output mechanism, and RLCD together. I did not find a controlled comparison isolating RLCD's contribution in the public material. My hypothesis is that this difference in training objectives produces the practical gap I experienced with Jev.[^4]
+
+## 1. Benchmark scores and actual task performance
 
 Changing decision models can change how the same question is understood. Arize, which builds AI evaluation tools, published a comparison that illustrates this.[^1]
 
@@ -57,6 +59,10 @@ Jev and OpenAI Decisions produced similar results under both wordings, while Kev
 If code uses this judgment to filter out unsupported responses, interpreting the question backward can let an incorrect response through. A model can return the required choice and probability while the task that uses those values still fails.
 
 This table does not establish that RLHF caused the errors or that RLCD reduced them. It does illustrate why similar APIs and benchmark scores do not guarantee the same behavior in an actual task.
+
+To test the effect of the training approach, we would need the same base model and task conditions, comparing head replacement alone with RL targeting the decisions the task needs. We would also need to distinguish the effects of training data and which weights are updated.
+
+That evaluation should measure individual answer accuracy and the reliability of predicted probabilities, as well as whether software using those outputs actually completes the task. It needs to cover gathering necessary information, executing operations when their conditions are met, and stopping after completion.
 
 ## 2. What RLCD aims to train differently
 
@@ -82,7 +88,7 @@ An 80% prediction does not guarantee the answer for that individual inquiry. Ret
 
 Reliable probabilities let code route clear cases immediately and send ambiguous ones for more information or to a larger model. For choice and score questions, Jev's `confidence` field summarizes the probability distribution, so it needs to be read differently from an individual option's probability.[^5]
 
-The public material explains this training objective. The official documentation and launch post I checked do not provide enough detail to reproduce Jev's training data or reward calculation. We therefore cannot equate RLCD with a particular loss function or a public training implementation.
+The public material explains this training objective. The official documentation and launch post I checked do not provide enough detail to reproduce Jev's training data or reward calculation, including whether completion of an entire workflow is used directly as a reward. We therefore cannot equate RLCD with a particular loss function or a public training implementation.
 
 What interests me about RLCD is **its objective of learning the decisions and uncertainty software needs to continue a task**. In the refund inquiry example, the software needs to decide which team should receive the inquiry and whether further checking is needed before processing can continue. I understand RLCD as an approach to training a model for decisions that support task completion.
 
@@ -107,20 +113,6 @@ When comparing actual products, we also need to distinguish their additional tra
 | Strands Decider | Replaces a pretrained Qwen base model's output head and also applies LoRA, which trains small sets of added weights within the base model.[^8] |
 
 These implementations differ in both their starting models and the scope of additional training. The earlier benchmark therefore cannot be read as a controlled comparison between simply replacing an RLHF-trained model's head and applying RLCD.
-
-## 4. What still needs to be isolated and tested
-
-TypeSafe introduced a new architecture, parallel output mechanism, and RLCD together. The official material I checked did not include a controlled comparison isolating RLCD's contribution. Its public objective is decisions and probability calibration; the material does not establish whether completion of an entire workflow is used directly as a reward.[^4]
-
-Testing my claim would require the same base model and task conditions, comparing head replacement alone with RL targeting the decisions the task needs. We would also need to distinguish the effects of training data and which weights are updated.
-
-The evaluation should measure individual answer accuracy and probability calibration, as well as whether software using those outputs actually completes the task. In the refund example, that means checking the connected behavior: gathering missing information, issuing a refund only after its conditions are met, and stopping when processing is complete.
-
-## Closing thoughts
-
-I think there is a difference between training for responses people find good to read and training for software task completion. **Replacing only the head of an RLHF-trained model is unlikely to close that gap; I think RL rewarding the decisions needed for task completion is necessary.**
-
-From that perspective, I would expect Jev, trained with RLCD, to perform differently on production cases from a model with only its head replaced. I suspect RLCD contributes substantially to the practical difference I experienced with Jev. I have not, however, isolated that contribution from the effects of other training and architectural choices.
 
 ---
 
