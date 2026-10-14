@@ -197,7 +197,7 @@ Those conditions and their source evidence make later changes assessable. When b
 ---
 
 [^1]: EncBird's product-intent document and [the background to the side project](/2024/01/13/lean-startup-in-action-with-side-project.html) (Korean). The service centers on the expression dictionary and practice using English.
-[^2]: EncBird's memory design and implementation materials. Individual facts retain learner-message evidence, while later requests select current state and feature-specific context. This post reflects the repository as of October 13, 2026.
+[^2]: EncBird's memory design and implementation materials. Individual facts retain learner-message evidence, while later requests select current state and feature-specific context.
 [^3]: EncBird's memory regression cases for roleplay biography, real-life disclosures during roleplay, job changes processed out of order, and negated preferences. All use synthetic dialogue and do not measure the frequency of production incidents.
 [^4]: EncBird's DiaryChat thought-expression dataset. The cafe input is synthetic; the question about the wife's order is preserved output from an earlier model. Reviewing criteria is distinct from a human labeling the answer's correctness.
 [^5]: EncBird's conversation and memory evaluation implementations and local evaluation UI. They connect fixed inputs, service request construction, stage checks, semantic judgments, traces, and comparisons. Screenshots use synthetic data only; no new model inference was run to capture them.

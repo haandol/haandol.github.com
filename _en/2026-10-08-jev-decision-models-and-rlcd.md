@@ -8,7 +8,7 @@ tags: ai jev decision-model reinforcement-learning rlcd evaluation
 publish: true
 published: true
 date: 2026-10-08 11:23:38 +0900
-last_modified_at: 2026-10-14 10:38:54 +0900
+last_modified_at: 2026-10-14 10:46:40 +0900
 lang: en
 translation_key: jev-decision-models-and-rlcd
 korean_url: /2026/10/08/jev-decision-models-and-rlcd.html
@@ -17,9 +17,9 @@ permalink: /en/2026/10/08/jev-decision-models-and-rlcd.html
 
 ## TL;DR
 
-- I suspect RLCD contributes substantially to Jev's practical advantage.
-- Preference training may still influence a model after its head is replaced.
-- That influence and RLCD's contribution have yet to be tested in isolation.
+- RLHF trains responses that people read and prefer.
+- Replacing the head alone is unlikely to substitute for training toward task completion.
+- I suspect RLCD contributes substantially to Jev's production performance.
 
 ## Introduction
 
@@ -33,7 +33,9 @@ It is similar to cases where an open model beats a commercial model on a benchma
 
 That gap made me interested in RLCD, Jev's approach to training decisions and their probabilities. TypeSafe, the company behind Jev, argues that responses people prefer and decisions software can act on need different training objectives. I agree, and **I suspect RLCD is what makes Jev different.**
 
-If that is right, replacing an existing model's head, the component that produces its outputs, may not give it the same qualities. In particular, I think replacing only the head of a model trained to produce responses people prefer leaves it likely to fail on questions that require choosing against those preferences. This is still a hypothesis. I want to explain why I find it plausible.
+The difference I have in mind is between **producing responses that are good for people to read and producing decisions that help software complete a task**. Replacing the head, the component that produces a model's outputs, does not by itself align the training objective with the latter.
+
+That is why I think reinforcement learning that rewards the decisions needed for task completion is necessary. I would expect a model trained with RLCD to perform differently in production from an RLHF-trained model with only its head replaced. I have not isolated and demonstrated RLCD's contribution to that difference.
 
 ## 1. A benchmark can change when you reverse the question
 
@@ -52,23 +54,23 @@ These values are ROC AUC, not accuracy. Here, the metric measures how well the m
 
 Jev and OpenAI Decisions produced similar results under both wordings, while Kev and Strands Decider changed substantially.
 
-What catches my attention is behavior that seems to follow a familiar judgment even when the question changes its criterion.
+If code uses this judgment to filter out unsupported responses, interpreting the question backward can let an incorrect response through. A model can return the required choice and probability while the task that uses those values still fails.
 
-This table cannot establish that human preference training caused the difference. Handling negation or the question wording in the training data could also explain it. OpenAI Decisions was stable under both wordings too, so this is not evidence that only Jev can handle such questions.
-
-But it does reveal a problem: **the judgment a question calls for can differ from the one a model habitually produces.** That is why I want to compare RLCD with the objectives used to train existing models.
+This table does not establish that RLHF caused the errors or that RLCD reduced them. It does illustrate why similar APIs and benchmark scores do not guarantee the same behavior in an actual task.
 
 ## 2. What RLCD aims to train differently
 
-### 2.1. A preferred response and a correct answer
+### 2.1. Responses people read and decisions software uses
 
 Reinforcement learning, or RL, trains a model to **take actions that earn more of a specified reward**. What the reward evaluates changes what the model learns to do well.
 
 Reinforcement learning from human feedback, or RLHF, uses people's preferences between responses as a training signal. InstructGPT, a model trained to follow instructions, first learned from demonstrations written by people, then used their rankings of responses to train a reward model for reinforcement learning.[^2]
 
-Human preference training helps produce conversations people want. But TypeSafe argues that rewarding preferred responses can also reinforce agreement with the user and confident-sounding errors.[^3]
+This training is useful for producing responses that people read and judge helpful. By good to read, I mean more than tone. I also mean explanations that are easy to understand, seem to address the request well, and help a person make a judgment and act.
 
-In classification, the sentence someone would like to receive can differ from the one that satisfies the question. Suppose we ask which is ruder: “Sorry to keep you waiting” or “Can't you even wait that long?” The answer should be the latter. Preferring a polite response does not change the correct answer here.
+When software uses that output to continue a task, the conditions for success change. It needs to decide which operation to execute, what to check when information is missing, and when the task is complete. If that decision is wrong, even correctly executed code can produce the wrong outcome.
+
+TypeSafe likewise describes human-preferred responses and the reliability needed for unattended automation as different training objectives. The concern is that a person's preference after reading an output cannot stand in for an assessment of whether that output enables a task to be completed.[^3]
 
 ### 2.2. A brief explanation of RLCD from the official documentation
 
@@ -82,19 +84,21 @@ Reliable probabilities let code route clear cases immediately and send ambiguous
 
 The public material explains this training objective. The official documentation and launch post I checked do not provide enough detail to reproduce Jev's training data or reward calculation. We therefore cannot equate RLCD with a particular loss function or a public training implementation.
 
-Calibration alone does not guarantee that a model understands negation or follows the question's criterion. What interests me about RLCD is **its objective of learning decisions that answer the question together with their uncertainty**. I think that difference in objective has contributed to Jev's practical performance.
+What interests me about RLCD is **its objective of learning the decisions and uncertainty software needs to continue a task**. In the refund inquiry example, the software needs to decide which team should receive the inquiry and whether further checking is needed before processing can continue. I understand RLCD as an approach to training a model for decisions that support task completion.
 
-## 3. What replacing the head may leave behind
+## 3. Replacing the head and training for task completion
 
 A head turns information computed inside a model into its final output. Replacing a next-token prediction head with one that scores options lets a model return choices and probabilities instead of long responses.
 
-But if we freeze the base model and train only the head, the way the base reads and represents the input stays the same. A new head can use that information differently, but there is no guarantee that it removes every influence of the earlier training.
+But if we freeze the base model and train only the head, the way the base reads and represents the input stays the same. A new head can use that information differently, but **whether the model has sufficiently learned the decisions needed to complete a task is a separate question**.
 
-In the rude-sentence example, the failure I suspect is assigning a higher score to the more polite sentence the model was trained to prefer as a response, even though the question asks for the ruder one. **If RLCD accounts for Jev's difference, I think models whose heads are replaced without sufficiently changing the influence of preference training are likely to fail on questions like this.**
+Suppose we connect the inquiry classifier to an automated refund workflow. After recognizing a refund request, the software still needs to choose between looking up the order, asking for more information, and issuing the refund. If it chooses to issue a refund before it has enough order information, the task proceeds incorrectly even when the output has the right format.
 
-This does not mean a model trained on human preferences cannot identify rude language. My hypothesis is that **preferences which survive a change in output format can conflict with the question's decision criterion**. How often that actually happens needs to be tested separately.
+The model needs to learn which decision, given the current state, leads to the task being completed correctly. Having learned to earn rewards for responses people find convincing does not give me enough reason to expect that it has also learned these operational decisions and their uncertainty sufficiently well.
 
-Applying this hypothesis to products requires distinguishing their starting models and additional training. Their public implementations do not support treating Kev, Jeff, and Strands Decider as chat models with only their heads replaced.
+I think **replacing only the head without addressing this difference in training objectives will leave many production cases where the model's behavior does not match the task's requirements**. That is why I think RL rewarding decisions that help complete tasks is necessary, and why I suspect RLCD's training in that direction is what distinguishes Jev.
+
+When comparing actual products, we also need to distinguish their additional training. The public implementations do not support treating Kev, Jeff, and Strands Decider as RLHF-trained models with only their heads replaced.
 
 | Project | Differences described in the public documentation |
 | --- | --- |
@@ -102,28 +106,28 @@ Applying this hypothesis to products requires distinguishing their starting mode
 | Jeff (`firelex/jeff`) | Fine-tunes all weights of its base models and calibrates probabilities after training.[^7] |
 | Strands Decider | Replaces a pretrained Qwen base model's output head and also applies LoRA, which trains small sets of added weights within the base model.[^8] |
 
-In particular, these documents do not support assuming that the smaller Kev models and Strands Decider start from chat models trained on human preferences. There is therefore no basis here for attributing their errors in the earlier benchmark to human preference training. These implementation descriptions reflect documentation checked on October 14, 2026.
+These implementations differ in both their starting models and the scope of additional training. The earlier benchmark therefore cannot be read as a controlled comparison between simply replacing an RLHF-trained model's head and applying RLCD.
 
-## 4. What still needs to be tested
+## 4. What still needs to be isolated and tested
 
-The TypeSafe material I checked did not include an ablation isolating RLCD's contribution: an experiment that changes or removes one component for comparison. TypeSafe introduced a new architecture, parallel output mechanism, and RLCD together, so differences between products cannot be attributed to RLCD alone.[^4]
+TypeSafe introduced a new architecture, parallel output mechanism, and RLCD together. The official material I checked did not include a controlled comparison isolating RLCD's contribution. Its public objective is decisions and probability calibration; the material does not establish whether completion of an entire workflow is used directly as a reward.[^4]
 
-Testing my hypothesis would require the same starting model, data, and evaluation cases, while varying whether preference training is applied and how decision training follows it. To test RLCD's contribution, we would also need to keep the set of trainable weights the same. That would distinguish gains from updating the base model from gains due to changing the training objective.
+Testing my claim would require the same base model and task conditions, comparing head replacement alone with RL targeting the decisions the task needs. We would also need to distinguish the effects of training data and which weights are updated.
 
-The evaluation should pair questions that reverse the criterion, such as choosing the more polite sentence and choosing the ruder one, and measure correct choices separately from probability calibration. If training only the head handles both criteria well, my hypothesis becomes weaker. If errors increase when the criterion conflicts with learned preferences, and applying RLCD under the same conditions reduces those errors, that would support it. The currently public material is not enough to complete this comparison.
+The evaluation should measure individual answer accuracy and probability calibration, as well as whether software using those outputs actually completes the task. In the refund example, that means checking the connected behavior: gathering missing information, issuing a refund only after its conditions are met, and stopping when processing is complete.
 
 ## Closing thoughts
 
-I think RLCD contributes substantially to Jev's practical advantage. That leads me to the hypothesis that **replacing only the head of a model still influenced by human preference training leaves it likely to fail when a question requires choosing against those preferences**.
+I think there is a difference between training for responses people find good to read and training for software task completion. **Replacing only the head of an RLHF-trained model is unlikely to close that gap; I think RL rewarding the decisions needed for task completion is necessary.**
 
-I have not isolated and tested that cause yet. What I want to know about a Jev replacement is whether, beyond similar scores on familiar questions, **it still follows the question when the decision criterion changes**.
+From that perspective, I would expect Jev, trained with RLCD, to perform differently on production cases from a model with only its head replaced. I suspect RLCD contributes substantially to the practical difference I experienced with Jev. I have not, however, isolated that contribution from the effects of other training and architectural choices.
 
 ---
 
 [^1]: Arize, [Decision model benchmark](https://arize.com/blog/decision-model-benchmark/). The table cites four models from its published question-reversal experiment. I did not rerun the experiment for this article.
 [^2]: Long Ouyang et al., [Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155). Describes InstructGPT's training on demonstrations and reinforcement learning using human preferences.
-[^3]: TypeSafe, [AI primer](https://docs.typesafe.ai/introduction/machine-learning-primer). Explains its concerns about RLHF, RLCD's objective, and probability calibration. Checked October 14, 2026.
-[^4]: TypeSafe, [Introducing System One Models & Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev). Introduces the architecture, parallel output mechanism, and RLCD together. Checked October 14, 2026.
+[^3]: TypeSafe, [AI primer](https://docs.typesafe.ai/introduction/machine-learning-primer). Explains its concerns about RLHF, RLCD's objective, and probability calibration.
+[^4]: TypeSafe, [Introducing System One Models & Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev). Introduces the architecture, parallel output mechanism, and RLCD together.
 [^5]: TypeSafe, [Confidence](https://docs.typesafe.ai/confidence). Distinguishes option probabilities from confidence calculated from the distribution.
 [^6]: [jaredpalmer/kev](https://github.com/jaredpalmer/kev), Models and training description.
 [^7]: [firelex/jeff](https://github.com/firelex/jeff), Train your own. This is the Jeff project discussed here.
