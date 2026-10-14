@@ -4,11 +4,11 @@ title: "My Thoughts on AWS AI-DLC — The Direction I Believe Agentic Developmen
 excerpt: Where AI-DLC diverges from my view of agentic development
 author: haandol
 email: ldg55d@gmail.com
-tags: career ai agent agentic-development ai-dlc harness-engineering hitl solutions-architect
+tags: ai agent agentic-development ai-dlc harness-engineering hitl solutions-architect
 publish: true
 lang: en
 date: 2026-09-06 09:00:00 +0900
-last_modified_at: 2026-10-06 10:53:43 +0900
+last_modified_at: 2026-10-14 10:06:47 +0900
 translation_key: aws-ai-dlc-thoughts
 korean_url: /2026/09/06/my-thoughts-on-aws-ai-dlc.html
 permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -34,7 +34,7 @@ But the AI-DLC processes I had encountered emphasized having people review and a
 
 Even on the account team, though, I increasingly found myself having to explain AI-DLC. I expect that work to become more common across the company as well.
 
-That is why I want to write down which parts of AI-DLC I find difficult to agree with. Writing this post is a way to examine my own views and think about what work I want to do next and how I want to do it.
+That is why I want to write down which parts of AI-DLC I find difficult to agree with. I want to examine my own views and understand why they differ from the experiences of customers adopting it.
 
 My view differs from AI-DLC in three areas: **Concept → Process → Implementation**.
 
@@ -234,11 +234,11 @@ AI-DLC's adaptive workflow greatly reduces the problem of applying the same proc
 
 As models improve, I think we should revisit the work sequences and solution strategies prescribed by the harness, and delegate more of those decisions to the model.
 
-## 4. Real Results Are What Challenge My View Most
+## 4. Customer Adoption and Results Keep Challenging My View
 
-If I were completely certain up to this point, I could simply continue in my own direction. The hardest part is something else.
+I think AI-DLC is difficult to adopt for production development and expand across teams and organizations. Across concept, process, and implementation, it also differs in many ways from the direction I see the market taking.
 
-**More cases than I expected keep appearing in which teams built real services and achieved results with AI-DLC.**
+Yet **I keep encountering customers who say AI-DLC works well for them, and others who plan to adopt it.** Each time I hear that, it shakes my confidence in my own view.
 
 An AWS article connects AI-DLC with parts of the process used by six people to build Bedrock Mantle in 76 days. The article also describes an early adoption case at a European financial institution, where one product owner and three developers delivered up to 35 features per sprint—a fixed period of work.[^10]
 
@@ -246,21 +246,13 @@ But Mantle's success alone does not prove that the full AI-DLC methodology cause
 
 The project combined excellent engineers, fast decisions, and good internal tools with the chance to build a new system rather than change an existing one. The public article itself carefully says that some of the processes and tools used for Mantle are now parts of AI-DLC.
 
-The result still exists.
+Even allowing for those conditions, I find it hard to dismiss customers' experiences of getting results with an approach I expect to be difficult. I wonder whether I have missed a condition that matters, or assumed that my experience with personal projects applies equally to teams and organizations.
 
-Whenever I hear similar stories, I wonder whether I have missed another reason for those results. I also question whether I am assuming that what happened in my personal projects applies to other teams.
+I think I need to try the approach I believe in at the team and organizational level, beyond my own projects. Working on real customer problems, launching a service, and dealing with both operational incidents and the difficulties of working together would help me understand which parts hold up and which need to change.
 
-At times, I cannot tell whether I am overvaluing my experience or undervaluing the results described inside the organization.
+**Until I gain those insights firsthand, I suspect I will keep wrestling with the gap between my views and customers' experiences.**
 
-I currently work as a Solutions Architect (SA), helping customers choose technologies and design systems. My role does not involve running one product and team for years and taking responsibility for the results, which limits my ability to see firsthand which approach works better.
-
-I do not want to decide which approach works better under which conditions from presentations and workshop reactions alone.
-
-I want to choose a real customer problem, lead a team, launch a service, and experience the outages and problems within the organization that follow before reaching a conclusion.
-
-**I think I need to run a product with a real team and live with the consequences of my decisions to find the limits of my perspective**.
-
-## 5. Breadth Alone Has Not Satisfied My Need for Depth
+## 5. From Personal Experience to Experience Across Teams and Organizations
 
 There is a video from a 1992 MIT talk in which Steve Jobs discusses consultants.
 
@@ -268,33 +260,27 @@ There is a video from a 1992 MIT talk in which Steve Jobs discusses consultants.
 
 Jobs argues that seeing many companies is not enough if you never implement your recommendations or live with their results and failures over time. His analogy is that you may have seen many pictures of fruit without ever tasting it.[^11]
 
-I do not want to turn that into a judgment of every SA. Working with customers over time and revealing recurring patterns and options across companies are real forms of expertise.
+I currently work as a Solutions Architect (SA), helping customers choose technologies and design systems. Working with customers over time and revealing recurring patterns and options across companies are real forms of expertise, so I do not want to turn Jobs's remarks into a judgment of every SA.
 
 But one question remains for me: `Do I experience the operational consequences of my recommendation?`
 
 I began my career as a developer and continued to build, deploy, and operate my own services after becoming an SA. I invest my own time and money in services with roughly 200,000 and 100,000 lines of code and take responsibility for their operations, but they are not official customer cases.
 
-Working on a range of customer problems as an SA has been valuable. What I need now is the experience of leading a team and running a product over time, then using the failures and operational results to inform my next decisions.
+That experience has helped me develop a clearer view of how I prefer to build software. But operating my own services can only tell me so much about whether the same approach works when several people must share an understanding of the problem and its background, make decisions together, and divide operational responsibilities.
 
-I have also seen people in product organizations who only complete assigned tickets and collect a paycheck without caring about the outcome. **Owning an outcome requires staying involved from problem definition through operation.**
+I have also seen people in product organizations complete assigned tickets without taking an interest in the actual outcome. **I think experience at the team and organizational level comes from staying involved from problem definition through operation, and using the results to inform the next decision.**
 
 As AI narrows the differences in people's ability to write code, I think it becomes more important for a team to share the problem and its background, check results, and improve the harness so the same failures do not happen again. Amazon's account also describes changes in these working practices among the teams with larger gains.[^5]
 
-I want to work with **a team that runs a product together and uses what went wrong to inform its next decisions**.
+This is what I want to understand better through practice: what needs to change when a team shares the working methods and harness that suited one person, and how lessons from operating the product can change the way the organization works.
 
 ## Conclusion
 
-AI-DLC can be a practical answer for organizations adopting AI for the first time or needing strict control over approvals and responsibilities. I still believe, however, that agentic engineering will move toward removing the reasons people were required in the system rather than positioning them more effectively at its center.
+I still believe agentic engineering will move toward removing, one by one, the reasons people have to keep stepping in. Yet the more customers I meet who adopt AI-DLC and get results, the more I want to understand why their choices differ from the direction I expected.
 
-What exhausts me most is not disagreement itself, but having almost nowhere to discuss these ideas comfortably. Before we can talk about the customer problem, I spend most of my time and energy explaining why people should have to step in less often, and why we should build small pieces and get feedback frequently.
+I want to put the approach to agentic development I believe in into practice at the team and organizational level, working together on real customer problems. This means applying the Lean Startup practice of building something small and learning from it to the development process and harness as well.[^12]
 
-A team with firsthand experience of agentic engineering would not need to agree on every conclusion. Having been through similar work would let us focus more on **how to solve the customer problem and change the way we work and the harness we use**.
-
-My goal is therefore to change jobs by the end of the year. More than a company name or title, I want a team that takes customer problems seriously and shares responsibility for operations. I would also like to learn new development practices and share them with colleagues on a team whose view of AI's future fits mine.
-
-If I cannot find such a team, I am also considering starting a small company that uses AI to try the Lean Startup approach of building something small, seeing how customers respond, and using that to decide what to do next.[^12] Taking responsibility for everything from choosing the customer problem to developing and operating the product would let me find out whether my ideas work.
-
-I am now looking for **a team where I can find out whether my ideas hold up when we work on real customer problems**.
+As I work this way, using customer responses and operational results to guide what comes next, I think I will gradually learn which parts of my thinking held up and what I missed.
 
 ---
 
