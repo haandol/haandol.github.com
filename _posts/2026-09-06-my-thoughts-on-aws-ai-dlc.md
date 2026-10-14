@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development ai-dlc harness-engineering hitl solutions-architect
 publish: true
-last_modified_at: 2026-10-14 10:10:40 +0900
+last_modified_at: 2026-10-14 10:13:20 +0900
 lang: ko
 translation_key: aws-ai-dlc-thoughts
 english_url: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -107,11 +107,15 @@ flowchart LR
 
 내가 생각하는 미래와 AI-DLC의 컨셉은 이 지점에서 갈라진다.
 
-Kiro가 공개한 Frontier Engineering 가이드에서도 같은 방향을 제시한다. 두 번째 원칙은 에이전트가 일하는 시간을 늘리고 사람의 개입을 줄이라는 것으로, 목표를 다음과 같이 설명한다.[^13]
+Amazon의 Frontier Development는 에이전트가 사람의 개입 없이 오래 작업하도록 하는 방식이다. AWS의 엔지니어 Clare Liguori는 기존 시스템을 운영하는 Amazon Stores의 50개 팀 가운데, 배포 속도가 크게 오른 팀들이 일하는 방식을 의도적으로 바꿨다고 설명한다. 대부분 비슷한 도구를 썼는데도 결과가 갈렸다는 점이 흥미로웠다.[^16]
+
+Kiro가 공개한 Frontier Engineering 가이드는 그 방향을 더 구체적으로 보여준다. 두 번째 원칙은 에이전트가 일하는 시간을 늘리고 사람의 개입을 줄이라는 것으로, 목표를 다음과 같이 설명한다.[^13]
 
 > 목표는 실행 과정에서 사람의 개입을 점차 줄여가는 것이다. (원문 일부 번역)
 
 사람은 방향을 정하고 결과를 확인하되, 그 사이의 구현과 테스트, 오류 수정은 에이전트가 스스로 반복하도록 맡기자는 이야기다.
+
+나는 AI-DLC의 단계별 승인보다, 이렇게 에이전트가 스스로 끝낼 수 있는 범위를 넓히는 쪽에 더 동의한다.
 
 ## 2. 프로세스의 차이 — 큰 원을 더 빨리 도는 접근
 
@@ -160,11 +164,13 @@ flowchart TB
 
 전체 기간은 줄어들 수 있지만, 같은 양의 요구사항과 설계 판단, 리뷰가 더 짧은 시간 안에 몰리면 사람의 인지부하는 오히려 높아질 수 있다.
 
-AI가 구현 시간을 크게 줄이면 코딩은 전체 일정의 작은 일부가 되고, 제품 결정과 리뷰, 출시 승인이 새로운 병목으로 드러난다. Amazon 내부의 Frontier Development 사례를 정리하면서도 같은 현상을 확인했다.[^5]
+Clare의 Frontier Development 발표에서도 구현이 빨라진 뒤 제품 결정과 출시 승인이 더 긴 과정으로 남는다고 설명한다. 특히 되돌리기 쉬운 결정은 더 빨리 내려야 한다고 권한다.[^16][^5]
+
+이 관찰은 기존의 큰 개발 사이클을 그대로 둔 채 구현만 압축해서는 부족하다는 내 생각과 맞닿아 있다. 내가 작은 원을 선호하는 것도 한 번에 결정하고 검토할 범위를 줄여, 다음 고객 피드백까지의 대기를 짧게 만들고 싶기 때문이다.
 
 AI-DLC 워크숍에 참여한 사람들이 좋았다고 말하는 이유 중에는 여러 이해관계자가 한자리에 모여 커뮤니케이션 비용이 줄었다는 이야기가 많았다.
 
-그 효과는 분명 중요하지만 AI-DLC만의 효과라기보다, 작은 팀이 빠르게 결정하는 Two-Pizza Team 방식과 개발부터 운영까지 함께 책임지는 DevOps 문화가 잘 작동한 결과일 수도 있다.[^5]
+그 효과는 분명 중요하지만 AI-DLC만의 효과라기보다, 작은 팀이 빠르게 결정하는 Two-Pizza Team 방식과 개발부터 운영까지 함께 책임지는 DevOps 문화가 잘 작동한 결과일 수도 있다.
 
 좋은 협업 문화와 AI-DLC라는 방법론의 효과를 같은 것으로 보면, 다른 조직에 옮겼을 때 무엇을 재현해야 하는지가 흐려진다.
 
@@ -222,6 +228,10 @@ OpenAI의 Codex 사례에도 계획을 남기고, 에이전트끼리 리뷰하�
 
 > **하네스는 모델에게 경기장을 제공해야지, 어떻게 경기할지를 대신 결정해서는 안 된다.**
 
+Kiro의 Frontier Engineering 가이드도 에이전트가 읽기 쉬운 코드 구조와 명확한 오류 메시지, 필요한 작업을 수행할 도구를 갖추라고 한다.[^17] 테스트를 실행하고 화면을 확인하는 도구까지 제공해, 실패한 결과를 사람이 옮겨주지 않아도 에이전트가 스스로 고칠 수 있게 하라는 설명도 있다.[^18]
+
+이런 투자는 내가 앞에서 구분한 실행 환경을 갖추는 일에 해당한다. 사람이 결과를 받아 매번 고쳐주는 일을 줄이고, 에이전트가 직접 확인하고 다시 시도할 수 있게 한다.
+
 하네스는 모델이 읽을 수 있는 코드 저장소, 명령을 실행할 환경, 접근 가능한 데이터와 금지된 작업, 통과해야 할 테스트를 정한다.
 
 그 경계 안에서 어떤 순서로 문제를 풀지는 가능한 한 모델에게 맡긴다.
@@ -264,7 +274,7 @@ AWS의 공개 글에는 유럽의 한 금융사가 AI-DLC를 도입한 초기 �
 
 제품 조직에 속해 있어도 주어진 티켓만 처리하고 실제 결과에는 관심을 두지 않는 경우를 봤다. **팀과 조직에서의 경험도 문제 정의부터 운영까지 참여하고, 그 결과를 다음 결정에 반영할 때 쌓인다고 생각한다.**
 
-AI가 코드를 만드는 능력의 개인차를 줄일수록, 풀려는 문제와 배경을 공유하고 결과를 확인하며 같은 실패를 반복하지 않도록 하네스를 고치는 팀의 능력이 더 중요해진다고 생각한다. Amazon 내부 사례에서도 성과가 크게 오른 팀들이 이런 일하는 방식을 바꿨다고 소개한다.[^5]
+AI가 코드를 만드는 능력의 개인차를 줄일수록, 풀려는 문제와 배경을 공유하고 결과를 확인하며 같은 실패를 반복하지 않도록 하네스를 고치는 팀의 능력이 더 중요해진다고 생각한다.
 
 내가 더 확인하고 싶은 것도 이 부분이다. 개인에게 잘 맞았던 작업 방식과 하네스를 팀이 함께 쓸 때 무엇을 바꿔야 하는지, 운영하면서 배운 것을 조직의 일하는 방식에 어떻게 반영할 수 있는지 직접 적용하며 알아가고 싶다.
 
@@ -307,3 +317,9 @@ AI가 코드를 만드는 능력의 개인차를 줄일수록, 풀려는 문제�
 [^14]: Kiro, [Continuously tune your agent setup](https://kiro.dev/topics/frontier-engineering/tune-your-setup/) — 열 번째 원칙. 실패에서 지침과 도구를 개선하고, 새 모델에서 오래된 임시방편이 여전히 필요한지 재검토하도록 한다.
 
 [^15]: Kiro, [Trust the boundaries, not the agent](https://kiro.dev/topics/frontier-engineering/trust-the-boundaries/) — 여덟 번째 원칙. 권한 제한과 자동 검사로 사람의 반복 개입을 줄이되, 되돌릴 수 없는 행동에는 승인을 남긴다.
+
+[^16]: Clare Liguori, [From AI-Assisted to AI-Native: Building a Frontier Development Team](https://ai.engineer/talks/pqlWNihgdjI-from-ai-assisted-ai-native-building-frontier) — 공식 발표 전사. Amazon Stores의 50개 팀 관찰과 구현 이후의 의사결정 병목을 설명한다.
+
+[^17]: Kiro, [Build your codebase for agents](https://kiro.dev/topics/frontier-engineering/build-for-agents/) — 에이전트가 이해하고 실행하기 쉬운 코드·문서·도구를 갖추는 세 번째 원칙.
+
+[^18]: Kiro, [Give agents a fast feedback loop](https://kiro.dev/topics/frontier-engineering/fast-feedback-loop/) — 에이전트가 직접 테스트하고 오류를 수정할 수 있도록 빠른 검증 환경을 만드는 네 번째 원칙.

@@ -8,7 +8,7 @@ tags: ai agent agentic-development ai-dlc harness-engineering hitl solutions-arc
 publish: true
 lang: en
 date: 2026-09-06 09:00:00 +0900
-last_modified_at: 2026-10-14 10:10:40 +0900
+last_modified_at: 2026-10-14 10:13:20 +0900
 translation_key: aws-ai-dlc-thoughts
 korean_url: /2026/09/06/my-thoughts-on-aws-ai-dlc.html
 permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -109,11 +109,15 @@ Starting only then to connect data held separately by teams, give agents the per
 
 This is where the future I expect and the concept behind AI-DLC diverge.
 
-Kiro's published Frontier Engineering guide points in the same direction. Its second principle is to maximize agent time while minimizing human involvement, and describes the goal this way:[^13]
+Amazon's Frontier Development aims to let agents work for long periods without human intervention. In her talk on this approach, AWS engineer Clare Liguori describes 50 Amazon Stores teams working on existing systems. The teams with large gains in deployment speed deliberately changed how they worked. What interested me was that results diverged even though most used similar tools.[^16]
+
+Kiro's published Frontier Engineering guide makes that direction more concrete. Its second principle is to maximize agent time while minimizing human involvement, and describes the goal this way:[^13]
 
 > “The goal is to progressively remove yourself from the loop”
 
 People set the direction and verify the outcome, while agents handle the repeated implementation, testing, and fixes in between.
+
+I favor expanding what agents can finish on their own over AI-DLC's approvals at each stage.
 
 ## 2. The Process Difference — Making the Big Loop Run Faster
 
@@ -162,11 +166,13 @@ Yet the people involved still meet at each stage to build a shared understanding
 
 The total duration can fall, but compressing the same volume of requirements, design decisions, and review into less time can increase human cognitive load.
 
-When AI sharply reduces implementation time, coding becomes a small part of the schedule, exposing product decisions, review, and launch approval as the next bottlenecks. I observed the same shift while examining Amazon's internal Frontier Development cases.[^5]
+Liguori also describes product decisions and launch approvals taking longer than implementation once coding accelerates. She recommends making decisions faster, especially when they are easy to reverse.[^16][^5]
+
+This observation supports my view that compressing implementation within the same large development cycle is not enough. I prefer small loops because I want to reduce the scope of each decision and review, shortening the wait for the next round of customer feedback.
 
 Participants in AI-DLC workshops often said that bringing stakeholders together reduced communication overhead.
 
-That effect matters, but it may come as much from Amazon's team culture as from AI-DLC itself: the Two-Pizza Team approach keeps teams small so they can decide quickly, while DevOps has teams share responsibility for building and operating the software.[^5]
+That effect matters, but it may come as much from Amazon's team culture as from AI-DLC itself: the Two-Pizza Team approach keeps teams small so they can decide quickly, while DevOps has teams share responsibility for building and operating the software.
 
 If good collaboration culture and the effect of the methodology are treated as the same thing, it becomes difficult to know what another organization must reproduce.
 
@@ -224,6 +230,10 @@ OpenAI's Codex case also includes written plans, reviews between agents, and rep
 
 > **A harness should provide the playing field, not decide how the model plays the game.**
 
+Kiro's Frontier Engineering guide also recommends preparing code that agents can navigate, informative error messages, and tools that let them carry out their work.[^17] It calls for giving agents tools to run tests and inspect the UI so they can repair failures without a person passing results between tools.[^18]
+
+These investments fit the execution infrastructure I described earlier. They reduce the work of people receiving and fixing each result by letting agents check their work and try again themselves.
+
 The harness decides which code repositories the model can read, where it can run commands, which data it can access, which actions are forbidden, and which tests it must pass.
 
 Within those boundaries, the model should choose how to solve the problem whenever possible.
@@ -266,7 +276,7 @@ That experience has helped me develop a clearer view of how I prefer to build so
 
 I have also seen people in product organizations complete assigned tickets without taking an interest in the actual outcome. **I think experience at the team and organizational level comes from staying involved from problem definition through operation, and using the results to inform the next decision.**
 
-As AI narrows the differences in people's ability to write code, I think it becomes more important for a team to share the problem and its background, check results, and improve the harness so the same failures do not happen again. Amazon's account also describes changes in these working practices among the teams with larger gains.[^5]
+As AI narrows the differences in people's ability to write code, I think it becomes more important for a team to share the problem and its background, check results, and improve the harness so the same failures do not happen again.
 
 This is what I want to understand better through practice: what needs to change when a team shares the working methods and harness that suited one person, and how lessons from operating the product can change the way the organization works.
 
@@ -309,3 +319,9 @@ As I work this way, using customer responses and operational results to guide wh
 [^14]: Kiro, [Continuously tune your agent setup](https://kiro.dev/topics/frontier-engineering/tune-your-setup/) — the tenth principle, on improving instructions and tools after failures and revisiting old workarounds when new models arrive.
 
 [^15]: Kiro, [Trust the boundaries, not the agent](https://kiro.dev/topics/frontier-engineering/trust-the-boundaries/) — the eighth principle, on reducing repeated human intervention through access limits and automated checks while retaining approval for irreversible actions.
+
+[^16]: Clare Liguori, [From AI-Assisted to AI-Native: Building a Frontier Development Team](https://ai.engineer/talks/pqlWNihgdjI-from-ai-assisted-ai-native-building-frontier) — the official talk transcript, covering the 50-team Amazon Stores pilot and decision bottlenecks after implementation accelerates.
+
+[^17]: Kiro, [Build your codebase for agents](https://kiro.dev/topics/frontier-engineering/build-for-agents/) — the third principle, on preparing code, documentation, and tools that agents can understand and use.
+
+[^18]: Kiro, [Give agents a fast feedback loop](https://kiro.dev/topics/frontier-engineering/fast-feedback-loop/) — the fourth principle, on providing fast checks so agents can test and repair their work themselves.
