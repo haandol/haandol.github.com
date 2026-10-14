@@ -8,7 +8,7 @@ tags: ai agent agentic-development ai-dlc harness-engineering hitl solutions-arc
 publish: true
 lang: en
 date: 2026-09-06 09:00:00 +0900
-last_modified_at: 2026-10-14 10:06:47 +0900
+last_modified_at: 2026-10-14 10:10:40 +0900
 translation_key: aws-ai-dlc-thoughts
 korean_url: /2026/09/06/my-thoughts-on-aws-ai-dlc.html
 permalink: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -240,13 +240,9 @@ I think AI-DLC is difficult to adopt for production development and expand acros
 
 Yet **I keep encountering customers who say AI-DLC works well for them, and others who plan to adopt it.** Each time I hear that, it shakes my confidence in my own view.
 
-An AWS article connects AI-DLC with parts of the process used by six people to build Bedrock Mantle in 76 days. The article also describes an early adoption case at a European financial institution, where one product owner and three developers delivered up to 35 features per sprint—a fixed period of work.[^10]
+An AWS article describes an early AI-DLC adoption case at a European financial institution. It reports that one product owner and three developers delivered 35 features per sprint—a fixed period of work.[^10]
 
-But Mantle's success alone does not prove that the full AI-DLC methodology caused those results.
-
-The project combined excellent engineers, fast decisions, and good internal tools with the chance to build a new system rather than change an existing one. The public article itself carefully says that some of the processes and tools used for Mantle are now parts of AI-DLC.
-
-Even allowing for those conditions, I find it hard to dismiss customers' experiences of getting results with an approach I expect to be difficult. I wonder whether I have missed a condition that matters, or assumed that my experience with personal projects applies equally to teams and organizations.
+Cases like this make me wonder whether I have missed a condition that matters, or assumed that my experience with personal projects applies equally to teams and organizations.
 
 I think I need to try the approach I believe in at the team and organizational level, beyond my own projects. Working on real customer problems, launching a service, and dealing with both operational incidents and the difficulties of working together would help me understand which parts hold up and which need to change.
 
@@ -302,7 +298,7 @@ As I work this way, using customer responses and operational results to guide wh
 
 [^9]: OpenAI, [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/) — describes an agent's work environment that automatically checks code structure and rules and tests the results.
 
-[^10]: AWS, [AI-Driven Development Lifecycle for Financial Services](https://aws.amazon.com/blogs/industries/ai-driven-development-lifecycle-for-financial-services/) (2026.05.26) — presents the Bedrock Mantle case and an early European financial-services adoption case.
+[^10]: AWS, [AI-Driven Development Lifecycle for Financial Services](https://aws.amazon.com/blogs/industries/ai-driven-development-lifecycle-for-financial-services/) (2026.05.26) — presents an early AI-DLC adoption case at a European financial institution.
 
 [^11]: MIT Sloan, [Steve Jobs talks consultants, hiring, and leaving Apple in unearthed 1992 talk](https://mitsloan.mit.edu/ideas-made-to-matter/steve-jobs-talks-consultants-hiring-and-leaving-apple-unearthed-1992-talk) — summarizes Jobs's argument that learning can remain shallow without implementing recommendations and living with their consequences over time.
 

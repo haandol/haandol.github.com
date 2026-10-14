@@ -6,7 +6,7 @@ author: haandol
 email: ldg55d@gmail.com
 tags: ai agent agentic-development ai-dlc harness-engineering hitl solutions-architect
 publish: true
-last_modified_at: 2026-10-14 10:06:47 +0900
+last_modified_at: 2026-10-14 10:10:40 +0900
 lang: ko
 translation_key: aws-ai-dlc-thoughts
 english_url: /en/2026/09/06/my-thoughts-on-aws-ai-dlc.html
@@ -238,13 +238,9 @@ AI-DLC의 adaptive workflow는 모든 작업에 같은 절차를 적용하던 �
 
 그런데 **AI-DLC가 잘 작동한다고 말하는 고객도, 도입하겠다는 고객도 계속 생긴다.** 그런 이야기를 접할 때마다 내 생각이 흔들린다.
 
-AWS의 공개 글은 Bedrock Mantle을 6명이 76일 만에 만든 과정 중 일부를 AI-DLC와 연결해 설명한다. 유럽의 한 금융사에서 제품 담당자 한 명과 개발자 3명이 한 번의 sprint, 즉 정해진 작업 기간마다 최대 35개 기능을 완성했다는 초기 도입 사례도 소개한다.[^10]
+AWS의 공개 글에는 유럽의 한 금융사가 AI-DLC를 도입한 초기 사례가 나온다. 제품 담당자 한 명과 개발자 3명이 한 번의 sprint, 즉 정해진 작업 기간마다 35개 기능을 완성했다고 소개한다.[^10]
 
-다만 Mantle이 성공했다고 해서 그 성과가 AI-DLC 방법론 전체 덕분이라고 단정할 수는 없다.
-
-뛰어난 엔지니어와 빠른 의사결정, 좋은 내부 도구가 있었고, 기존 시스템을 고치는 대신 새로 만드는 프로젝트이기도 했다. 공개 글도 Mantle에서 사용한 과정과 도구 중 일부가 오늘날 AI-DLC에 포함됐다고 조심스럽게 표현한다.
-
-그런 조건을 고려해도, 내가 어렵다고 생각한 방식으로 성과를 내고 있다는 고객들의 경험을 쉽게 넘기기는 어렵다. 내가 놓친 조건이 있는지, 개인 프로젝트에서 얻은 경험을 팀과 조직에도 그대로 적용해서 생각하는 건 아닌지 돌아보게 된다.
+이런 사례를 접하면 내가 놓친 조건이 있는지, 개인 프로젝트에서 얻은 경험을 팀과 조직에도 그대로 적용해서 생각하는 건 아닌지 돌아보게 된다.
 
 내가 생각하는 방식도 개인을 넘어 팀과 조직 단위로 도입해봐야 한다고 생각한다. 실제 고객의 문제를 풀고 서비스를 출시한 뒤, 운영 중의 장애와 여러 사람이 함께 일하며 부딪히는 문제까지 겪어봐야 어느 부분이 통하고 어느 부분을 바꿔야 하는지 알 수 있을 것이다.
 
@@ -300,7 +296,7 @@ AI가 코드를 만드는 능력의 개인차를 줄일수록, 풀려는 문제�
 
 [^9]: OpenAI, [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/) — 코드 구조와 규칙을 자동으로 검사하고 테스트로 결과를 확인하도록 에이전트의 작업 환경을 만든 사례.
 
-[^10]: AWS, [AI-Driven Development Lifecycle for Financial Services](https://aws.amazon.com/blogs/industries/ai-driven-development-lifecycle-for-financial-services/) (2026.05.26) — Bedrock Mantle과 유럽 금융사의 초기 AI-DLC 도입 사례를 소개한다.
+[^10]: AWS, [AI-Driven Development Lifecycle for Financial Services](https://aws.amazon.com/blogs/industries/ai-driven-development-lifecycle-for-financial-services/) (2026.05.26) — 유럽 금융사의 초기 AI-DLC 도입 사례를 소개한다.
 
 [^11]: MIT Sloan, [Steve Jobs talks consultants, hiring, and leaving Apple in unearthed 1992 talk](https://mitsloan.mit.edu/ideas-made-to-matter/steve-jobs-talks-consultants-hiring-and-leaving-apple-unearthed-1992-talk) — 권고를 구현하고 그 결과를 오래 겪지 않을 때 학습이 얕아질 수 있다는 잡스의 강연을 정리한다.
 
