@@ -7,7 +7,7 @@ email: ldg55d@gmail.com
 tags: ai agent claude code-review harness-engineering evaluation
 publish: true
 published: true
-date: 2026-10-19 00:00:00 +0900
+date: 2026-10-19 09:16:05 +0900
 lang: ko
 translation_key: how-anthropic-reviews-ai-generated-code
 english_url: /en/2026/10/19/how-anthropic-reviews-ai-generated-code.html
