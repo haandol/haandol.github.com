@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "How Much Code Review Can We Delegate? — Lessons from the Claude Code Team"
-excerpt: Reviewing AI-generated code with evidence and explicit team rules
+title: "Bottlenecks After AI Writes the Code — Anthropic's Review and Source Control Practices"
+excerpt: How Anthropic handles bottlenecks after AI writes the code
 author: haandol
 email: ldg55d@gmail.com
-tags: ai agent claude code-review harness-engineering evaluation
+tags: ai agent claude code-review source-control software-factory evaluation
 publish: true
 published: true
 date: 2026-10-19 09:16:05 +0900
-last_modified_at: 2026-10-19 09:16:05 +0900
+last_modified_at: 2026-10-19 09:40:50 +0900
 lang: en
 translation_key: how-anthropic-reviews-ai-generated-code
 korean_url: /2026/10/19/how-anthropic-reviews-ai-generated-code.html
@@ -17,57 +17,35 @@ permalink: /en/2026/10/19/how-anthropic-reviews-ai-generated-code.html
 
 ## TL;DR
 
-- Automated review findings need supporting evidence.
-- Review instructions should describe concrete failure conditions.
-- Time saved in review needs to be assessed alongside quality.
+- The Claude Code team allocates human review according to change risk.
+- Scion illustrates infrastructure bottlenecks after code generation.
+- Review automation needs to be evaluated alongside operational quality.
 
 ## Introduction
 
-If people must understand and review every change, faster AI coding moves the next bottleneck to review. In an earlier post about review's cognitive load, I argued for lowering the cost of understanding context and automating recurring judgments.[^2]
+Faster AI coding does not shorten delivery time by the same amount if reading, checking, and merging the changes cannot keep up. Anthropic's articles on code review and source control address this problem at different scopes.
 
-I read Anthropic's account of code review on the Claude Code team.[^1] Here I summarize its main points and add details from the public documentation to explore what can actually be automated.
+The October 15 article, “How the Claude Code team does code review,” describes the team's review process.[^1] The October 13 article, “Redesigning source control at Anthropic,” covers a source control system called Scion.[^2] **Claude Code uses a separate repository, so these accounts should not be read as one repository's workflow.**
 
-## 1. Track review time alongside failed changes
+Here I summarize the two cases and connect them to my earlier posts on cognitive load and Software Factories. I think they help explain both what people need to understand and decide, and how automated verification can improve.
 
-The team reports that merged PRs more than doubled from June to September, while the proportion reverted fell by over 40%. Its aim is to reduce human time without increasing reverts or incidents.[^1]
+## 1. What the Claude Code team verifies automatically
 
-A pull request, or PR, is a request to review code changes and merge them into a repository. The team combines multiple checks with staged releases and fast recovery.[^1] The figures describe those operational results; they do not isolate the effect of automated review alone.
+### 1.1. Track review savings alongside failed changes
 
-I think this is a useful way to assess review automation. Less review time may not mean less work if engineers spend more time fixing problems after release. Saving an hour of review each day while adding two hours of incident response would make faster approval a poor measure of improvement.
+A pull request, or PR, asks for code changes to be reviewed and merged into a repository. The Claude Code team reports that merged PRs more than doubled from June to September 2026, while the proportion reverted fell by over 40%.[^1]
 
-## 2. Separate execution from verification
+Other figures in the article have different scopes. The share of internal PRs receiving substantive review comments rose from 16% to 54% after AI review was introduced. Across Anthropic's monorepo, a repository containing multiple projects, daily merges rose from roughly 2,500 in May to over 30,000 in September. Neither figure should be presented as a Claude Code repository result measured over the same period.[^1]
 
-### 2.1. Check the implementation first
+The goal is for most PRs to involve at most one person, who can be the author, without increasing reverts or incidents. The reported results come from multiple checks, staged releases, and fast recovery together; they do not isolate the effect of AI review alone.
 
-Claude Code's best-practices guide recommends giving agents checks they can run: tests, builds, or visual comparisons. Reading the results and revising the work allows an agent to continue without waiting for another human instruction. The guide also describes verification by an agent with context separate from the implementation session.[^3]
+### 1.2. Verification starts before the PR
 
-For a booking cancellation feature, for example, a claim that the cancel button exists is insufficient. Define the expected behavior, such as how a canceled booking appears in the list and whether repeating the request preserves its state, then compare it with execution results.
+After Claude changes code, it runs tests and builds and inspects the output. UI changes are compared with the design, and a subagent reviews the changes with context separate from the implementation session. Separate skills also look for bugs, simplify code, and check user behavior from beginning to end.[^1]
 
-### 2.2. Check the review findings too
+Recurring findings move into instructions or automated checks. `CLAUDE.md` describes the stack, development conventions, and goals. `REVIEW.md` describes the failures that matter in that part of the code. The team separately checks whether the reviewer follows those instructions.
 
-In the public Code Review service, several agents inspect the changes and surrounding code. A verification step checks candidate findings against the code; remaining findings are deduplicated and posted on the PR in severity order.[^4]
-
-{% raw %}
-```mermaid
-flowchart TD
-    A["PR changes and surrounding code"] --> B["Agents search for issues"]
-    B --> C["Verify findings against the code"]
-    C --> D["Deduplicate and rank by severity"]
-    D --> E["Post review results on the PR"]
-```
-{% endraw %}
-
-The service does not approve or block PRs. **Finding issues and deciding whether to accept a change are separate responsibilities.** Security review is also available through the separate `/security-review` command or a GitHub Action that runs on PRs.[^4][^5]
-
-Repository rules need to define which failed checks block a merge and who decides what to do with unresolved findings. The existence of a review comment does not establish that its issue has been resolved.
-
-## 3. Describe failures in REVIEW.md
-
-Once the tool is connected, it needs to know which problems matter to the team. The public documentation distinguishes project-wide instructions in `CLAUDE.md` from review-specific instructions in `REVIEW.md`. The latter can specify checks, severity, and exclusions.[^6]
-
-There is an important difference between tools: the Code Review service reads both files, while the local `/code-review` command reads only `CLAUDE.md`. Rules intended for both paths belong in `CLAUDE.md`.[^6]
-
-I think instructions work better when they describe failure conditions instead of saying “check security carefully.” For the booking cancellation example, I would write something like this:
+For a booking cancellation feature, for example, the criteria could look like this:
 
 ```text
 Booking cancellation review criteria
@@ -77,38 +55,159 @@ Booking cancellation review criteria
 - Include the triggering conditions and relevant file and line in each finding.
 ```
 
-This extends the review from successful cancellation to ownership and repeated requests. It also makes it easier to distinguish a guess based on a filename lacking `secure` from a finding that traces how a user could change someone else's booking.
+If the same authorization issue keeps recurring, the team can go beyond recording it in instructions and add a test that rejects attempts to cancel someone else's booking. Future changes can then be checked against the same failure condition.
 
-Writing the criteria does not complete verification. A test showing that a request to cancel another user's booking is rejected connects the rule to implementation behavior. The document preserves the question to ask; the test makes that condition executable on later changes.
+### 1.3. Other agents verify the review findings
 
-## 4. Manage human judgment and repeated reviews
+Every PR receives an AI review. The reviewer reads the changes, surrounding repository code, and the PR's stated purpose to check whether it solves the original problem or breaks other behavior. Several agents search for problems in parallel, and a separate group assesses each finding.[^1]
 
-On the Claude Code team, trusted authors can merge low-risk changes on automated checks alone. Higher-risk changes need human approval, which agent approvals cannot replace.[^1]
+{% raw %}
+```mermaid
+flowchart TD
+    A["PR changes · intent · repository context"] --> B["Several agents search for problems"]
+    B --> C["Separate agent group verifies findings"]
+    C --> D{"Enough agreement that the issue is real?"}
+    D -->|Yes| E["Filter · rank by severity · post comments"]
+    D -->|No| F["Discard finding"]
+```
+{% endraw %}
 
-Applying this to another team requires deciding which failures are costly. Changing a cancellation button's text and changing cancellation permissions can affect the same screen while carrying different consequences. I think review policy should reflect that difference, with human review adjusted to what automated checks can establish.
+This reduces false positives: reports of bugs that are not actually present. The diagram simplifies the detection and verification process; the article does not disclose the exact number of agents or the agreement threshold.
 
-Less human review will not finish a change if automated review keeps requesting revisions. The article describes reconsidering the approach after three rounds.[^1]
+Existing problems are marked `Pre-existing`. Every finding must be fixed or resolved with a reason for leaving the code as it is. Security review runs separately, and unresolved bug or security findings block merging.[^1]
 
-Three rounds should not be read as permission to pass unresolved issues. When review does not converge, it helps to inspect whether the remaining findings are actual defects or conflicting requirements before running the same process again.
+The public Code Review product that posts findings should be distinguished from the Claude Code team's merge policy. The product does not provide the approval itself; making unresolved findings block a merge is a team rule.
 
-Suppose returning success for repeated cancellations is the agreed behavior, but the reviewer keeps demanding an error response. More revisions will not resolve that disagreement. Record the expected behavior in both review instructions and tests, then check whether the reviewer raises the same objection again.
+### 1.4. Connect automated checks to recovery after release
 
-The reviewer's ability to find real problems also needs checking. The Claude Code team evaluates its reviewer daily against past incidents.[^1]
+AI review runs alongside CI, or continuous integration: automated checks used when integrating changes. These check code conventions and types, run tests across platforms, and build the software. PRs describe how the change was tested and how to undo it. Even when Claude fills in those details, the person who requested the change verifies them.[^1]
 
-In an earlier post about Software Factory evaluation, I described tension metrics: measures that reveal whether other aspects of quality deteriorate as a target metric improves.[^7] The same perspective applies to review. Tracking both review duration and missed defects helps avoid treating a reviewer that merely posts fewer comments as a better reviewer.
+The following diagram shows the Claude Code team's workflow. The next section explains when human approval is required.
+
+{% raw %}
+```mermaid
+flowchart TD
+    A["Implementation · local verification"] --> B["Open PR"]
+    B --> C["AI code and security review / CI"]
+    C --> D["Resolve findings · approval by risk"]
+    D --> E["Merge queue<br/>Recheck combined with main"]
+    E --> F["Internal use · staged release"]
+    F --> G["Monitor · recover when problems appear"]
+    G -. "Feed missed failures into future checks" .-> A
+```
+{% endraw %}
+
+A merge queue schedules changes and checks them again against the latest `main`, because PRs that pass separately can still fail when combined. New behavior usually goes to employees first behind a feature flag, a switch for enabling or disabling it, followed by staged public releases.[^1]
+
+If a problem appears after release, the team can disable the flag or revert the change. Incident reviews also ask which verification layer missed it. The article presents these recovery measures as part of what makes broader automated review possible.
+
+## 2. How the team manages human approval and repeated reviews
+
+### 2.1. Change risk determines the required approval
+
+The Claude Code team classifies risk by the change, rather than the author's experience.[^1]
+
+| Risk | Example changes | Required human approvals |
+| --- | --- | --- |
+| Low | Documentation, copy, internal features, additions behind a flag | Zero when automated checks and other conditions are met |
+| Medium | Ordinary product changes, caching, the auto-updater, system prompts | One |
+| High | Highest-risk code and paths that always require two people | Two |
+
+One AI classifier assigns the risk tier. Another checks whether this particular change needs an additional person. CI configuration and paths marked sensitive by their owners always require human review.
+
+The lighter approval paths apply only to authors on the repository's trusted list. For an agent-written PR, the person directing the agent remains accountable and may count toward the required reviewers. An agent's approval cannot fill a required human slot.
+
+Approval covers a specific commit. It must be renewed after changes the system cannot vouch for, such as an agent's revision or a manually resolved merge conflict.[^1]
+
+### 2.2. Review also needs to finish
+
+An AI author and an AI reviewer can keep creating work for each other. One Claude Code PR went through more than 50 rounds of review and fixes overnight. Investigation found that about 59% of the repeatedly flagged code had already existed at the first review. The reviewer was mostly finding more old problems, rather than new bugs introduced by the fixes.[^1]
+
+The team changed re-review accordingly.
+
+| Revised rule | Purpose |
+| --- | --- |
+| Ask the author to reconsider the approach after three rounds | Stop repeating the same process indefinitely |
+| Focus on the newly changed code—the diff—after the first few passes | Limit repeated expansion into existing code |
+| Flag a class of bug rather than one line | Fix similar instances together |
+| Do not repeat findings already posted | Avoid duplicate revision and review work |
+
+Three rounds is a point for reconsidering the approach, not permission to pass unresolved defects. Nightly reviews also inspect existing code separately, so narrowing PR re-review does not mean abandoning older bugs.[^1]
+
+### 2.3. Human decisions and shared understanding
+
+People decide whether a feature should exist, which risks to accept, and whether an architecture should become a pattern for other code. They also read test output and review evidence to understand what the checks might miss. The person directing the work remains responsible for the shipped change.[^1]
+
+The team supplements review's knowledge-sharing role with explanations of the part of the code someone needs to understand. Engineers ask Claude to explain the module they are about to change or create a visualization. The article does not claim this is a formal knowledge-sharing process.
+
+## 3. Scion addresses the source control bottleneck
+
+Reviewed changes still need to be fetched, merged, and tested. Scion is a centralized service built for online agents and jobs in a huge monorepo. Clients retrieve needed files and query changes and history through APIs. It is not proposed as a general Git replacement.[^2]
+
+Merge policies differ too. Claude Code uses a merge queue, while the monorepo invested in post-merge, pre-deploy testing because globally locking the queue proved impractical.[^1][^2]
+
+Reading these cases together makes me think review policy and infrastructure capacity need to be considered together. Fast approval still leaves changes waiting if automated checks are backed up. Conversely, fast checks do not remove the cost of understanding and judgment when a person must reread every result.
+
+## 4. Connections to cognitive load and Software Factories
+
+### 4.1. Reduce the cost of understanding and the share requiring review
+
+In my cognitive-load post, I described how understanding accumulated during implementation can become concentrated at the point when AI delivers the result.[^3] Cognitive load here is the burden of holding information in mind to understand and judge the code's intent, behavior, and exceptions.
+
+The two responses I proposed were to reduce the cost of understanding each change or remove people from recurring verification. The Claude Code team's module explanations and verification evidence connect to the former; its risk-based approval policy connects to the latter.
+
+This does not remove the need for understanding. People still need enough context to judge what should be built, which failures matter, and what automated checks establish. The approach reduces repeated reading while providing evidence for the decisions that remain.
+
+### 4.2. Turn operational failures into reviewer evaluations
+
+My Software Factory post described a system in which AI connects implementation, verification, and operation to improve both the product and the development process.[^4] Evals—running defined inputs and comparing actual results with expected outcomes—provide the basis for deciding what to change next.
+
+The Claude Code team collects PRs that caused incidents, together with their fixes and reverts. Engineers familiar with the code confirm each bug and its location. The reviewer is evaluated against this dataset daily and again when its prompts, tools, or model change.[^1]
+
+{% raw %}
+```mermaid
+sequenceDiagram
+    participant O as Operational results
+    participant E as Evaluation cases
+    participant R as Reviewer improvement
+    O->>E: Incident PRs · fixes · reverts
+    E->>E: Engineers confirm bugs and locations
+    R->>E: Run the revised reviewer
+    E-->>R: Real bugs detected · false positives · harmful findings
+    R->>R: Assess the revision using evaluation results
+```
+{% endraw %}
+
+The team also runs the reviewer on known-clean PRs to check for findings that could lead to harmful code changes. For comments on real PRs, it records whether people fixed the issue, rejected the finding as wrong, or explained that the behavior was intentional, among other responses.[^1]
+
+I see a direct connection to Software Factories here: a product failure leads not only to a product fix, but also to an evaluation of the reviewer that missed it. When recurring failures change the tests and instructions used on future tasks, the development process improves too.
+
+### 4.3. Evaluate throughput alongside quality
+
+In the Software Factory post, tension metrics reveal whether other aspects of quality deteriorate while the target metric improves.[^4] Optimizing only review comment counts or approval speed can make results look better while real defects go unnoticed.
+
+The Claude Code team tracks the following together.[^1]
+
+| What is evaluated | What the team seeks to improve | Quality checked alongside it |
+| --- | --- | --- |
+| Human involvement | Human approvals per PR at the median and 95th percentile, comments, time waiting on people | Revert rate and incident rate |
+| Reviewer | Real bugs detected and rounds needed to pass | False positives and potentially harmful findings |
+
+The 95th percentile is the value at or below which 95% of PRs fall, helping the team track changes that need more approvals.
+
+The article prioritizes catching real bugs first and reducing review rounds second. Saving review time would not be an improvement if people then spent more time responding to incidents.
+
+It also states that no mechanism yet automatically tightens approval requirements when incident or revert metrics worsen. This is not evidence of the automated selection and target adjustment of KPIs—key performance indicators used to judge results—that I proposed in the Software Factory post. What the account establishes is a process that connects operational results to evaluations and tracks human time alongside change failures.
 
 ## Conclusion
 
-I think a useful starting point for review automation is turning one recurring finding into a concrete verification condition. State when it fails, locate the relevant code, and make the behavior something that can be checked by running it.
+These cases make me think review automation needs to extend beyond reading code. Verifying findings, bringing review to a close, testing combined changes, and preserving operational failures as evaluation cases all need to connect.
 
-Once that condition can be verified automatically, people have less reason to inspect it repeatedly. Review automation helps development when the time saved goes toward behavior that remains unverified and decisions about what the product should do.
+For adoption, I would follow the article's suggestion to start with an AI reviewer in one repository, tune the instructions, and then expand. Recording both what people wait for and what fails after deployment provides evidence for deciding whether to improve review rules or the verification environment next.
 
 ---
 
-[^1]: Anthropic, [How the Claude Code team does code review](https://claude.dev/blog/solving-code-review-at-anthropic/).
-[^2]: [Why AI Code Review Feels Overwhelming — Time to Learn the Context and Cognitive Debt](/en/2026/08/18/ai-coding-review-cognitive-load.html).
-[^3]: Anthropic, [Best practices for Claude Code](https://code.claude.com/docs/en/best-practices).
-[^4]: Anthropic, [Code Review](https://code.claude.com/docs/en/code-review).
-[^5]: Anthropic, [Automated Security Reviews in Claude Code](https://support.claude.com/en/articles/11932705-automated-security-reviews-in-claude-code).
-[^6]: Anthropic, [Customize Code Review](https://code.claude.com/docs/en/code-review-customize).
-[^7]: [How a Software Factory Can Improve Itself — Evals, KPIs, and Tension Metrics](/en/2026/10/05/software-factory-evals-and-tension-metrics.html).
+[^1]: Addy Osmani, Morgan Westlee Lunt, Qing Wang, [How the Claude Code team does code review](https://claude.dev/blog/solving-code-review-at-anthropic/) (2026-10-15).
+[^2]: Anthropic, [Redesigning source control at Anthropic](https://www.anthropic.com/engineering/redesigning-source-control) (2026-10-13, updated October 15).
+[^3]: [Why AI Code Review Feels Overwhelming — Time to Learn the Context and Cognitive Debt](/en/2026/08/18/ai-coding-review-cognitive-load.html).
+[^4]: [How a Software Factory Can Improve Itself — Evals, KPIs, and Tension Metrics](/en/2026/10/05/software-factory-evals-and-tension-metrics.html).
