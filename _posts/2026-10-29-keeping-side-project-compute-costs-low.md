@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "완전 서버리스로 서버비 낮춰 버티기"
-excerpt: Keeping side projects affordable until product-market fit
+title: "AWS 네이티브 서버리스 아키텍처로 사이드 프로젝트 서버비 0원 만들기"
+excerpt: Eliminating idle server costs for side projects on AWS
 author: haandol
 email: ldg55d@gmail.com
 tags: aws serverless lambda s3-vectors agentcore side-project pmf cost-optimization
 publish: true
 published: true
 date: 2026-10-29 00:34:56 +0900
-last_modified_at: 2026-10-29 00:34:56 +0900
+last_modified_at: 2026-10-29 10:39:17 +0900
 lang: ko
 translation_key: keeping-side-project-compute-costs-low
 english_url: /en/2026/10/29/keeping-side-project-compute-costs-low.html

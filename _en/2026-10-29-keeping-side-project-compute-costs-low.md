@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "Keeping Server Costs Low with Fully Serverless Services"
-excerpt: Keeping side projects affordable until product-market fit
+title: "Zero Server Costs for Side Projects with AWS Native Serverless Architecture"
+excerpt: Eliminating idle server costs for side projects on AWS
 author: haandol
 email: ldg55d@gmail.com
 tags: aws serverless lambda s3-vectors agentcore side-project pmf cost-optimization
 publish: true
 published: true
 date: 2026-10-29 00:34:56 +0900
-last_modified_at: 2026-10-29 00:34:56 +0900
+last_modified_at: 2026-10-29 10:39:17 +0900
 lang: en
 translation_key: keeping-side-project-compute-costs-low
 korean_url: /2026/10/29/keeping-side-project-compute-costs-low.html
