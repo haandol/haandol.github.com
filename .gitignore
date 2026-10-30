@@ -5,3 +5,5 @@ vendor/
 .bundle/config
 .claude/settings.local.json
 .playwright-mcp/
+# Local blog previews and diagram scratch files
+/_preview/
