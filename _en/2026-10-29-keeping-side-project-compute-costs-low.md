@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "Zero Server Costs for Side Projects with AWS Native Serverless Architecture"
-excerpt: Eliminating idle server costs for side projects on AWS
+title: "Eliminating Idle Server Costs for Side Projects with AWS Serverless"
+excerpt: A shared serverless stack for Encbird and PixelbankStudio
 author: haandol
 email: ldg55d@gmail.com
 tags: aws serverless lambda s3-vectors agentcore side-project pmf cost-optimization
 publish: true
 published: true
 date: 2026-10-29 00:34:56 +0900
-last_modified_at: 2026-10-29 10:39:17 +0900
+last_modified_at: 2026-10-30 15:40:32 +0900
 lang: en
 translation_key: keeping-side-project-compute-costs-low
 korean_url: /2026/10/29/keeping-side-project-compute-costs-low.html
@@ -19,7 +19,7 @@ permalink: /en/2026/10/29/keeping-side-project-compute-costs-low.html
 
 - Keep fixed operating costs low until product-market fit.
 - Avoid continuously running application servers.
-- Keep development and deployment affordable.
+- Payment and insurance costs can exceed server costs.
 
 ## Introduction
 
@@ -39,13 +39,13 @@ Hosting several services on one server can spread its cost across them. But I st
 
 Encbird and PixelbankStudio serve their web interfaces as static files and run their backends on AWS Lambda. Lambda executes code in response to requests or events. Keeping a service available this way does not require a continuously running application server for each product.
 
-The application interface is a Vue 3 single-page application (SPA). I chose client-side rendering (CSR), where JavaScript constructs the interface in the browser, to reduce the cost of server-side rendering (SSR), which generates HTML on the server for incoming requests.
+The application interface is a single-page application (SPA). I chose client-side rendering (CSR), where JavaScript constructs the interface in the browser, to reduce the cost of server-side rendering (SSR), which generates HTML on the server for incoming requests.
 
 The HTML and JavaScript files are stored in Amazon S3 and delivered through Amazon CloudFront. S3 stores files; CloudFront is a content delivery network (CDN) that caches and delivers them close to users.
 
 CSR makes search engine optimization (SEO) more challenging because a search engine needs to execute JavaScript to read the page content. I address that by prerendering public pages that can be prepared in advance, generating their HTML at build time.[^1]
 
-Encbird's landing and pricing pages are examples. They are deployed as HTML files containing the page content, so the server does not need to render them again for each incoming request.
+These public pages are deployed as HTML files containing the page content, so the server does not need to render them again for each incoming request.
 
 Both services store data in Amazon DynamoDB using its on-demand capacity mode, which charges for reads and writes as they are used. I do not keep a separate database server running for either application.[^2]
 
@@ -60,7 +60,7 @@ That difference matters when requests are infrequent. Compute costs follow incom
 
 API Gateway connects incoming requests to the backend. Simple Queue Service (SQS) holds jobs for processing. Separating these responsibilities does not mean adding a continuously running server for each one.
 
-### Moving to Go to reduce cold starts and memory use
+### Choosing a suitable language to reduce cold starts and memory requirements
 
 Low compute costs between requests come with a possible delay when a new execution environment needs to be prepared. That delay is a cold start. The INIT phase, which starts the runtime and loads libraries and initialization code, is also billed. Since August 1, 2025, INIT billing has also applied to the previously exempt combination of managed runtimes, ZIP packages, and on-demand execution.[^3]
 
@@ -70,57 +70,53 @@ Encbird's server was written in Go from the beginning. PixelbankStudio started i
 
 On a Lambda configured with little memory, I found that **the Python implementation's cold start took more than one second longer than Go's.** That difference led me to move PixelbankStudio's backend APIs and workers entirely to Go.
 
-Language alone does not determine cost. Libraries, initialization code, and memory settings matter too. In my case, making the execution setup lighter with Go helped me run the backend on smaller Lambdas.
+Still, Lambda charges depend on request count, execution duration, and allocated memory. Libraries and initialization code affect execution duration too, so I need to consider the execution setup as well as the language. In my case, keeping that setup light with Go helped me run the backend with less memory allocated to Lambda.
+
+If I need Python or Java for existing code or libraries, even at a slightly higher cost, **Lambda SnapStart is worth considering.** It reduces cold starts by saving and restoring an initialized execution environment, and supports Java 11 or later and Python 3.12 or later. Python incurs charges for maintaining and restoring that saved state, while Java managed runtimes have no additional SnapStart charge.[^13]
 
 ## 2. The AWS stack in use
 
 **Encbird and PixelbankStudio share the same foundational architecture.** S3 and CloudFront serve the static web app, Lambda runs APIs and background jobs, and DynamoDB and S3 store the data.
 
-The diagram adds scheduling, email, observability, and deployment support to that shared foundation. S3 Vectors for similarity search and Step Functions for multi-step jobs appear as options for workloads that need them. Multiple functions or stores with the same role are grouped together.
+The diagram adds scheduling, email, observability, and deployment support to that shared foundation. Encbird uses S3 Vectors for long-term memory processing, while Step Functions connects multi-step jobs. These workload-specific components are shown alongside the shared foundation, with multiple functions or stores of the same role grouped together.
 
 ![The shared AWS architecture for Encbird and PixelbankStudio: web hosting, authentication, APIs, data stores, queues and workers, scheduling, email, observability, deployment support, and optional S3 Vectors and Step Functions.](/assets/img/2026/1028/shared-aws-architecture-en.svg)
 
-### Encbird: separating learning requests from follow-up work
+### Encbird: separating requests from follow-up processing
 
-In Encbird, learners collect English expressions, practice them in conversations, and review them later. I described the learning design in an earlier post: expressions collected from conversations go into a shared dictionary that other practice features can use.[^4]
+In Encbird, I separate the processing needed for an immediate user response from work that can process the resulting data later. API Lambda functions respond to requests, while lengthy follow-up work travels through events and queues to separate Lambda workers.
 
-API Lambda functions accept learning requests, while follow-up work after a session ends travels through events and queues to separate Lambda functions. Moving lengthy processing, including model calls, out of the request means the API does not have to hold its response until the entire job finishes.
+Learning data is stored in DynamoDB, and images and other files go into S3. Later requests and background jobs can reuse the stored data.[^4] Stages that need an AI model call an external model API, so I do not operate GPU servers to host the models.
 
-Amazon Cognito handles sign-in, DynamoDB stores learning data, and S3 stores images and other files. Where AI is needed, the backend calls model APIs. I do not operate GPU servers to host those models.
+SNS delivers events, and SQS holds work to be processed, connecting request handling to background work. A worker is a program that executes queued jobs; here, it runs on Lambda. The API therefore does not have to hold its response until all processing has finished.
 
-Simple Notification Service (SNS) distributes events. For example, a session-ended event is delivered to a queue, and a worker processes the queued work. A worker is a program that performs these background tasks; here, it also runs on Lambda.
+Supporting work such as scheduling, email, and logs also uses managed services, so I do not keep separate servers running for those capabilities. The overview diagram groups these services by role.
 
-EventBridge rules and Scheduler start work at specified times, and SES sends application emails. CloudFront Functions normalize file requests, while Lambda@Edge resizes images when needed. Caching the transformed result avoids recomputing it every time the same file is displayed.
+CloudFront Functions normalize file requests, while Lambda@Edge resizes images when needed. Caching the transformed result avoids recomputing it every time the same file is displayed.
 
-CloudWatch provides logs, metrics, and alarms, with X-Ray for execution tracing. IAM manages execution permissions, and SSM Parameter Store holds configuration. ACM provides HTTPS certificates, and CloudFormation deploys the infrastructure defined in CDK. I do not operate separate servers for these supporting capabilities either.
+Adding work can mean adding APIs and workers. Having more functions does not, by itself, create a bill for keeping a separate server running all day for each one.
 
-Adding learning features can mean adding APIs and workers. Having more functions does not, by itself, create a bill for keeping a separate server running all day for each one.
+Scheduled jobs and follow-up work can still incur costs when no user is online. What I have reduced is the cost of continuously running application servers just to keep the service available.
 
-Scheduled jobs and follow-up work can still incur costs when no user is online. What I have reduced is the compute kept running just to maintain availability.
+### PixelbankStudio: separating file transfer from long-running jobs
 
-### PixelbankStudio: editing in the browser, generating through jobs
-
-PixelbankStudio lets users arrange and edit images on a canvas, then generate images with AI. Its web app is served statically, while Lambda runs the APIs for image uploads and generation jobs.
-
-Moving and resizing images on the canvas happens in the browser. The server does not need to keep computing the canvas while a user edits it.
+In PixelbankStudio, I separate interface work that can finish in the browser from file processing and generation jobs handled by the backend. The web interface is served statically, while Lambda runs the server APIs.
 
 For uploads, I also avoided having an API Lambda receive an entire image and forward it to S3. The server issues a presigned URL, which grants temporary permission to upload a particular file, and the browser uploads directly to S3. Before subsequent processing, the server checks matters such as the file's ownership and intended use.
 
-This keeps large image payloads out of API Gateway and Lambda. Lambda issues upload permissions and validates requests; S3 handles the file transfer.
+This keeps large image files from being relayed through API Gateway and Lambda. Lambda issues upload permissions and validates requests; S3 handles the file transfer.
 
 Work such as image generation can take 30 seconds or more to produce a response, making it difficult to wait for completion within an ordinary HTTP API request. The API Gateway HTTP API used for this path has a maximum integration timeout of 30 seconds.[^5] The API therefore queues a job in SQS and returns its ID first. A Lambda worker then calls the model API and stores the result in S3. The browser checks the job's status and retrieves the completed file through CloudFront.
-
-Some multi-step jobs, such as space generation and video import, use Step Functions to run their Lambda stages in sequence. EventBridge starts scheduled recovery work. Authentication, email, observability, permissions, and deployment use the managed services shown in the diagram; ECR stores images for Lambdas deployed as containers.
 
 Calling models through external APIs removes the need to maintain my own GPU servers. Each generation incurs the model provider's usage charge instead.
 
 Asynchronous processing separates long jobs from the request's time limit. Time spent waiting for a model API response inside a Lambda worker is still billed as Lambda execution.[^6]
 
-Files have lifetimes too. Unused uploads and generation inputs have expiration policies, and incomplete multipart uploads are cleaned up. Separating results that users want to keep from intermediate files helps prevent storage costs from steadily accumulating after compute has been reduced.
+I distinguish results users want to keep from temporary data used during processing. Expiration policies for temporary data help limit unnecessary storage costs after the work has finished.
 
 ### Splitting long jobs into stages and keeping compute on Lambda
 
-Making the API asynchronous does not remove the maximum 15-minute limit on a single ordinary Lambda execution.[^7] An agent's overall task—researching information, calling tools, and revising its result—can take longer than that.
+Making the API asynchronous does not remove the maximum 15-minute limit on a single ordinary Lambda execution.[^7] An overall job that chains several processing steps can take longer than that.
 
 I therefore split long jobs into processing stages. Each stage finishes within its Lambda execution limit, with progress and results stored between stages. Step Functions connects the stages. The overall job can exceed 15 minutes without any single Lambda running for more than 15 minutes.
 
@@ -128,17 +124,35 @@ Amazon Bedrock AgentCore Runtime is another good option when one agent execution
 
 **For now, I find it easier to manage staged Lambdas and keep compute on Lambda.** That lets me continue using the deployment, permissions, and logging setup I already have. Moving to AgentCore Runtime is an option, rather than a requirement; my choice depends on whether I can split the work and how simple I can keep the execution environments I operate.
 
-### S3 Vectors as an option for similarity search
+## 3. Managing Encbird's long-term memory with S3 Vectors
 
-Long-term memory and document retrieval sometimes need to find similar meanings expressed in different words. Similarity search represents text or documents as numerical arrays called vectors, then finds nearby vectors. Starting with a continuously running vector database can create maintenance costs even when searches are rare.
+Processing Encbird's long-term memory requires finding content with similar meanings even when the wording differs. I use similarity search, which represents sentences as numerical arrays called vectors and finds vectors that are close to one another.
 
-For Encbird's earlier long-term memory implementation, I replaced the Qdrant vector database with **Amazon S3 Vectors** for similarity search. S3 Vectors provides dedicated vector buckets and indexes, so I could store and query vectors without provisioning a separate vector database's compute capacity.[^10]
+I initially considered Qdrant and Amazon OpenSearch Serverless for similarity search, then chose Qdrant because of cost. Qdrant Cloud's Free Tier let me use a small hosted vector database without a monthly charge.[^17]
 
-In the current Encbird code, the memory design has changed: DynamoDB holds records and references, while ordinary S3 snapshots hold memory content. This memory path does not call S3 Vectors. **Choosing S3 Vectors where similarity search is needed, and omitting that component where it is not,** is another way to keep costs low.
+Encbird processes memory in batches, grouping the work by user. I can temporarily load the relevant user's memory into a vector database, process it, and update the memory in DynamoDB with the result. **This work does not require keeping a vector database server running continuously.**
 
-With S3 Vectors, I need to account for storage, writes, queries, and generating embeddings—the process of converting source content into vectors. Query charges depend on requests and the data processed, which reflects vector count and size in the index. Growing data or query volume calls for another comparison.[^11] Its value here is avoiding a continuously running vector server at the beginning.
+I also tried running a small vector database directly inside a Lambda execution environment for this purpose. After trying several approaches, I found S3 Vectors' speed and pricing reasonable for the way I process memory.
 
-## 3. Keeping development and deployment affordable
+**I now manage Encbird's long-term memory with S3 Vectors.** It provides vector storage and search through dedicated vector buckets and indexes, without requiring me to maintain separate vector database compute capacity.[^10] The current processing flow is as follows.
+
+{% raw %}
+```mermaid
+sequenceDiagram
+    participant B as Memory batch job
+    participant V as S3 Vectors
+    participant D as DynamoDB
+    B->>V: Load the user's memory vectors
+    B->>V: Run similarity search
+    V-->>B: Return search results
+    B->>B: Process memory
+    B->>D: Update memory with the result
+```
+{% endraw %}
+
+I still need to account for S3 Vectors storage, writes, and queries, plus the cost of generating embeddings to convert source content into vectors.[^11]
+
+## 4. Keeping development and deployment affordable
 
 ### Keeping dev and prod separate
 
@@ -164,11 +178,21 @@ The workflows use Ubuntu runners. They run checks for the affected scope and reu
 
 Keeping builds and deployments within the included minutes avoids adding a continuously running server on the development side as well. Artifact storage and the AWS resources receiving the deployment have separate costs to manage.
 
+## 5. In the era of agentic engineering, operating is the bigger hurdle
+
+Encbird is aimed at users in Korea, while PixelbankStudio targets the US market. Despite serving different markets, both use **Toss Payments** as their payment processor to handle payments and settle the proceeds. Toss Payments also supports cards issued outside Korea, but enabling this requires an additional agreement and a review by the card companies.[^14]
+
+**In my case, expenses such as surety insurance premiums for payment processing exceed my server costs.** Toss Payments' official fee page lists a one-time signup fee of KRW 220,000 and an annual maintenance fee of KRW 110,000; the terms can vary by contract.[^15]
+
+Surety insurance helps cover settlement risk when a merchant fails to deliver a product or service. Toss Payments offers an exemption when the monthly settlement limit is KRW 10 million or less, but the merchant's industry and products can affect eligibility.[^16]
+
+In an era of agentic engineering, where AI agents help with implementation and testing, I think operating a service is a bigger hurdle than developing it. Even when writing code takes less effort, I still need to deal with payment contracts, provider reviews, insurance renewals, and the costs of running the service.
+
 ## Closing
 
 I think this architecture fits side projects and solo businesses that are still looking for PMF. It keeps compute costs low while users are few and avoids adding continuously running servers for development and deployment.
 
-The same principle can apply when trying another service: build around the work that actually runs and the data that must remain, rather than starting with another continuously running server. While learning which services people need, I want an environment where maintenance costs do not force an early end to an attempt.
+The same principle can apply when trying another service: build around the work that actually runs and the data that must remain, while also accounting for payment contracts and insurance premiums. While learning which services people need, I want an environment where maintenance costs do not force an early end to an attempt.
 
 ---
 
@@ -184,3 +208,8 @@ The same principle can apply when trying another service: build around the work 
 [^10]: [Amazon S3 Vectors](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html) — vector storage and search without separately provisioned infrastructure.
 [^11]: [Amazon S3 pricing](https://aws.amazon.com/s3/pricing/) — S3 Vectors storage, write, and query charges.
 [^12]: [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions) — GitHub Free for individuals and organizations includes 2,000 monthly minutes for private repositories. Standard GitHub-hosted runners are free for public repositories; artifact storage is accounted for separately from execution time.
+[^13]: [Lambda SnapStart](https://docs.aws.amazon.com/lambda/latest/dg/snapstart.html) — restoring initialized execution environments, supported runtimes, and additional charges.
+[^14]: [Toss Payments international payment guide](https://docs.tosspayments.com/guides/v2/learn/foreign-payment) — support for cards issued outside Korea, additional agreements, and card-company reviews.
+[^15]: [Toss Payments fees](https://www.tosspayments.com/about/fee) — signup and annual maintenance fees, with terms varying by contract. Checked October 30, 2026.
+[^16]: [Toss Payments surety insurance requirements and exemptions](https://www.tosspayments.com/blog/articles/54333) — the insurance's purpose and conditions by industry and settlement limit. See also the [renewal guide](https://www.tosspayments.com/blog/articles/48553).
+[^17]: [Qdrant Cloud pricing](https://qdrant.tech/pricing/) — a Free Tier with a small free cluster. Capacity and features beyond its limits belong to paid plans.
