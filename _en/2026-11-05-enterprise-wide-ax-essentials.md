@@ -8,7 +8,7 @@ tags: ai agent ax platform organization software-factory knowledge harness-engin
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-06 11:33:13 +0900
+last_modified_at: 2026-11-09 22:10:00 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -17,7 +17,7 @@ permalink: /en/2026/11/05/enterprise-wide-ax-essentials.html
 
 ## TL;DR
 
-- Company-wide AX needs platforms for each axis.
+- Company-wide AX needs platforms for requirements, development, and business automation.
 - Each platform's output must become the next stage's input.
 - Teams need shared knowledge and operating infrastructure.
 
@@ -29,9 +29,9 @@ By AX (Agentic Transformation), I mean automating business processes by removing
 
 If one team automates a task with an agent, another team can try something similar. But if every team has to prepare its own data connections, agent environment, review and approval process, and result tracking, the work of setting up and maintaining automation grows along with the number of tasks.
 
-I think **company-wide AX requires platforms for each axis**. Teams need to reuse common capabilities and working procedures while adapting them to their own business rules and systems.
+I think **company-wide AX requires platforms that help teams define requirements, develop software, and automate business work**. Teams need to reuse common capabilities and working procedures while adapting them to their own business rules and systems.
 
-This post divides those platforms into three axes—requirements, software development, and business automation—plus a shared knowledge layer, then describes what each needs to do. Hatch, Milo, AgentStorming, AgentWeaver, and Knowledge Layers are projects I am working on that help make these requirements concrete.[^7]
+This post uses these three roles as the axes of company-wide AX and describes the capabilities they need, along with a knowledge layer shared across them. Hatch, Milo, AgentStorming, AgentWeaver, and Knowledge Layers are projects I am working on that help make these requirements concrete.[^7]
 
 ## 1. Platforms for three axes and shared knowledge
 
@@ -44,7 +44,7 @@ Platforms for company-wide AX can be organized around that flow.
 | Axis 1 · Requirements | Research, specification and prototype creation, joint review | A version of agreed requirements, prototype, and success criteria |
 | Axis 2 · Software development | Impact analysis, code changes and checks, review, merge, and deployment automation | Verified code, validation evidence, and operating results |
 | Axis 3 · Business automation | Discover current work, select automation candidates, configure and operate agents | Process maps, automation requirements, and execution records |
-| Shared · Knowledge | Business definitions and data mappings, retrieval and queries, evidence, access, and versions | Business knowledge that platforms interpret consistently |
+| Shared · Knowledge | Hybrid retrieval for general information, ontology retrieval for business knowledge, data mappings, evidence, access, and versions | Sources and business knowledge shared across platforms |
 
 Axis 3 must connect **understanding the work and choosing what to automate** with **executing the selected work**. These responsibilities can be handled by a process discovery platform and an agent operations platform.
 
@@ -67,7 +67,7 @@ flowchart TB
   H -.->|"agreed requirements · reviewed version"| F
   F -.->|"code and tools for business use"| W
   W -.->|"improvements found in operation"| H
-  K["Shared knowledge platform<br/>meaning · data mappings · evidence · access · versions<br/>Example: Knowledge Layers"]
+  K["Shared knowledge platform<br/>General information: hybrid retrieval<br/>Business knowledge: ontology retrieval<br/>Shared: data mappings · evidence · access · versions<br/>Example: Knowledge Layers"]
   K -.->|"research evidence"| H
   K -.->|"business and development context"| F
   K -.->|"business rules and sources"| S
@@ -257,37 +257,60 @@ All three axes need internal knowledge. The requirements platform researches bus
 
 Separate preparation repeats work and can leave platforms reading different versions of a rule. That calls for **a shared knowledge platform managing business definitions, evidence, and data mappings together**.
 
-### Separate business meaning from data mappings
+The shared knowledge layer needs **hybrid retrieval for general information** and **ontology retrieval for business processes and rules**. Finding similar support cases and understanding the sequence and conditions for handling a refund call for different forms of knowledge.
 
-The definition of a completed refund is distinct from the system status that represents it. Business meaning should survive a source-column change, while a change in the business rule should trigger a review of the queries and implementations that use it.
+### General information: hybrid retrieval combining similarity and BM25
 
-Knowledge Layers separates these responsibilities into business knowledge (K), mappings to actual fields and values (S), and prepared queryable data (D). As a platform requirement, this means **data mappings must be replaceable without tying business definitions to a source's physical shape**.
+For documents, meeting notes, and support records, it helps to combine similarity search, which finds passages close in meaning to the question, with BM25 search, which checks how well the actual words match. BM25 ranks documents using factors such as term frequency, rarity, and document length.
 
-### Retrieval and queries suited to the question
+For example, similarity search can connect a customer's ‘I want my money back’ with ‘refund request’ in an internal document. For a specific product code or error message, searching for the actual string is useful. Hybrid retrieval combines and ranks the two sets of results to cover these different needs.
 
-Even within refund work, finding the policy for a product involves relationships, finding similar support cases involves documents, and calculating last month's refund rate requires a defined calculation. Trying to answer every question with one retrieval method can miss necessary information.
+Results should include relevant passages, source locations, and revision versions. An agent using them to answer a question or support a requirement needs a way to check the original explanation and its conditions.
 
-The shared platform should preserve originals, provenance, and cleaned data, then prepare relationship traversal, document search, and metric queries on top of them. A new method may require more extraction or indexing, but repeated collection and cleaning can be reduced.
+### Business knowledge: ontology retrieval through abstraction layers
+
+A few relevant passages may be insufficient to understand the refund sequence, approval conditions, and effects on other work. An ontology explicitly records business concepts, relationships, processes, and rules, helping the agent navigate while keeping track of which business activity and condition it is reading.
+
+**Ontology retrieval does not require a graph database or a graph traversal engine.** Business processes can be written in Turtle, a text format for recording concepts and relationships, and organized into abstraction layers that an agent can search and follow into detail. Here, layers separate different levels of detail: a business area's responsibilities and core rules, its internal processes, and the conditions its implementation must satisfy.
+
+For example, an agent changing refund functionality can first read the ordering and payment overviews and choose the area responsible for refunds. It can then search that area's refund processes, approval rules, and exceptions, read the related ADRs (Architecture Decision Records), and find the current implementation. When a rule from another area is needed, the agent can follow a recorded connection to that area.
 
 {% raw %}
 ```mermaid
-flowchart TB
-  Q["Business question"] --> P["Check current access · select published version"]
-  P --> K["Business definitions · conditions · exceptions"]
-  K --> S["Map to actual fields and values"]
-  S --> D["Query prepared data · calculate metrics"]
-  P --> R["Select relevant documents → find passages"]
-  D --> V["Check values and source evidence at fixed revisions"]
-  R --> V
-  V --> A["Recheck current access before returning results"]
+sequenceDiagram
+  participant A as Agent
+  participant K as Shared knowledge layer
+  participant C as Code repository
+  A->>K: Request business-area overviews with access and published version
+  K-->>A: Responsibilities · core rules · connections
+  A->>K: Search refund work within the selected area
+  K-->>A: Relevant processes · rules · sources · next lookup locations
+  A->>K: Read required steps, exceptions, and related ADRs
+  K-->>A: Implementation conditions · evidence · cross-area relationships
+  A->>C: Find the current implementation using those conditions
+  C-->>A: Related code and tests
 ```
 {% endraw %}
 
-Results should include the source and revision behind the answer. For implementation context, navigation should go from a business-area overview into rules, exceptions, and related development decisions, so agents can find necessary conditions without reading everything at once.
+Today's agents are quite good at reading an overview and deciding which area and item to examine next. I think giving them the necessary explanations at each layer and paths into the next one is often enough to handle business knowledge at a substantial scale.
+
+That abstraction design matters more as the scope grows toward an enterprise. Searching one enormous data lake and returning detailed material from many business areas leaves the agent to sort out the conditions relevant to its current task. Narrowing the scope at the upper layer and searching within each layer reduces the unrelated detail brought into context.
+
+Centrally stored data can still support retrieval by layer. The efficiency I mean is **how little context an agent needs to receive the relevant information**, rather than how quickly the storage is read. This depends on overviews that help the agent select the right area and preserve the rules and connections it must not miss.
+
+### Separate business meaning from data mappings
+
+Finding the meaning of a completed refund in the ontology does not calculate last month's refund rate; that requires querying actual data. The definition of a completed refund is distinct from the system status that represents it. Business meaning should survive a source-column change, while a change in the business rule should trigger a review of the queries and implementations that use it.
+
+Knowledge Layers separates these responsibilities into business knowledge (K), mappings to actual fields and values (S), and prepared queryable data (D). As a platform requirement, this means **data mappings must be replaceable without tying business definitions to a source's physical shape**. Metric queries use those definitions and mappings to calculate values, preserving the data and definition versions used.
+
+The shared platform should preserve originals, provenance, and cleaned data for reuse across retrieval and queries. A new retrieval method may require more extraction or indexing, but repeated collection and cleaning can be reduced.
 
 ### Shared management of adoption, publication, and access
 
 AI-extracted candidates need to remain distinct from definitions adopted by business owners. The platform must manage which published version is used in ordinary work. Source changes and revoked access must also affect the paths that use that knowledge.
+
+Current access must be checked both when retrieving information and when returning it. If access is revoked after a search begins, material already retrieved must not simply be returned.
 
 Knowledge Layers' queries, document retrieval, and context navigation make these requirements concrete. Exposing them through an open standard such as MCP allows platforms to reuse the same capabilities.[^5] Connections need to carry the requester's permissions and the published version as well as the authentication method.
 
@@ -328,7 +351,15 @@ Capture a baseline for the existing approach and compare similar scope and excep
 
 If I were pursuing company-wide AX, I would start by defining the requirements for each platform. Reaching agreement on requirements, implementing and verifying software, and discovering and operating business work need different capabilities and responsibilities.
 
-Teams can avoid repeating the same preparation when each platform's output is usable by the next stage and they share business knowledge and operating infrastructure. Adapting business rules and exceptions on top of that foundation is how I think AX can expand across a company.
+The shared knowledge layer also needs both general-information retrieval and navigation through business meaning and processes. For business knowledge in particular, I think agents should be able to read an overview and descend into the details they need.
+
+To apply this approach to development, I also implemented `ontology-writer` in [ALPS Writer Plugins](https://github.com/haandol/alps-writer-plugins). It lets users model processes, steps, events, and rules in Turtle, then move from a business-area overview to searches within that area and on to related ADRs.[^8]
+
+The screenshot below shows the ontology built for EncBird, an English learning service, in its actual UI. A bounded context (BC) is a scope within which business terms and responsibilities have a consistent meaning. Selecting the ‘Expression dictionary’ BC exposes its registration and expansion processes and steps for search and further inspection. The screenshot's Korean text has been translated into English for this version of the article.
+
+![EncBird's ontology UI with the Expression dictionary area selected. Processes and steps appear on the left, with the business overview and search within the area on the right.](/assets/img/2026/1105/encbird-ontology-knowledge-en.png)
+
+Teams can avoid repeating the same preparation when each platform's output is usable by the next stage and they share business knowledge and operating infrastructure like this. Adapting business rules and exceptions on top of that foundation is how I think AX can expand across a company.
 
 ---
 
@@ -339,3 +370,4 @@ Teams can avoid repeating the same preparation when each platform's output is us
 [^5]: Anthropic, [Donating the Model Context Protocol and establishing the Agentic AI Foundation](https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation).
 [^6]: [My post on harness engineering](/en/2026/03/15/harness-engineering-beyond-context-engineering.html), covering task instructions, tools, execution environments, verification, and recovery.
 [^7]: Based on documentation and key implementation paths in Hatch, Milo, AgentStorming, AgentWeaver, and Knowledge Layers as of November 6, 2026. The product name in the AgentStorming repository is AgentStorm. Inspection of individual capabilities does not establish integrated execution across all five projects or measured company-wide results.
+[^8]: [ontology-writer](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer), including its business knowledge layers and navigation. The view was generated from EncBird's `docs/ontology/` on November 9, 2026. The file-based implementation reads the Turtle model on each query but returns only knowledge from the selected layer to the agent. The screenshot illustrates the organization of business knowledge, not measured enterprise-scale retrieval performance.
