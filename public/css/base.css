@@ -240,6 +240,11 @@ img {
   text-align: center;
 }
 
+/* SVG는 block 요소이므로 부모의 text-align 대신 자동 여백으로 가운데 배치한다. */
+.mermaid > svg {
+  margin-inline: auto;
+}
+
 /* ── 표 ────────────────────────────────────────────────────── */
 
 table {

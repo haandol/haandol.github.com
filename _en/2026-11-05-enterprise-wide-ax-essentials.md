@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Why Enterprise AX Needs Reusable Solutions and DDD"
+title: "Why Enterprise AX Needs Reusable Solutions and Business Models"
 excerpt: Building enterprise AX on reusable solutions and business models
 author: haandol
 email: ldg55d@gmail.com
@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 19:01:29 +0900
+last_modified_at: 2026-11-13 20:11:15 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -18,7 +18,7 @@ permalink: /en/2026/11/05/enterprise-wide-ax-essentials.html
 ## TL;DR
 
 - Enterprise AX should be built on reusable solutions.
-- DDD keeps business language, models, and implementation consistent.
+- Business models keep business language and implementation consistent.
 - Business changes should flow into agent-led implementation, verification, and improvement.
 
 ## Introduction
@@ -29,13 +29,13 @@ AX (Agentic Transformation)—moving business work to agent-based systems—requ
 
 In traditional software development, business processes were often recast to fit resource limits or technologies and structures familiar to the development team. If this changed their meaning or flow, business teams discussed the original work while developers answered in terms of the implemented system. Different interpretations of the same work made recurring conflicts likely.
 
-Reducing this conflict requires the business language and rules agreed by business and development teams to remain intact in the implementation. **DDD (Domain-Driven Design) makes that shared business model the reference for design and code.** It treats the model and implementation together so that addressing technical constraints does not change business meaning.
+Reducing this conflict requires the business language and rules agreed by business and development teams to remain intact in the implementation. **Keeping business models and implementation aligned in meaning**, a core principle of DDD (Domain-Driven Design), fits AX's aim of connecting business experts' intent to agent execution. This article borrows that perspective for AX design without requiring adoption of the entire methodology.
 
 Agent-based business automation and self-improving agents can help put this model into practice and maintain it. When a domain expert who understands the rules and exceptions recognizes a business change and requests an update, agents should revise the workflow against the same business model. A Software Factory carries the necessary code through implementation, verification, and delivery.
 
 This post describes the solutions that support this flow and the organizational responsibilities needed for domain experts to lead changes.
 
-## 1. DDD and bounded contexts
+## 1. Business meaning and bounded contexts
 
 ### When technical structure changes the business process
 
@@ -56,7 +56,7 @@ flowchart TB
     T2 --> T3["Repository<br/>9 = cancellation done<br/>and refund done"]
     T3 --> T4["RefundBatch<br/>Return funds later"]
   end
-  subgraph D["DDD preserves business meaning"]
+  subgraph D["Business meaning preserved"]
     direction TB
     D1["Order.cancel()<br/>Check cancellation rules"] --> D2["Refund.request()<br/>Refund in progress"]
     D2 --> D3["Refund.complete()<br/>Confirm returned funds"]
@@ -72,9 +72,9 @@ flowchart TB
 
 Changing the “refund completed” rule in this structure requires piecing it together from Controller checks, Service updates, database values, and batch timing.
 
-DDD treats “cancellation confirmed” and “refund completed” as distinct business concepts, with their conditions enforced in code. `Refund.complete()` must use confirmation of returned funds as its completion criterion; updating a shared status value is not sufficient.
+Treat “cancellation confirmed” and “refund completed” as distinct business concepts, with their conditions enforced in code. `Refund.complete()` must use confirmation of returned funds as its completion criterion; updating a shared status value is not sufficient.
 
-Layered architecture and DDD can be used together. DDD reduces this gap by **giving the domain model responsibility for business meaning and rules, while APIs, databases, and batch jobs perform the technical work needed to carry out its decisions**.
+A layered architecture can still **give the domain model responsibility for business meaning and rules, while APIs, databases, and batch jobs perform the technical work needed to carry out its decisions**. Clear ownership of the business criteria helps preserve their meaning when implementation technology changes.
 
 ### Defining boundaries of business meaning
 
@@ -144,9 +144,9 @@ Its partner guidance identifies a reusable **harness** of business knowledge, to
 
 Palantir provides Foundry for data and business models, AIP for agents and AI workflows, and Apollo for deployment and infrastructure. FDEs work with customers to build capabilities on this foundation.[^3] The Ontology at its center connects business objects and relationships with actions and functions, carrying business meaning into executable logic.[^4]
 
-The common pattern is **combining a reusable technical foundation with each customer's business model**. The official materials do not establish that either company has adopted DDD or that every change is handled autonomously. DDD is this article's design perspective for keeping business and implementation aligned on top of such solutions.
+The common pattern is **combining a reusable technical foundation with each customer's business model**. Using shared capabilities still requires a design that preserves the meaning of customer-specific rules in both the model and implementation.
 
-## 3. Preserving business meaning through shared knowledge and DDD
+## 3. Shared knowledge for business and coding agents
 
 AX requires agents to find not only business documents but also relationships between processes and implementation knowledge spread across repositories and services. Shared knowledge provides the context management foundation for retrieving the information each task needs.
 
@@ -211,7 +211,11 @@ This 3D view in the [ontology tool](https://github.com/haandol/alps-writer-plugi
 
 ![3D ontology view of EncBird's expression dictionary processes and their connections](/assets/img/2026/1105/encbird-ontology-3d-en.png)
 
-Changing expression registration requires checking how expressions arrive from conversations and podcasts, and how registration affects review and learning records. The relationships recorded in the ontology guide agents toward the processes whose conditions and exceptions they need to read.
+This information provides **a bird's-eye view of where the current work sits in the overall learning process and how it connects to other work**. Just as a person explores relationships in the 3D view, an agent can read the processes and conditions in the same model to understand what comes before and after.
+
+Suppose the request is, “Make it easier to register expressions from a podcast.” The agent can follow the relationships from collecting suggested expressions through learner selection and registration checks to review and learning-activity records.
+
+That reveals concrete considerations: whether registration still requires the learner's approval, whether an already registered expression is charged again, and whether successful registration feeds review and learning records. Starting with the overall relationships narrows the scope before the agent reads each process's rules and exceptions, making the relevant conditions easier to identify.
 
 ### Separating business meaning from implementation responsibilities
 
@@ -219,26 +223,23 @@ Business models hold process purpose, participants, conditions, and exceptions. 
 
 As in [Clean and Hexagonal Architecture](/2022/02/13/demystifying-hexgagonal-architecture.html) (Korean), define the operations and results the business needs through interfaces, and isolate connections to specific databases or external APIs in adapters. The concrete implementation depends on interfaces defined on the business side, so the business model does not need to know external technology formats.
 
-The arrows below show **the direction of change impact**. Business-rule changes propagate to the affected implementation, while adapters absorb technical replacements that preserve the existing contract.
+The diagram shows **two kinds of change moving through the same business model, contracts, and implementation**. Blue arrows carry business criteria into implementation; orange arrows trace a technical replacement and verification against the existing contract. Technical replacements that preserve that contract should not propagate into changes to domain rules.
 
 {% raw %}
 ```mermaid
-flowchart LR
-  subgraph B["When business rules change"]
-    direction TB
-    B1["Domain rules change"] --> B2["Affected contracts and tests"]
-    B2 --> B3["Required implementation changes"]
-  end
-  subgraph T["When technical details change"]
-    direction BT
-    T1["Replace DB, API, or framework"] --> T2["Revise adapters<br/>Preserve the contract"]
-    T2 --x|"Change contained"| T3["Domain logic<br/>Unchanged"]
-  end
-  B ~~~ T
-  classDef changed fill:#fff1df,stroke:#af731b,color:#65410b
-  classDef stable fill:#e9f6ec,stroke:#3c7754,color:#23452b
-  class B1,T1 changed
-  class T3 stable
+flowchart TB
+  M["Business model<br/>Domain rules"]
+  P["Business contract<br/>Interfaces · verification"]
+  I["Implementation<br/>Code · adapters"]
+  T["Technical replacement<br/>DB · API · framework"]
+  M -->|"Rule change"| P
+  P -->|"Update implementation"| I
+  T -->|"Replace"| I
+  I -.->|"Verify the contract"| P
+  P --x|"Block technical impact"| M
+  linkStyle 0,1 stroke:#336fa1,stroke-width:2px
+  linkStyle 2,3 stroke:#b87720,stroke-width:2px
+  linkStyle 4 stroke:#af3943,stroke-width:2px
 ```
 {% endraw %}
 
@@ -353,9 +354,7 @@ The ideal outcome of AX is **a system whose business processes, organizational r
 
 If business experts must learn the solution's technical interpretation after an FDE finishes the build and leaves, they have inherited work previously handled by developers. They need to be able to request changes and judge results in their own business terms.
 
-Reaching that goal requires **applying DDD on top of reusable solutions to keep business language, models, and implementation consistent**. Software Factories and self-improving agents should maintain that alignment through repeated changes and verification, while organizations give domain experts the authority and responsibility to lead the process.
-
----
+Reaching that goal requires **designing reusable solutions so that business language, models, and implementation remain consistent in meaning**. Software Factories and self-improving agents should maintain that alignment through repeated changes and verification, while organizations give domain experts the authority and responsibility to lead the process.
 
 [^1]: AWS, [AWS invests $1 billion to embed AI forward deployed engineers with customers](https://www.aboutamazon.com/news/aws/aws-1-billion-forward-deployed-ai-engineers), June 30, 2026. Describes the customer-account semantic layer, knowledge graph, and customer engineers' progression toward independent operation.
 [^2]: AWS Partner Network Blog, [Introducing Forward Deployed Engineering for Partners](https://aws.amazon.com/blogs/apn/introducing-forward-deployed-engineering-for-partners-winning-the-future-of-enterprise-ai/). Describes the partner-owned, reusable harness of ontologies, evaluation, tool connections, and agent operations.

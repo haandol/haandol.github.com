@@ -480,6 +480,9 @@ Mermaid는 흰 배경을 전제로 렌더링하므로 다크 테마에서 그대
 그래서 `.mermaid`를 **항상 흰 패널에 얹는다** (`base.css`). 테마별로 다이어그램을
 두 벌 렌더하는 것보다 단순하고, 다이어그램이 문서 안의 삽화처럼 보인다.
 
+패널보다 작은 도식은 가운데 배치한다. 공통 스타일에서 SVG를 블록 요소로 표시하므로
+부모의 `text-align`에만 의존하지 않고 `.mermaid > svg`의 좌우 자동 여백으로 정렬한다.
+
 ## 댓글 위젯 (utteranc.es)
 
 댓글은 cross-origin iframe이라 CSS가 닿지 않는다. `_includes/comments.html`이
