@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 23:11:17 +0900
+last_modified_at: 2026-11-13 23:49:12 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -33,19 +33,19 @@ In traditional software development, business processes were often recast to fit
 
 Reducing this conflict requires the business language and rules agreed by business and development teams to remain intact in the implementation. **Keeping business models and implementation aligned in meaning**, a core principle of DDD (Domain-Driven Design), fits AX's aim of connecting business experts' intent to agent execution.
 
-Agent-based business automation and self-improving agents can help put this model into practice and maintain it. When a domain expert who understands the rules and exceptions recognizes a business change and requests an update, agents should revise the workflow against the same business model. A Software Factory carries the necessary code through implementation, verification, and delivery.
+Agent-based business automation and self-improving agents can help put this model into practice and maintain it. When a domain expert who understands the rules and exceptions recognizes a business change and requests an update, agents should revise the workflow against the same business model. A Software Factory is the software development solution that carries the necessary code through implementation, verification, and delivery.
 
 ## 1. Business meaning and bounded contexts
 
-Connect a Context Layer Service that maintains business rules and boundaries with a Software Factory that implements and verifies those criteria in code.
+Connect a Context Layer Solution that maintains business rules and boundaries with a Software Factory that implements and verifies those criteria in code.
 
 ### When technical structure changes the business process
 
-Business processes are described through the goals, conditions, and responsibilities of customers and business teams. To turn them into software, developers translate the work into methods, data structures, and service calls. This introduces **a layer of developer interpretation and technical design** between the business and its code.
+Business processes are described through the goals, conditions, and responsibilities of customers and business teams. To turn them into software, developers translate the work into methods, data structures, and API calls. This introduces **a layer of developer interpretation and technical design** between the business and its code.
 
 That interpretation is shaped by the team's domain understanding, skills, familiar terminology and programming languages, existing systems, and implementation environment. When technical structure is chosen without a shared business model to preserve, concepts and responsibilities may be regrouped, and important conditions or exceptions may disappear from the code.
 
-For example, “refund approval” includes who may decide to return money and under which conditions. If that decision is spread across UI checks, a generic status-update service, and database writes, understanding how the original process is implemented requires reconstructing its business meaning from those technical pieces.
+For example, “refund approval” includes who may decide to return money and under which conditions. If that decision is spread across UI checks, generic status-update code, and database writes, understanding how the original process is implemented requires reconstructing its business meaning from those technical pieces.
 
 DDD reduces this gap by having business experts and developers establish **a shared language with consistent meanings—Ubiquitous Language**, use it to build a business model, and keep design and code aligned with that model. The concept and conditions of “refund approval” retain the same meaning in business discussions, models, and code.
 
@@ -80,7 +80,7 @@ A shared language also needs a defined scope. The same word, such as “complete
 {% raw %}
 ```mermaid
 flowchart LR
-  subgraph K["Context Layer Service · business models"]
+  subgraph K["Context Layer Solution · business models"]
     O["Ordering BC<br/>Order and cancellation rules"] -->|"Event contract"| P["Payments BC<br/>Payment and refund rules"]
   end
   K -->|"Boundaries and rules"| F["Software Factory<br/>Implement and verify each BC"]
@@ -89,7 +89,7 @@ flowchart LR
 
 The payments BC handles an order-cancellation event according to its own approval and refund rules. Contracts between BCs define what information is exchanged and what it means, keeping order cancellation distinct from refund completion.
 
-Organizational and service responsibilities should reflect these boundaries. Several services may implement one BC; the BC defines a boundary of business meaning. For more on terminology and context boundaries, see [Notes for DDD beginners](/2021/10/11/thoughts-for-ddd-starters.html) (Korean).
+Organizational responsibilities and software components should reflect these boundaries. Several applications may implement one BC; the BC defines a boundary of business meaning. For more on terminology and context boundaries, see [Notes for DDD beginners](/2021/10/11/thoughts-for-ddd-starters.html) (Korean).
 
 ## 2. Connecting solutions to introduce AX
 
@@ -100,9 +100,9 @@ Enterprise AX should be built by providing and connecting a solution for each of
 flowchart TB
   FDE["FDE<br/>Initial setup"] -.-> S
   subgraph S["Connected solutions"]
-    K["1. Shared knowledge<br/>Context Layer Service"]
+    K["1. Shared knowledge<br/>Context Layer Solution"]
     subgraph W["Solutions sharing the knowledge layer"]
-      P["2. Process analysis<br/>Process analysis solution"] -->|"Target process"| R["3. Requirements<br/>Requirements management"]
+      P["2. Process analysis<br/>Process analysis solution"] -->|"Target process"| R["3. Requirements<br/>Requirements management solution"]
       R -->|"Requirements and checks"| A["4. Business automation<br/>Business agent solution"]
       A -->|"Build needed"| F["5. Software development<br/>Software Factory"]
       F -->|"Verified code / tools"| A
@@ -124,11 +124,11 @@ flowchart TB
 
 | Stage | Supporting solution | Information read and passed on |
 | --- | --- | --- |
-| 1. Shared knowledge | Context Layer Service | Supplies business and implementation knowledge to every solution and incorporates validated changes |
+| 1. Shared knowledge | Context Layer Solution | Supplies business and implementation knowledge to every solution and incorporates validated changes |
 | 2. Process analysis | Process analysis solution | Reads current work and passes target processes and affected areas to requirements management |
-| 3. Requirements | Requirements management | Reads business rules and exceptions and passes requirements and verification criteria to automation and development |
+| 3. Requirements | Requirements management solution | Reads business rules and exceptions and passes requirements and verification criteria to automation and development |
 | 4. Business automation | Business agent solution | Executes against business criteria, requests missing capabilities from development, and returns results to experts |
-| 5. Software development | Software Factory | Reads business models and repo/service relationships and supplies verified code and tools to automation |
+| 5. Software development | Software Factory | Reads business models and relationships among repositories and applications; supplies verified code and tools to automation |
 
 Experts decide what work to change and how success will be judged. The connected solutions carry that decision through analysis, requirements, execution, and implementation. Business rules, implementation relationships, and verification evidence validated through execution and review return to shared knowledge as the basis for subsequent work.
 
@@ -150,21 +150,21 @@ The common pattern is **combining a reusable technical foundation with each cust
 
 ## 3. Shared knowledge for business and coding agents
 
-AX requires agents to find business documents, relationships between processes, and implementation knowledge spread across repositories and services. **A Context Layer Service must provide the shared solution for managing this knowledge and supplying the context each task needs.**
+AX requires agents to find business documents, relationships between processes, and implementation knowledge spread across repositories and applications. **A Context Layer Solution is needed to manage this knowledge and supply the context each task needs.**
 
-The service contains document retrieval for RAG (Retrieval-Augmented Generation), graph traversal for relationships, and ontology retrieval for business concepts and rules. Business and coding agents access it through MCP or tool calls. MCP (Model Context Protocol) connects agents to external data and tools.
+The solution contains document retrieval for RAG (Retrieval-Augmented Generation), graph traversal for relationships, and ontology retrieval for business concepts and rules. Business and coding agents access it through MCP or tool calls. MCP (Model Context Protocol) connects agents to external data and tools.
 
 {% raw %}
 ```mermaid
 flowchart TB
-  subgraph U["Service consumers"]
+  subgraph U["Solution consumers"]
     B["Business agents<br/>Decide and execute"]
     D["Coding agents<br/>Implement and verify"]
   end
   B <--> M["MCP / tool calls"]
   D <--> M
   M <-->|"Query / context"| S
-  subgraph S["Context Layer Service"]
+  subgraph S["Context Layer Solution"]
     direction TB
     P["Permissions and scope"]
     subgraph Q["3 retrieval capabilities"]
@@ -178,13 +178,13 @@ flowchart TB
 ```
 {% endraw %}
 
-The service applies the caller's permissions and business scope before retrieval, then returns context with provenance and version information. **Solutions at every stage use this interface to read the same business criteria and contribute validated changes.**
+The solution applies the caller's permissions and business scope before retrieval, then returns context with provenance and version information. **Solutions at every stage use this interface to read the same business criteria and contribute validated changes.**
 
 ### Three ways to retrieve knowledge
 
 **Document retrieval and RAG** find evidence in business documents, meeting notes, and design records and use it in a task. Hybrid retrieval combines similarity search with BM25, which ranks documents by matching terms. This covers both different expressions of the same meaning, such as “I want my money back” and “refund request,” and exact terms such as product codes.
 
-**Graph traversal** follows recorded relationships to find connected entities. Following events passed between refund processes, service calls made by a payment service, or dependencies between repositories helps identify where a change may have an effect.
+**Graph traversal** follows recorded relationships to find connected entities. Following events passed between refund processes, API calls made by a payment application, or dependencies between repositories helps identify where a change may have an effect.
 
 **Ontology retrieval** finds the business meaning of concepts and relationships, along with applicable rules and exceptions. It makes explicit what “cancellation completed” in ordering and “refund completed” in payments mean and when each holds, so agents do not have to reconstruct the business criteria from document fragments each time.
 
@@ -194,11 +194,11 @@ These capabilities work together. Graph traversal provides a way to follow conne
 
 **Business agents** primarily need business knowledge and rules. To handle a refund request, they must read customer and order state, approval conditions, processing steps, and exceptions to determine which actions the business permits.
 
-**Coding agents** need those same business criteria plus the knowledge required to implement them. They need to know which project's repositories to change, how services connect through APIs and events, and which contracts and tests must hold.
+**Coding agents** need those same business criteria plus the knowledge required to implement them. They need to know which project's repositories to change, how applications connect through APIs and events, and which contracts and tests must hold.
 
-Both types of agents should share business concepts and rules while retrieving the scope relevant to their work. Business agents may need service relationships, and coding agents must also consult the ontology for business meaning.
+Both types of agents should share business concepts and rules while retrieving the scope relevant to their work. Business agents may need application relationships, and coding agents must also consult the ontology for business meaning.
 
-The Context Layer Service manages ownership, provenance, versions, and permitted use, applying role- and business-scope access controls before retrieval. Business teams decide the meaning and permitted use of rules; platform teams ensure those decisions govern actual access by agents and external services.
+The Context Layer Solution manages ownership, provenance, versions, and permitted use, applying role- and business-scope access controls before retrieval. Business teams decide the meaning and permitted use of rules; platform teams ensure those decisions govern actual access by agents and external solutions.
 
 ### Navigating business knowledge in layers
 
@@ -210,7 +210,7 @@ When agents can read an overview and decide where to look next, they can narrow 
 
 For this to work, each overview must be accurate enough to guide the next retrieval step. Exceptions omitted from an overview must still be available in detailed rules and original sources.
 
-This 3D view in the [ontology tool](https://github.com/haandol/alps-writer-plugins) shows the “Expression dictionary” BC of [EncBird](https://www.encbird.com), an English learning service. It shows how expression registration, expansion, and dictionary management relate to conversations, podcasts, and review.[^5]
+This 3D view in the [ontology tool](https://github.com/haandol/alps-writer-plugins) shows the “Expression dictionary” BC of [EncBird](https://www.encbird.com), an English learning app. It shows how expression registration, expansion, and dictionary management relate to conversations, podcasts, and review.[^5]
 
 ![3D ontology view of EncBird's expression dictionary processes and their connections](/assets/img/2026/1105/encbird-ontology-3d-en.png)
 
@@ -222,7 +222,7 @@ That reveals concrete considerations: whether registration still requires the le
 
 ### Separating business meaning from implementation responsibilities
 
-The Software Factory reads business criteria from the Context Layer Service and produces code and tests that satisfy them. **Keeping business rules at the center, with implementation details depending on those rules, is part of its implementation and verification responsibility.**
+The Software Factory reads business criteria from the Context Layer Solution and produces code and tests that satisfy them. **Keeping business rules at the center, with implementation details depending on those rules, is part of its implementation and verification responsibility.**
 
 As in [Clean and Hexagonal Architecture](/2022/02/13/demystifying-hexgagonal-architecture.html) (Korean), domain models and business rules sit at the center, workflows and interfaces surround them, and connections to databases, APIs, and frameworks sit outside. Code dependencies point inward.
 
@@ -234,7 +234,7 @@ Interface boundaries, implementation choices, and verification criteria are reco
 
 ## 4. Solutions that turn business changes into execution
 
-Process analysis, requirements management, business agents, and the Software Factory each own a part of the work below. Every solution reads the same business criteria from the Context Layer Service and passes its results to the next stage.
+Process analysis, requirements management, business agents, and the Software Factory each own a part of the work below. Every solution reads the same business criteria from the Context Layer Solution and passes its results to the next stage.
 
 {% raw %}
 ```mermaid
@@ -278,7 +278,7 @@ Self-improving agents use execution and review findings to change the order of s
 
 ### Software Factory: implementing and integrating missing capabilities
 
-The Software Factory reads business models, implementation contracts, and repository and service relationships to produce code, tools, and tests. It integrates them for use by the business agent solution and returns **evidence of which business conditions were implemented and what was verified**.
+The Software Factory reads business models, implementation contracts, and repository and application relationships to produce code, tools, and tests. It integrates them for use by the business agent solution and returns **evidence of which business conditions were implemented and what was verified**.
 
 [Software Factory evaluations](/en/2026/10/05/software-factory-evals-and-tension-metrics.html) must check business conditions as well as code generation. The solution must own implementation, verification, and integration so subsequent business changes can proceed without waiting for manual development work.
 
@@ -296,7 +296,7 @@ flowchart TB
   R -->|"Code change needed"| F["Software Factory<br/>Implement and regression-test"]
   F --> W
   W -->|"Verification passes"| A
-  W -->|"Validated changes"| K["Context Layer Service<br/>Update knowledge and models"]
+  W -->|"Validated changes"| K["Context Layer Solution<br/>Update knowledge and models"]
   K -->|"Current criteria"| R
   R -->|"Business judgment needed"| O["Business / domain experts"]
   O -->|"Decide criteria"| R
@@ -304,7 +304,7 @@ flowchart TB
 ```
 {% endraw %}
 
-Both final results and stored knowledge need checking. Source retrieval may produce a correct answer while an incorrect ontology rule remains available to the next run. Reflecting verified business rules, implementation relationships, and execution evidence in the Context Layer Service gives every solution an updated basis for its work.
+Both final results and stored knowledge need checking. Source retrieval may produce a correct answer while an incorrect ontology rule remains available to the next run. Reflecting verified business rules, implementation relationships, and execution evidence in the Context Layer Solution gives every solution an updated basis for its work.
 
 ### Moving decision authority and verification responsibility together
 
