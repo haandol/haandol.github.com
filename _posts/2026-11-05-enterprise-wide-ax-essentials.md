@@ -7,7 +7,7 @@ email: ldg55d@gmail.com
 tags: ai agent ax ddd platform organization software-factory knowledge harness-engineering
 publish: true
 published: true
-last_modified_at: 2026-11-13 23:49:12 +0900
+last_modified_at: 2026-11-13 23:54:41 +0900
 lang: ko
 translation_key: enterprise-wide-ax-essentials
 english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
@@ -220,15 +220,17 @@ flowchart TB
 
 ### 업무 모델과 구현의 책임을 분리하기
 
-Software Factory는 컨텍스트 레이어 솔루션에서 업무 기준을 읽고, 그 기준에 맞는 코드와 테스트를 만든다. **업무 규칙을 중심에 두고 구현 디테일이 그 규칙에 의존하도록 만드는 것**도 이 솔루션의 구현·검증 책임이다.
+**업무 프로세스를 가장 높은 추상화 계층에 두고, 이를 실현할 기능 계약과 코드를 아래에 둔다.** 온톨로지는 업무의 흐름·책임·인계 규칙을 표현하고, ADR(Architecture Decision Record, 설계 결정 기록)은 각 기능이 그 업무를 실현하기 위해 지켜야 할 계약과 설계 결정을 담는다. 코드와 테스트는 그 계약을 구현하고 검증한다.[^6]
 
-[클린·헥사고날 아키텍처](/2022/02/13/demystifying-hexgagonal-architecture.html)처럼 안쪽에는 도메인 모델과 업무 규칙을, 그 바깥에는 업무 흐름과 인터페이스를, 가장 바깥에는 DB·API·프레임워크 연결 코드를 둔다. 코드의 의존성은 바깥에서 안쪽으로 향한다.
+컨텍스트 레이어 솔루션은 업무 모델을 제공하고, 요구사항 관리 솔루션은 이를 기능별 입출력·조건·예외와 검증 기준으로 구체화한다. Software Factory는 그 계약을 기준으로 코드와 테스트를 만들고, 실제 결과가 업무 기준을 충족하는지 확인한다.
 
-![Software Factory가 구현·검증하는 코드의 양파형 의존성 구조: 구현과 어댑터가 안쪽의 업무 계약과 도메인 규칙에 의존한다](/assets/img/2026/1105/solution-dependencies.svg){: .diagram-image }
+![업무 프로세스를 중심에 둔 추상화 계층: 기능 계약과 코드가 상위 모델에 의존하며, 업무 변경은 구현에 반영되고 구현 방식의 변경은 업무 모델을 유지한다](/assets/img/2026/1105/solution-dependencies.svg){: .diagram-image }
 
-환불 API의 응답 필드명이나 DB 저장 방식만 바뀌었다면, Software Factory는 어댑터를 수정하고 기존 계약을 지키는지 검증한다. `Refund.complete()`의 업무 규칙은 그대로 유지한다. 환불 승인 조건 자체가 바뀌면 새 업무 기준에 맞춰 도메인 로직과 필요한 구현·검증을 함께 바꾼다.
+[클린·헥사고날 아키텍처](/2022/02/13/demystifying-hexgagonal-architecture.html)가 도메인 로직을 구현 디테일로부터 보호하듯, 이 구조에서는 업무 프로세스를 표현한 계층을 보호한다. 온톨로지에 코드의 파일 경로나 클래스명, 사용 라이브러리를 넣지 않고, 하위 기능이 어떤 업무 단계를 실현하는지 연결한다. 그래야 코드 구조를 바꿀 때 업무 모델까지 고칠 필요가 없다.
 
-인터페이스의 경계, 구현 선택과 검증 기준은 ADR(Architecture Decision Record, 설계 결정 기록)에 남긴다. 요구사항 관리 솔루션이 이 기준을 관리하고 Software Factory가 구현에 반영하므로, 후속 변경도 같은 기준으로 판단할 수 있다.
+예를 들어 환불 승인 뒤 별도 지급 담당자가 처리하던 업무를 자동 지급으로 바꾸면, 온톨로지의 책임과 인계 흐름부터 달라진다. 요구사항 관리 솔루션이 관련 기능 계약과 검증 기준을 갱신하고, Software Factory가 지급 코드와 테스트를 수정해야 한다.
+
+반면 같은 환불 업무를 유지하면서 DB 저장 방식이나 API 연결 라이브러리를 교체한다면, Software Factory는 구현을 바꾸고 기존 계약을 만족하는지 검증한다. **코드가 바뀌었다는 이유만으로 상위의 비즈니스 프로세스를 수정하지 않는다.** 업무 모델은 전문가의 언어로 유지되고, 솔루션은 그 기준 안에서 구현을 개선할 수 있다.
 
 ## 4. 업무 변경을 실행으로 이어가는 솔루션
 
@@ -337,3 +339,4 @@ FDE가 구축을 마치고 떠난 뒤 비즈니스 전문가가 솔루션의 기
 [^3]: Palantir, [Integrated platforms: AIP, Foundry, and Apollo](https://www.palantir.com/docs/foundry/architecture-center/platforms). 표준 플랫폼과 고객별 맞춤화, FDE의 관계를 설명한다.
 [^4]: Palantir, [Ontology building](https://www.palantir.com/docs/foundry/ontology/overview). 업무 객체·관계와 액션·함수를 함께 다루는 운영 계층을 설명한다.
 [^5]: [업무 온톨로지 도구의 3D 보기](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). 잉크버드의 업무 모델에서 생성한 ‘표현 사전’ BC 화면.
+[^6]: [온톨로지 계층의 책임과 변경 방향](https://github.com/haandol/alps-writer-plugins/blob/main/plugins/ontology-writer/references/ontology.md). 업무 온톨로지·ADR·코드의 책임을 나누고, 업무 변경은 하위 구현으로 전달하며 코드 리팩터링은 업무 모델을 변경하지 않도록 정한 설계 원칙.

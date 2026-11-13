@@ -1,19 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="560" height="590" viewBox="0 0 560 590" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI', Helvetica, Arial, sans-serif">
-<title id="title">Software Factory — 업무 규칙을 보호하는 구현·검증</title><desc id="desc">Software Factory가 업무 흐름과 인터페이스, 외부 기술을 연결하는 어댑터를 구현한다. 코드 의존성은 바깥의 구현에서 안쪽의 업무 규칙으로 향한다.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="708" viewBox="0 0 640 708" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI', Helvetica, Arial, sans-serif">
+<title id="title">업무 프로세스를 중심에 둔 추상화 계층</title>
+<desc id="desc">중심의 업무 프로세스와 온톨로지를 기능 계약과 ADR, 코드와 테스트가 둘러싼다. 하위 구현은 상위 업무 기준에 의존한다. 업무 변경은 관련 계약과 코드에 반영하고, 구현 방식의 변경은 업무 모델을 유지한다.</desc>
 <defs><marker id="inward" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 1L9 5L0 9Z" fill="#336fa1"/></marker></defs>
-<rect width="560" height="590" rx="12" fill="#fff"/>
-<circle cx="280" cy="300" r="222" fill="#edf3f9" stroke="#759ab6" stroke-width="2"/>
-<circle cx="280" cy="300" r="154" fill="#fff4d8" stroke="#c4a459" stroke-width="2"/>
-<circle cx="280" cy="300" r="86" fill="#e9f6ec" stroke="#659878" stroke-width="2"/>
-<path d="M280 500V441" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
-<path d="M280 423V365" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
-<text x="280" y="28" text-anchor="middle" font-size="24" font-weight="700" fill="#17324d">Software Factory</text>
-<text x="280" y="54" text-anchor="middle" font-size="16" font-weight="400" fill="#465768">업무 규칙을 보호하는 구현·검증</text>
-<text x="280" y="109" text-anchor="middle" font-size="21" font-weight="700" fill="#34556b">구현·어댑터</text>
-<text x="280" y="132" text-anchor="middle" font-size="15" font-weight="400" fill="#465768">DB · 외부 API · 프레임워크 연결</text>
-<text x="280" y="175" text-anchor="middle" font-size="18" font-weight="700" fill="#795b16">업무 흐름</text>
-<text x="280" y="201" text-anchor="middle" font-size="14" font-weight="400" fill="#795b16">인터페이스 · 입출력 계약</text>
-<text x="280" y="290" text-anchor="middle" font-size="21" font-weight="700" fill="#285d3b">도메인 모델</text>
-<text x="280" y="319" text-anchor="middle" font-size="18" font-weight="400" fill="#285d3b">업무 규칙</text>
-<text x="280" y="561" text-anchor="middle" font-size="17" font-weight="700" fill="#17324d">코드 의존성: 바깥 → 안쪽</text>
+<rect width="640" height="708" rx="12" fill="#fff"/>
+<circle cx="320" cy="330" r="250" fill="#edf3f9" stroke="#759ab6" stroke-width="2"/>
+<circle cx="320" cy="330" r="175" fill="#fff4d8" stroke="#c4a459" stroke-width="2"/>
+<circle cx="320" cy="330" r="100" fill="#e9f6ec" stroke="#659878" stroke-width="2"/>
+<path d="M320 558V494" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
+<path d="M320 479V418" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
+<text x="320" y="35" text-anchor="middle" font-size="24" font-weight="700" fill="#17324d">업무 모델이 구현의 기준</text>
+<text x="320" y="108" text-anchor="middle" font-size="22" font-weight="700" fill="#34556b">코드·테스트</text>
+<text x="320" y="133" text-anchor="middle" font-size="17" font-weight="400" fill="#34556b">Software Factory</text>
+<text x="320" y="197" text-anchor="middle" font-size="19" font-weight="700" fill="#795b16">기능 계약·설계 결정</text>
+<text x="320" y="222" text-anchor="middle" font-size="15" font-weight="400" fill="#795b16">요구사항 관리 솔루션 · ADR</text>
+<text x="320" y="306" text-anchor="middle" font-size="21" font-weight="700" fill="#285d3b">업무 프로세스</text>
+<text x="320" y="335" text-anchor="middle" font-size="18" font-weight="400" fill="#285d3b">온톨로지</text>
+<text x="320" y="362" text-anchor="middle" font-size="15" font-weight="400" fill="#285d3b">컨텍스트 레이어 솔루션</text>
+<text x="320" y="613" text-anchor="middle" font-size="18" font-weight="700" fill="#336fa1">의존성: 코드 → ADR → 업무 프로세스</text>
+<line x1="80" y1="633" x2="560" y2="633" stroke="#d9e1e8"/>
+<text x="320" y="661" text-anchor="middle" font-size="18" font-weight="600" fill="#285d3b">업무 프로세스 변경 → 관련 ADR·코드 수정</text>
+<text x="320" y="688" text-anchor="middle" font-size="17" font-weight="400" fill="#465768">구현 방식 변경 → 업무 프로세스 유지</text>
 </svg>

@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 23:49:12 +0900
+last_modified_at: 2026-11-13 23:54:41 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -222,15 +222,17 @@ That reveals concrete considerations: whether registration still requires the le
 
 ### Separating business meaning from implementation responsibilities
 
-The Software Factory reads business criteria from the Context Layer Solution and produces code and tests that satisfy them. **Keeping business rules at the center, with implementation details depending on those rules, is part of its implementation and verification responsibility.**
+**Place business processes at the highest level of abstraction, with the feature contracts and code that realize them below.** The ontology expresses business flow, responsibilities, and hand-off rules. ADRs (Architecture Decision Records) capture the contracts and design decisions each feature must follow to realize that work. Code and tests implement and verify those contracts.[^6]
 
-As in [Clean and Hexagonal Architecture](/2022/02/13/demystifying-hexgagonal-architecture.html) (Korean), domain models and business rules sit at the center, workflows and interfaces surround them, and connections to databases, APIs, and frameworks sit outside. Code dependencies point inward.
+The Context Layer Solution supplies the business model. The requirements management solution turns it into feature-level inputs, outputs, conditions, exceptions, and verification criteria. The Software Factory uses those contracts to produce code and tests and check that actual results satisfy the business criteria.
 
-![Onion-style dependencies in code implemented and verified by the Software Factory: adapters depend on inner business contracts and domain rules](/assets/img/2026/1105/solution-dependencies-en.svg){: .diagram-image }
+![Abstraction layers centered on business processes: feature contracts and code depend on the higher-level model; business changes propagate to implementation, while implementation changes preserve the business model](/assets/img/2026/1105/solution-dependencies-en.svg){: .diagram-image }
 
-If only a refund API's response field names or the database storage format changes, the Software Factory revises the adapter and verifies the existing contract. The business rule in `Refund.complete()` stays intact. When refund approval conditions themselves change, it updates domain logic and the required implementation and verification against the new criteria.
+Just as [Clean and Hexagonal Architecture](/2022/02/13/demystifying-hexgagonal-architecture.html) (Korean) protect domain logic from implementation details, this structure protects the layer that expresses business processes. Keep code paths, class names, and libraries out of the ontology, and link lower-level features to the business steps they realize. Code can then be reorganized without requiring changes to the business model.
 
-Interface boundaries, implementation choices, and verification criteria are recorded in ADRs (Architecture Decision Records). The requirements management solution maintains these criteria, and the Software Factory applies them, giving subsequent changes the same basis for decisions.
+For example, replacing a separate payout operator with automatic payment after refund approval changes the responsibilities and hand-offs in the ontology. The requirements management solution updates the affected feature contracts and verification criteria, and the Software Factory must revise the payment code and tests.
+
+By contrast, replacing database storage or an API client library while preserving the same refund process calls for the Software Factory to change the implementation and verify the existing contracts. **A code change alone does not require changing the higher-level business process.** The business model remains in the expert's language, while solutions improve the implementation within those criteria.
 
 ## 4. Solutions that turn business changes into execution
 
@@ -339,3 +341,4 @@ If business experts must learn the solution's technical interpretation after an 
 [^3]: Palantir, [Integrated platforms: AIP, Foundry, and Apollo](https://www.palantir.com/docs/foundry/architecture-center/platforms). Describes the standard platforms, customer-specific customization, and FDEs.
 [^4]: Palantir, [Ontology building](https://www.palantir.com/docs/foundry/ontology/overview). Describes the operational layer combining business objects and relationships with actions and functions.
 [^5]: [3D view in the business ontology tool](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). The “Expression dictionary” BC generated from EncBird's business model. Screenshot labels were translated into English for this version.
+[^6]: [Ontology layer responsibilities and change direction](https://github.com/haandol/alps-writer-plugins/blob/main/plugins/ontology-writer/references/ontology.md). Defines separate responsibilities for business ontology, ADRs, and code: business changes propagate to implementation, while code refactoring leaves the business model unchanged.

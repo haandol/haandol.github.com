@@ -1,19 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="560" height="590" viewBox="0 0 560 590" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI', Helvetica, Arial, sans-serif">
-<title id="title">Software Factory — Implementation and verification that protect business rules</title><desc id="desc">The Software Factory implements workflows, interfaces and adapters. Code dependencies point inward from technical implementation to business rules.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="708" viewBox="0 0 640 708" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI', Helvetica, Arial, sans-serif">
+<title id="title">Abstraction layers centered on business processes</title>
+<desc id="desc">Business processes and their ontology sit at the center, surrounded by feature contracts and ADRs, then code and tests. Lower-level implementation depends on higher-level business criteria. Business changes propagate to contracts and code; implementation changes preserve the business model.</desc>
 <defs><marker id="inward" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 1L9 5L0 9Z" fill="#336fa1"/></marker></defs>
-<rect width="560" height="590" rx="12" fill="#fff"/>
-<circle cx="280" cy="300" r="222" fill="#edf3f9" stroke="#759ab6" stroke-width="2"/>
-<circle cx="280" cy="300" r="154" fill="#fff4d8" stroke="#c4a459" stroke-width="2"/>
-<circle cx="280" cy="300" r="86" fill="#e9f6ec" stroke="#659878" stroke-width="2"/>
-<path d="M280 500V441" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
-<path d="M280 423V365" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
-<text x="280" y="28" text-anchor="middle" font-size="24" font-weight="700" fill="#17324d">Software Factory</text>
-<text x="280" y="54" text-anchor="middle" font-size="16" font-weight="400" fill="#465768">Implementation and verification that protect business rules</text>
-<text x="280" y="109" text-anchor="middle" font-size="21" font-weight="700" fill="#34556b">Adapters</text>
-<text x="280" y="132" text-anchor="middle" font-size="15" font-weight="400" fill="#465768">DB · API · framework connections</text>
-<text x="280" y="175" text-anchor="middle" font-size="18" font-weight="700" fill="#795b16">Workflows</text>
-<text x="280" y="201" text-anchor="middle" font-size="14" font-weight="400" fill="#795b16">Interfaces · contracts</text>
-<text x="280" y="290" text-anchor="middle" font-size="21" font-weight="700" fill="#285d3b">Domain model</text>
-<text x="280" y="319" text-anchor="middle" font-size="18" font-weight="400" fill="#285d3b">Business rules</text>
-<text x="280" y="561" text-anchor="middle" font-size="17" font-weight="700" fill="#17324d">Code dependencies: outside → inside</text>
+<rect width="640" height="708" rx="12" fill="#fff"/>
+<circle cx="320" cy="330" r="250" fill="#edf3f9" stroke="#759ab6" stroke-width="2"/>
+<circle cx="320" cy="330" r="175" fill="#fff4d8" stroke="#c4a459" stroke-width="2"/>
+<circle cx="320" cy="330" r="100" fill="#e9f6ec" stroke="#659878" stroke-width="2"/>
+<path d="M320 558V494" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
+<path d="M320 479V418" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
+<text x="320" y="35" text-anchor="middle" font-size="24" font-weight="700" fill="#17324d">Business models guide implementation</text>
+<text x="320" y="108" text-anchor="middle" font-size="22" font-weight="700" fill="#34556b">Code and tests</text>
+<text x="320" y="133" text-anchor="middle" font-size="17" font-weight="400" fill="#34556b">Software Factory</text>
+<text x="320" y="197" text-anchor="middle" font-size="19" font-weight="700" fill="#795b16">Contracts · decisions</text>
+<text x="320" y="222" text-anchor="middle" font-size="15" font-weight="400" fill="#795b16">Requirements solution · ADR</text>
+<text x="320" y="306" text-anchor="middle" font-size="21" font-weight="700" fill="#285d3b">Business processes</text>
+<text x="320" y="335" text-anchor="middle" font-size="18" font-weight="400" fill="#285d3b">Ontology</text>
+<text x="320" y="362" text-anchor="middle" font-size="15" font-weight="400" fill="#285d3b">Context Layer Solution</text>
+<text x="320" y="613" text-anchor="middle" font-size="18" font-weight="700" fill="#336fa1">Dependencies: code → ADRs → business processes</text>
+<line x1="80" y1="633" x2="560" y2="633" stroke="#d9e1e8"/>
+<text x="320" y="661" text-anchor="middle" font-size="18" font-weight="600" fill="#285d3b">Business process changes → revise ADRs and code</text>
+<text x="320" y="688" text-anchor="middle" font-size="17" font-weight="400" fill="#465768">Implementation changes → preserve business processes</text>
 </svg>
