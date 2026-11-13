@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 17:42:36 +0900
+last_modified_at: 2026-11-13 18:01:46 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -35,7 +35,34 @@ Agent-based business automation and self-improving agents can help put this mode
 
 This post describes the solutions that support this flow and the organizational responsibilities needed for domain experts to lead changes.
 
-## 1. Connecting solutions to introduce AX
+## 1. DDD and bounded contexts
+
+In DDD, business experts and developers model business concepts, relationships, and rules together, keeping their meaning intact in design and code. Technical implementation choices can change while a business criterion such as “when an order may be canceled” remains the same.
+
+One model cannot serve every part of the business equally well. For example, “cancellation completed” in ordering means that an order's cancellation has been confirmed, while “refund completed” in payments means that returning the customer's money has finished. The two areas participate in the same process but have different responsibilities and completion criteria.
+
+**A bounded context (BC) is the scope within which a business model's terms and rules have consistent meanings.** Ordering and payments have separate boundaries, with business meaning and implementation kept aligned inside each.
+
+{% raw %}
+```mermaid
+flowchart LR
+  subgraph O["Ordering BC"]
+    direction TB
+    OR["Order and cancellation rules"] --> OC["Ordering model and code"]
+  end
+  subgraph P["Payments BC"]
+    direction TB
+    PR["Payment and refund rules"] --> PC["Payments model and code"]
+  end
+  O -->|"Cancellation event"| P
+```
+{% endraw %}
+
+The payments BC handles an order-cancellation event according to its own approval and refund rules. Contracts between BCs define what information is exchanged and what it means, keeping order cancellation distinct from refund completion.
+
+Organizational and service responsibilities should reflect these boundaries. Several services may implement one BC; the BC defines a boundary of business meaning. For more on terminology and context boundaries, see [Notes for DDD beginners](/2021/10/11/thoughts-for-ddd-starters.html) (Korean).
+
+## 2. Connecting solutions to introduce AX
 
 An organization introducing AX can start with these five steps. After the initial build, domain experts' change requests should enter the same flow and lead to system improvements.
 
@@ -60,7 +87,7 @@ Existing solutions provide the common capabilities at each step. Teams configure
 
 | Step | Role | Result |
 | --- | --- | --- |
-| 1. Shared knowledge | Prepare business sources and access | Knowledge with traceable evidence |
+| 1. Shared knowledge | Prepare business and implementation knowledge and access | Knowledge with traceable evidence |
 | 2. Process analysis | Analyze current and target work and responsibility | Target processes and transformation candidates |
 | 3. Requirements | Agree on business rules and success criteria | Criteria for implementation and verification |
 | 4. Business automation | Configure and test existing agents and tools | An execution flow and any missing capabilities |
@@ -80,29 +107,58 @@ Palantir provides Foundry for data and business models, AIP for agents and AI wo
 
 The common pattern is **combining a reusable technical foundation with each customer's business model**. The official materials do not establish that either company has adopted DDD or that every change is handled autonomously. DDD is this article's design perspective for keeping business and implementation aligned on top of such solutions.
 
-## 2. Preserving business meaning through shared knowledge and DDD
+## 3. Preserving business meaning through shared knowledge and DDD
 
-To understand a domain expert's change request, agents need access to terms, existing processes, rules, and exceptions. The shared knowledge platform holds the sources, while governance of ownership, provenance, and permitted use determines access for agents and external services.
+AX requires agents to find not only business documents but also relationships between processes and implementation knowledge spread across repositories and services. Shared knowledge provides the context management foundation for retrieving the information each task needs.
 
-Business teams decide the meaning of rules and their permitted scope. Platform teams ensure those decisions apply to retrieval and execution. Preparing data and granting access need to happen together.
-
-### General information and business knowledge need different retrieval methods
-
-Documents, meeting notes, and support records need **hybrid retrieval** combining similarity search with BM25, which ranks documents by matching terms. This covers both different expressions of the same meaning, such as “I want my money back” and “refund request,” and specific terms such as product codes.
-
-If agents must reconstruct refund approval responsibilities, processing sequences, and effects on other work from document fragments each time, their interpretations can differ. An **ontology** makes the business concepts, relationships, and rules they should follow explicit.
-
-A graph database is not mandatory. Business knowledge can be written in a text format such as Turtle, with routes from an overview into the required detail.
-
-First show the responsibilities and core work of bounded contexts (BCs), the scopes within which terms and rules have consistent meanings. Agents can then find rules and exceptions inside relevant BCs. Retrieval can work without every internal relationship being complete, provided BC membership and paths into the details are established.
+The required capabilities include RAG (Retrieval-Augmented Generation), which uses retrieved information in model responses or work; graph traversal, which follows relationships; and ontology retrieval, which finds business concepts and rules. **Both business agents and coding agents need access to all three capabilities.**
 
 {% raw %}
 ```mermaid
 flowchart LR
-  B["BC overview"] --> R["Relevant rules and exceptions"]
-  R --> E["Required sources and implementation criteria"]
+  subgraph K["3 retrieval methods"]
+    direction TB
+    R["Document RAG<br/>Similarity + BM25"]
+    G["Graph traversal<br/>Relations · dependencies"]
+    O["Ontology retrieval<br/>Meaning · rules"]
+  end
+  R --> C["Permissions · scope<br/>Task context"]
+  G --> C
+  O --> C
+  subgraph U["2 agent types"]
+    B["Business agents<br/>Knowledge · rules"]
+    D["Coding agents<br/>Business + implementation<br/>Repos · projects<br/>Service relationships"]
+  end
+  C --> B
+  C --> D
 ```
 {% endraw %}
+
+### Three ways to retrieve knowledge
+
+**Document retrieval and RAG** find evidence in business documents, meeting notes, and design records and use it in a task. Hybrid retrieval combines similarity search with BM25, which ranks documents by matching terms. This covers both different expressions of the same meaning, such as “I want my money back” and “refund request,” and exact terms such as product codes.
+
+**Graph traversal** follows recorded relationships to find connected entities. Following events passed between refund processes, service calls made by a payment service, or dependencies between repositories helps identify where a change may have an effect.
+
+**Ontology retrieval** finds the business meaning of concepts and relationships, along with applicable rules and exceptions. It makes explicit what “cancellation completed” in ordering and “refund completed” in payments mean and when each holds, so agents do not have to reconstruct the business criteria from document fragments each time.
+
+These capabilities work together. Graph traversal provides a way to follow connections, while an ontology defines what those connections and concepts mean. Information retrieved from a graph or ontology can also feed RAG.
+
+### Serving two types of agents
+
+**Business agents** primarily need business knowledge and rules. To handle a refund request, they must read customer and order state, approval conditions, processing steps, and exceptions to determine which actions the business permits.
+
+**Coding agents** need those same business criteria plus the knowledge required to implement them. They need to know which project's repositories to change, how services connect through APIs and events, and which contracts and tests must hold. Searching code within one repository is insufficient for changes spanning projects and services.
+
+The two consumers should not be isolated into separate knowledge systems. They should share business concepts and rules while retrieving the scope relevant to their work. Business agents may need service relationships, and coding agents must also consult the ontology for business meaning.
+
+The shared knowledge platform manages ownership, provenance, versions, and permitted use, applying role- and business-scope access controls before retrieval. Business teams decide the meaning and permitted use of rules; platform teams ensure those decisions govern actual access by agents and external services.
+
+### Navigating business knowledge in layers
+
+Ontology retrieval does not require a graph database. Business knowledge can be written in a text format such as Turtle, with routes from an overview into the required detail.
+
+First show each BC's responsibilities and core work. Agents can then find rules and exceptions inside relevant BCs. Retrieval can work without every internal relationship being complete, provided BC membership and paths into the details are established.
 
 When agents can read an overview and decide where to look next, they can narrow the scope before reading details instead of taking in material from across the enterprise at once. Retrieving details only from relevant areas reduces unrelated context as business knowledge grows. The saving is in how much information agents must read, rather than storage retrieval time.
 
@@ -116,13 +172,44 @@ Changing expression registration requires checking how expressions arrive from c
 
 ### Separating business meaning from implementation responsibilities
 
-“Cancellation completed” in ordering and “refund completed” in payments are different events even when they belong to the same process. From a DDD perspective, their meanings should be clear within each BC, with the conditions and results connecting the two recorded explicitly.
-
 Business models hold process purpose, participants, conditions, and exceptions. ADRs (Architecture Decision Records) hold design decisions and conditions the implementation must satisfy; code and data mappings hold the concrete methods. Renaming a refund-status column must not change the meaning of a completed refund. Changing the completion criterion, however, requires corresponding implementation and verification changes.
+
+{% raw %}
+```mermaid
+flowchart TB
+  M["Business model<br/>BCs · processes · rules"] --> A["Implementation contracts<br/>ADRs · verification criteria"]
+  A --> C["Implementation<br/>Code · services"]
+```
+{% endraw %}
 
 These boundaries must also shape agent execution: which BC's rules to read, which tools and permissions to use, and which results to pass to other BCs. One agent can handle several BCs while preserving the decision criteria of each.
 
-## 3. Connecting process analysis to automation and implementation
+## 4. Connecting process analysis to automation and implementation
+
+With shared knowledge in place, a business change can be developed into requirements and an executable workflow. When a capability is missing, coding agents in the Software Factory implement it.
+
+{% raw %}
+```mermaid
+sequenceDiagram
+  actor O as Domain expert
+  participant B as Business agent
+  participant K as Shared knowledge
+  participant C as Coding agent
+  O->>B: Business change request
+  B->>K: Retrieve rules and exceptions
+  K-->>B: Decision and verification criteria
+  B->>B: Define target flow and requirements
+  opt Implementation needed
+    B->>C: Missing capability and business criteria
+    C->>K: Retrieve repo and service relationships
+    K-->>C: Implementation context and dependencies
+    C->>C: Implement and test
+    C-->>B: Verified code and tools
+  end
+  B->>B: Configure and verify automation
+  B-->>O: Results and verification evidence
+```
+{% endraw %}
 
 ### Finding current and target work
 
@@ -138,7 +225,7 @@ Requirements need the necessary data, inputs and outputs, conditions and excepti
 
 ### Configuring automation with existing agents and tools
 
-Next, check whether existing agents and tools meet the requirements. When the necessary query and action capabilities and permissions are available, connect them into a workflow and test it with business cases. Missing capabilities become implementation requests for the Software Factory.
+Next, check whether existing agents and tools meet the requirements. When the necessary query and action capabilities and permissions are available, connect them into a workflow and test it with business scenarios. Missing capabilities become implementation requests for the Software Factory.
 
 Check that inputs and outputs match, business rules hold, and failures are handled as intended. Self-improving agents should then use change requests, execution records, and review findings to revise the workflow and tool use. The agreed business model remains the reference.
 
@@ -150,36 +237,31 @@ Alongside code, it should leave **evidence of which business conditions changed 
 
 This role continues after the initial build. When a business change requires code changes, implementation and verification should follow the same criteria, without requiring a domain expert to rewrite every request in technical terms.
 
-## 4. Reviews and organizational responsibilities that enable self-improvement
+## 5. Reviews and organizational responsibilities that enable self-improvement
 
 Differences found in execution records and session or workflow reviews need changes appropriate to their cause. If the ontology's business model is missing a rule or exception, correct it against the sources. If execution violates an existing rule, fix the workflow or code. Business meaning and verification criteria must not be changed just to accommodate the code.
 
 A correct answer may still have relied on source retrieval to compensate for a wrong business definition. Evaluating the final result and stored knowledge separately helps prevent the same incorrect rule from being reused.
 
-Changes with established business criteria can follow the flow below. When a new business judgment is needed, return its evidence to the domain expert.
+For changes with established business criteria, revise knowledge or execution according to the cause and verify the result. When a new business judgment is needed, the domain expert must establish the criteria first.
 
 {% raw %}
 ```mermaid
-sequenceDiagram
-  actor O as Domain expert
-  participant K as Shared business model
-  participant A as Self-improving agent
-  participant F as Software Factory
-  loop Business change and improvement
-    O->>A: Business change request
-    A->>K: Read criteria and context
-    K-->>A: Change criteria and context
-    A->>A: Analyze and revise workflow
-    opt Code changes needed
-      A->>F: Implement and verify
-      F-->>A: Verified code and tools
-    end
-    A->>A: Execute, verify, review
-    A-->>K: Change results and evidence
-    A-->>O: Results and verification
-  end
+flowchart TB
+  R["Execution and session review"] --> D{"Cause of the gap"}
+  D -->|"Missing business rule"| K["Update ontology"]
+  D -->|"Execution error"| I["Revise workflow or code"]
+  D -->|"New judgment needed"| O["Domain expert"]
+  O -->|"Criteria agreed"| K
+  K --> V["Verify business and implementation"]
+  I --> V
+  V -->|"Pass"| S["Update knowledge and execution"]
+  V -.->|"Fail"| R
+  S --> R
 ```
 {% endraw %}
+
+Verified changes must also be reflected in business models and implementation knowledge. Update the ontology when rules change, and implementation knowledge and retrieval indexes when service connections or code locations change. This lets subsequent business agents and coding agents work from the same changes.
 
 ### Moving decision authority and verification responsibility together
 
@@ -197,7 +279,7 @@ If the common platform team builds every business-specific feature, growing dema
 
 ### Checking with one business change
 
-Use an actual business change to check whether the system can handle it without technical specialists reinterpreting the request. When a refund policy changes, check whether the domain expert can request the new conditions in business terms and verify the system's changes through business cases.
+Use an actual business change to check whether the system can handle it without technical specialists reinterpreting the request. When a refund policy changes, check whether the domain expert can request the new conditions in business terms and verify the system's changes through business scenarios.
 
 Include the time experts spend explaining and checking results alongside processing time, failures, and rework. If every change still requires an FDE or developer to reinterpret the request, some execution may have been automated while the dependency for changes and maintenance remains.
 
