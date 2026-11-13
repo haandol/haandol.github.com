@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 21:02:43 +0900
+last_modified_at: 2026-11-13 21:39:30 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -32,6 +32,8 @@ In traditional software development, business processes were often recast to fit
 Reducing this conflict requires the business language and rules agreed by business and development teams to remain intact in the implementation. **Keeping business models and implementation aligned in meaning**, a core principle of DDD (Domain-Driven Design), fits AX's aim of connecting business experts' intent to agent execution.
 
 Agent-based business automation and self-improving agents can help put this model into practice and maintain it. When a domain expert who understands the rules and exceptions recognizes a business change and requests an update, agents should revise the workflow against the same business model. A Software Factory carries the necessary code through implementation, verification, and delivery.
+
+In this structure, **shared knowledge is the foundation every solution consults**. Analysis results feed requirements, requirements guide automation and development, and findings confirmed through execution and verification return to shared knowledge.
 
 ## 1. Business meaning and bounded contexts
 
@@ -107,34 +109,42 @@ Enterprise AX should be built by providing and connecting a solution for each of
 ```mermaid
 flowchart TB
   FDE["FDE<br/>Initial setup"] -.-> S
-  subgraph S["Solutions for each stage"]
-    direction TB
-    K["1. Shared knowledge<br/>Knowledge management"] --> P["2. Process analysis<br/>Process analysis solution"]
-    P --> R["3. Requirements<br/>Requirements management"]
-    R --> A["4. Business automation<br/>Business agent solution"]
-    A -->|"Build needed"| F["5. Software development<br/>Software Factory"]
-    F -->|"Verified code / tools"| A
+  subgraph S["Connected solutions"]
+    K["1. Shared knowledge<br/>Knowledge management"]
+    subgraph W["Solutions sharing the knowledge layer"]
+      P["2. Process analysis<br/>Process analysis solution"] -->|"Target process"| R["3. Requirements<br/>Requirements management"]
+      R -->|"Requirements and checks"| A["4. Business automation<br/>Business agent solution"]
+      A -->|"Build needed"| F["5. Software development<br/>Software Factory"]
+      F -->|"Verified code / tools"| A
+    end
+    K --> W
+    W -.->|"Validated updates"| K
+    K ~~~ P
   end
   U["Business / domain<br/>experts"] -->|"Change and criteria"| P
   A -->|"Results and evidence"| U
   classDef expert fill:#e9f6ec,stroke:#3c7754,color:#23452b
   classDef setup fill:#f1f3f5,stroke:#7d8790,color:#39434c
+  classDef knowledge fill:#eaf2fb,stroke:#5683ac,color:#17324d
   class U expert
   class FDE setup
+  class K knowledge
 ```
 {% endraw %}
 
-| Stage | Supporting solution | What it provides to experts |
+| Stage | Supporting solution | Information read and passed on |
 | --- | --- | --- |
-| 1. Shared knowledge | Knowledge management | Retrieval of business and implementation knowledge, provenance, and access control |
-| 2. Process analysis | Process analysis solution | Current and target workflows, automation candidates, and affected work |
-| 3. Requirements | Requirements management | Business rules, exceptions, and implementation and verification criteria |
-| 4. Business automation | Business agent solution | Workflow configuration, execution, verification, and improvement |
-| 5. Software development | Software Factory | Implementation and tests for missing capabilities, with code and tools for execution |
+| 1. Shared knowledge | Knowledge management | Supplies business and implementation knowledge to every solution and incorporates validated changes |
+| 2. Process analysis | Process analysis solution | Reads current work and passes target processes and affected areas to requirements management |
+| 3. Requirements | Requirements management | Reads business rules and exceptions and passes requirements and verification criteria to automation and development |
+| 4. Business automation | Business agent solution | Executes against business criteria, requests missing capabilities from development, and returns results to experts |
+| 5. Software development | Software Factory | Reads business models and repo/service relationships and supplies verified code and tools to automation |
 
-The same business models, requirements, and verification evidence must pass between stages. If someone still has to translate process-analysis results into technical documents or manually connect generated code, that work remains after the FDE leaves. **Experts should decide what work to change and how success will be judged; the connected solutions should turn those decisions into working behavior.**
+Each solution **reads the current business criteria from shared knowledge and receives the preceding stage's results as input**.
 
-For example, when refund approval conditions change, the process analysis solution identifies affected work and the requirements management solution defines the new rules and verification scenarios. The business agent solution revises the workflow against those criteria; if a new capability is needed, the Software Factory implements and supplies it. Experts use the business results and verification evidence to judge whether the change matches their intent.
+Experts decide what work to change and how success will be judged. The connected solutions carry that decision through analysis, requirements, execution, and implementation. Business rules, implementation relationships, and verification evidence validated through execution and review return to shared knowledge as the basis for subsequent work.
+
+For example, when refund approval conditions change, the analysis and requirements solutions read the current rules and ordering/payment relationships from shared knowledge to determine impact and verification criteria. Business agents and the Software Factory use those criteria to revise the workflow and any required code, then return results to experts. The confirmed rules and implementation relationships remain in shared knowledge so the next change starts from the same criteria.
 
 A team that has already mapped processes with business experts can use that work to identify the data it needs. Automating process analysis itself requires readable sources and access first. Either way, shared knowledge is difficult to postpone.
 
