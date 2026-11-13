@@ -7,7 +7,7 @@ email: ldg55d@gmail.com
 tags: ai agent ax ddd platform organization software-factory knowledge harness-engineering
 publish: true
 published: true
-last_modified_at: 2026-11-13 17:31:34 +0900
+last_modified_at: 2026-11-13 17:42:36 +0900
 lang: ko
 translation_key: enterprise-wide-ax-essentials
 english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
@@ -78,16 +78,6 @@ AWS는 고객 계정에 업무의 의미와 데이터를 연결하는 시맨틱 
 
 이 사례들의 공통점은 **재사용 가능한 기술 기반과 고객 고유의 업무 모델을 결합한다는 것**이다. 공식 자료가 두 회사의 DDD 채택이나 모든 변경의 자율 처리를 확인해주는 것은 아니다. DDD는 이런 솔루션 위에서도 업무와 구현의 의미를 일치시켜야 한다는 이 글의 설계 관점이다.
 
-### 실제 적용 사례: Uber와 Cleveland Clinic
-
-Uber는 2026년 Software Factory 사례에서 코드 리뷰, 빌드·테스트 실패 복구, 운영 장애 분류 등을 관리형 에이전트에 맡긴다고 설명한다. 이를 지원하는 공통 기반으로 도구 게이트웨이와 서비스·설계 문서·운영 기록을 연결한 문맥 그래프를 구축하고, 실제 작업을 기준으로 에이전트의 품질과 비용을 평가한다.[^5]
-
-DDD 활용은 별도의 2020년 아키텍처 글에서 확인된다. Uber는 관련 서비스를 도메인으로 묶고, 계층별 의존 관계와 공통 인터페이스를 정리하는 설계에 DDD와 Clean Architecture를 참고했다고 명시한다. 다만 도메인과 조직 구조가 항상 일대일로 대응하는 것은 아니라고 설명한다.[^6]
-
-Cleveland Clinic은 2024년 공개한 사례에서 팔란티어 기반 플랫폼에 병상, 입·퇴원과 환자 수요, 인력 데이터를 모아 배치 결정을 지원한다고 설명했다. 여러 자료와 전화로 모으던 정보를 공통 화면에서 확인하고 예측하면서, 간호 관리자와 중앙 인력 운영팀의 협업 방식도 달라졌다고 한다.[^7]
-
-이 사례들은 공통 기반 위의 개발 자동화와 업무 데이터 통합에 따른 협업 변화를 보여준다. 도메인 전문가의 요청만으로 시스템 전체가 자율 개선되는 구조까지 입증한 사례는 아니다.
-
 ## 2. 공통 지식과 DDD로 업무의 뜻을 유지하기
 
 도메인 전문가의 변경 요청을 에이전트가 이해하려면 용어, 기존 프로세스, 규칙과 예외를 함께 읽을 수 있어야 한다. 확보한 자료를 공통 지식 플랫폼에 쌓고, 소유자·출처·허용 범위를 관리하는 거버넌스를 통해 에이전트와 외부 서비스에 접근권한을 부여한다.
@@ -98,7 +88,9 @@ Cleveland Clinic은 2024년 공개한 사례에서 팔란티어 기반 플랫폼
 
 문서·회의록·상담 기록 같은 일반 정보에는 의미가 비슷한 구간을 찾는 유사도 검색과, 단어의 일치를 기준으로 문서를 정렬하는 BM25를 결합한 **하이브리드 검색**이 필요하다. ‘돈을 돌려받고 싶다’와 ‘환불 요청’처럼 표현이 다른 경우와, 상품 코드처럼 정확한 단어를 찾아야 하는 경우를 함께 다루기 위해서다.
 
-환불의 처리 순서, 승인 조건, 다른 업무에 미치는 영향은 개념과 관계·규칙을 정리한 **온톨로지**에서 찾는다. 반드시 그래프 데이터베이스가 필요한 것은 아니다. Turtle 같은 텍스트 형식으로 업무 지식을 정리하고, 개요에서 필요한 상세로 내려갈 수 있게 해줘도 된다.
+환불의 승인 주체나 처리 순서, 다른 업무에 미치는 영향을 매번 문서 조각에서 다시 추론하게 두면 같은 업무를 다르게 해석할 수 있다. 개념과 관계·규칙을 정리한 **온톨로지**는 에이전트가 따라야 할 업무 기준을 명시한다.
+
+반드시 그래프 데이터베이스가 필요한 것은 아니다. Turtle 같은 텍스트 형식으로 업무 지식을 정리하고, 개요에서 필요한 상세로 내려갈 수 있게 해줘도 된다.
 
 같은 용어와 규칙이 통하는 범위인 바운디드 컨텍스트(BC, Bounded Context)의 책임과 핵심 업무를 먼저 보여주고, 에이전트가 관련 BC 안에서 규칙과 예외를 찾게 하는 방식이다. 모든 내부 관계를 미리 완성하지 않아도, BC 소속과 상세로 내려갈 경로가 정리되어 있으면 그 범위에서 검색할 수 있다.
 
@@ -113,6 +105,12 @@ flowchart LR
 에이전트가 개요를 읽고 다음 탐색 범위를 판단하게 하면, 기업 전체의 자료를 한꺼번에 읽히지 않고 필요한 영역부터 좁혀갈 수 있다. 업무 지식이 커져도 관련 영역의 상세만 가져오므로, 관계없는 내용을 컨텍스트에 넣는 일을 줄일 수 있다. 여기서 줄이는 것은 저장소의 검색 시간이 아니라 에이전트가 읽어야 할 정보의 양이다.
 
 이를 위해서는 각 계층의 개요가 다음 탐색 범위를 고를 수 있을 만큼 정확해야 한다. 개요에서 빠진 예외도 상세 규칙과 원문에서는 찾아볼 수 있어야 한다.
+
+아래는 [온톨로지 도구](https://github.com/haandol/alps-writer-plugins)로 영어 학습 서비스 [잉크버드(EncBird)](https://www.encbird.com)의 ‘표현 사전’ BC를 3D로 연 화면이다. 표현 등록·확장·사전 관리와 대화·팟캐스트·복습 사이의 관계를 보여준다.[^5]
+
+![잉크버드 표현 사전의 업무 프로세스와 연결 관계를 보여주는 3D 온톨로지 화면](/assets/img/2026/1105/encbird-ontology-3d.png)
+
+표현 등록 방식을 바꾼다면 대화·팟캐스트에서 표현이 들어오는 경로와, 등록 결과가 복습·학습 기록에 미치는 영향을 함께 확인해야 한다. 온톨로지에 기록한 관계는 에이전트가 어느 프로세스의 조건과 예외를 읽어야 하는지 좁히는 기준이 된다.
 
 ### 업무 모델과 구현의 책임을 분리하기
 
@@ -203,10 +201,6 @@ sequenceDiagram
 
 ## 마치며
 
-아래는 [온톨로지 도구](https://github.com/haandol/alps-writer-plugins)로 영어 학습 서비스 [잉크버드(EncBird)](https://www.encbird.com)의 ‘표현 사전’ BC를 3D로 연 화면이다. 표현 등록·확장·사전 관리와 대화·팟캐스트·복습 사이의 관계를 보여준다.[^8]
-
-![잉크버드 표현 사전의 업무 프로세스와 연결 관계를 보여주는 3D 온톨로지 화면](/assets/img/2026/1105/encbird-ontology-3d.png)
-
 이상적인 AX의 목표는 **업무 프로세스와 조직의 책임 구조, 실제 구현이 같은 업무 모델을 따르고, 구현의 세부는 그 기준 안에서 자율적으로 관리되는 시스템**이다.
 
 FDE가 구축을 마치고 떠난 뒤 비즈니스 전문가가 솔루션의 기술적 해석까지 따로 익혀야 한다면, 개발자가 하던 역할을 떠안은 것이다. 업무 전문가가 자신의 언어로 변경을 요청하고 결과를 판단할 수 있어야 한다.
@@ -219,7 +213,4 @@ FDE가 구축을 마치고 떠난 뒤 비즈니스 전문가가 솔루션의 기
 [^2]: AWS Partner Network Blog, [Introducing Forward Deployed Engineering for Partners](https://aws.amazon.com/blogs/apn/introducing-forward-deployed-engineering-for-partners-winning-the-future-of-enterprise-ai/). 파트너가 보유·재사용하는 온톨로지·평가·도구 연결·에이전트 운영 하네스를 설명한다.
 [^3]: Palantir, [Integrated platforms: AIP, Foundry, and Apollo](https://www.palantir.com/docs/foundry/architecture-center/platforms). 표준 플랫폼과 고객별 맞춤화, FDE의 관계를 설명한다.
 [^4]: Palantir, [Ontology building](https://www.palantir.com/docs/foundry/ontology/overview). 업무 객체·관계와 액션·함수를 함께 다루는 운영 계층을 설명한다.
-[^5]: Uber Engineering, [Running a Software Factory Efficiently at Uber Scale](https://www.uber.com/us/en/blog/efficient-software-factory/), 2026-08-27. 공통 하네스·도구 게이트웨이·문맥 그래프를 사용하는 관리형 에이전트와 작업별 평가를 설명한다.
-[^6]: Uber Engineering, [Introducing Domain-Oriented Microservice Architecture](https://www.uber.com/us/en/blog/microservice-architecture/), 2020-07-23. DDD와 Clean Architecture의 영향을 명시한 서비스 아키텍처 사례이며, 2026년 Software Factory와의 통합 효과를 검증한 자료는 아니다.
-[^7]: Cleveland Clinic, [How AI Assists With Staffing, Scheduling and Once-Tedious Tasks](https://consultqd.clevelandclinic.org/how-ai-assists-with-staffing-scheduling-and-once-tedious-tasks), 2024-02-14. 병원 측이 공개한 병상·인력·수술실 운영 지원과 현업 협업 사례다.
-[^8]: [업무 온톨로지 도구의 3D 보기](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). 잉크버드의 업무 모델에서 생성한 ‘표현 사전’ BC 화면.
+[^5]: [업무 온톨로지 도구의 3D 보기](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). 잉크버드의 업무 모델에서 생성한 ‘표현 사전’ BC 화면.

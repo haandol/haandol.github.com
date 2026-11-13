@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 17:31:34 +0900
+last_modified_at: 2026-11-13 17:42:36 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -80,16 +80,6 @@ Palantir provides Foundry for data and business models, AIP for agents and AI wo
 
 The common pattern is **combining a reusable technical foundation with each customer's business model**. The official materials do not establish that either company has adopted DDD or that every change is handled autonomously. DDD is this article's design perspective for keeping business and implementation aligned on top of such solutions.
 
-### Applied examples: Uber and Cleveland Clinic
-
-Uber's 2026 Software Factory article describes managed agents handling code reviews, recovery from build and test failures, and operational-alert triage. The shared foundation includes a tool gateway and a context graph connecting services, design documents, and operating records, with agent quality and cost evaluated against real work.[^5]
-
-DDD's role is documented separately in Uber's 2020 architecture article. Uber explicitly cites DDD and Clean Architecture as influences on an architecture that groups related services into domains and defines layered dependencies and shared interfaces. It also states that domains do not always map one-to-one to organizational structure.[^6]
-
-In a case study published in 2024, Cleveland Clinic describes using a Palantir-based platform to bring together bed availability, admissions and discharges, patient demand, and staffing data to support allocation decisions. The hospital reports that shared views and forecasts replaced information gathering through multiple sources and phone calls, changing how nurse managers collaborate with centralized staffing operations.[^7]
-
-These cases demonstrate development automation on a shared foundation and changes in collaboration through integrated business data. They do not establish that an entire system can improve autonomously from a domain expert's request alone.
-
 ## 2. Preserving business meaning through shared knowledge and DDD
 
 To understand a domain expert's change request, agents need access to terms, existing processes, rules, and exceptions. The shared knowledge platform holds the sources, while governance of ownership, provenance, and permitted use determines access for agents and external services.
@@ -100,7 +90,9 @@ Business teams decide the meaning of rules and their permitted scope. Platform t
 
 Documents, meeting notes, and support records need **hybrid retrieval** combining similarity search with BM25, which ranks documents by matching terms. This covers both different expressions of the same meaning, such as “I want my money back” and “refund request,” and specific terms such as product codes.
 
-Refund sequences, approval conditions, and effects on other work can be found in an **ontology** of business concepts, relationships, and rules. A graph database is not mandatory. Business knowledge can be written in a text format such as Turtle, with routes from an overview into the required detail.
+If agents must reconstruct refund approval responsibilities, processing sequences, and effects on other work from document fragments each time, their interpretations can differ. An **ontology** makes the business concepts, relationships, and rules they should follow explicit.
+
+A graph database is not mandatory. Business knowledge can be written in a text format such as Turtle, with routes from an overview into the required detail.
 
 First show the responsibilities and core work of bounded contexts (BCs), the scopes within which terms and rules have consistent meanings. Agents can then find rules and exceptions inside relevant BCs. Retrieval can work without every internal relationship being complete, provided BC membership and paths into the details are established.
 
@@ -115,6 +107,12 @@ flowchart LR
 When agents can read an overview and decide where to look next, they can narrow the scope before reading details instead of taking in material from across the enterprise at once. Retrieving details only from relevant areas reduces unrelated context as business knowledge grows. The saving is in how much information agents must read, rather than storage retrieval time.
 
 For this to work, each overview must be accurate enough to guide the next retrieval step. Exceptions omitted from an overview must still be available in detailed rules and original sources.
+
+This 3D view in the [ontology tool](https://github.com/haandol/alps-writer-plugins) shows the “Expression dictionary” BC of [EncBird](https://www.encbird.com), an English learning service. It shows how expression registration, expansion, and dictionary management relate to conversations, podcasts, and review.[^5]
+
+![3D ontology view of EncBird's expression dictionary processes and their connections](/assets/img/2026/1105/encbird-ontology-3d-en.png)
+
+Changing expression registration requires checking how expressions arrive from conversations and podcasts, and how registration affects review and learning records. The relationships recorded in the ontology guide agents toward the processes whose conditions and exceptions they need to read.
 
 ### Separating business meaning from implementation responsibilities
 
@@ -205,10 +203,6 @@ Include the time experts spend explaining and checking results alongside process
 
 ## Conclusion
 
-This 3D view in the [ontology tool](https://github.com/haandol/alps-writer-plugins) shows the “Expression dictionary” BC of [EncBird](https://www.encbird.com), an English learning service. It shows how expression registration, expansion, and dictionary management relate to conversations, podcasts, and review.[^8]
-
-![3D ontology view of EncBird's expression dictionary processes and their connections](/assets/img/2026/1105/encbird-ontology-3d-en.png)
-
 The ideal outcome of AX is **a system whose business processes, organizational responsibilities, and implementation follow the same business model, with implementation details managed autonomously within those criteria**.
 
 If business experts must learn the solution's technical interpretation after an FDE finishes the build and leaves, they have inherited work previously handled by developers. They need to be able to request changes and judge results in their own business terms.
@@ -221,7 +215,4 @@ Reaching that goal requires **applying DDD on top of reusable solutions to keep 
 [^2]: AWS Partner Network Blog, [Introducing Forward Deployed Engineering for Partners](https://aws.amazon.com/blogs/apn/introducing-forward-deployed-engineering-for-partners-winning-the-future-of-enterprise-ai/). Describes the partner-owned, reusable harness of ontologies, evaluation, tool connections, and agent operations.
 [^3]: Palantir, [Integrated platforms: AIP, Foundry, and Apollo](https://www.palantir.com/docs/foundry/architecture-center/platforms). Describes the standard platforms, customer-specific customization, and FDEs.
 [^4]: Palantir, [Ontology building](https://www.palantir.com/docs/foundry/ontology/overview). Describes the operational layer combining business objects and relationships with actions and functions.
-[^5]: Uber Engineering, [Running a Software Factory Efficiently at Uber Scale](https://www.uber.com/us/en/blog/efficient-software-factory/), August 27, 2026. Describes managed agents, shared harnesses, a tool gateway, a context graph, and evaluation against actual tasks.
-[^6]: Uber Engineering, [Introducing Domain-Oriented Microservice Architecture](https://www.uber.com/us/en/blog/microservice-architecture/), July 23, 2020. Explicitly identifies DDD and Clean Architecture as influences on service architecture; it does not measure integration with the 2026 Software Factory.
-[^7]: Cleveland Clinic, [How AI Assists With Staffing, Scheduling and Once-Tedious Tasks](https://consultqd.clevelandclinic.org/how-ai-assists-with-staffing-scheduling-and-once-tedious-tasks), February 14, 2024. The hospital's account of bed, staffing, and operating-room support and changes in collaboration.
-[^8]: [3D view in the business ontology tool](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). The “Expression dictionary” BC generated from EncBird's business model. Screenshot labels were translated into English for this version.
+[^5]: [3D view in the business ontology tool](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). The “Expression dictionary” BC generated from EncBird's business model. Screenshot labels were translated into English for this version.
