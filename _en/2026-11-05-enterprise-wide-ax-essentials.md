@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 18:01:46 +0900
+last_modified_at: 2026-11-13 18:31:13 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -37,9 +37,48 @@ This post describes the solutions that support this flow and the organizational 
 
 ## 1. DDD and bounded contexts
 
-In DDD, business experts and developers model business concepts, relationships, and rules together, keeping their meaning intact in design and code. Technical implementation choices can change while a business criterion such as “when an order may be canceled” remains the same.
+### When technical structure changes the business process
 
-One model cannot serve every part of the business equally well. For example, “cancellation completed” in ordering means that an order's cancellation has been confirmed, while “refund completed” in payments means that returning the customer's money has finished. The two areas participate in the same process but have different responsibilities and completion criteria.
+Suppose the business rule is: “Refund orders canceled before shipping, and mark the refund complete when the return of funds is confirmed.” A layered architecture can separate request handling (Controller), coordination (Service), and data storage (Repository).
+
+Problems arise if deadlines, shared-code reuse, and an existing database schema take priority: cancellation and refund are collapsed into one “done” state, while the actual refund is deferred to a batch job. The code has finished updating a status, but the business has not yet finished returning the customer's money.
+
+{% raw %}
+```mermaid
+flowchart TB
+  subgraph B["Business process"]
+    direction LR
+    B1["Cancel before shipping"] --> B2["Issue refund"] --> B3["Confirm returned funds<br/>Refund complete"]
+  end
+  subgraph T["Technical convenience first"]
+    direction TB
+    T1["Controller<br/>Check shipping state"] --> T2["Shared Service<br/>updateStatus(9)"]
+    T2 --> T3["Repository<br/>9 = cancellation done<br/>and refund done"]
+    T3 --> T4["RefundBatch<br/>Return funds later"]
+  end
+  subgraph D["DDD preserves business meaning"]
+    direction TB
+    D1["Order.cancel()<br/>Check cancellation rules"] --> D2["Refund.request()<br/>Refund in progress"]
+    D2 --> D3["Refund.complete()<br/>Confirm returned funds"]
+  end
+  B -.->|"Technical structure first"| T
+  B -.->|"Model the business rules"| D
+  classDef mismatch fill:#fde8e8,stroke:#b52d36,color:#821d25
+  classDef aligned fill:#e9f6ec,stroke:#3c7754,color:#23452b
+  class T3 mismatch
+  class D3 aligned
+```
+{% endraw %}
+
+Changing the “refund completed” rule in this structure requires piecing it together from Controller checks, Service updates, database values, and batch timing.
+
+DDD treats “cancellation confirmed” and “refund completed” as distinct business concepts, with their conditions enforced in code. `Refund.complete()` must use confirmation of returned funds as its completion criterion; updating a shared status value is not sufficient.
+
+Layered architecture and DDD can be used together. DDD reduces this gap by **giving the domain model responsibility for business meaning and rules, while APIs, databases, and batch jobs perform the technical work needed to carry out its decisions**.
+
+### Defining boundaries of business meaning
+
+Keeping cancellation and refund rules distinct also requires defining each business model's scope of responsibility.
 
 **A bounded context (BC) is the scope within which a business model's terms and rules have consistent meanings.** Ordering and payments have separate boundaries, with business meaning and implementation kept aligned inside each.
 
@@ -116,13 +155,17 @@ The required capabilities include RAG (Retrieval-Augmented Generation), which us
 {% raw %}
 ```mermaid
 flowchart LR
+  P["Check permissions<br/>Set search scope"]
   subgraph K["3 retrieval methods"]
     direction TB
     R["Document RAG<br/>Similarity + BM25"]
     G["Graph traversal<br/>Relations · dependencies"]
     O["Ontology retrieval<br/>Meaning · rules"]
   end
-  R --> C["Permissions · scope<br/>Task context"]
+  P --> R
+  P --> G
+  P --> O
+  R --> C["Task context"]
   G --> C
   O --> C
   subgraph U["2 agent types"]

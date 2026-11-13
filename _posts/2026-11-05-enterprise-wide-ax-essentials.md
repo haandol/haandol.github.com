@@ -7,7 +7,7 @@ email: ldg55d@gmail.com
 tags: ai agent ax ddd platform organization software-factory knowledge harness-engineering
 publish: true
 published: true
-last_modified_at: 2026-11-13 18:01:46 +0900
+last_modified_at: 2026-11-13 18:31:13 +0900
 lang: ko
 translation_key: enterprise-wide-ax-essentials
 english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
@@ -35,9 +35,48 @@ english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
 
 ## 1. DDD와 바운디드 컨텍스트
 
-DDD에서는 업무 전문가와 개발자가 비즈니스의 개념·관계·규칙을 함께 모델로 정리하고, 그 의미가 설계와 코드에서도 유지되게 한다. 기술적인 구현 방법이 달라져도 ‘어떤 조건에서 주문을 취소할 수 있는가’ 같은 업무 기준은 같아야 한다.
+### 업무 프로세스가 기술 구조에 맞춰 바뀌는 경우
 
-이때 모든 업무에 하나의 모델을 강요할 수는 없다. 예를 들어 주문의 ‘취소 완료’는 주문 취소가 확정됐다는 뜻이고, 결제의 ‘환불 완료’는 고객에게 돈을 돌려주는 처리가 끝났다는 뜻이다. 같은 프로세스에 참여하더라도 책임과 완료 기준이 다르다.
+예를 들어 ‘배송 전 취소된 주문은 환불하고, 반환이 확인되면 환불 완료로 처리한다’는 업무 규칙을 구현한다고 하자. 요청 처리(Controller), 실행 조정(Service), 데이터 저장(Repository)으로 나누는 계층형 아키텍처를 사용할 수 있다.
+
+그런데 일정과 공통 코드 재사용, 기존 DB 구조를 우선해 취소와 환불을 하나의 ‘완료’ 상태로 합치고, 실제 환불은 배치 작업으로 넘기면 문제가 생긴다. 코드는 상태 변경을 끝냈지만 고객에게 돈을 돌려주는 업무는 아직 끝나지 않았기 때문이다.
+
+{% raw %}
+```mermaid
+flowchart TB
+  subgraph B["업무 프로세스"]
+    direction LR
+    B1["배송 전 취소"] --> B2["환불 실행"] --> B3["반환 확인 후<br/>환불 완료"]
+  end
+  subgraph T["기술 편의에 맞춘 구현"]
+    direction TB
+    T1["Controller<br/>배송 조건 검사"] --> T2["공통 Service<br/>updateStatus(9)"]
+    T2 --> T3["Repository<br/>9 = 취소·환불 완료"]
+    T3 --> T4["RefundBatch<br/>실제 환불은 나중에"]
+  end
+  subgraph D["DDD로 의미를 유지한 구현"]
+    direction TB
+    D1["Order.cancel()<br/>취소 규칙 확인"] --> D2["Refund.request()<br/>환불 요청·진행"]
+    D2 --> D3["Refund.complete()<br/>반환 확인 후 완료"]
+  end
+  B -.->|"기술 구조 우선"| T
+  B -.->|"업무 규칙을 모델로"| D
+  classDef mismatch fill:#fde8e8,stroke:#b52d36,color:#821d25
+  classDef aligned fill:#e9f6ec,stroke:#3c7754,color:#23452b
+  class T3 mismatch
+  class D3 aligned
+```
+{% endraw %}
+
+이 구조에서 ‘환불 완료’ 규칙을 바꾸려면 Controller의 검사, Service의 상태 변경, DB 값과 배치 시점을 다시 이어 읽어야 한다.
+
+DDD에서는 ‘취소 확정’과 ‘환불 완료’를 업무 모델의 서로 다른 개념으로 두고, 코드에서도 각각의 조건을 지키게 한다. `Refund.complete()`는 반환 확인을 기준으로 완료를 판단해야 하므로, 공통 상태값을 갱신했다는 이유만으로 환불을 완료 처리할 수 없다.
+
+계층형 아키텍처와 DDD는 함께 사용할 수 있다. **업무 의미와 규칙을 도메인 모델이 책임지고, API·DB·배치는 그 결정을 실행하는 기술적 역할을 맡게 하는 것**이 DDD가 이 간극을 줄이는 방법이다.
+
+### 업무 의미의 경계를 정하기
+
+취소와 환불의 규칙을 구분하려면 각 업무 모델의 책임 범위도 정해야 한다.
 
 **바운디드 컨텍스트(BC, Bounded Context)는 한 업무 모델의 용어와 규칙이 일관된 뜻을 갖는 범위**다. 주문과 결제의 경계를 나누고, 각 BC 안에서는 업무에서 쓰는 의미와 실제 구현의 의미를 맞춘다.
 
@@ -114,13 +153,17 @@ AX를 진행하면 업무 문서뿐 아니라 업무 간 관계, 여러 저장�
 {% raw %}
 ```mermaid
 flowchart LR
+  P["권한 확인<br/>검색 범위 결정"]
   subgraph K["검색 방식 3가지"]
     direction TB
     R["문서 검색·RAG<br/>유사도 + BM25"]
     G["그래프 탐색<br/>관계·의존성"]
     O["온톨로지 탐색<br/>의미·규칙"]
   end
-  R --> C["권한·범위 적용<br/>컨텍스트 제공"]
+  P --> R
+  P --> G
+  P --> O
+  R --> C["검색 결과·컨텍스트"]
   G --> C
   O --> C
   subgraph U["사용처 2가지"]
