@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "What Platforms Does Company-Wide AX Need?"
-excerpt: Platform requirements for scaling agentic work across a company
+title: "Building AX That Improves Itself From Business Change Requests"
+excerpt: Turning domain experts' change requests into autonomous system improvements
 author: haandol
 email: ldg55d@gmail.com
-tags: ai agent ax platform organization software-factory knowledge harness-engineering
+tags: ai agent ax ddd platform organization software-factory knowledge harness-engineering
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 10:01:36 +0900
+last_modified_at: 2026-11-13 15:16:06 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -17,146 +17,70 @@ permalink: /en/2026/11/05/enterprise-wide-ax-essentials.html
 
 ## TL;DR
 
-- Company-wide AX needs requirements, knowledge, development, and automation platforms.
-- Each platform's output must become the next stage's input.
-- Reviews should improve the business model, execution, and code together.
+- Domain experts' business change requests should lead to system improvements.
+- DDD keeps business meaning consistent across requests, models, and implementation.
+- Software Factories and self-improving agents carry out changes and verification.
 
 ## Introduction
 
-Writing about harness engineering, the cognitive load of reviewing AI-generated code, internal FDEs—engineers working on automation with business teams—and Software Factories has led me to think about how a company should approach AX as a whole.
+Domain experts are the first to notice that a business process has changed because they encounter customer needs, business rules, and exceptions in daily work.
 
-By AX (Agentic Transformation), I mean automating business processes by removing human intervention, and eventually allowing those processes to improve themselves based on operating results.
+When the system's concepts and processing flow differ from the business, even a small change requires a developer to reinterpret it in technical terms. Domain experts know what needs to change, but need a separate explanation to judge whether the implementation preserves that meaning.
 
-If one team automates a task with an agent, another team can try something similar. But if every team has to prepare its own data connections, agent environment, review and approval process, and result tracking, the work of setting up and maintaining automation grows along with the number of tasks.
+Writing about harness engineering, the cognitive load of reviewing AI-generated code, internal FDEs—engineers working on automation with business teams—and Software Factories has led me to think about closing this gap.
 
-I think **company-wide AX requires platforms for requirements, shared knowledge management, software development, and business automation**. Teams need to reuse common capabilities and working procedures while adapting them to their own business rules and systems.
+The AX (Agentic Transformation) I want is **a structure in which domain experts request changes in business terms and the system improves its business model, workflows, and code accordingly**. Self-improving agents revise the processing flow using requests and execution results, while the Software Factory implements, verifies, and delivers the capabilities needed.
 
-This post describes the capabilities needed in these four platform areas and how they should connect. I use examples from platforms I am developing to make these requirements concrete.[^7]
+This flow needs a shared reference that preserves a request's meaning throughout. DDD (Domain-Driven Design) is an approach to keeping business language and rules consistent across models and implementation. When people and agents read the same business model, a domain expert's request can become the basis for a change without a developer first rewriting it in technical terms. Agents handle the concrete translation into code and data mappings.
 
-## 1. Four platform areas for company-wide AX
+I think **the alignment between business models and implementation pursued by DDD is essential for this form of AX**. Software Factories and self-improving agents need to work against the same business criteria, and organizations need to give domain experts authority over business changes and responsibility for verifying outcomes.
 
-The diagram below shows the platform structure I have in mind. Boxes show platform roles, and dashed lines represent the artifacts and knowledge that need to pass between them.
+This post follows an organization introducing AX through shared knowledge, process analysis, requirements, automation design, and implementation of missing capabilities. These five steps build the structure that carries domain experts' change requests into improved execution and code. I use examples from platforms I am developing to make the requirements concrete.[^7]
+
+## 1. From AX adoption to business change
+
+An organization introducing AX can start with these five steps. After the initial build, domain experts' change requests should enter the same flow so the system can reanalyze and improve the affected models and execution.
 
 {% raw %}
 ```mermaid
 flowchart TB
-  subgraph X1["1. Requirements"]
-    H["Requirements"]
-  end
-  subgraph X2["2. Shared knowledge"]
-    K["Data and knowledge"]
-  end
-  subgraph X3["3. Software development"]
-    F["Build and verify"]
-  end
-  subgraph X4["4. Business automation"]
-    S["Process discovery"]
-    W["Agent operations"]
-    S -.->|"Automation requirements"| W
-  end
-  H -.->|"Agreed requirements"| F
-  F -.->|"Code and tools"| W
-  W -.->|"Change requests"| H
-  K -.->|"Research evidence"| H
-  K -.->|"Business context"| F
-  K -.->|"Process data"| S
-  S -.->|"Data requirements"| K
-  K -.->|"Permitted knowledge"| W
+  K["1. Shared knowledge"] --> P["2. Process analysis"]
+  U["Domain expert"] -->|"Business change request"| P
+  P --> R["3. Requirements"]
+  R --> A["4. Automation design"]
+  A --> D{"Existing capabilities enough?"}
+  D -->|"Yes"| E["Execute and verify"]
+  D -->|"Implementation needed"| F["5. Software Factory"]
+  F --> E
+  E --> V["Business review"]
+  V -.->|"Update knowledge"| K
+  V -.->|"Improve process"| P
 ```
 {% endraw %}
 
-Creating a new capability in a company involves defining a business requirement, implementing it in code, and applying the resulting system to real work. Problems found in operation become new requirements. Managing the business definitions and rules used throughout this work is another responsibility.
+This is an adoption flow that uses existing services and tools to transform work. Each step can be supported by a shared platform or a commercial service. When the automation design needs a missing business capability, the Software Factory implements it, and the result is incorporated into the automation before execution.
 
-Platforms for company-wide AX can be organized around these four responsibilities.
-
-| Platform area | What the platform does | Outputs to share |
+| Step | What to establish | What passes forward |
 | --- | --- | --- |
-| 1. Requirements | Research, specification and prototype creation, joint review | A version of agreed requirements, prototype, and success criteria |
-| 2. Shared knowledge | Authoring, review, and retrieval of business knowledge; data mappings, evidence, access, and versions | Sources and business knowledge shared across platforms |
-| 3. Software development | Impact analysis, code changes and checks, review, merge, and deployment automation | Verified code, validation evidence, and operating results |
-| 4. Business automation | Discover current work, select automation candidates, configure and operate agents | Process maps, automation requirements, and execution records |
+| 1. Shared knowledge | Business sources, ownership, access, and versions | Data and knowledge for analysis and execution |
+| 2. Process analysis | Current and target work, roles, rules, and exceptions | As-Is and To-Be, business boundaries, responsibilities, and candidates |
+| 3. Requirements | Agreed goals, data, inputs/outputs, and success criteria | Reviewed requirements, prototypes, and verification cases |
+| 4. Business automation | Compose and test workflows with existing agents and tools | Execution configuration and missing capabilities |
+| 5. Software development | Implement, verify, and deliver missing capabilities | Verified code, tools, and business-verification evidence |
 
-The shared knowledge platform supports the other areas by securing data and managing access. It also owns knowledge authoring, review, and updates, so requirements research, development, process analysis, and agent execution can use consistent definitions and rules.
+Separating process analysis from business automation distinguishes deciding what to change from configuring agents to perform that work. Both continue using shared knowledge, while the Software Factory carries business-model changes into code and tests after the initial implementation as well.
 
-Business automation must connect **understanding current work and choosing what to automate** with **executing the selected work**. These responsibilities can be handled by a process discovery platform and an agent operations platform.
+A team that has already mapped processes with business experts can use that work to identify the data it needs. Automating process analysis itself, however, requires readable sources and access first. This post starts with shared knowledge and shows how execution and review lead back to earlier steps.
 
-The build order depends on the approach. A team can analyze processes with business experts before securing the required data. Automating that analysis may instead require preparing its knowledge foundation first. Either way, shared knowledge supports both analysis and execution and needs early attention.
+Each step needs to preserve the business meaning and verification criteria in the domain expert's request. Organizational roles should support experts deciding changes, agents carrying them into implementation and operation, and experts assessing results in business terms.
 
-This division defines responsibilities and outputs. One product may cover several roles, but a late input or an output the next stage cannot use will hold up the overall flow.
+## 2. Shared knowledge: providing data and business knowledge
 
-## 2. Requirements: developing and agreeing on what to build
+To handle a business change request, agents need to read the domain expert's terms, existing processes, rules, and exceptions against the same reference. The shared knowledge platform manages those criteria and their evidence. Analysis agents need sources and access for the initial business scope to understand the actual work.
 
-Turning an idea into a prototype immediately does not settle the business rules and success criteria developers need. When the document and interface change separately, designers and developers have to reconcile what they are reviewing.
+Automating process analysis requires access to business documents and existing work records. The data is accumulated on the shared knowledge platform, with its owner, source, and permitted uses recorded. **The platform uses these governance rules to grant agents and external services access to the knowledge they need.** Business teams decide the meaning of rules and their permitted scope; platform teams operate the mechanisms that apply those decisions to storage, retrieval, and execution.
 
-The requirements platform should let **planners develop an idea, try it themselves, and preserve the agreement needed to start development in one version**.
-
-### Research and requirements authoring
-
-Planners need to gather references and describe whose problem they are solving and which business rules apply. The platform should distinguish facts found in sources, AI suggestions, and unconfirmed assumptions, then incorporate content the planner has reviewed.
-
-Internal sources need organization-approved connections. MCP (Model Context Protocol), a protocol connecting agents to external tools and data, can be used here. Establishing a connection does not grant access to every source.
-
-### Working prototypes and review criteria
-
-A planner should be able to generate, revise, and try a prototype without managing a development environment. A demo scenario describing what to check and in what order helps distinguish an interface that opens from one that supports the intended work.
-
-New prototype generation should run separately from the version under review. If a failed candidate overwrites that version, it also removes the result other people were reviewing.
-
-### Joint review and version handoff
-
-The specification, demo scenario, and validated prototype should be bound to one version that designers and developers can review and comment on. When changes are needed, the document and prototype should be revised together for the next review.
-
-{% raw %}
-```mermaid
-sequenceDiagram
-  actor P as Planner
-  participant H as Requirements platform
-  actor R as Designer and developer
-  P->>H: Write the spec
-  H-->>P: Requirements and prototype
-  P->>H: Try and revise
-  H-->>R: Fixed review version
-  R-->>P: Feedback
-  opt Revisions needed
-    P->>H: Revise spec and prototype
-    H-->>R: New review version
-  end
-  R-->>P: Agree to start
-  P->>H: Select build version
-```
-{% endraw %}
-
-Having a version to share is different from agreeing to start development. The platform should record the conditions agreed upon and the questions still open, not just the date a link was shared.
-
-In the requirements platform I built, planners work with AI to write a PRD (Product Requirements Document), generate and revise a prototype, then publish the document, demo scenario, and validated prototype as one review version. Organization-level access and sharing are also part of making this work reusable across teams.
-
-## 3. Shared knowledge: providing data and business knowledge
-
-The shared knowledge platform manages the data and business knowledge needed for requirements, development, and automation. Preparing sources separately duplicates work and can leave platforms using different rule versions, so business definitions, evidence, and data mappings need shared management.
-
-One starting point is agent storming: defining the current process (As-Is) and the process to be handled by agents (To-Be). If a team first works with business experts to define those processes, the next task is to secure the data the agents need to execute the target process.
-
-That data is accumulated on the shared knowledge platform, with its owner, source, and permitted uses recorded. **The platform uses these governance rules to grant agents and external services access to the knowledge they need.** Securing data and deciding which services may use it need to be managed together.
-
-The order changes when agent storming itself becomes a solution for automating process analysis. The analysis agent first needs business documents and process data to read. In this approach, the shared knowledge platform must be built first to prepare the relevant sources and access permissions, enabling the agent to retrieve them, analyze the As-Is process, and design the To-Be process. The analysis then clarifies what additional data and permissions are needed.
-
-{% raw %}
-```mermaid
-flowchart TB
-  subgraph P["Start with process analysis"]
-    direction LR
-    P1["Define As-Is and To-Be"] --> P2["Acquire and store data"]
-    P2 --> P3["Grant access"]
-  end
-  subgraph A["Start with automated analysis"]
-    direction LR
-    A1["Build knowledge platform"] --> A2["Prepare sources and access"]
-    A2 --> A3["Automate process analysis"]
-  end
-```
-{% endraw %}
-
-**The first task can differ, but shared knowledge is difficult to postpone.** Securing data and managing access for the initial business scope need to start early so process analysis can lead to actual agent execution.
+Even if business experts have already mapped the current and target processes, the data needed to execute that target must be secured on this platform. Analysis identifies additional sources and permissions, and shared knowledge supports the next analysis and execution. **Different starting points do not make shared knowledge easy to postpone.**
 
 The shared knowledge layer needs **hybrid retrieval for general information** and **ontology retrieval for business processes and rules**. Finding similar support cases and understanding the sequence and conditions for handling a refund call for different forms of knowledge.
 
@@ -216,11 +140,13 @@ Centrally stored data can still support retrieval by layer. The efficiency I mea
 
 Rare exceptions omitted from an overview must remain available. The navigation feature I built reads selected definitions together with their required conditions and also supports direct retrieval of details and sources within the same permitted scope. When a definition exceeds the input limit, it leaves the unread dependencies and scope visible so the agent can split the read or adjust its selection, rather than truncating the definition and presenting it as complete.
 
-### Abstracting business processes and separating layers with DDD
+### Preserving the meaning of business changes through DDD
 
-Navigating from a business overview into the relevant details requires clear business boundaries and layer responsibilities when the knowledge is created. I used DDD (Domain-Driven Design), which designs models around business language and rules, as the basis for those boundaries.
+Navigating from a business overview into the relevant details requires clear business boundaries and layer responsibilities when the knowledge is created. I also used DDD to define the business boundaries and layer responsibilities in this platform.
 
-First, bounded contexts separate the scopes in which terms and rules have consistent meanings. Each BC records the work it owns and the results it passes to other BCs. For example, ‘cancellation completed’ in ordering and ‘refund completed’ in payments are different events. A refund process can cross both areas while retaining the distinct concepts and the events and conditions connecting them.
+First, bounded contexts separate the scopes in which terms and rules have consistent meanings. Each BC records the work it owns and the results it passes to other BCs. For example, ‘cancellation completed’ in ordering and ‘refund completed’ in payments are different events. A refund process can cross both areas while retaining the distinct concepts and the events and conditions connecting them. The model should also identify who owns changes to the rules and which conditions must pass to other business areas.
+
+For example, a domain expert might request, “Refund orders canceled before shipping without separate approval.” The agent uses the model's meanings of shipping, cancellation, approval, and refund to find the scope of the change. The expert can describe the business condition without naming fields or functions. The agent finds the technical implementation, with the aim of removing the need for a developer to redefine the business meaning.
 
 The BCs identified through this work must also shape how agents handle requests. Execution needs to connect each task to the business context and rules it reads, the tools and permissions it uses, and the results it passes to other BCs. Even when one agent handles work across several BCs, each step must retain the appropriate terms, decision criteria, and meaning of its outputs.
 
@@ -273,58 +199,9 @@ Adopted knowledge and the version published for operational use need distinct ve
 
 The shared knowledge platform's search and business-context retrieval can be exposed to multiple platforms through an open standard such as MCP.[^5] Connections need to carry the requester's permissions and the exact knowledge revision as well as the authentication method. Platforms may reuse the same knowledge, but they still need a record of which version of a rule they read.
 
-## 4. Software development: connecting implementation and verification
+## 3. Process analysis: understanding current and target work
 
-Once requirements are agreed, the development platform needs to turn them into verified code and deliver them to the actual service. A coding agent can implement quickly while disconnected review, checks, and deployment still limit company-wide delivery speed.
-
-Faros AI's 2025 report used data from more than 10,000 developers to compare periods of lower and higher AI adoption within teams. Merged PRs increased by 98%, but review time also rose by 91%, with no significant correlation between AI adoption and performance improvements at the company level.[^1] A PR (Pull Request) is a request to review a code change and merge it into the existing code.
-
-This was an observational analysis as of June 2025, when most usage was autocomplete. It does not establish the same result for today's agents, but it does show that later stages can fail to keep up with increased implementation throughput.
-
-That is why I think software development needs **a development platform connecting request intake, impact analysis, isolated implementation, checks, and delivery**.
-
-### Project-specific standards and execution environments
-
-The platform should connect existing repositories, tickets, operational alerts, and CI. CI (Continuous Integration) automatically builds and checks code changes. Connecting agent work to a team's current development flow is easier to adopt than replacing all of its tools.
-
-Project-specific design standards, task instructions, and check commands need to be registered, with the version used for each run recorded. Work needs coordination so that agents do not overwrite one another's changes in the same repository. Execution time, cost, and retry budgets also need management.
-
-### Changes and verification evidence
-
-Code changes should run in an environment separate from existing work, with real builds, tests, and business scenarios checking whether the requirements are met. Failed or unavailable checks need to remain visible, and their results should not be delivered as if the change had succeeded.
-
-Along with code, the agent should leave **evidence of what changed and which conditions were checked**. As discussed in [my post on AI code review's cognitive load](/en/2026/08/18/ai-coding-review-cognitive-load.html), review remains a bottleneck when people have to reconstruct the implementation's intent and impact from scratch.
-
-### Review and merge policies, and operating feedback
-
-Smaller changes, AI review and approval, and risk-based handling can all reduce review work.[^2][^3] The platform should apply the company's adopted policies and manage which changes can be handled automatically and which need human review.
-
-Classifying a change as suitable for automatic merging is not sufficient to merge it. The actual checks, repository protection rules, permissions, and change version must still be valid at merge time. Incidents and change requests after deployment also need to return as new work.
-
-{% raw %}
-```mermaid
-flowchart TB
-  B["Project standards"] --> R["Development request"]
-  R --> A["Impact analysis"]
-  A --> C["Isolated implementation"]
-  C --> V{"Verification"}
-  V -->|"Failed or unavailable"| F["Record incomplete work"]
-  F -->|"Retry allowed"| C
-  V -->|"Passed"| P["PR and evidence"]
-  P --> G["Check merge conditions"]
-  G -->|"Conditions met"| D["Merge and deploy"]
-  D --> O["Operating results"]
-  O -.->|"Change request"| R
-```
-{% endraw %}
-
-The Software Factory I am developing is a self-hosted base project. It connects existing repositories, tickets, alerts, and CI, and manages project standards, requirements decisions, coding-agent changes and checks in isolated environments, PRs, and automation policies. Policies are built from real PR examples and evaluated on separate cases, while classification is kept distinct from actual merge authority.
-
-A Software Factory should carry requirements through implementation, verification, delivery, and fixes for problems found in operation. StrongDM's scenario-based verification[^4] and [my post on Software Factory evals](/en/2026/10/05/software-factory-evals-and-tension-metrics.html) both address how to define success and judge the next change.
-
-## 5. Business automation: connecting process discovery and agent operations
-
-Automating development does not decide which business work to change first. The company needs to understand work scattered across departments, select the scope of automation, and connect it to executable capabilities and operating ownership.
+Use the sources prepared in shared knowledge to identify the current process (As-Is) and the target process to be handled by agents (To-Be). After adoption, compare domain experts' change requests with the existing model to identify which steps, conditions, and responsibilities change. An approach such as agent storming combines source analysis with business-expert review to map events, rules, and exceptions, while designing the automation scope and organizational decision authority and operating responsibility together.
 
 ### Process discovery: building a map with evidence
 
@@ -336,22 +213,17 @@ A process discovery platform should draft the map from internal documents and re
 
 Publication should fix the reviewed map together with its evidence and question state. An unfinished map may be shared, but publication must not be treated as proof that discovery is complete.
 
-### Automation candidates and implementation requirements
+### Automation candidates and target processes
 
 Choosing a target process for agents from the current process map requires considering frequent requests and long waits alongside exception frequency and the impact of failure. The team must also check that the shared knowledge platform has the required data, that the executing agent has permission to read it, and that tools can perform the work.
 
+Faster processing can leave waits and checks between departments unchanged if the same division of work and approval procedures remain. The target process should define the judgments people retain, responsibility for exceptions, and authority to change the work alongside the automated steps.
+
 For refunds, small cases with clear rules could be considered first. But if every case waits for a person's approval, reducing that wait requires agreeing with finance on the conditions and limits within which the agent can act. Cases involving frequent judgment calls, such as disputes, can remain with people.
 
-The platform should help distinguish agent judgment, deterministic rules, human work, and insufficient evidence. Selected candidates need requirements the next stage can implement.
+The platform should help distinguish agent judgment, deterministic rules, human work, and insufficient evidence. Preserve selected candidates with their target processes so the next stage can turn them into agreed requirements.
 
-| What to preserve | Refund example |
-| --- | --- |
-| Goal and automation scope | Reduce small-refund handling time while passing disputes to support |
-| Data and usage conditions | Owners, permissions, freshness, and retrieval-failure handling for delivery status and refund policy |
-| Inputs and outputs | Receive a refund request and return approve, reject, or human review, with the reason |
-| Representative cases and success criteria | Expected results for an allowed cancellation, a policy rejection, and a request above the approval limit |
-
-In the process discovery platform I built, business boundaries and automation candidates are analyzed against the same published snapshot, then goals, data, input/output contracts, and three distinct examples are exported as a requirements document and JSON. Links to the original process map and unresolved questions remain in the document.
+In the process discovery platform I built, business boundaries and automation candidates are analyzed against the same published snapshot, then goals, data, input/output contracts, and three distinct examples are exported as a requirements document and JSON. Links to the original process map and unresolved questions remain in the document. The requirements stage then reviews this draft and agrees on success criteria.
 
 {% raw %}
 ```mermaid
@@ -361,15 +233,73 @@ flowchart TB
   M --> P["Publish review version"]
   P --> A["Identify candidates"]
   A --> C["Review candidates"]
-  C --> R["Automation requirements"]
+  C --> R["Target and draft requirements"]
 ```
 {% endraw %}
 
-### Agent operations: finding and executing the needed capabilities
+## 4. Requirements: defining the change and its verification criteria
 
-Once work has been selected, the agent operations platform should clarify its inputs and expected outputs, then find and connect available agents and tools. A catalog for registration, discovery, and sharing helps departments avoid rebuilding the same capabilities.
+A domain expert's request needs to become changes to the business model, an impact scope, and success criteria. Agents should make these concrete in documents and cases, letting experts judge in business terms whether their intent and exceptions have been preserved.
 
-If one existing agent supplies the required input/output contract, its version should be reusable directly. Multiple capabilities can be assembled into a workflow, with checks on data types and required values between steps. A missing capability should remain an implementation requirement for the development platform.
+The requirements platform should let **domain experts define business rules and success criteria and review change results against those same criteria**. Planning, design, and development specialists help establish initial criteria and implementation constraints. Business owners should be able to decide and verify subsequent business changes within the agreed conditions.
+
+### Research and requirements authoring
+
+Develop the candidates passed from process analysis through the following items.
+
+| What to preserve | Refund example |
+| --- | --- |
+| Goal and handling responsibility | Reduce small-refund handling time while passing disputes to support |
+| Data and usage conditions | Owners, permissions, freshness, and retrieval-failure handling for delivery status and refund policy |
+| Inputs and outputs | Receive a refund request and return approve, reject, or human review, with the reason |
+| Representative cases and success criteria | Expected results for an allowed cancellation, a policy rejection, and a request above the approval limit |
+
+Business owners and planners need to gather references and describe whose problem they are solving and which business rules apply. The platform should distinguish facts found in sources, AI suggestions, and unconfirmed assumptions, then incorporate content the planner has reviewed.
+
+Internal sources need organization-approved connections. MCP (Model Context Protocol), a protocol connecting agents to external tools and data, can be used here. Establishing a connection does not grant access to every source.
+
+### Working prototypes and review criteria
+
+A planner should be able to generate, revise, and try a prototype without managing a development environment. A demo scenario describing what to check and in what order helps distinguish an interface that opens from one that supports the intended work.
+
+New prototype generation should run separately from the version under review. If a failed candidate overwrites that version, it also removes the result other people were reviewing.
+
+### Joint review and version handoff
+
+When reviewing initial requirements or new implementation conditions, bind the specification, demo scenario, and validated prototype to one version that the relevant specialists can review and comment on. When changes are needed, the document and prototype should be revised together for the next review.
+
+{% raw %}
+```mermaid
+sequenceDiagram
+  actor P as Business owner
+  participant H as Requirements platform
+  actor R as Design and development
+  P->>H: Write the spec
+  H-->>P: Requirements and prototype
+  P->>H: Try and revise
+  H-->>R: Fixed review version
+  R-->>P: Feedback
+  opt Revisions needed
+    P->>H: Revise spec and prototype
+    H-->>R: New review version
+  end
+  R-->>P: Agree initial criteria
+  P->>H: Select build version
+```
+{% endraw %}
+
+Having a version to share is different from agreeing to start development. The platform should record agreed conditions, open questions, who can change the rules, and who judges the resulting change.
+
+In the requirements platform I built, planners work with AI to write a PRD (Product Requirements Document), generate and revise a prototype, then publish the document, demo scenario, and validated prototype as one review version. Organization-level access and sharing are also part of making this work reusable across teams.
+
+## 5. Business automation: improving from requests and execution results
+
+Once requirements are agreed, try configuring the target process with existing agents and tools. Self-improving agents should then use domain experts' requests and execution and review results to revise work order, tool selection, and decision conditions. The agreed business model remains the reference; missing capabilities become requirements for the Software Factory.
+
+
+The agent operations platform should find and connect available agents and tools using the agreed inputs and expected outputs. A catalog for registration, discovery, and sharing helps departments avoid rebuilding the same capabilities.
+
+If one existing agent supplies the required input/output contract, its version should be reusable directly. Multiple capabilities can be assembled into a workflow, with checks on data types and required values between steps. A missing capability should remain an implementation requirement for the Software Factory.
 
 The refund example still needs capabilities for checking delivery, checking policy, and processing refunds. Generating a workflow does not itself prepare those capabilities or grant permission to run them.
 
@@ -397,15 +327,66 @@ flowchart TB
 
 The agent operations platform I built registers departmental agents, MCP services, and workflows, then finds and connects approved capabilities matching the input/output contract confirmed through conversation. It distinguishes direct agent selection from workflow composition and rechecks usage conditions during execution.
 
-Someone also needs to use operating results to improve procedures and evaluation cases. The FDE (Forward Deployed Engineer) in [my post on internal FDEs](/en/2026/09/03/developers-to-internal-fde.html) is an engineer working close to business teams on this implementation and improvement. Execution records alone do not sustain improvement if no one owns the work of changing the process.
+Someone also needs to use operating results to improve procedures and evaluation cases. The FDE (Forward Deployed Engineer) in [my post on internal FDEs](/en/2026/09/03/developers-to-internal-fde.html) is an engineer working close to business teams on this implementation and improvement. In this structure, the FDE should establish the initial business model, platform adoption, and verification procedures, then enable business teams to continue changing and checking their work against the same criteria. If authority and responsibility for improving the work remain solely with technical specialists, execution records will not remove that dependency.
 
-## 6. Handoffs and company-wide operation
+## 6. Software Factory: carrying business changes into code and verification
+
+When existing agents and tools cannot meet the requirements, the Software Factory should turn the missing capabilities into verified code for the automation configuration. A coding agent can implement quickly while disconnected review, checks, and deployment still limit company-wide delivery speed.
+
+Faros AI's 2025 report used data from more than 10,000 developers to compare periods of lower and higher AI adoption within teams. Merged PRs increased by 98%, but review time also rose by 91%, with no significant correlation between AI adoption and performance improvements at the company level.[^1] A PR (Pull Request) is a request to review a code change and merge it into the existing code.
+
+This was an observational analysis as of June 2025, when most usage was autocomplete. It does not establish the same result for today's agents, but it does show that later stages can fail to keep up with increased implementation throughput.
+
+That is why I think a Software Factory should **carry business-model changes through impact analysis, isolated implementation, checks, and delivery**. Its inputs should include changed business rules and cases that check them. Its outputs should include code and evidence showing whether those rules hold, so business owners can judge the change without reconstructing the code's behavior.
+
+### Project-specific standards and execution environments
+
+The platform should connect existing repositories, tickets, operational alerts, and CI. CI (Continuous Integration) automatically builds and checks code changes. Connecting agent work to a team's current development flow is easier to adopt than replacing all of its tools.
+
+Project-specific design standards, task instructions, and check commands need to be registered, with the version used for each run recorded. Work needs coordination so that agents do not overwrite one another's changes in the same repository. Execution time, cost, and retry budgets also need management.
+
+### Changes and verification evidence
+
+Code changes should run in an environment separate from existing work, with real builds, tests, and business scenarios checking whether the requirements are met. Failed or unavailable checks need to remain visible, and their results should not be delivered as if the change had succeeded.
+
+Along with code, the agent should leave **evidence of which business conditions changed, which processes are affected, and which cases were checked**. As discussed in [my post on AI code review's cognitive load](/en/2026/08/18/ai-coding-review-cognitive-load.html), review remains a bottleneck when people have to reconstruct the implementation's intent and impact from scratch.
+
+### Review and merge policies, and operating feedback
+
+Smaller changes, AI review and approval, and risk-based handling can all reduce review work.[^2][^3] The platform should apply the company's adopted policies and manage which changes can be handled automatically and which need human review.
+
+Classifying a change as suitable for automatic merging is not sufficient to merge it. The actual checks, repository protection rules, permissions, and change version must still be valid at merge time. Incidents and change requests after deployment also need to return as new work.
+
+{% raw %}
+```mermaid
+flowchart TB
+  B["Project standards"] --> R["Development request"]
+  R --> A["Impact analysis"]
+  A --> C["Isolated implementation"]
+  C --> V{"Verification"}
+  V -->|"Failed or unavailable"| F["Record incomplete work"]
+  F -->|"Retry allowed"| C
+  V -->|"Passed"| P["PR and evidence"]
+  P --> G["Check merge conditions"]
+  G -->|"Conditions met"| D["Merge and deploy"]
+  D --> O["Operating results"]
+  O -.->|"Change request"| R
+```
+{% endraw %}
+
+The Software Factory I am developing is a self-hosted base project. It connects existing repositories, tickets, alerts, and CI, and manages project standards, requirements decisions, coding-agent changes and checks in isolated environments, PRs, and automation policies. Policies are built from real PR examples and evaluated on separate cases, while classification is kept distinct from actual merge authority.
+
+A Software Factory should carry requirements through implementation, verification, delivery, and fixes for problems found in operation. Its position at the end of the adoption flow does not end its role after the first build: it continues carrying business-model changes requested by domain experts into code and tests. StrongDM's scenario-based verification[^4] and [my post on Software Factory evals](/en/2026/10/05/software-factory-evals-and-tension-metrics.html) both address how to define success and judge the next change.
+
+## 7. Organizing operation around domain-led change
 
 Even with the platforms in place, people explaining everything again and moving data at each transition creates another bottleneck. Each platform therefore needs **an output that lets the next platform retain the agreed conditions and their evidence**.
 
 The requirements platform should pass the specification, prototype, and success criteria as one version. The process discovery platform should attach the original map and open questions to automation requirements. Execution results should identify the requirements and knowledge versions used, so they can support the next change.
 
-Those details need to travel with work passed from the requirements platform to the development platform, or from process discovery to agent operations. Similar file formats or MCP support alone do not complete an automatic integration.
+Those details need to travel from process analysis to requirements, from requirements to automation design, and from implementation of missing capabilities back to execution. Similar file formats or MCP support alone do not complete an automatic integration.
+
+This flow starts with a request from a domain expert who has noticed a business change. The organization needs to establish who decides that change and who verifies the results. Even if platforms read the same model, domain experts cannot lead changes if a developer still has to rewrite each request in technical terms.
 
 ### Turning reviews into the next ontology, workflow, and code changes
 
@@ -417,55 +398,63 @@ For example, suppose an agent confirms an order cancellation and then tells the 
 
 The Software Factory should carry those business rules and implementation contracts into code and tests. The agent operations platform should connect that code and those tools into executable business processes. Execution records and reviews then become evidence for revising the ontology, workflows, and implementation again.
 
-This is the iterative structure I have in mind for the two platforms.
+Once the business criteria for a change are established, the system can be designed to carry analysis, implementation, and verification forward as follows.
 
 {% raw %}
 ```mermaid
 sequenceDiagram
-  participant K as Ontology
+  actor O as Domain expert
+  participant K as Shared business model
+  participant A as Self-improving agent
   participant F as Software Factory
-  participant W as Agent operations
-  participant R as Reviews
-  actor O as Business owner
-  loop Execute, review, improve
-    K-->>F: Rules and contracts
-    F-->>W: Verified code and tools
-    K-->>W: BC processing rules
-    W->>R: Execution records
-    opt Business change needed
-      R-->>O: Candidate and evidence
-      O->>K: Review and adopt
+  loop Business change and improvement
+    O->>K: Business change request
+    K-->>A: Change criteria and context
+    A->>A: Analyze and revise workflow
+    opt Code changes needed
+      A->>F: Implement and verify
+      F-->>A: Verified code and tools
     end
-    R-->>W: Workflow changes
-    R-->>F: Implementation changes
+    A->>A: Execute, verify, review
+    A-->>K: Change results and evidence
+    A-->>O: Results and verification
   end
 ```
 {% endraw %}
 
 Repeated iterations should reduce the gap between the business model and actual behavior. Alongside building the initial model well, the platforms need to carry what is learned in operation into the next model and its execution.
 
-### Shared operation and business-specific customization
+### Reassign responsibilities between business and platform teams
 
-Company-wide platforms need owners for organization and project access, usage and cost, versions and security patches, and incident response. Each business team needs someone responsible for its rules, exceptions, and evaluation cases.
+The organizational change I have in mind gives domain experts on the team accountable for the business model and its outcomes the authority to decide changes and verify results. Technical teams own shared execution environments, access controls, verification and recovery standards, and platform operation.
 
-I think a common platform organization should work alongside teams that customize and operate what it provides. If the central organization has to build every business-specific feature too, teams will end up waiting on it as requests grow.
+Once DDD clarifies business boundaries, the organization needs to establish who decides the meaning of that work and who owns its outcome. When several departments participate in one process, they should agree on completion criteria and change responsibilities that implementation and review also follow. Moving people without changing decision authority or evaluation criteria leaves the waits in place.
 
-Teams also need a harness combining task instructions, tools, checks, and evaluation criteria so they can customize with agents.[^6] Configuration and extension points, along with reviews of changes and their effects, help teams keep receiving security patches and improvements without separately modifying every copy of the common code.
+For example, an organization where technical specialists continually mediate business requests and implementation could reassign responsibilities as follows.
 
-Commercial services can be used where their capabilities are sufficient. Custom development can start from a shared base. Either way, an internal team still needs to own business configuration, evaluation, and improvement.
+| Role | Responsibility to establish | What the platform supports |
+| --- | --- | --- |
+| Domain experts on business teams | Recognize business changes; own models and outcome criteria; decide changes and verify results | Changes in business terms and case review |
+| Platform and technical teams | Shared execution environments, access, verification and recovery standards, operating quality | Automated implementation and operation for each business area |
+| FDEs | Establish initial models and adoption; enable business teams to change and verify their work | Handover of criteria and execution evidence |
 
-### Measure adoption speed separately from business outcomes
+If the common platform team also builds every business-specific feature, growing demand puts teams back in its queue. Teams need a harness of instructions, tools, checks, and evaluation criteria so they can customize with agents.[^6] Configuration and extension points, with reviews of change impact, help them continue adopting shared security patches and improvements.
 
-More teams using a platform or a faster first prototype does not establish the effect of company-wide AX. Faster preparation and better business outcomes need separate measurement.
+Commercial services can cover the parts they support, and custom development can start from a common base. Either way, responsibility for judging business rules and outcomes and responsibility for the technical foundation enabling automation must be clear.
+
+### Check whether requests lead to improvements without technical reinterpretation
+
+More teams using a platform or a faster first prototype does not establish the effect of company-wide AX. Measure preparation separately from business outcomes, and check how much technical interpretation and coordination a business change still requires.
 
 | Area | What to check |
 | --- | --- |
-| Requirements | Time from organizing an idea until planners, designers, and developers agree to start |
 | Shared knowledge | Missed rules and exceptions in retrieval, correction accuracy, and preparation and query costs |
-| Software development | Time from confirmed requirements to stable delivery, failed checks, and rework |
+| Process analysis | Missing or incorrect current/target process details; agreement on roles and change ownership |
+| Requirements | Time for business owners and design/development specialists to agree on rules and success criteria |
 | Business automation | Time from request to completion, human intervention, incorrect handling and reprocessing, total cost per case |
+| Software development | Time from confirmed requirements to stable delivery, failed checks, and rework |
 
-Shared operation also needs measures of whether more teams can run and improve their own work, and of the effort and cost of adopting common changes.
+For example, when a refund policy changes, can a domain expert request the new conditions and verify the system's changes against business criteria without an FDE interpreting them? A faster initial build leaves the organizational dependency intact if each such change still requires bringing a technical specialist back. Shared operation should also track teams that can run and improve their own work, along with the effort and cost of adopting common changes.
 
 Process maps need checks for omitted items, incorrect additions, and items with unconfirmed evidence as well as creation time. A map containing every confirmed rule can still be poor if it also adds many incorrect rules.
 
@@ -473,9 +462,7 @@ Capture a baseline for the existing approach and compare similar scope and excep
 
 ## Conclusion
 
-If I were pursuing company-wide AX, I would start by defining the requirements for each platform. Requirements, shared knowledge management, software development, and business automation each need different capabilities and responsibilities.
-
-Together, these platforms should let **business language and rules carry through to real execution and the structure and behavior of code**. I see this as the ideal DDD has been pursuing. Agents should use models developed with business experts to guide execution and implementation, then bring what reviews reveal back into those models.
+When designing company-wide AX, I first want to know whether domain experts can request a business change in their own terms and whether the system can improve its implementation and operation accordingly. The flow from shared knowledge through process analysis, requirements, automation design, and implementation connects that request to changes in execution and code.
 
 I also built an [ontology tool](https://github.com/haandol/alps-writer-plugins) for authoring business models and connecting them to development. It lets users model processes, steps, events, and rules in Turtle, then move from a business-area overview to searches within that area and on to related ADRs.[^8]
 
@@ -483,7 +470,11 @@ The screenshot below shows this tool displaying the ontology of an English learn
 
 ![Ontology view of an English learning service with the Expression dictionary area selected. Processes and steps appear on the left, with the business overview and search within the area on the right.](/assets/img/2026/1105/encbird-ontology-knowledge-en.png)
 
-When agents take on finding, changing, and verifying the connections between business models and implementation, they can reduce the effort needed to maintain this structure. Software Factories and agent operations platforms should repeat this process so that business knowledge, workflows, and code evolve together. I think **agents have made it possible to build and maintain the ideal DDD originally set out to achieve**.
+My ideal AX is **a system whose business processes, organizational responsibilities, and implementation follow the same business model**. Implementation details such as agent configuration and infrastructure operations should be managed autonomously within those business criteria.
+
+If only technical specialists understand the connection between the business and its implementation, that role does not disappear when an FDE finishes the build and leaves. The remaining business experts must either learn how the solution interprets their work and take on a developer's responsibilities, or continue relying on technical specialists for changes and maintenance. In that situation, it is hard to call changes and maintenance fully automated.
+
+When a domain expert notices a business change and requests an update, the Software Factory and self-improving agents should carry its meaning into the business model, workflows, and code, and verify the result. The expert judges outcomes using business criteria and cases rather than learning a developer's technical interpretation. I think **this form of AX requires the alignment between business models and implementation pursued by DDD, with organizational authority and responsibilities also changing so domain experts can lead improvements**.
 
 ---
 
