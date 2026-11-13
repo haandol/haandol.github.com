@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 22:24:56 +0900
+last_modified_at: 2026-11-13 22:47:47 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -25,7 +25,7 @@ permalink: /en/2026/11/05/enterprise-wide-ax-essentials.html
 
 AX (Agentic Transformation)—moving business work to agent-based systems—requires data connections, access controls, business knowledge, evaluation, and ongoing operations. When each team builds these capabilities from scratch, it repeats the setup work, and later changes can remain dependent on the technical specialists who built the first version.
 
-**Enterprise AX should be built on reusable solutions while keeping the customer's business and its implementation aligned in meaning.** Products and shared platforms provide recurring capabilities, with customer-specific business rules and processes configured on top.
+**Enterprise AX should be built by providing and connecting reusable solutions at each stage.** Establish solutions for shared knowledge, process analysis, requirements, business automation, and software development, then configure the customer's business rules and processes on that foundation.
 
 The solutions need to own change analysis, requirements updates, implementation, and verification so business requests can become operational changes without waiting for manual development.
 
@@ -34,8 +34,6 @@ In traditional software development, business processes were often recast to fit
 Reducing this conflict requires the business language and rules agreed by business and development teams to remain intact in the implementation. **Keeping business models and implementation aligned in meaning**, a core principle of DDD (Domain-Driven Design), fits AX's aim of connecting business experts' intent to agent execution.
 
 Agent-based business automation and self-improving agents can help put this model into practice and maintain it. When a domain expert who understands the rules and exceptions recognizes a business change and requests an update, agents should revise the workflow against the same business model. A Software Factory carries the necessary code through implementation, verification, and delivery.
-
-In this structure, **a Context Layer Service provides shared knowledge as a common solution**. Solutions at every stage consult this service. Analysis results feed requirements, requirements guide automation and development, and findings confirmed through execution and verification return to shared knowledge.
 
 ## 1. Business meaning and bounded contexts
 

@@ -34,6 +34,8 @@ normal scope and edit permissions below.
 
 Write a short review anchor: the reader's question, the author's intended claim, the claim the current draft actually develops, the intended audience, and the kind of article (for example, a personal essay or a practical walkthrough). Keep intended and actual claims distinct when they differ. Infer them from the brief and article when clear; do not ask the user to repeat known context.
 
+For writer-side or normal reviews, use the article's saved `.agents/writing-intents/` brief and current user instructions. Independent final reviewers use the supplied intent paragraph. Check the whole article against that intent: a request to improve one component must not make that component stand in for the entire argument. Review-only agents do not execute the writer's pre-edit announcement or mutate the intent brief.
+
 For context abstraction, agents taking over intermediate development work, or code that explains business intent, read [the author's agentic-development thesis](../haandol-blog-writing/references/agentic-development-thesis.md). Use it to recognize drift within that topic, not to impose that thesis on unrelated articles or override the current brief.
 
 Use the older author posts required above to identify a few recurring voice traits relevant to this article: paragraph rhythm, directness of opinion, how examples enter the explanation, vocabulary, and emphasis. Record the reference post paths and the observed traits. Reuse the writer's existing comparison when available. Compare representative passages, not just titles or word counts; do not infer the author's style from recent AI-related posts alone.

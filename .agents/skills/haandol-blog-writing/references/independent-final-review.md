@@ -10,6 +10,9 @@ manuscripts communicate the user's intent without explanations from their author
   the reader's question, the author's intended answer, the audience, article form, and essential
   user constraints such as a fixed title or language restriction. Do not infer the
   intended answer from the current draft merely to make the draft pass.
+- Ground this paragraph in the saved whole-article intent and current human instructions,
+  not only the most recent local editing request. Include the accepted claim and the
+  roles of its main parts; exclude the brief's drafting history or review material.
 - Provide current Korean and English manuscript paths, subject to the user's
   language scope. These are review inputs, not extra background. For conversational
   copy, save exact snapshots in a task scratch location and provide their paths.

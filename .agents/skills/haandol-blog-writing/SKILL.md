@@ -1,6 +1,6 @@
 ---
 name: haandol-blog-writing
-description: Write or revise Haandol technical blog posts, complete the English counterpart, and finish with an independent subagent review given only the article's intent and current manuscripts. Use for blog copy in conversation or in _posts/, _drafts/, and _en/. Use haandol-blog-review for editorial criteria and review-only requests.
+description: State and preserve the whole article's intent before writing or revising Haandol blog copy, complete the English counterpart, and finish with an independent intent-only review. Use for blog copy in conversation or in _posts/, _drafts/, and _en/. Use haandol-blog-review for editorial criteria and review-only requests.
 ---
 
 # Haandol Blog Writing
@@ -9,15 +9,23 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 
 ## Workflow
 
-1. Read the entire target post or supplied material. Identify the reader's question, the author's answer, the audience, and which claims are observations, inferences, or proposals. For review-only requests, use [haandol-blog-review](../haandol-blog-review/SKILL.md) in report-only mode.
+1. Read the entire target post, its saved intent, and the user's request. Before editing, complete **State The Whole Intent Before Editing** below. Identify which claims are observations, inferences, or proposals. For review-only requests, use [haandol-blog-review](../haandol-blog-review/SKILL.md) in report-only mode.
 2. Read 2-4 related recent posts before changing definitions, terminology, or the author's recurring argument. Also compare at least two older author posts for voice; reuse suitable posts already read. Note their paths and relevant recurring traits so the review can assess the author's style against actual passages. Current user preferences take priority over old habits. Bring any necessary context from references into the article, then cite its source; follow **Make Each Article Self-Contained** below.
-3. Draft toward that question and answer using **Keep One Argument from Opening to Conclusion** below. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it. Before drafting the introduction or starting a new episode or topic, apply **Establish the Reader's Context** below.
+3. Draft within the stated whole-article intent and edit scope, using **Keep One Argument from Opening to Conclusion** below. A local improvement must not promote one component into the whole article's thesis. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it. Before drafting the introduction or starting a new episode or topic, apply **Establish the Reader's Context** below.
 4. Apply "Remove AI Slop" and "Write for Junior Developers and Interested Non-Developers" while composing, not only after drafting. Edit paragraphs and diagrams together so they express the same causal model.
 5. After completing the Korean text, create or update its complete English version in the same task without waiting for a separate translation request. Follow **Complete Both Language Versions** below.
 6. Apply [haandol-blog-review](../haandol-blog-review/SKILL.md) as the writer's own editorial pass. Review both whole articles across its six axes, including titles, summaries, diagrams, conclusions, and citations. Fix supported issues within scope and compare the two languages before requesting the final review.
 7. Run the mandatory [independent final review](references/independent-final-review.md) with a fresh subagent that does not inherit the drafting conversation. Its only task-specific context is a short user-grounded statement of the article's intent and the current manuscripts. Do not send drafting rationale, earlier versions, suspected defects, or previous review results. The subagent reads both versions and returns a report without editing or delegating.
 8. Read that report, assess each finding against the user's intent and the actual passage, and apply supported fixes. Repeat with a fresh, equally isolated reviewer after prose or diagram changes until the latest independent review has **High: 0 and Medium: 0** and earlier material findings have been resolved or rejected with evidence. Do not silently downgrade findings, stop at a fixed round count, or rewrite the user's position to obtain a pass. Low findings alone do not block completion.
 9. Complete the applicable validation, then report both article paths, the final independent High/Medium/Low counts, and any remaining limitations. Keep self-review and independent review results distinct. If an isolated reviewer or required evidence is unavailable, finish the work that can proceed and report the unmet final-review requirement; do not substitute self-review and call it independent. Publication still requires the user's authorization.
+
+## State The Whole Intent Before Editing
+
+- For repository-backed posts, read `.agents/writing-intents/<translation_key>.md` from the repository root before drafting or revising. If there is no translation key, use the stable source filename without its extension. Create a missing brief from the user's confirmed instructions; use one brief for the Korean and English pair. For conversation-only copy, use the user's current brief.
+- Keep the brief about the article's reader, central claim, supporting roles, and accepted scope and style constraints. Update it when the user changes those instructions, not to justify a drifting draft. Current human instructions take precedence. Do not store drafting history, review verdicts, or the writer's defense in the brief.
+- **Before each manuscript-editing pass, state the whole article's actual intent in user-facing commentary.** This includes the initial response to every writing or revision request and a later pass applying review findings. Explain the central claim and how its main parts support it, then say what this edit will change to serve that intent. A promise to remember, a generic “I will preserve the intent,” or a summary of only the latest local request does not satisfy this step.
+- When the user steers an active revision, state the whole intent and updated edit scope again before further manuscript edits. Preserve the existing thesis when the new request changes only a local detail. Do not ask the user to reconfirm an already clear intent.
+- Use the saved intent again before final review to compare the title, introduction, section emphasis, diagrams, and conclusion. The intent statement belongs in the conversation; do not paste it into the article as commentary about the writing process.
 
 ## Complete Both Language Versions
 

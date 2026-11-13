@@ -7,7 +7,7 @@ email: ldg55d@gmail.com
 tags: ai agent ax ddd platform organization software-factory knowledge harness-engineering
 publish: true
 published: true
-last_modified_at: 2026-11-13 22:24:56 +0900
+last_modified_at: 2026-11-13 22:47:47 +0900
 lang: ko
 translation_key: enterprise-wide-ax-essentials
 english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
@@ -23,7 +23,7 @@ english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
 
 기업의 업무를 에이전트 기반으로 전환하는 AX(Agentic Transformation)에는 데이터 연결, 접근권한, 업무 지식, 평가와 운영이 함께 필요하다. 팀마다 이를 새로 만들면 비슷한 준비를 반복하고, 이후의 변경도 처음 구축한 기술 전문가에게 의존하기 쉽다.
 
-**엔터프라이즈 AX는 재사용 가능한 솔루션 위에 구축하되, 고객의 업무와 구현이 같은 의미로 연결되게 해야 한다.** 반복되는 기능은 제품이나 공통 플랫폼으로 제공하고, 고객별 업무 규칙과 프로세스를 그 위에 구성하는 방식이다.
+**엔터프라이즈 AX는 단계별로 재사용 가능한 솔루션을 갖추고 연결해 구축해야 한다.** 공통 지식, 프로세스 분석, 요구사항 정리, 업무 자동화, 소프트웨어 개발을 맡을 솔루션을 마련하고, 고객의 업무 규칙과 프로세스를 그 위에 구성한다.
 
 업무 변경을 분석하고 요구사항을 갱신하며 코드를 수정·검증하는 기능까지 솔루션이 맡아야, 전문가의 요청이 개발자의 수작업을 기다리지 않고 실제 운영 변경으로 이어진다.
 
@@ -32,8 +32,6 @@ english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
 이 충돌을 줄이려면 비즈니스와 개발이 함께 정리한 업무의 언어와 규칙이 구현에서도 유지되어야 한다. DDD(Domain-Driven Design, 도메인 주도 설계)의 핵심 철학인 **업무 모델과 구현의 의미를 일치시키는 것**은 업무 전문가의 의도를 에이전트의 실행으로 연결하려는 AX와 잘 맞는다.
 
 에이전트 기반 업무 자동화와 자가 개선 에이전트는 이 모델을 구현에 반영하고 유지하는 수단이 될 수 있다. 업무 규칙과 예외를 아는 도메인 전문가가 변화를 발견하고 변경을 요청하면, 에이전트가 같은 업무 모델을 기준으로 처리 흐름을 고치도록 구성한다. 필요한 코드의 구현·검증·변경 전달은 Software Factory라는 개발 체계가 이어받는다.
-
-이 구조에서는 **공통 지식을 Context Layer Service(컨텍스트 레이어 서비스)라는 공통 솔루션으로 제공한다.** 모든 단계의 솔루션이 이 서비스를 함께 참조한다. 분석 결과는 요구사항으로, 요구사항은 업무 자동화와 개발로 전달되며, 실행과 검증에서 확인한 내용은 다시 공통 지식에 쌓인다.
 
 ## 1. 업무 의미와 바운디드 컨텍스트
 

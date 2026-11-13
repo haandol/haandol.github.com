@@ -95,6 +95,12 @@ For drafting, revising, or reviewing blog posts, use the project skill at
 workflow for logical structure, personal-opinion tone, terminology, diagrams,
 citations, and validation.
 
+Before editing blog copy, read its saved intent in `.agents/writing-intents/` and
+state the whole article's intent to the user, followed by the scope of this edit.
+Do this for every revision request and review-fix pass, including small changes
+and steering during an active turn. Follow the writing skill's intent-first procedure; do not replace
+the article's purpose with the latest local editing request.
+
 After every blog draft, prose revision, or translation, run
 `.agents/skills/haandol-blog-review/SKILL.md` before reporting completion.
 This applies to `_posts/`, `_drafts/`, `_en/`, and blog copy composed in the

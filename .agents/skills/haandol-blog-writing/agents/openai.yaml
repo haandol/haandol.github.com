@@ -1,4 +1,4 @@
 interface:
   display_name: "Haandol Blog Writing"
-  short_description: "블로그 작성·번역 후 의도만 전달한 독립 리뷰로 마무리하기"
-  default_prompt: "Use $haandol-blog-writing to draft or revise both language versions, then obtain a fresh intent-only subagent review and address supported findings until the latest independent review has no High or Medium issues."
+  short_description: "전체 글의 의도를 먼저 밝히고 작성·번역·독립 리뷰하기"
+  default_prompt: "Use $haandol-blog-writing to read the saved article intent, state the whole intent before editing, revise both language versions within that scope, and finish with a fresh intent-only independent review."
