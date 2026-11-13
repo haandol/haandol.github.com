@@ -7,6 +7,18 @@ description: Review Haandol blog posts for natural sentences and flow, clear the
 
 Finish with a post that answers its intended reader's question in the author's voice, plus an honest account of the review. This is an editorial review, not AI-authorship detection.
 
+## Independent Final-Review Mode
+
+When dispatched as the writing workflow's independent final reviewer, follow
+[the isolated handoff protocol](../haandol-blog-writing/references/independent-final-review.md).
+This mode is strictly report-only: do not edit manuscripts, launch another reviewer,
+or execute the writing workflow. Use the intent brief as the user's desired meaning;
+do not reconstruct drafting history or read previous review reports. Read reusable
+editorial guidance and, when needed, author-style references and cited sources
+independently. Missing facts or decisions are findings to return to the writer,
+not questions to send directly to the user. Other review requests retain the
+normal scope and edit permissions below.
+
 ## Scope And Inputs
 
 - Read the repository `AGENTS.md` and [the writing skill](../haandol-blog-writing/SKILL.md). Use its editorial and validation criteria without restarting its workflow or recursively invoking this skill.
@@ -54,6 +66,8 @@ Search may locate candidates but cannot establish a defect or a pass. Do not add
 ### Check the Whole Argument Before Polishing Sentences
 
 - Read the opening's question and conclusion together, then trace the body that connects them. Explain what the reader learns between the two. Repeating the right thesis in the TL;DR and ending does not repair a body that develops a different claim.
+- Apply the writing skill's **State Claims Without Defensive Asides** deletion test. Flag defenses against positions the text never takes, repeated scope disclaimers, and commentary about the article's intentions when they add no reader-relevant information. Do not recommend such caveats merely to demonstrate caution or make the writer's reasoning explicit; judge the claim actually written.
+- Preserve material conditions and the author's affirmative position while removing filler. A recurring defensive pattern can be Medium under the existing criteria even when each sentence is grammatical; do not treat every negative statement or useful limitation as a defect.
 - Use 기승전결 as a reasoning check: a situation raises a question, the body develops it, an example or change in perspective adds something, and the ending answers it. Do not require fixed section counts, a dramatic reversal, or a personal anecdote in every article.
 - Judge thesis drift under the existing severity criteria. Replacing the author's central position can be High even when every sentence reads naturally; a missing bridge or distracting passage can be Medium while the main claim remains recoverable. Locate the change of subject and its effect rather than assigning severity from a phrase alone.
 - For each article in a series or batch, state its own question, resulting answer, and at least one consequential transition. Recheck this relationship after revisions and in the English version. Keep useful qualifications, but check that factual caution has not displaced the opinion the author asked to express.

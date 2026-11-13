@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 20:11:15 +0900
+last_modified_at: 2026-11-13 20:29:47 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -29,11 +29,9 @@ AX (Agentic Transformation)—moving business work to agent-based systems—requ
 
 In traditional software development, business processes were often recast to fit resource limits or technologies and structures familiar to the development team. If this changed their meaning or flow, business teams discussed the original work while developers answered in terms of the implemented system. Different interpretations of the same work made recurring conflicts likely.
 
-Reducing this conflict requires the business language and rules agreed by business and development teams to remain intact in the implementation. **Keeping business models and implementation aligned in meaning**, a core principle of DDD (Domain-Driven Design), fits AX's aim of connecting business experts' intent to agent execution. This article borrows that perspective for AX design without requiring adoption of the entire methodology.
+Reducing this conflict requires the business language and rules agreed by business and development teams to remain intact in the implementation. **Keeping business models and implementation aligned in meaning**, a core principle of DDD (Domain-Driven Design), fits AX's aim of connecting business experts' intent to agent execution.
 
 Agent-based business automation and self-improving agents can help put this model into practice and maintain it. When a domain expert who understands the rules and exceptions recognizes a business change and requests an update, agents should revise the workflow against the same business model. A Software Factory carries the necessary code through implementation, verification, and delivery.
-
-This post describes the solutions that support this flow and the organizational responsibilities needed for domain experts to lead changes.
 
 ## 1. Business meaning and bounded contexts
 
@@ -191,9 +189,9 @@ These capabilities work together. Graph traversal provides a way to follow conne
 
 **Business agents** primarily need business knowledge and rules. To handle a refund request, they must read customer and order state, approval conditions, processing steps, and exceptions to determine which actions the business permits.
 
-**Coding agents** need those same business criteria plus the knowledge required to implement them. They need to know which project's repositories to change, how services connect through APIs and events, and which contracts and tests must hold. Searching code within one repository is insufficient for changes spanning projects and services.
+**Coding agents** need those same business criteria plus the knowledge required to implement them. They need to know which project's repositories to change, how services connect through APIs and events, and which contracts and tests must hold.
 
-The two consumers should not be isolated into separate knowledge systems. They should share business concepts and rules while retrieving the scope relevant to their work. Business agents may need service relationships, and coding agents must also consult the ontology for business meaning.
+Both types of agents should share business concepts and rules while retrieving the scope relevant to their work. Business agents may need service relationships, and coding agents must also consult the ontology for business meaning.
 
 The shared knowledge platform manages ownership, provenance, versions, and permitted use, applying role- and business-scope access controls before retrieval. Business teams decide the meaning and permitted use of rules; platform teams ensure those decisions govern actual access by agents and external services.
 
@@ -201,9 +199,9 @@ The shared knowledge platform manages ownership, provenance, versions, and permi
 
 Ontology retrieval does not require a graph database. Business knowledge can be written in a text format such as Turtle, with routes from an overview into the required detail.
 
-First show each BC's responsibilities and core work. Agents can then find rules and exceptions inside relevant BCs. Retrieval can work without every internal relationship being complete, provided BC membership and paths into the details are established.
+First show each BC's responsibilities and core work. Agents can then find rules and exceptions inside relevant BCs.
 
-When agents can read an overview and decide where to look next, they can narrow the scope before reading details instead of taking in material from across the enterprise at once. Retrieving details only from relevant areas reduces unrelated context as business knowledge grows. The saving is in how much information agents must read, rather than storage retrieval time.
+When agents can read an overview and decide where to look next, they can narrow the scope before reading details instead of taking in material from across the enterprise at once. Retrieving details only from relevant areas reduces unrelated context as business knowledge grows.
 
 For this to work, each overview must be accurate enough to guide the next retrieval step. Exceptions omitted from an overview must still be available in detailed rules and original sources.
 

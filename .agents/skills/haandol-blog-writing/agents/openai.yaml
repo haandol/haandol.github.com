@@ -1,4 +1,4 @@
 interface:
   display_name: "Haandol Blog Writing"
-  short_description: "Haandol 블로그 글을 작성하고 논리·문체·도식을 다듬기"
-  default_prompt: "Use $haandol-blog-writing to draft or revise a Haandol blog post, then repeat $haandol-blog-review and supported fixes until a full review finds zero High and Medium issues."
+  short_description: "블로그 작성·번역 후 의도만 전달한 독립 리뷰로 마무리하기"
+  default_prompt: "Use $haandol-blog-writing to draft or revise both language versions, then obtain a fresh intent-only subagent review and address supported findings until the latest independent review has no High or Medium issues."

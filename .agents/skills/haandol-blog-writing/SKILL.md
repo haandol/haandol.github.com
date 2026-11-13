@@ -1,6 +1,6 @@
 ---
 name: haandol-blog-writing
-description: Write or revise Haandol technical blog posts, automatically completing the English version after Korean writing, with the author's voice and clear reasoning. Use for blog copy in conversation or in _posts/, _drafts/, and _en/. Review both versions with haandol-blog-review; route review-only requests there.
+description: Write or revise Haandol technical blog posts, complete the English counterpart, and finish with an independent subagent review given only the article's intent and current manuscripts. Use for blog copy in conversation or in _posts/, _drafts/, and _en/. Use haandol-blog-review for editorial criteria and review-only requests.
 ---
 
 # Haandol Blog Writing
@@ -14,9 +14,10 @@ Read the repository `AGENTS.md` before editing. Preserve its front matter, title
 3. Draft toward that question and answer using **Keep One Argument from Opening to Conclusion** below. Separate conceptual overview, organizational execution, and evaluation. Keep each detail in the section whose title promises it. Before drafting the introduction or starting a new episode or topic, apply **Establish the Reader's Context** below.
 4. Apply "Remove AI Slop" and "Write for Junior Developers and Interested Non-Developers" while composing, not only after drafting. Edit paragraphs and diagrams together so they express the same causal model.
 5. After completing the Korean text, create or update its complete English version in the same task without waiting for a separate translation request. Follow **Complete Both Language Versions** below.
-6. After every draft, prose revision, or translation, read and execute [haandol-blog-review](../haandol-blog-review/SKILL.md) across its six evaluation axes. These cover sentence naturalness, flow, theme and composition, grounded explanation, AI slop, and author voice; the review skill defines them in one place. Cover both whole articles, including titles, excerpts, TL;DR, headings, diagrams, conclusions, and footnotes, and compare their meaning. Let the LLM judge passages in context rather than enforce scores or phrase counts. List findings, apply supported fixes within the user's scope, and re-review without asking for routine approval. This also applies to blog copy written in conversation.
-7. Repeat the review's fix-and-recheck loop until a full review of both latest versions finds **High: 0 and Medium: 0**, using the severity definitions in the review skill. Review is mandatory even for an apparently clean first draft. Do not stop after listing suggestions, one round of fixes, or an arbitrary number of rounds. Low findings alone do not block completion.
-8. Complete the applicable validation below, then report both article paths and the final High/Medium/Low counts. If a real source, permission, or author-decision blocker prevents resolving a finding, finish independent work and state the unresolved finding and needed input; do not call the article complete or count the finding as resolved.
+6. Apply [haandol-blog-review](../haandol-blog-review/SKILL.md) as the writer's own editorial pass. Review both whole articles across its six axes, including titles, summaries, diagrams, conclusions, and citations. Fix supported issues within scope and compare the two languages before requesting the final review.
+7. Run the mandatory [independent final review](references/independent-final-review.md) with a fresh subagent that does not inherit the drafting conversation. Its only task-specific context is a short user-grounded statement of the article's intent and the current manuscripts. Do not send drafting rationale, earlier versions, suspected defects, or previous review results. The subagent reads both versions and returns a report without editing or delegating.
+8. Read that report, assess each finding against the user's intent and the actual passage, and apply supported fixes. Repeat with a fresh, equally isolated reviewer after prose or diagram changes until the latest independent review has **High: 0 and Medium: 0** and earlier material findings have been resolved or rejected with evidence. Do not silently downgrade findings, stop at a fixed round count, or rewrite the user's position to obtain a pass. Low findings alone do not block completion.
+9. Complete the applicable validation, then report both article paths, the final independent High/Medium/Low counts, and any remaining limitations. Keep self-review and independent review results distinct. If an isolated reviewer or required evidence is unavailable, finish the work that can proceed and report the unmet final-review requirement; do not substitute self-review and call it independent. Publication still requires the user's authorization.
 
 ## Complete Both Language Versions
 
@@ -68,6 +69,7 @@ When writing about context abstraction, agents taking over intermediate developm
 
 ## Match The Author's Voice
 
+- Match the article form in the user's intent. A technical explanation or practical guide should not default to a personal essay or progress report. Keep authorship details and work-in-progress status only when they explain evidence, a limitation, or a choice the reader needs to understand. When status is irrelevant, remove the status and any unnecessary claim it qualified together; never make an unfinished feature sound implemented. Personal experience and first-person judgment remain appropriate when the requested article actually needs them.
 - Keep paragraphs focused, with sentence length and breaks following the thought. A compact paragraph can contain a naturally connected sentence; do not chop it into short declarations to meet a sentence-length or sentence-count target.
 - Present personal interpretations as opinions: use `생각한다`, `가정한다`, `볼 수 있다`, or `지표로 삼아볼 수 있다` where needed to establish their status. Do not append the same hedge to every sentence in an already qualified paragraph.
 - Avoid `나는 ... 본다` when `...라고 생각한다` reads more naturally.
@@ -78,7 +80,7 @@ When writing about context abstraction, agents taking over intermediate developm
 - Separate observation, inference, and proposal:
   - observation: cite evidence;
   - inference: explain the causal link;
-  - proposal: state that it is the author's lens or suggestion.
+  - proposal: state the proposed approach directly without presenting it as a measured result.
 - Preserve direct wording for facts the user explicitly says can be stated without qualification.
 - Treat the user's supplied firsthand details as source material. Do not remove or turn them into hypothetical examples merely because a shorter brief does not repeat them. Investigate actual contradictions or details identified as unverified or model-invented; absence from a summary alone is not evidence of fabrication.
 
@@ -87,6 +89,13 @@ When writing about context abstraction, agents taking over intermediate developm
 Treat AI slop as an editorial problem: generic, repetitive, inflated prose that obscures the author's reasoning. Do not claim to detect AI authorship from wording.
 
 Use the older author posts read in the workflow to match directness, paragraph rhythm, and specificity without copying old factual claims, typos, or mannerisms. Human writing here means a recognizable judgment, supported detail, and connected reasoning; it does not mean adding invented experiences or artificial imperfections.
+
+### State Claims Without Defensive Asides
+
+- State the intended claim directly. Do not turn the user's drafting corrections into reader-facing disclaimers about what the article is not arguing. If a passage already says it borrows an idea from a method, do not append a defense such as “this does not require adopting the whole methodology.”
+- Remove sentences whose only role is to preempt an unstated objection, deny an unclaimed generalization, announce the article's intentions, or repeat a scope limit already clear from the wording or example. Truthful and grammatical sentences can still be unnecessary.
+- Read the passage without the sentence. If no fact, causal explanation, meaningful condition, reader decision, or necessary transition is lost, delete it. Do not replace it with another reassurance, a softer disclaimer, or a comment explaining that the caveat was removed.
+- Preserve conditions that change what is valid, required, or permitted. Put those conditions once, next to the claim they govern. For example, preserving an interface contract materially limits a claim about containing implementation changes; generic defenses against every possible exception do not. If a claim is too broad, narrow the claim itself instead of surrounding it with defensive prose.
 
 ### Three Layers To Check While Writing
 
@@ -275,7 +284,7 @@ Also verify:
 - a junior developer or interested non-developer can follow the argument without looking up unexplained terminology; source paraphrases and English translations use the same plain reading level and natural sentence flow, rather than chopping explanations into short statements;
 - both language versions pass the reading without opening references described in **Make Each Article Self-Contained**; a valid link or a familiar title does not establish comprehension;
 - the AI-slop prose pass is complete; rewrites preserve factual meaning and the author's position without fabricated detail;
-- `haandol-blog-review` has assessed all six axes, grounded author-style judgments in reference posts and current preferences, listed findings with High/Medium/Low severity, applied supported in-scope fixes, and reviewed the latest whole article until High and Medium findings both reach zero; an explicit review-only request reports findings without editing;
+- the writer has applied `haandol-blog-review`, then a fresh intent-only subagent has independently reviewed the latest whole manuscripts; supported findings have been addressed and the latest independent review has High: 0 and Medium: 0, with the reviewed version identified as described in [independent final review](references/independent-final-review.md). Explicit review-only requests remain report-only;
 - required front matter exists and `excerpt` is English;
 - every `_en/` translation has `last_modified_at` set to its actual English
   publication or meaningful revision time; update Korean `last_modified_at`
