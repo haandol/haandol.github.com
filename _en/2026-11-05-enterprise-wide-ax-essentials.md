@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "Building AX That Improves Itself From Business Change Requests"
-excerpt: Turning domain experts' change requests into autonomous system improvements
+title: "Why Enterprise AX Needs Reusable Solutions and DDD"
+excerpt: Building enterprise AX on reusable solutions and business models
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent ax ddd platform organization software-factory knowledge harness-engineering
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 15:16:06 +0900
+last_modified_at: 2026-11-13 15:39:55 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -17,27 +17,27 @@ permalink: /en/2026/11/05/enterprise-wide-ax-essentials.html
 
 ## TL;DR
 
-- Domain experts' business change requests should lead to system improvements.
-- DDD keeps business meaning consistent across requests, models, and implementation.
-- Software Factories and self-improving agents carry out changes and verification.
+- Enterprise AX should be built on reusable solutions.
+- DDD keeps business language, models, and implementation consistent.
+- Business changes should flow into agent-led implementation, verification, and improvement.
 
 ## Introduction
 
-Domain experts are the first to notice that a business process has changed because they encounter customer needs, business rules, and exceptions in daily work.
+Writing about harness engineering, the cognitive load of reviewing AI-generated code, internal FDEs—engineers working on automation with business teams—and Software Factories has led me to think about the foundation enterprises need for AX.
 
-When the system's concepts and processing flow differ from the business, even a small change requires a developer to reinterpret it in technical terms. Domain experts know what needs to change, but need a separate explanation to judge whether the implementation preserves that meaning.
+Transforming work across an enterprise requires data connections, access controls, business knowledge, evaluation, execution, and operation together. If each team builds these capabilities again, preparation is repeated and later changes can remain dependent on the technical specialists who built the first version.
 
-Writing about harness engineering, the cognitive load of reviewing AI-generated code, internal FDEs—engineers working on automation with business teams—and Software Factories has led me to think about closing this gap.
+I think **enterprise AX should be built on reusable solutions while keeping the customer's business and its implementation aligned in meaning**. By a solution-based approach, I mean providing recurring capabilities through products or shared platforms and configuring customer-specific business rules and processes on top.
 
-The AX (Agentic Transformation) I want is **a structure in which domain experts request changes in business terms and the system improves its business model, workflows, and code accordingly**. Self-improving agents revise the processing flow using requests and execution results, while the Software Factory implements, verifies, and delivers the capabilities needed.
+In traditional software development, business processes were often recast to fit resource limits or technologies and structures familiar to the development team before being implemented in code. If this changed their meaning or flow, business teams discussed the original work while developers answered in terms of the implemented system. Different interpretations of the same work made recurring conflicts likely.
 
-This flow needs a shared reference that preserves a request's meaning throughout. DDD (Domain-Driven Design) is an approach to keeping business language and rules consistent across models and implementation. When people and agents read the same business model, a domain expert's request can become the basis for a change without a developer first rewriting it in technical terms. Agents handle the concrete translation into code and data mappings.
+I understand DDD (Domain-Driven Design) as **an attempt to address the gap between business and implementation at its root**. It organizes business language and rules into a shared model that guides the structure and behavior of code, allowing business and development teams to reason from the same meaning.
 
-I think **the alignment between business models and implementation pursued by DDD is essential for this form of AX**. Software Factories and self-improving agents need to work against the same business criteria, and organizations need to give domain experts authority over business changes and responsibility for verifying outcomes.
+I think agent-based business automation and self-improving agents can make this structure practical to build and maintain. The AX (Agentic Transformation) I want lets domain experts who notice business changes request them in their own terms, with agents and the Software Factory using the same business model to revise and verify workflows and code. Organizations also need to give domain experts authority over business changes and responsibility for verifying outcomes.
 
-This post follows an organization introducing AX through shared knowledge, process analysis, requirements, automation design, and implementation of missing capabilities. These five steps build the structure that carries domain experts' change requests into improved execution and code. I use examples from platforms I am developing to make the requirements concrete.[^7]
+This post draws on the approaches described in public AWS and Palantir FDE materials, then follows adoption from shared knowledge through process analysis, requirements, automation configuration, and implementation of missing capabilities. I also use examples from platforms I am developing.[^7]
 
-## 1. From AX adoption to business change
+## 1. Connecting solutions to introduce AX
 
 An organization introducing AX can start with these five steps. After the initial build, domain experts' change requests should enter the same flow so the system can reanalyze and improve the affected models and execution.
 
@@ -58,7 +58,7 @@ flowchart TB
 ```
 {% endraw %}
 
-This is an adoption flow that uses existing services and tools to transform work. Each step can be supported by a shared platform or a commercial service. When the automation design needs a missing business capability, the Software Factory implements it, and the result is incorporated into the automation before execution.
+This is an adoption flow that uses existing services and tools to transform work. Reusable solutions provide each step's common capabilities, with business-specific rules and connections configured on top. When the automation design needs a missing business capability, the Software Factory implements it, and the result is incorporated into the automation before execution.
 
 | Step | What to establish | What passes forward |
 | --- | --- | --- |
@@ -73,6 +73,18 @@ Separating process analysis from business automation distinguishes deciding what
 A team that has already mapped processes with business experts can use that work to identify the data it needs. Automating process analysis itself, however, requires readable sources and access first. This post starts with shared knowledge and shows how execution and review lead back to earlier steps.
 
 Each step needs to preserve the business meaning and verification criteria in the domain expert's request. Organizational roles should support experts deciding changes, agents carrying them into implementation and operation, and experts assessing results in business terms.
+
+### How AWS and Palantir FDEs build on reusable solutions
+
+AWS's June 2026 FDE announcement describes engineers working with customers' business, engineering, and security teams to build production systems around their data and governance. FDEs deploy a semantic layer in the customer's AWS account and let agents use a governed, versioned knowledge graph. Handover includes the graph, runbooks, and architecture documentation, with customer engineers developing from co-builders into independent operators.[^10]
+
+AWS's partner FDE guidance makes the reusable foundation explicit: domain ontologies, evaluation frameworks, MCP servers, agent operations tooling, and a context graph recording design decisions and domain patterns. Partners retain this harness and use it on later engagements, turning customer-specific delivery experience into a shared foundation.[^11]
+
+Palantir describes Foundry as its data, Ontology, and workflow foundation; AIP as the foundation for AI agents and workflows; and Apollo as the deployment and infrastructure foundation. Its architecture documentation emphasizes customer-specific work built on these standard platforms and connects their evolution to FDEs embedded with customers building and shipping capabilities.[^12]
+
+The Ontology at the center contains business objects and relationships, such as orders and equipment, alongside actions and functions that execute business changes. This connects the customer's business meaning and actual logic through shared platform capabilities.[^13]
+
+The common pattern is **combining customer-specific business meaning and execution with a reusable technical foundation**. The official materials reviewed do not explicitly name this approach DDD. DDD is this article's design criterion for keeping business language, models, and implementation consistent within a solution-based approach. Supporting independent customer operation is also distinct from the goal of handling every change autonomously from a business expert's request alone.
 
 ## 2. Shared knowledge: providing data and business knowledge
 
@@ -296,7 +308,6 @@ In the requirements platform I built, planners work with AI to write a PRD (Prod
 
 Once requirements are agreed, try configuring the target process with existing agents and tools. Self-improving agents should then use domain experts' requests and execution and review results to revise work order, tool selection, and decision conditions. The agreed business model remains the reference; missing capabilities become requirements for the Software Factory.
 
-
 The agent operations platform should find and connect available agents and tools using the agreed inputs and expected outputs. A catalog for registration, discovery, and sharing helps departments avoid rebuilding the same capabilities.
 
 If one existing agent supplies the required input/output contract, its version should be reusable directly. Multiple capabilities can be assembled into a workflow, with checks on data types and required values between steps. A missing capability should remain an implementation requirement for the Software Factory.
@@ -462,7 +473,7 @@ Capture a baseline for the existing approach and compare similar scope and excep
 
 ## Conclusion
 
-When designing company-wide AX, I first want to know whether domain experts can request a business change in their own terms and whether the system can improve its implementation and operation accordingly. The flow from shared knowledge through process analysis, requirements, automation design, and implementation connects that request to changes in execution and code.
+Designing enterprise AX should start with which capabilities to reuse as shared solutions and where to preserve the customer's business meaning. This foundation lets domain experts request changes in their own terms and judge how the system implements them. The flow from shared knowledge through process analysis, requirements, automation design, and implementation connects that request to changes in execution and code.
 
 I also built an [ontology tool](https://github.com/haandol/alps-writer-plugins) for authoring business models and connecting them to development. It lets users model processes, steps, events, and rules in Turtle, then move from a business-area overview to searches within that area and on to related ADRs.[^8]
 
@@ -474,7 +485,7 @@ My ideal AX is **a system whose business processes, organizational responsibilit
 
 If only technical specialists understand the connection between the business and its implementation, that role does not disappear when an FDE finishes the build and leaves. The remaining business experts must either learn how the solution interprets their work and take on a developer's responsibilities, or continue relying on technical specialists for changes and maintenance. In that situation, it is hard to call changes and maintenance fully automated.
 
-When a domain expert notices a business change and requests an update, the Software Factory and self-improving agents should carry its meaning into the business model, workflows, and code, and verify the result. The expert judges outcomes using business criteria and cases rather than learning a developer's technical interpretation. I think **this form of AX requires the alignment between business models and implementation pursued by DDD, with organizational authority and responsibilities also changing so domain experts can lead improvements**.
+When a domain expert notices a business change and requests an update, the Software Factory and self-improving agents should carry its meaning into the business model, workflows, and code, and verify the result. The expert judges outcomes using business criteria and cases rather than learning a developer's technical interpretation. I think **enterprise AX should be built on reusable solutions, with DDD keeping the business language, models, and implementation on top consistent**. Organizational authority and responsibilities should also change so domain experts can lead these improvements.
 
 ---
 
@@ -488,3 +499,8 @@ When a domain expert notices a business change and requests an update, the Softw
 [^8]: [Layered navigation in the business ontology tool](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). The view was generated from the business ontology of an English learning service I am developing, on November 9, 2026. The file-based implementation reads the Turtle model on each query but returns only knowledge from the selected layer to the agent. The screenshot illustrates the organization of business knowledge, not measured enterprise-scale retrieval performance.
 
 [^9]: Based on the designs, implementation, and tests for business-context navigation, layer contracts, document retrieval, and source-backed correction in the shared knowledge platform I am developing, as of November 9, 2026. I inspected the paths comparing source-only retrieval, current knowledge, and corrected knowledge; this article does not report new measurements of live-model accuracy or enterprise-scale performance gains.
+
+[^10]: AWS, [AWS invests $1 billion to embed AI forward deployed engineers with customers](https://www.aboutamazon.com/news/aws/aws-1-billion-forward-deployed-ai-engineers), June 30, 2026. Describes the customer-account semantic layer, governed knowledge graph, and customer engineers' progression toward independent operation.
+[^11]: AWS Partner Network Blog, [Introducing Forward Deployed Engineering for Partners](https://aws.amazon.com/blogs/apn/introducing-forward-deployed-engineering-for-partners-winning-the-future-of-enterprise-ai/). Describes the partner-owned, reusable harness of ontologies, evaluation, MCP, agent operations, and a context graph.
+[^12]: Palantir, [Integrated platforms: AIP, Foundry, and Apollo](https://www.palantir.com/docs/foundry/architecture-center/platforms). Describes the standard platforms, maintainable customer customization, and Forward Deployed Engineering.
+[^13]: Palantir, [Ontology building](https://www.palantir.com/docs/foundry/ontology/overview). Describes the operational layer combining business objects and relationships with actions, functions, and security.
