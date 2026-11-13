@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 15:39:55 +0900
+last_modified_at: 2026-11-13 15:52:22 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -31,7 +31,7 @@ I think **enterprise AX should be built on reusable solutions while keeping the 
 
 In traditional software development, business processes were often recast to fit resource limits or technologies and structures familiar to the development team before being implemented in code. If this changed their meaning or flow, business teams discussed the original work while developers answered in terms of the implemented system. Different interpretations of the same work made recurring conflicts likely.
 
-I understand DDD (Domain-Driven Design) as **an attempt to address the gap between business and implementation at its root**. It organizes business language and rules into a shared model that guides the structure and behavior of code, allowing business and development teams to reason from the same meaning.
+Reducing this conflict requires the business language and rules agreed by business and development teams to remain intact in the implementation. **DDD (Domain-Driven Design) makes that shared business model the reference for design and code.** I understand it as an attempt to address the gap between business and implementation at its root.
 
 I think agent-based business automation and self-improving agents can make this structure practical to build and maintain. The AX (Agentic Transformation) I want lets domain experts who notice business changes request them in their own terms, with agents and the Software Factory using the same business model to revise and verify workflows and code. Organizations also need to give domain experts authority over business changes and responsibility for verifying outcomes.
 

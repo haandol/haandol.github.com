@@ -7,7 +7,7 @@ email: ldg55d@gmail.com
 tags: ai agent ax ddd platform organization software-factory knowledge harness-engineering
 publish: true
 published: true
-last_modified_at: 2026-11-13 15:39:55 +0900
+last_modified_at: 2026-11-13 15:52:22 +0900
 lang: ko
 translation_key: enterprise-wide-ax-essentials
 english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
@@ -29,7 +29,7 @@ english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
 
 기존 소프트웨어 개발에서는 비즈니스 프로세스를 제한된 리소스로 구현할 수 있는 형태나 개발팀에 익숙한 기술과 구조에 맞춰 코드로 옮기는 일이 많았다. 그 과정에서 업무의 뜻과 흐름이 달라지면, 비즈니스는 원래 업무를 기준으로 말하고 개발은 구현된 시스템을 기준으로 답하게 된다. 같은 업무를 두고도 서로 다른 해석으로 이야기하니 충돌이 반복되기 쉽다.
 
-나는 DDD(Domain-Driven Design, 도메인 주도 설계)를 **업무와 구현 사이의 간극을 근본적으로 줄이려는 시도**로 이해한다. 업무의 언어와 규칙을 공통 모델로 정리하고, 그 모델이 코드의 구조와 동작까지 이어지게 해서 비즈니스와 개발이 같은 의미를 기준으로 이야기하게 하려는 것이다.
+이 충돌을 줄이려면 비즈니스와 개발이 함께 정리한 업무의 언어와 규칙이 구현에서도 유지되어야 한다. **DDD(Domain-Driven Design, 도메인 주도 설계)는 그 공통의 업무 모델을 설계와 코드의 기준으로 삼는 접근**이다. 나는 이를 업무와 구현 사이의 간극을 근본적으로 줄이려는 시도로 이해한다.
 
 에이전트를 통한 업무 자동화와 자가 개선 에이전트가 이 구조를 실제로 만들고 유지할 수 있게 해준다고 생각한다. 내가 바라는 AX(Agentic Transformation)는 업무 변화를 먼저 알아챈 도메인 전문가가 자신의 언어로 변경을 요청하면, 에이전트와 Software Factory가 같은 업무 모델을 기준으로 워크플로우와 코드를 고치고 검증하는 구조다. 조직도 도메인 전문가에게 업무 변경의 결정권과 결과 검증 책임을 줄 수 있어야 한다.
 
