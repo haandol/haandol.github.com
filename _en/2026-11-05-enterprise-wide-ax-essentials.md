@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 17:09:41 +0900
+last_modified_at: 2026-11-13 17:31:34 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -205,9 +205,9 @@ Include the time experts spend explaining and checking results alongside process
 
 ## Conclusion
 
-This connection between business models and implementation criteria is also visible in the [ontology tool](https://github.com/haandol/alps-writer-plugins). The screenshot shows the model of an English learning service. Its “Expression dictionary” BC provides access to related processes and rules, then to the details and implementation criteria needed.[^8]
+This 3D view in the [ontology tool](https://github.com/haandol/alps-writer-plugins) shows the “Expression dictionary” BC of [EncBird](https://www.encbird.com), an English learning service. It shows how expression registration, expansion, and dictionary management relate to conversations, podcasts, and review.[^8]
 
-![Ontology view of an English learning service with the Expression dictionary area selected](/assets/img/2026/1105/encbird-ontology-knowledge-en.png)
+![3D ontology view of EncBird's expression dictionary processes and their connections](/assets/img/2026/1105/encbird-ontology-3d-en.png)
 
 The ideal outcome of AX is **a system whose business processes, organizational responsibilities, and implementation follow the same business model, with implementation details managed autonomously within those criteria**.
 
@@ -224,4 +224,4 @@ Reaching that goal requires **applying DDD on top of reusable solutions to keep 
 [^5]: Uber Engineering, [Running a Software Factory Efficiently at Uber Scale](https://www.uber.com/us/en/blog/efficient-software-factory/), August 27, 2026. Describes managed agents, shared harnesses, a tool gateway, a context graph, and evaluation against actual tasks.
 [^6]: Uber Engineering, [Introducing Domain-Oriented Microservice Architecture](https://www.uber.com/us/en/blog/microservice-architecture/), July 23, 2020. Explicitly identifies DDD and Clean Architecture as influences on service architecture; it does not measure integration with the 2026 Software Factory.
 [^7]: Cleveland Clinic, [How AI Assists With Staffing, Scheduling and Once-Tedious Tasks](https://consultqd.clevelandclinic.org/how-ai-assists-with-staffing-scheduling-and-once-tedious-tasks), February 14, 2024. The hospital's account of bed, staffing, and operating-room support and changes in collaboration.
-[^8]: [Layered navigation in the business ontology tool](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). The view was generated from an English learning service's business model. Screenshot text was translated into English for this version.
+[^8]: [3D view in the business ontology tool](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). The “Expression dictionary” BC generated from EncBird's business model. Screenshot labels were translated into English for this version.

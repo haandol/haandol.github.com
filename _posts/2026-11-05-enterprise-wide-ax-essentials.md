@@ -7,7 +7,7 @@ email: ldg55d@gmail.com
 tags: ai agent ax ddd platform organization software-factory knowledge harness-engineering
 publish: true
 published: true
-last_modified_at: 2026-11-13 17:09:41 +0900
+last_modified_at: 2026-11-13 17:31:34 +0900
 lang: ko
 translation_key: enterprise-wide-ax-essentials
 english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
@@ -203,9 +203,9 @@ sequenceDiagram
 
 ## 마치며
 
-업무 모델과 구현 기준을 연결하는 구조는 [온톨로지 도구](https://github.com/haandol/alps-writer-plugins)에서도 확인할 수 있다. 아래는 영어 학습 서비스의 업무 모델을 연 화면이다. ‘표현 사전’ BC에서 관련 프로세스와 규칙을 찾고, 필요한 상세와 구현 기준으로 내려갈 수 있다.[^8]
+아래는 [온톨로지 도구](https://github.com/haandol/alps-writer-plugins)로 영어 학습 서비스 [잉크버드(EncBird)](https://www.encbird.com)의 ‘표현 사전’ BC를 3D로 연 화면이다. 표현 등록·확장·사전 관리와 대화·팟캐스트·복습 사이의 관계를 보여준다.[^8]
 
-![영어 학습 서비스의 온톨로지에서 표현 사전 영역을 선택한 화면](/assets/img/2026/1105/encbird-ontology-knowledge.png)
+![잉크버드 표현 사전의 업무 프로세스와 연결 관계를 보여주는 3D 온톨로지 화면](/assets/img/2026/1105/encbird-ontology-3d.png)
 
 이상적인 AX의 목표는 **업무 프로세스와 조직의 책임 구조, 실제 구현이 같은 업무 모델을 따르고, 구현의 세부는 그 기준 안에서 자율적으로 관리되는 시스템**이다.
 
@@ -222,4 +222,4 @@ FDE가 구축을 마치고 떠난 뒤 비즈니스 전문가가 솔루션의 기
 [^5]: Uber Engineering, [Running a Software Factory Efficiently at Uber Scale](https://www.uber.com/us/en/blog/efficient-software-factory/), 2026-08-27. 공통 하네스·도구 게이트웨이·문맥 그래프를 사용하는 관리형 에이전트와 작업별 평가를 설명한다.
 [^6]: Uber Engineering, [Introducing Domain-Oriented Microservice Architecture](https://www.uber.com/us/en/blog/microservice-architecture/), 2020-07-23. DDD와 Clean Architecture의 영향을 명시한 서비스 아키텍처 사례이며, 2026년 Software Factory와의 통합 효과를 검증한 자료는 아니다.
 [^7]: Cleveland Clinic, [How AI Assists With Staffing, Scheduling and Once-Tedious Tasks](https://consultqd.clevelandclinic.org/how-ai-assists-with-staffing-scheduling-and-once-tedious-tasks), 2024-02-14. 병원 측이 공개한 병상·인력·수술실 운영 지원과 현업 협업 사례다.
-[^8]: [업무 온톨로지 도구의 계층별 탐색](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). 영어 학습 서비스의 업무 모델로 생성한 화면.
+[^8]: [업무 온톨로지 도구의 3D 보기](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). 잉크버드의 업무 모델에서 생성한 ‘표현 사전’ BC 화면.
