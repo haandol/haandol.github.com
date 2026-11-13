@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 18:31:13 +0900
+last_modified_at: 2026-11-13 19:01:29 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -215,17 +215,38 @@ Changing expression registration requires checking how expressions arrive from c
 
 ### Separating business meaning from implementation responsibilities
 
-Business models hold process purpose, participants, conditions, and exceptions. ADRs (Architecture Decision Records) hold design decisions and conditions the implementation must satisfy; code and data mappings hold the concrete methods. Renaming a refund-status column must not change the meaning of a completed refund. Changing the completion criterion, however, requires corresponding implementation and verification changes.
+Business models hold process purpose, participants, conditions, and exceptions. Choices of database, API, and framework belong in the implementation. The purpose of this separation is to **contain implementation changes so that replacing technical details does not require changing domain logic**.
+
+As in [Clean and Hexagonal Architecture](/2022/02/13/demystifying-hexgagonal-architecture.html) (Korean), define the operations and results the business needs through interfaces, and isolate connections to specific databases or external APIs in adapters. The concrete implementation depends on interfaces defined on the business side, so the business model does not need to know external technology formats.
+
+The arrows below show **the direction of change impact**. Business-rule changes propagate to the affected implementation, while adapters absorb technical replacements that preserve the existing contract.
 
 {% raw %}
 ```mermaid
-flowchart TB
-  M["Business model<br/>BCs · processes · rules"] --> A["Implementation contracts<br/>ADRs · verification criteria"]
-  A --> C["Implementation<br/>Code · services"]
+flowchart LR
+  subgraph B["When business rules change"]
+    direction TB
+    B1["Domain rules change"] --> B2["Affected contracts and tests"]
+    B2 --> B3["Required implementation changes"]
+  end
+  subgraph T["When technical details change"]
+    direction BT
+    T1["Replace DB, API, or framework"] --> T2["Revise adapters<br/>Preserve the contract"]
+    T2 --x|"Change contained"| T3["Domain logic<br/>Unchanged"]
+  end
+  B ~~~ T
+  classDef changed fill:#fff1df,stroke:#af731b,color:#65410b
+  classDef stable fill:#e9f6ec,stroke:#3c7754,color:#23452b
+  class B1,T1 changed
+  class T3 stable
 ```
 {% endraw %}
 
-These boundaries must also shape agent execution: which BC's rules to read, which tools and permissions to use, and which results to pass to other BCs. One agent can handle several BCs while preserving the decision criteria of each.
+For example, if only the refund API's response field names or the database storage format changes, revise the adapter so that it still provides the same confirmation of returned funds. Keep the business rule in `Refund.complete()` unchanged and verify that the replacement implementation satisfies the existing contract.
+
+Record interface boundaries, implementation choices, and verification criteria in ADRs (Architecture Decision Records). ADRs preserve the reasoning behind those choices; interfaces and adapters in the code contain the changes.
+
+Agent work must follow the same boundaries. Execution configuration must identify which BC's rules to read, which tools and permissions to use, and which results to pass to other BCs. One agent can handle several BCs while preserving the decision criteria of each.
 
 ## 4. Connecting process analysis to automation and implementation
 

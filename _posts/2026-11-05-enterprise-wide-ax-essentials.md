@@ -7,7 +7,7 @@ email: ldg55d@gmail.com
 tags: ai agent ax ddd platform organization software-factory knowledge harness-engineering
 publish: true
 published: true
-last_modified_at: 2026-11-13 18:31:13 +0900
+last_modified_at: 2026-11-13 19:01:29 +0900
 lang: ko
 translation_key: enterprise-wide-ax-essentials
 english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
@@ -213,17 +213,38 @@ flowchart LR
 
 ### 업무 모델과 구현의 책임을 분리하기
 
-업무 모델에는 프로세스의 목적·참여자·조건·예외를, ADR(Architecture Decision Record, 설계 결정 기록)에는 구현이 지켜야 할 결정과 조건을, 코드와 데이터 연결에는 구체적인 처리 방법을 둔다. 환불 상태 컬럼이 바뀌었다고 ‘환불 완료’의 뜻까지 바뀌어서는 안 된다. 반대로 완료 기준이 바뀌었다면 관련 구현과 검증도 함께 바뀌어야 한다.
+업무 모델에는 프로세스의 목적·참여자·조건·예외를 두고, DB·API·프레임워크에 대한 선택은 구현에 둔다. **구현 디테일을 교체할 때 도메인 로직까지 고치지 않도록 변경 범위를 제한하는 것**이 이 분리의 목적이다.
+
+[클린·헥사고날 아키텍처](/2022/02/13/demystifying-hexgagonal-architecture.html)에서처럼 업무에 필요한 동작과 결과를 인터페이스로 정의하고, 특정 DB나 외부 API를 연결하는 코드는 어댑터로 분리한다. 구체 구현이 업무 쪽 인터페이스에 의존하게 하므로, 업무 모델이 외부 기술의 형식을 직접 알아야 할 필요가 없다.
+
+아래 화살표는 **변경이 영향을 주는 방향**이다. 업무 규칙이 바뀌면 영향받는 구현까지 반영하고, 기존 계약을 유지하는 기술 교체는 어댑터에서 흡수한다.
 
 {% raw %}
 ```mermaid
-flowchart TB
-  M["업무 모델<br/>BC·프로세스·규칙"] --> A["구현 계약<br/>ADR·검증 조건"]
-  A --> C["실제 구현<br/>코드·서비스"]
+flowchart LR
+  subgraph B["업무 규칙이 바뀌면"]
+    direction TB
+    B1["도메인 규칙 변경"] --> B2["영향받는 계약·검증"]
+    B2 --> B3["필요한 구현 수정"]
+  end
+  subgraph T["구현 디테일이 바뀌면"]
+    direction BT
+    T1["DB·API·프레임워크 교체"] --> T2["어댑터 수정<br/>기존 계약 유지"]
+    T2 --x|"영향 차단"| T3["도메인 로직<br/>변경 없음"]
+  end
+  B ~~~ T
+  classDef changed fill:#fff1df,stroke:#af731b,color:#65410b
+  classDef stable fill:#e9f6ec,stroke:#3c7754,color:#23452b
+  class B1,T1 changed
+  class T3 stable
 ```
 {% endraw %}
 
-이 경계는 에이전트의 실제 처리에도 적용되어야 한다. 어떤 BC의 규칙을 읽고 어떤 권한과 도구로 처리하는지, 다른 BC에 어떤 결과를 넘기는지가 실행 구성에 반영되어야 한다. 에이전트 하나가 여러 BC를 맡더라도 업무별 판단 기준은 구분해야 한다.
+예를 들어 환불 API의 응답 필드명이나 DB 저장 방식만 바뀌었다면, 어댑터가 여전히 ‘반환 확인’이라는 같은 결과를 제공하게 고친다. `Refund.complete()`의 업무 규칙은 그대로 두고, 교체한 구현이 기존 계약을 지키는지 검증한다.
+
+인터페이스의 경계, 구현 선택과 검증 기준은 ADR(Architecture Decision Record, 설계 결정 기록)에 남긴다. ADR이 선택의 근거를 기록하고, 실제 코드의 인터페이스와 어댑터가 변경 범위를 제한한다.
+
+에이전트의 작업도 이 경계를 따라야 한다. 어떤 BC의 규칙을 읽고 어떤 권한과 도구로 처리하는지, 다른 BC에 어떤 결과를 넘기는지가 실행 구성에 반영되어야 한다. 에이전트 하나가 여러 BC를 맡더라도 업무별 판단 기준은 구분해야 한다.
 
 ## 4. 프로세스 분석에서 자동화와 구현으로 이어가기
 
