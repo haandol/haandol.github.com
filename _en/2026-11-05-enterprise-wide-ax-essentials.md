@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 20:29:47 +0900
+last_modified_at: 2026-11-13 21:02:43 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -101,40 +101,46 @@ Organizational and service responsibilities should reflect these boundaries. Sev
 
 ## 2. Connecting solutions to introduce AX
 
-An organization introducing AX can start with these five steps. After the initial build, domain experts' change requests should enter the same flow and lead to system improvements.
+Enterprise AX should be built by providing and connecting a solution for each of the five stages below. An FDE (Forward Deployed Engineer) works with business teams to establish this foundation. **After the FDE leaves, business and domain experts should be able to maintain and improve their workflows on their own through these connected solutions.**
 
 {% raw %}
 ```mermaid
 flowchart TB
-  K["1. Shared knowledge"] --> P["2. Process analysis"]
-  U["Domain expert"] -->|"Business change request"| P
-  P --> R["3. Requirements"]
-  R --> A["4. Automation design"]
-  A --> D{"Existing capabilities enough?"}
-  D -->|"Yes"| E["Execute and verify"]
-  D -->|"Implementation needed"| F["5. Software Factory"]
-  F --> E
-  E --> V["Business review"]
-  V -.->|"Update knowledge"| K
-  V -.->|"Improve process"| P
+  FDE["FDE<br/>Initial setup"] -.-> S
+  subgraph S["Solutions for each stage"]
+    direction TB
+    K["1. Shared knowledge<br/>Knowledge management"] --> P["2. Process analysis<br/>Process analysis solution"]
+    P --> R["3. Requirements<br/>Requirements management"]
+    R --> A["4. Business automation<br/>Business agent solution"]
+    A -->|"Build needed"| F["5. Software development<br/>Software Factory"]
+    F -->|"Verified code / tools"| A
+  end
+  U["Business / domain<br/>experts"] -->|"Change and criteria"| P
+  A -->|"Results and evidence"| U
+  classDef expert fill:#e9f6ec,stroke:#3c7754,color:#23452b
+  classDef setup fill:#f1f3f5,stroke:#7d8790,color:#39434c
+  class U expert
+  class FDE setup
 ```
 {% endraw %}
 
-Existing solutions provide the common capabilities at each step. Teams configure the rules and connections for their business. If the automation design needs a missing capability, the Software Factory implements it before it is used in execution.
-
-| Step | Role | Result |
+| Stage | Supporting solution | What it provides to experts |
 | --- | --- | --- |
-| 1. Shared knowledge | Prepare business and implementation knowledge and access | Knowledge with traceable evidence |
-| 2. Process analysis | Analyze current and target work and responsibility | Target processes and transformation candidates |
-| 3. Requirements | Agree on business rules and success criteria | Criteria for implementation and verification |
-| 4. Business automation | Configure and test existing agents and tools | An execution flow and any missing capabilities |
-| 5. Software development | Implement and verify missing capabilities | Code and tools for automation |
+| 1. Shared knowledge | Knowledge management | Retrieval of business and implementation knowledge, provenance, and access control |
+| 2. Process analysis | Process analysis solution | Current and target workflows, automation candidates, and affected work |
+| 3. Requirements | Requirements management | Business rules, exceptions, and implementation and verification criteria |
+| 4. Business automation | Business agent solution | Workflow configuration, execution, verification, and improvement |
+| 5. Software development | Software Factory | Implementation and tests for missing capabilities, with code and tools for execution |
+
+The same business models, requirements, and verification evidence must pass between stages. If someone still has to translate process-analysis results into technical documents or manually connect generated code, that work remains after the FDE leaves. **Experts should decide what work to change and how success will be judged; the connected solutions should turn those decisions into working behavior.**
+
+For example, when refund approval conditions change, the process analysis solution identifies affected work and the requirements management solution defines the new rules and verification scenarios. The business agent solution revises the workflow against those criteria; if a new capability is needed, the Software Factory implements and supplies it. Experts use the business results and verification evidence to judge whether the change matches their intent.
 
 A team that has already mapped processes with business experts can use that work to identify the data it needs. Automating process analysis itself requires readable sources and access first. Either way, shared knowledge is difficult to postpone.
 
 ### How AWS and Palantir FDEs build on reusable solutions
 
-An FDE (Forward Deployed Engineer) works inside a customer or business team to build systems with them. Public AWS and Palantir materials describe how customer-specific work is implemented on shared technical foundations.
+Public AWS and Palantir materials describe how customer-specific work is implemented on shared technical foundations.
 
 AWS describes deploying a semantic layer connecting business meaning to data in the customer's account and letting agents use a governed, versioned knowledge graph. The graph, runbooks, and architecture documentation remain with the customer, with customer engineers progressing from co-builders to independent operators.[^1]
 
