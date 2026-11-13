@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="590" viewBox="0 0 560 590" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI', Helvetica, Arial, sans-serif">
+<title id="title">Software Factory — 업무 규칙을 보호하는 구현·검증</title><desc id="desc">Software Factory가 업무 흐름과 인터페이스, 외부 기술을 연결하는 어댑터를 구현한다. 코드 의존성은 바깥의 구현에서 안쪽의 업무 규칙으로 향한다.</desc>
+<defs><marker id="inward" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 1L9 5L0 9Z" fill="#336fa1"/></marker></defs>
+<rect width="560" height="590" rx="12" fill="#fff"/>
+<circle cx="280" cy="300" r="222" fill="#edf3f9" stroke="#759ab6" stroke-width="2"/>
+<circle cx="280" cy="300" r="154" fill="#fff4d8" stroke="#c4a459" stroke-width="2"/>
+<circle cx="280" cy="300" r="86" fill="#e9f6ec" stroke="#659878" stroke-width="2"/>
+<path d="M280 500V441" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
+<path d="M280 423V365" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
+<text x="280" y="28" text-anchor="middle" font-size="24" font-weight="700" fill="#17324d">Software Factory</text>
+<text x="280" y="54" text-anchor="middle" font-size="16" font-weight="400" fill="#465768">업무 규칙을 보호하는 구현·검증</text>
+<text x="280" y="109" text-anchor="middle" font-size="21" font-weight="700" fill="#34556b">구현·어댑터</text>
+<text x="280" y="132" text-anchor="middle" font-size="15" font-weight="400" fill="#465768">DB · 외부 API · 프레임워크 연결</text>
+<text x="280" y="175" text-anchor="middle" font-size="18" font-weight="700" fill="#795b16">업무 흐름</text>
+<text x="280" y="201" text-anchor="middle" font-size="14" font-weight="400" fill="#795b16">인터페이스 · 입출력 계약</text>
+<text x="280" y="290" text-anchor="middle" font-size="21" font-weight="700" fill="#285d3b">도메인 모델</text>
+<text x="280" y="319" text-anchor="middle" font-size="18" font-weight="400" fill="#285d3b">업무 규칙</text>
+<text x="280" y="561" text-anchor="middle" font-size="17" font-weight="700" fill="#17324d">코드 의존성: 바깥 → 안쪽</text>
+</svg>

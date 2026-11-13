@@ -245,6 +245,10 @@ img {
   margin-inline: auto;
 }
 
+img.diagram-image {
+  margin-inline: auto;
+}
+
 /* ── 표 ────────────────────────────────────────────────────── */
 
 table {

@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 21:39:30 +0900
+last_modified_at: 2026-11-13 22:24:56 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -19,7 +19,7 @@ permalink: /en/2026/11/05/enterprise-wide-ax-essentials.html
 
 - Enterprise AX should be built on reusable solutions.
 - Business models keep business language and implementation consistent.
-- Business changes should flow into agent-led implementation, verification, and improvement.
+- Solutions at each stage should implement, verify, and improve the work.
 
 ## Introduction
 
@@ -27,15 +27,19 @@ AX (Agentic Transformation)—moving business work to agent-based systems—requ
 
 **Enterprise AX should be built on reusable solutions while keeping the customer's business and its implementation aligned in meaning.** Products and shared platforms provide recurring capabilities, with customer-specific business rules and processes configured on top.
 
+The solutions need to own change analysis, requirements updates, implementation, and verification so business requests can become operational changes without waiting for manual development.
+
 In traditional software development, business processes were often recast to fit resource limits or technologies and structures familiar to the development team. If this changed their meaning or flow, business teams discussed the original work while developers answered in terms of the implemented system. Different interpretations of the same work made recurring conflicts likely.
 
 Reducing this conflict requires the business language and rules agreed by business and development teams to remain intact in the implementation. **Keeping business models and implementation aligned in meaning**, a core principle of DDD (Domain-Driven Design), fits AX's aim of connecting business experts' intent to agent execution.
 
 Agent-based business automation and self-improving agents can help put this model into practice and maintain it. When a domain expert who understands the rules and exceptions recognizes a business change and requests an update, agents should revise the workflow against the same business model. A Software Factory carries the necessary code through implementation, verification, and delivery.
 
-In this structure, **shared knowledge is the foundation every solution consults**. Analysis results feed requirements, requirements guide automation and development, and findings confirmed through execution and verification return to shared knowledge.
+In this structure, **a Context Layer Service provides shared knowledge as a common solution**. Solutions at every stage consult this service. Analysis results feed requirements, requirements guide automation and development, and findings confirmed through execution and verification return to shared knowledge.
 
 ## 1. Business meaning and bounded contexts
+
+Connect a Context Layer Service that maintains business rules and boundaries with a Software Factory that implements and verifies those criteria in code.
 
 ### When technical structure changes the business process
 
@@ -56,7 +60,7 @@ flowchart TB
     T2 --> T3["Repository<br/>9 = cancellation done<br/>and refund done"]
     T3 --> T4["RefundBatch<br/>Return funds later"]
   end
-  subgraph D["Business meaning preserved"]
+  subgraph D["Software Factory implementation"]
     direction TB
     D1["Order.cancel()<br/>Check cancellation rules"] --> D2["Refund.request()<br/>Refund in progress"]
     D2 --> D3["Refund.complete()<br/>Confirm returned funds"]
@@ -72,7 +76,7 @@ flowchart TB
 
 Changing the “refund completed” rule in this structure requires piecing it together from Controller checks, Service updates, database values, and batch timing.
 
-Treat “cancellation confirmed” and “refund completed” as distinct business concepts, with their conditions enforced in code. `Refund.complete()` must use confirmation of returned funds as its completion criterion; updating a shared status value is not sufficient.
+The Software Factory must read the agreed business model and implement and verify cancellation confirmation separately from refund completion. `Refund.complete()` must use confirmation of returned funds as its completion criterion; updating a shared status value is not sufficient.
 
 A layered architecture can still **give the domain model responsibility for business meaning and rules, while APIs, databases, and batch jobs perform the technical work needed to carry out its decisions**. Clear ownership of the business criteria helps preserve their meaning when implementation technology changes.
 
@@ -85,15 +89,10 @@ Keeping cancellation and refund rules distinct also requires defining each busin
 {% raw %}
 ```mermaid
 flowchart LR
-  subgraph O["Ordering BC"]
-    direction TB
-    OR["Order and cancellation rules"] --> OC["Ordering model and code"]
+  subgraph K["Context Layer Service · business models"]
+    O["Ordering BC<br/>Order and cancellation rules"] -->|"Event contract"| P["Payments BC<br/>Payment and refund rules"]
   end
-  subgraph P["Payments BC"]
-    direction TB
-    PR["Payment and refund rules"] --> PC["Payments model and code"]
-  end
-  O -->|"Cancellation event"| P
+  K -->|"Boundaries and rules"| F["Software Factory<br/>Implement and verify each BC"]
 ```
 {% endraw %}
 
@@ -110,7 +109,7 @@ Enterprise AX should be built by providing and connecting a solution for each of
 flowchart TB
   FDE["FDE<br/>Initial setup"] -.-> S
   subgraph S["Connected solutions"]
-    K["1. Shared knowledge<br/>Knowledge management"]
+    K["1. Shared knowledge<br/>Context Layer Service"]
     subgraph W["Solutions sharing the knowledge layer"]
       P["2. Process analysis<br/>Process analysis solution"] -->|"Target process"| R["3. Requirements<br/>Requirements management"]
       R -->|"Requirements and checks"| A["4. Business automation<br/>Business agent solution"]
@@ -134,13 +133,11 @@ flowchart TB
 
 | Stage | Supporting solution | Information read and passed on |
 | --- | --- | --- |
-| 1. Shared knowledge | Knowledge management | Supplies business and implementation knowledge to every solution and incorporates validated changes |
+| 1. Shared knowledge | Context Layer Service | Supplies business and implementation knowledge to every solution and incorporates validated changes |
 | 2. Process analysis | Process analysis solution | Reads current work and passes target processes and affected areas to requirements management |
 | 3. Requirements | Requirements management | Reads business rules and exceptions and passes requirements and verification criteria to automation and development |
 | 4. Business automation | Business agent solution | Executes against business criteria, requests missing capabilities from development, and returns results to experts |
 | 5. Software development | Software Factory | Reads business models and repo/service relationships and supplies verified code and tools to automation |
-
-Each solution **reads the current business criteria from shared knowledge and receives the preceding stage's results as input**.
 
 Experts decide what work to change and how success will be judged. The connected solutions carry that decision through analysis, requirements, execution, and implementation. Business rules, implementation relationships, and verification evidence validated through execution and review return to shared knowledge as the basis for subsequent work.
 
@@ -162,34 +159,35 @@ The common pattern is **combining a reusable technical foundation with each cust
 
 ## 3. Shared knowledge for business and coding agents
 
-AX requires agents to find not only business documents but also relationships between processes and implementation knowledge spread across repositories and services. Shared knowledge provides the context management foundation for retrieving the information each task needs.
+AX requires agents to find business documents, relationships between processes, and implementation knowledge spread across repositories and services. **A Context Layer Service must provide the shared solution for managing this knowledge and supplying the context each task needs.**
 
-The required capabilities include RAG (Retrieval-Augmented Generation), which uses retrieved information in model responses or work; graph traversal, which follows relationships; and ontology retrieval, which finds business concepts and rules. **Both business agents and coding agents need access to all three capabilities.**
+The service contains document retrieval for RAG (Retrieval-Augmented Generation), graph traversal for relationships, and ontology retrieval for business concepts and rules. Business and coding agents access it through MCP or tool calls. MCP (Model Context Protocol) connects agents to external data and tools.
 
 {% raw %}
 ```mermaid
-flowchart LR
-  P["Check permissions<br/>Set search scope"]
-  subgraph K["3 retrieval methods"]
+flowchart TB
+  subgraph U["Service consumers"]
+    B["Business agents<br/>Decide and execute"]
+    D["Coding agents<br/>Implement and verify"]
+  end
+  B <--> M["MCP / tool calls"]
+  D <--> M
+  M <-->|"Query / context"| S
+  subgraph S["Context Layer Service"]
     direction TB
-    R["Document RAG<br/>Similarity + BM25"]
-    G["Graph traversal<br/>Relations · dependencies"]
-    O["Ontology retrieval<br/>Meaning · rules"]
+    P["Permissions and scope"]
+    subgraph Q["3 retrieval capabilities"]
+      direction TB
+      R["Document retrieval / RAG<br/>Similarity + BM25"]
+      G["Graph traversal<br/>Relationships"]
+      O["Ontology retrieval<br/>Meaning and rules"]
+    end
+    P --> Q
   end
-  P --> R
-  P --> G
-  P --> O
-  R --> C["Task context"]
-  G --> C
-  O --> C
-  subgraph U["2 agent types"]
-    B["Business agents<br/>Knowledge · rules"]
-    D["Coding agents<br/>Business + implementation<br/>Repos · projects<br/>Service relationships"]
-  end
-  C --> B
-  C --> D
 ```
 {% endraw %}
+
+The service applies the caller's permissions and business scope before retrieval, then returns context with provenance and version information. **Solutions at every stage use this interface to read the same business criteria and contribute validated changes.**
 
 ### Three ways to retrieve knowledge
 
@@ -209,7 +207,7 @@ These capabilities work together. Graph traversal provides a way to follow conne
 
 Both types of agents should share business concepts and rules while retrieving the scope relevant to their work. Business agents may need service relationships, and coding agents must also consult the ontology for business meaning.
 
-The shared knowledge platform manages ownership, provenance, versions, and permitted use, applying role- and business-scope access controls before retrieval. Business teams decide the meaning and permitted use of rules; platform teams ensure those decisions govern actual access by agents and external services.
+The Context Layer Service manages ownership, provenance, versions, and permitted use, applying role- and business-scope access controls before retrieval. Business teams decide the meaning and permitted use of rules; platform teams ensure those decisions govern actual access by agents and external services.
 
 ### Navigating business knowledge in layers
 
@@ -233,114 +231,89 @@ That reveals concrete considerations: whether registration still requires the le
 
 ### Separating business meaning from implementation responsibilities
 
-Business models hold process purpose, participants, conditions, and exceptions. Choices of database, API, and framework belong in the implementation. The purpose of this separation is to **contain implementation changes so that replacing technical details does not require changing domain logic**.
+The Software Factory reads business criteria from the Context Layer Service and produces code and tests that satisfy them. **Keeping business rules at the center, with implementation details depending on those rules, is part of its implementation and verification responsibility.**
 
-As in [Clean and Hexagonal Architecture](/2022/02/13/demystifying-hexgagonal-architecture.html) (Korean), define the operations and results the business needs through interfaces, and isolate connections to specific databases or external APIs in adapters. The concrete implementation depends on interfaces defined on the business side, so the business model does not need to know external technology formats.
+As in [Clean and Hexagonal Architecture](/2022/02/13/demystifying-hexgagonal-architecture.html) (Korean), domain models and business rules sit at the center, workflows and interfaces surround them, and connections to databases, APIs, and frameworks sit outside. Code dependencies point inward.
 
-The diagram shows **two kinds of change moving through the same business model, contracts, and implementation**. Blue arrows carry business criteria into implementation; orange arrows trace a technical replacement and verification against the existing contract. Technical replacements that preserve that contract should not propagate into changes to domain rules.
+![Onion-style dependencies in code implemented and verified by the Software Factory: adapters depend on inner business contracts and domain rules](/assets/img/2026/1105/solution-dependencies-en.svg){: .diagram-image }
 
-{% raw %}
-```mermaid
-flowchart TB
-  M["Business model<br/>Domain rules"]
-  P["Business contract<br/>Interfaces · verification"]
-  I["Implementation<br/>Code · adapters"]
-  T["Technical replacement<br/>DB · API · framework"]
-  M -->|"Rule change"| P
-  P -->|"Update implementation"| I
-  T -->|"Replace"| I
-  I -.->|"Verify the contract"| P
-  P --x|"Block technical impact"| M
-  linkStyle 0,1 stroke:#336fa1,stroke-width:2px
-  linkStyle 2,3 stroke:#b87720,stroke-width:2px
-  linkStyle 4 stroke:#af3943,stroke-width:2px
-```
-{% endraw %}
+If only a refund API's response field names or the database storage format changes, the Software Factory revises the adapter and verifies the existing contract. The business rule in `Refund.complete()` stays intact. When refund approval conditions themselves change, it updates domain logic and the required implementation and verification against the new criteria.
 
-For example, if only the refund API's response field names or the database storage format changes, revise the adapter so that it still provides the same confirmation of returned funds. Keep the business rule in `Refund.complete()` unchanged and verify that the replacement implementation satisfies the existing contract.
+Interface boundaries, implementation choices, and verification criteria are recorded in ADRs (Architecture Decision Records). The requirements management solution maintains these criteria, and the Software Factory applies them, giving subsequent changes the same basis for decisions.
 
-Record interface boundaries, implementation choices, and verification criteria in ADRs (Architecture Decision Records). ADRs preserve the reasoning behind those choices; interfaces and adapters in the code contain the changes.
+## 4. Solutions that turn business changes into execution
 
-Agent work must follow the same boundaries. Execution configuration must identify which BC's rules to read, which tools and permissions to use, and which results to pass to other BCs. One agent can handle several BCs while preserving the decision criteria of each.
-
-## 4. Connecting process analysis to automation and implementation
-
-With shared knowledge in place, a business change can be developed into requirements and an executable workflow. When a capability is missing, coding agents in the Software Factory implement it.
+Process analysis, requirements management, business agents, and the Software Factory each own a part of the work below. Every solution reads the same business criteria from the Context Layer Service and passes its results to the next stage.
 
 {% raw %}
 ```mermaid
 sequenceDiagram
-  actor O as Domain expert
-  participant B as Business agent
-  participant K as Shared knowledge
-  participant C as Coding agent
-  O->>B: Business change request
-  B->>K: Retrieve rules and exceptions
-  K-->>B: Decision and verification criteria
-  B->>B: Define target flow and requirements
+  actor O as Business expert
+  participant P as Analysis solution
+  participant R as Requirements solution
+  participant A as Agent solution
+  participant F as Software Factory
+  O->>P: Change and success criteria
+  P->>R: Current and target processes
+  R->>A: Conditions, exceptions, test cases
+  A->>A: Configure workflow
   opt Implementation needed
-    B->>C: Missing capability and business criteria
-    C->>K: Retrieve repo and service relationships
-    K-->>C: Implementation context and dependencies
-    C->>C: Implement and test
-    C-->>B: Verified code and tools
+    A->>F: Missing capability and requirements
+    F->>F: Implement and test
+    F-->>A: Verified code and tools
   end
-  B->>B: Configure and verify automation
-  B-->>O: Results and verification evidence
+  A->>A: Execute and verify business results
+  A-->>O: Results and verification evidence
 ```
 {% endraw %}
 
-### Finding current and target work
+### Process analysis solution: finding current and target work
 
-Use shared sources and business-expert explanations to understand the current process (As-Is) and design the target process for agents (To-Be). Approaches such as agent storming or [Event Storming](/2020/12/10/demystifying-event-storming.html) (Korean) collect events, rules, and exceptions and identify who owns outcomes and changes.
+The process analysis solution uses shared knowledge and business-expert explanations to describe the current process (As-Is) and design the target process for agents (To-Be). It gathers events, rules, exceptions, and responsibilities, as in agent storming or [Event Storming](/2020/12/10/demystifying-event-storming.html) (Korean), and proposes what to automate and which connections to change.
 
-For refunds, examine how support intake, order-team delivery checks, and finance approval connect. If every case waits for a person to approve it, faster tools still leave that wait in place. The target process must include the conditions and authority for agents to act and the exceptions people retain.
+For refunds, it analyzes how support intake, order-team shipping checks, and finance approval connect. Experts decide the conditions and authority for agents to act and the exceptions people retain. The result becomes input to the requirements management solution.
 
-### Turning a change request into verifiable requirements
+### Requirements management solution: defining change and verification criteria
 
-Suppose a domain expert asks, “Refund orders canceled before shipping without separate approval.” The agent uses the shared model's meanings of shipping, cancellation, approval, and refund to find what is affected and establish which cases should be allowed or rejected.
+Given “Refund orders canceled before shipping without separate approval,” the requirements management solution checks the shared meanings of shipping, cancellation, approval, and refund. It defines the necessary data, inputs and outputs, allowed conditions, exceptions, and cases with expected results, then passes them to execution and development solutions.
 
-Requirements need the necessary data, inputs and outputs, conditions and exceptions, and cases with expected results. The expert judges business meaning and success criteria rather than specifying fields or functions. Initial design and development criteria are agreed with technical specialists; subsequent changes within that scope should proceed against the same model.
+Experts judge business meaning and success criteria. The solution maintains those decisions as implementation contracts and verification cases, updating affected requirements and cases when the business criteria change.
 
-### Configuring automation with existing agents and tools
+### Business agent solution: configuring, executing, observing, and improving work
 
-Next, check whether existing agents and tools meet the requirements. When the necessary query and action capabilities and permissions are available, connect them into a workflow and test it with business scenarios. Missing capabilities become implementation requests for the Software Factory.
+The business agent solution connects agents, tools, and permissions into workflows that satisfy the requirements. It executes them, checks inputs, outputs, business rules, failure handling, and results, and records execution. Missing capabilities are requested from the Software Factory with their business criteria.
 
-Check that inputs and outputs match, business rules hold, and failures are handled as intended. Self-improving agents should then use change requests, execution records, and review findings to revise the workflow and tool use. The agreed business model remains the reference.
+Self-improving agents use execution and review findings to change the order of steps, revise instructions, and adjust tool use, then verify the changes. The solution needs this capability to turn operational findings into improvements to subsequent runs.
 
-### Implementing missing capabilities with the Software Factory
+### Software Factory: implementing and integrating missing capabilities
 
-The Software Factory implements and verifies missing capabilities and supplies code and tools that automation can use. It should read the business model, ADRs, and current implementation together to determine impact, then check the business conditions through tests and scenarios.
+The Software Factory reads business models, implementation contracts, and repository and service relationships to produce code, tools, and tests. It integrates them for use by the business agent solution and returns **evidence of which business conditions were implemented and what was verified**.
 
-Alongside code, it should leave **evidence of which business conditions changed and what was verified**. Generated code alone does not establish correct business behavior. [Software Factory evaluations](/en/2026/10/05/software-factory-evals-and-tension-metrics.html) need to distinguish the two.
+[Software Factory evaluations](/en/2026/10/05/software-factory-evals-and-tension-metrics.html) must check business conditions as well as code generation. The solution must own implementation, verification, and integration so subsequent business changes can proceed without waiting for manual development work.
 
-This role continues after the initial build. When a business change requires code changes, implementation and verification should follow the same criteria, without requiring a domain expert to rewrite every request in technical terms.
+## 5. Solutions that turn operational results into improvements
 
-## 5. Reviews and organizational responsibilities that enable self-improvement
+The business agent solution collects execution and session records and evaluates results. Analysis and requirements solutions use that evidence to identify causes and define correction criteria. The business agent solution revises and verifies workflows; the Software Factory handles code and tools.
 
-Differences found in execution records and session or workflow reviews need changes appropriate to their cause. If the ontology's business model is missing a rule or exception, correct it against the sources. If execution violates an existing rule, fix the workflow or code. Business meaning and verification criteria must not be changed just to accommodate the code.
-
-A correct answer may still have relied on source retrieval to compensate for a wrong business definition. Evaluating the final result and stored knowledge separately helps prevent the same incorrect rule from being reused.
-
-For changes with established business criteria, revise knowledge or execution according to the cause and verify the result. When a new business judgment is needed, the domain expert must establish the criteria first.
+Where business criteria are established, the solutions continue improving against them. When a new policy judgment is needed, they return the evidence to experts. Business meaning and verification criteria must not be changed merely to accommodate the code.
 
 {% raw %}
 ```mermaid
 flowchart TB
-  R["Execution and session review"] --> D{"Cause of the gap"}
-  D -->|"Missing business rule"| K["Update ontology"]
-  D -->|"Execution error"| I["Revise workflow or code"]
-  D -->|"New judgment needed"| O["Domain expert"]
-  O -->|"Criteria agreed"| K
-  K --> V["Verify business and implementation"]
-  I --> V
-  V -->|"Pass"| S["Update knowledge and execution"]
-  V -.->|"Fail"| R
-  S --> R
+  A["Business agent solution<br/>Execute, observe, review"] --> R["Analysis / requirements solutions<br/>Causes and correction criteria"]
+  R --> W["Business agent solution<br/>Revise and verify workflows"]
+  R -->|"Code change needed"| F["Software Factory<br/>Implement and regression-test"]
+  F --> W
+  W -->|"Verification passes"| A
+  W -->|"Validated changes"| K["Context Layer Service<br/>Update knowledge and models"]
+  K -->|"Current criteria"| R
+  R -->|"Business judgment needed"| O["Business / domain experts"]
+  O -->|"Decide criteria"| R
+  W -.->|"Verification fails"| R
 ```
 {% endraw %}
 
-Verified changes must also be reflected in business models and implementation knowledge. Update the ontology when rules change, and implementation knowledge and retrieval indexes when service connections or code locations change. This lets subsequent business agents and coding agents work from the same changes.
+Both final results and stored knowledge need checking. Source retrieval may produce a correct answer while an incorrect ontology rule remains available to the next run. Reflecting verified business rules, implementation relationships, and execution evidence in the Context Layer Service gives every solution an updated basis for its work.
 
 ### Moving decision authority and verification responsibility together
 
@@ -368,7 +341,7 @@ The ideal outcome of AX is **a system whose business processes, organizational r
 
 If business experts must learn the solution's technical interpretation after an FDE finishes the build and leaves, they have inherited work previously handled by developers. They need to be able to request changes and judge results in their own business terms.
 
-Reaching that goal requires **designing reusable solutions so that business language, models, and implementation remain consistent in meaning**. Software Factories and self-improving agents should maintain that alignment through repeated changes and verification, while organizations give domain experts the authority and responsibility to lead the process.
+**Provide and connect solutions for knowledge, analysis, requirements, automation, and development.** Experts judge business direction and results; solutions carry those decisions into implementation, verification, and improvement. Organizational authority and responsibilities should enable experts to lead this flow.
 
 [^1]: AWS, [AWS invests $1 billion to embed AI forward deployed engineers with customers](https://www.aboutamazon.com/news/aws/aws-1-billion-forward-deployed-ai-engineers), June 30, 2026. Describes the customer-account semantic layer, knowledge graph, and customer engineers' progression toward independent operation.
 [^2]: AWS Partner Network Blog, [Introducing Forward Deployed Engineering for Partners](https://aws.amazon.com/blogs/apn/introducing-forward-deployed-engineering-for-partners-winning-the-future-of-enterprise-ai/). Describes the partner-owned, reusable harness of ontologies, evaluation, tool connections, and agent operations.

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="590" viewBox="0 0 560 590" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI', Helvetica, Arial, sans-serif">
+<title id="title">Software Factory — Implementation and verification that protect business rules</title><desc id="desc">The Software Factory implements workflows, interfaces and adapters. Code dependencies point inward from technical implementation to business rules.</desc>
+<defs><marker id="inward" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 1L9 5L0 9Z" fill="#336fa1"/></marker></defs>
+<rect width="560" height="590" rx="12" fill="#fff"/>
+<circle cx="280" cy="300" r="222" fill="#edf3f9" stroke="#759ab6" stroke-width="2"/>
+<circle cx="280" cy="300" r="154" fill="#fff4d8" stroke="#c4a459" stroke-width="2"/>
+<circle cx="280" cy="300" r="86" fill="#e9f6ec" stroke="#659878" stroke-width="2"/>
+<path d="M280 500V441" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
+<path d="M280 423V365" fill="none" stroke="#336fa1" stroke-width="3" marker-end="url(#inward)"/>
+<text x="280" y="28" text-anchor="middle" font-size="24" font-weight="700" fill="#17324d">Software Factory</text>
+<text x="280" y="54" text-anchor="middle" font-size="16" font-weight="400" fill="#465768">Implementation and verification that protect business rules</text>
+<text x="280" y="109" text-anchor="middle" font-size="21" font-weight="700" fill="#34556b">Adapters</text>
+<text x="280" y="132" text-anchor="middle" font-size="15" font-weight="400" fill="#465768">DB · API · framework connections</text>
+<text x="280" y="175" text-anchor="middle" font-size="18" font-weight="700" fill="#795b16">Workflows</text>
+<text x="280" y="201" text-anchor="middle" font-size="14" font-weight="400" fill="#795b16">Interfaces · contracts</text>
+<text x="280" y="290" text-anchor="middle" font-size="21" font-weight="700" fill="#285d3b">Domain model</text>
+<text x="280" y="319" text-anchor="middle" font-size="18" font-weight="400" fill="#285d3b">Business rules</text>
+<text x="280" y="561" text-anchor="middle" font-size="17" font-weight="700" fill="#17324d">Code dependencies: outside → inside</text>
+</svg>

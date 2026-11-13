@@ -483,6 +483,8 @@ Mermaid는 흰 배경을 전제로 렌더링하므로 다크 테마에서 그대
 패널보다 작은 도식은 가운데 배치한다. 공통 스타일에서 SVG를 블록 요소로 표시하므로
 부모의 `text-align`에만 의존하지 않고 `.mermaid > svg`의 좌우 자동 여백으로 정렬한다.
 
+별도 SVG 파일로 넣는 개념도는 이미지에 `diagram-image` 클래스를 붙여 같은 방식으로 가운데 배치한다.
+
 ## 댓글 위젯 (utteranc.es)
 
 댓글은 cross-origin iframe이라 CSS가 닿지 않는다. `_includes/comments.html`이
