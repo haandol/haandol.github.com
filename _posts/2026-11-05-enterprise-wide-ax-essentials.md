@@ -7,7 +7,7 @@ email: ldg55d@gmail.com
 tags: ai agent ax ddd platform organization software-factory knowledge harness-engineering
 publish: true
 published: true
-last_modified_at: 2026-11-13 22:47:47 +0900
+last_modified_at: 2026-11-13 23:11:17 +0900
 lang: ko
 translation_key: enterprise-wide-ax-essentials
 english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
@@ -39,46 +39,39 @@ english_url: /en/2026/11/05/enterprise-wide-ax-essentials.html
 
 ### 업무 프로세스가 기술 구조에 맞춰 바뀌는 경우
 
-예를 들어 ‘배송 전 취소된 주문은 환불하고, 반환이 확인되면 환불 완료로 처리한다’는 업무 규칙을 구현한다고 하자. 요청 처리(Controller), 실행 조정(Service), 데이터 저장(Repository)으로 나누는 계층형 아키텍처를 사용할 수 있다.
+비즈니스 프로세스는 고객과 업무 담당자의 목적·조건·책임으로 설명된다. 이를 소프트웨어로 만들 때 개발자는 업무를 메서드, 데이터 구조, 서비스 호출 같은 기술 요소로 옮긴다. 이 과정에서 비즈니스와 코드 사이에 **개발자의 해석과 기술적 설계라는 층**이 생긴다.
 
-그런데 일정과 공통 코드 재사용, 기존 DB 구조를 우선해 취소와 환불을 하나의 ‘완료’ 상태로 합치고, 실제 환불은 배치 작업으로 넘기면 문제가 생긴다. 코드는 상태 변경을 끝냈지만 고객에게 돈을 돌려주는 업무는 아직 끝나지 않았기 때문이다.
+그 해석은 팀의 업무 이해도와 숙련도, 익숙한 용어와 프로그래밍 언어, 기존 시스템과 구현 환경의 영향을 받는다. 함께 유지할 업무 모델 없이 기술 구조부터 정하면, 업무의 개념과 책임이 다르게 묶이거나 중요한 조건과 예외가 코드에 빠질 수 있다.
+
+예를 들어 업무의 ‘환불 승인’에는 누가 어떤 조건에서 돈을 돌려줘도 된다고 판단하는지가 담겨 있다. 이를 화면의 조건 검사, 범용 상태 변경 서비스, DB 갱신으로 나누는 동안 판단 기준까지 각 부분에 흩어지면, 원래의 업무가 코드에서 어떻게 실현됐는지 다시 해석해야 한다.
+
+DDD는 업무 전문가와 개발자가 **같은 뜻으로 사용하는 공통 언어(Ubiquitous Language)**를 만들고, 그 언어로 업무 모델을 정리해 설계와 코드에 계속 반영하는 방식으로 이 간극을 줄인다. ‘환불 승인’의 개념과 조건이 업무 설명, 모델, 코드에서 같은 의미로 이어지게 하는 것이다.
 
 {% raw %}
 ```mermaid
 flowchart TB
-  subgraph B["업무 프로세스"]
-    direction LR
-    B1["배송 전 취소"] --> B2["환불 실행"] --> B3["반환 확인 후<br/>환불 완료"]
+  B["비즈니스 프로세스<br/>목적·조건·책임"]
+  subgraph T["개발팀의 해석에 의존하는 구현"]
+    E["팀의 이해·숙련도<br/>용어·언어·구현 환경"] --> D["개발자의 기술적 설계"]
+    D --> C["기술 모델·코드<br/>개념·조건의 누락·변형"]
   end
-  subgraph T["기술 편의에 맞춘 구현"]
-    direction TB
-    T1["Controller<br/>배송 조건 검사"] --> T2["공통 Service<br/>updateStatus(9)"]
-    T2 --> T3["Repository<br/>9 = 취소·환불 완료"]
-    T3 --> T4["RefundBatch<br/>실제 환불은 나중에"]
+  subgraph S["DDD의 접근"]
+    M["업무 전문가 + 개발자<br/>공통 언어·공유 모델"] --> N["기술 구현·코드<br/>합의한 업무 의미 유지"]
   end
-  subgraph D["Software Factory의 구현·검증"]
-    direction TB
-    D1["Order.cancel()<br/>취소 규칙 확인"] --> D2["Refund.request()<br/>환불 요청·진행"]
-    D2 --> D3["Refund.complete()<br/>반환 확인 후 완료"]
-  end
-  B -.->|"기술 구조 우선"| T
-  B -.->|"업무 규칙을 모델로"| D
-  classDef mismatch fill:#fde8e8,stroke:#b52d36,color:#821d25
+  B -->|"구현을 위해 전달"| D
+  B -->|"함께 모델링"| M
+  classDef drift fill:#fff1df,stroke:#af731b,color:#65410b
   classDef aligned fill:#e9f6ec,stroke:#3c7754,color:#23452b
-  class T3 mismatch
-  class D3 aligned
+  class C drift
+  class M,N aligned
 ```
 {% endraw %}
 
-이 구조에서 ‘환불 완료’ 규칙을 바꾸려면 Controller의 검사, Service의 상태 변경, DB 값과 배치 시점을 다시 이어 읽어야 한다.
-
-Software Factory는 합의한 업무 모델을 읽고 ‘취소 확정’과 ‘환불 완료’를 구분해 구현·검증해야 한다. `Refund.complete()`는 반환 확인을 기준으로 완료를 판단해야 하므로, 공통 상태값을 갱신했다는 이유만으로 환불을 완료 처리할 수 없다.
-
-계층형 아키텍처를 유지하면서도 **업무 의미와 규칙은 도메인 모델이 책임지고, API·DB·배치는 그 결정을 실행하는 기술적 역할을 맡게 할 수 있다.** 이렇게 업무 기준의 책임을 분명히 하면 구현 기술이 바뀌어도 그 의미를 유지할 수 있다.
+개발자는 언어와 실행 환경에 맞는 구현을 선택하면서도, 업무 전문가와 합의한 모델을 기준으로 개념·조건·책임이 코드에 유지되는지 확인한다.
 
 ### 업무 의미의 경계를 정하기
 
-취소와 환불의 규칙을 구분하려면 각 업무 모델의 책임 범위도 정해야 한다.
+공통 언어를 만들 때는 그 말이 통하는 범위도 정해야 한다. 주문의 ‘완료’와 결제의 ‘완료’처럼 같은 단어가 다른 기준을 뜻할 수 있기 때문이다.
 
 **바운디드 컨텍스트(BC, Bounded Context)는 한 업무 모델의 용어와 규칙이 일관된 뜻을 갖는 범위**다. 주문과 결제의 경계를 나누고, 각 BC 안에서는 업무에서 쓰는 의미와 실제 구현의 의미를 맞춘다.
 

@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 22:47:47 +0900
+last_modified_at: 2026-11-13 23:11:17 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -41,46 +41,39 @@ Connect a Context Layer Service that maintains business rules and boundaries wit
 
 ### When technical structure changes the business process
 
-Suppose the business rule is: “Refund orders canceled before shipping, and mark the refund complete when the return of funds is confirmed.” A layered architecture can separate request handling (Controller), coordination (Service), and data storage (Repository).
+Business processes are described through the goals, conditions, and responsibilities of customers and business teams. To turn them into software, developers translate the work into methods, data structures, and service calls. This introduces **a layer of developer interpretation and technical design** between the business and its code.
 
-Problems arise if deadlines, shared-code reuse, and an existing database schema take priority: cancellation and refund are collapsed into one “done” state, while the actual refund is deferred to a batch job. The code has finished updating a status, but the business has not yet finished returning the customer's money.
+That interpretation is shaped by the team's domain understanding, skills, familiar terminology and programming languages, existing systems, and implementation environment. When technical structure is chosen without a shared business model to preserve, concepts and responsibilities may be regrouped, and important conditions or exceptions may disappear from the code.
+
+For example, “refund approval” includes who may decide to return money and under which conditions. If that decision is spread across UI checks, a generic status-update service, and database writes, understanding how the original process is implemented requires reconstructing its business meaning from those technical pieces.
+
+DDD reduces this gap by having business experts and developers establish **a shared language with consistent meanings—Ubiquitous Language**, use it to build a business model, and keep design and code aligned with that model. The concept and conditions of “refund approval” retain the same meaning in business discussions, models, and code.
 
 {% raw %}
 ```mermaid
 flowchart TB
-  subgraph B["Business process"]
-    direction LR
-    B1["Cancel before shipping"] --> B2["Issue refund"] --> B3["Confirm returned funds<br/>Refund complete"]
+  B["Business process<br/>Goals · conditions · roles"]
+  subgraph T["Developer interpretation"]
+    E["Team knowledge · skills<br/>Terms · language · environment"] --> D["Developer's design"]
+    D --> C["Technical model / code<br/>Meaning lost or changed"]
   end
-  subgraph T["Technical convenience first"]
-    direction TB
-    T1["Controller<br/>Check shipping state"] --> T2["Shared Service<br/>updateStatus(9)"]
-    T2 --> T3["Repository<br/>9 = cancellation done<br/>and refund done"]
-    T3 --> T4["RefundBatch<br/>Return funds later"]
+  subgraph S["DDD's approach"]
+    M["Experts + developers<br/>Shared language and model"] --> N["Technical implementation<br/>Business meaning preserved"]
   end
-  subgraph D["Software Factory implementation"]
-    direction TB
-    D1["Order.cancel()<br/>Check cancellation rules"] --> D2["Refund.request()<br/>Refund in progress"]
-    D2 --> D3["Refund.complete()<br/>Confirm returned funds"]
-  end
-  B -.->|"Technical structure first"| T
-  B -.->|"Model the business rules"| D
-  classDef mismatch fill:#fde8e8,stroke:#b52d36,color:#821d25
+  B -->|"For implementation"| D
+  B -->|"Model together"| M
+  classDef drift fill:#fff1df,stroke:#af731b,color:#65410b
   classDef aligned fill:#e9f6ec,stroke:#3c7754,color:#23452b
-  class T3 mismatch
-  class D3 aligned
+  class C drift
+  class M,N aligned
 ```
 {% endraw %}
 
-Changing the “refund completed” rule in this structure requires piecing it together from Controller checks, Service updates, database values, and batch timing.
-
-The Software Factory must read the agreed business model and implement and verify cancellation confirmation separately from refund completion. `Refund.complete()` must use confirmation of returned funds as its completion criterion; updating a shared status value is not sufficient.
-
-A layered architecture can still **give the domain model responsibility for business meaning and rules, while APIs, databases, and batch jobs perform the technical work needed to carry out its decisions**. Clear ownership of the business criteria helps preserve their meaning when implementation technology changes.
+Developers still choose implementations suited to their language and execution environment, using the model agreed with business experts to check that concepts, conditions, and responsibilities remain intact in code.
 
 ### Defining boundaries of business meaning
 
-Keeping cancellation and refund rules distinct also requires defining each business model's scope of responsibility.
+A shared language also needs a defined scope. The same word, such as “complete,” can refer to different criteria in ordering and payments.
 
 **A bounded context (BC) is the scope within which a business model's terms and rules have consistent meanings.** Ordering and payments have separate boundaries, with business meaning and implementation kept aligned inside each.
 
