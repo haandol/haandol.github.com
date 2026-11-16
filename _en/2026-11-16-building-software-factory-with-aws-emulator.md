@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Building a Software Factory with Lessons from AWS Emulator — A Runbook Starting at L2"
+title: "Building a Software Factory: Lessons from AWS Emulator"
 excerpt: A practical runbook for building software factories incrementally
 author: haandol
 email: ldg55d@gmail.com

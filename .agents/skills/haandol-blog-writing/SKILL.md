@@ -7,6 +7,8 @@ description: State and preserve the whole article's intent before writing or rev
 
 Read the repository `AGENTS.md` before editing. Preserve its front matter, title, TL;DR, file, image, and Jekyll conventions.
 
+Write concise Korean and English post titles without em dashes (`—`). Put supporting detail in the excerpt or body rather than appending a long subtitle.
+
 ## Workflow
 
 1. Read the entire target post, its saved intent, and the user's request. Before editing, complete **State The Whole Intent Before Editing** below. Identify which claims are observations, inferences, or proposals. For review-only requests, use [haandol-blog-review](../haandol-blog-review/SKILL.md) in report-only mode.

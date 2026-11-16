@@ -61,7 +61,7 @@ bundle exec jekyll serve --watch
 
 ### Post Lint
 
-Deterministic checks that need no judgment (TL;DR bullet cap, Mermaid `{% raw %}` wrapping,
+Deterministic checks that need no judgment (no em dashes in titles, TL;DR bullet cap, Mermaid `{% raw %}` wrapping,
 fence balance, internal link form, footnote refs vs definitions, front matter, image existence):
 
 ```bash
@@ -142,7 +142,7 @@ publish: true
 
 - Write a **hook-oriented** title aimed at the reader who actually wants to *do* the thing — not a textbook summary. Lead with the concrete payoff or the question the reader is asking ("그래서 실제로는 어떻게?").
 - **Do NOT end titles with the declarative "~이다" copula style.** Older posts avoided it; keep titles noun- or gerund-ending (e.g. "...하기", "...과정", "...정리") or a short phrase.
-- A subtitle after an em dash (`—`) is welcome to add the practical angle (e.g. "EncBird에 하네스를 한 겹씩 씌워온 과정 — 실전 하네스 엔지니어링").
+- Keep Korean and English titles concise and do not use em dashes (`—`). Put supporting detail in the excerpt or body instead of adding a long subtitle.
 - Ground the title in a concrete project/case when the post is a hands-on walkthrough (real service names like EncBird, PixelBank are fine to expose).
 
 ### Post Structure Pattern

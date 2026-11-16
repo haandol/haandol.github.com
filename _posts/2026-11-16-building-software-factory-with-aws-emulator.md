@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "AWS Emulator로 배우는 Software Factory 구축 — L2에서 시작하는 런북"
+title: "AWS Emulator로 배우는 소프트웨어 팩토리 구축"
 excerpt: A practical runbook for building software factories incrementally
 author: haandol
 email: ldg55d@gmail.com

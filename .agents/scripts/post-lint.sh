@@ -86,6 +86,10 @@ for f in "${files[@]}"; do
     fi
   fi
 
+  # Post titles must not contain em dashes; body punctuation is unrestricted.
+  post_title=$(front_matter_value "$f" title)
+  [[ "$post_title" == *"—"* ]] && report "$f" "title must not contain an em dash (—)"
+
   # TL;DR: at most 3 bullets
   n=$(awk '/^## TL;DR/{f=1;next} /^## /{f=0} f&&/^- /{c++} END{print c+0}' "$f")
   [ "$n" -gt 3 ] && report "$f" "TL;DR has $n bullets (max 3)"
