@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Why Enterprise AX Needs Reusable Solutions and Business Models"
+title: "The Two Sides of AX, Part 1: Business Automation"
 excerpt: Building enterprise AX on reusable solutions and business models
 author: haandol
 email: ldg55d@gmail.com
@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-13 23:54:41 +0900
+last_modified_at: 2026-11-17 14:42:26 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -23,17 +23,17 @@ permalink: /en/2026/11/05/enterprise-wide-ax-essentials.html
 
 ## Introduction
 
-AX (Agentic Transformation)—moving business work to agent-based systems—requires data connections, access controls, business knowledge, evaluation, and ongoing operations. When each team builds these capabilities from scratch, it repeats the setup work, and later changes can remain dependent on the technical specialists who built the first version.
+AX (Agentic Transformation), moving work to agent-based systems, has two aspects. One is adopting agents to automate business work. The other is adopting agentic engineering in development teams: carrying out design, coding, testing, and revision with agents.
+
+Most current AX discussions focus on automating work done by people outside software development. The aim is to connect internal and external business information and rules to improve internal workflows. This first article in the series examines what business experts need to change their own work through agents and verify the results. [Part 2](/en/2026/11/17/software-factory-team-tooling-runbook.html) covers the adoption of agentic engineering in development teams.
+
+This business automation requires data connections, access controls, business knowledge, evaluation, and ongoing operations. When each team builds these capabilities from scratch, it repeats the setup work, and later changes can remain dependent on the technical specialists who built the first version.
 
 **Enterprise AX should be built by providing and connecting reusable solutions at each stage.** Establish solutions for shared knowledge, process analysis, requirements, business automation, and software development, then configure the customer's business rules and processes on that foundation.
 
 The solutions need to own change analysis, requirements updates, implementation, and verification so business requests can become operational changes without waiting for manual development.
 
-In traditional software development, business processes were often recast to fit resource limits or technologies and structures familiar to the development team. If this changed their meaning or flow, business teams discussed the original work while developers answered in terms of the implemented system. Different interpretations of the same work made recurring conflicts likely.
-
-Reducing this conflict requires the business language and rules agreed by business and development teams to remain intact in the implementation. **Keeping business models and implementation aligned in meaning**, a core principle of DDD (Domain-Driven Design), fits AX's aim of connecting business experts' intent to agent execution.
-
-Agent-based business automation and self-improving agents can help put this model into practice and maintain it. When a domain expert who understands the rules and exceptions recognizes a business change and requests an update, agents should revise the workflow against the same business model. A Software Factory is the software development solution that carries the necessary code through implementation, verification, and delivery.
+Business experts' intent must retain the same meaning in the implementation. This is why **keeping business models and implementation aligned in meaning**, a core principle of DDD (Domain-Driven Design), matters here. Business agents should revise workflows against this model, with a Software Factory providing the development capability to implement, verify, and deliver any necessary code.
 
 ## 1. Business meaning and bounded contexts
 
@@ -53,7 +53,7 @@ DDD reduces this gap by having business experts and developers establish **a sha
 ```mermaid
 flowchart TB
   B["Business process<br/>Goals · conditions · roles"]
-  subgraph T["Developer interpretation"]
+  subgraph T["Implementation relying on developer interpretation"]
     E["Team knowledge · skills<br/>Terms · language · environment"] --> D["Developer's design"]
     D --> C["Technical model / code<br/>Meaning lost or changed"]
   end
@@ -194,9 +194,27 @@ These capabilities work together. Graph traversal provides a way to follow conne
 
 **Business agents** primarily need business knowledge and rules. To handle a refund request, they must read customer and order state, approval conditions, processing steps, and exceptions to determine which actions the business permits.
 
-**Coding agents** need those same business criteria plus the knowledge required to implement them. They need to know which project's repositories to change, how applications connect through APIs and events, and which contracts and tests must hold.
+**Coding agents** read those same business criteria alongside product plans, internal code and designs, external library and API documentation, tests, and execution records. They decide which repository to change, what to reuse, and how existing features relate, then produce code that will be delivered to end users. They must retrieve and reconcile a much wider range of information than typical business automation requires.
 
-Both types of agents should share business concepts and rules while retrieving the scope relevant to their work. Business agents may need application relationships, and coding agents must also consult the ontology for business meaning.
+A business agent handling a refund checks whether it processed that request correctly through the available tools. A coding agent changing the refund feature must verify that the revised code satisfies the new conditions without breaking existing refunds. Even with unchanged business rules, code and dependencies change, so development automation's context and verification targets change more frequently. **Agentic engineering must produce code that works reliably through these changes.**
+
+The tools differ as well. Business agents need tools to retrieve business information and carry out the work. Coding agents need code search, editing, builds, tests, and execution-record access. They share business criteria, while their environments must support their respective outputs and verification needs.
+
+{% raw %}
+```mermaid
+%%{init: {"flowchart": {"useMaxWidth": false, "rankSpacing": 32, "nodeSpacing": 28}}}%%
+flowchart TB
+    B["Internal and external business information<br/>Business rules"]
+    K["Plans, designs, internal and external code<br/>Libraries, tests, execution records"]
+    B --> A["Business agent<br/>Information and workflow tools"]
+    B --> D["Coding agent<br/>Search, edit, build, test"]
+    K --> D
+    A --> O["Process requests and improve workflows"]
+    O --> V["Verify the business outcome"]
+    D --> C["Code delivered to end users"]
+    C --> T["Verify new conditions and existing behavior"]
+```
+{% endraw %}
 
 The Context Layer Solution manages ownership, provenance, versions, and permitted use, applying role- and business-scope access controls before retrieval. Business teams decide the meaning and permitted use of rules; platform teams ensure those decisions govern actual access by agents and external solutions.
 
@@ -283,6 +301,8 @@ Self-improving agents use execution and review findings to change the order of s
 The Software Factory reads business models, implementation contracts, and repository and application relationships to produce code, tools, and tests. It integrates them for use by the business agent solution and returns **evidence of which business conditions were implemented and what was verified**.
 
 [Software Factory evaluations](/en/2026/10/05/software-factory-evals-and-tension-metrics.html) must check business conditions as well as code generation. The solution must own implementation, verification, and integration so subsequent business changes can proceed without waiting for manual development work.
+
+An ordinary team needs to build this connection incrementally. Developers initially retain implementation decisions and result verification, then automate work that has been verified repeatedly. Here, a Software Factory is the direction for developing the capability that supplies implementations to business automation; the development team's tools and verification environment must be prepared alongside it.
 
 ## 5. Solutions that turn operational results into improvements
 
