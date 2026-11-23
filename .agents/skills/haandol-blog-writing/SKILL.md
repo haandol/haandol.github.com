@@ -7,7 +7,7 @@ description: State and preserve the whole article's intent before writing or rev
 
 Read the repository `AGENTS.md` before editing. Preserve its front matter, title, TL;DR, file, image, and Jekyll conventions.
 
-Write concise Korean and English post titles without em dashes (`—`). Put supporting detail in the excerpt or body rather than appending a long subtitle.
+Apply the repository's [title conventions](../../../AGENTS.md#title) to every Korean and English post title, including translations and suggestions in chat. Identify the reader's search intent, then name the article's subject or finding in a concise noun phrase or declarative statement. Never use interrogative titles. Rewrite “코딩 에이전트는 개발 방식을 어떻게 바꿨나?” as “코딩 에이전트가 바꾼 개발 방식”. Removing the question mark alone leaves the question intact. Use familiar search terms, introduce author-coined acronyms in the body, and avoid em dashes in titles.
 
 ## Workflow
 

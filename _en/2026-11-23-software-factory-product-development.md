@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "What Should a Software Factory Handle in Product Development?"
-excerpt: What a software factory can plan, build, and verify
+title: "Coding Agents and Software Factories Are Changing Product Development"
+excerpt: Agents plan the work, and product outcomes guide the next change
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent software-factory agentic-engineering ax alps rftcr rlo evaluation
 publish: true
 published: true
 date: 2026-11-23 11:37:21 +0900
-last_modified_at: 2026-11-23 11:37:21 +0900
+last_modified_at: 2026-11-23 12:37:44 +0900
 lang: en
 translation_key: software-factory-product-development
 korean_url: /2026/11/23/software-factory-product-development.html

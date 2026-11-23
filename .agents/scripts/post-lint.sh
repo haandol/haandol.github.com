@@ -86,9 +86,12 @@ for f in "${files[@]}"; do
     fi
   fi
 
-  # Post titles must not contain em dashes; body punctuation is unrestricted.
+  # Check title punctuation here. The editorial review judges SEO keyword choice in context.
   post_title=$(front_matter_value "$f" title)
   [[ "$post_title" == *"—"* ]] && report "$f" "title must not contain an em dash (—)"
+  case "$post_title" in
+    *'?'|*'？') report "$f" "rewrite the question title as a statement or noun phrase" ;;
+  esac
 
   # TL;DR: at most 3 bullets
   n=$(awk '/^## TL;DR/{f=1;next} /^## /{f=0} f&&/^- /{c++} END{print c+0}' "$f")

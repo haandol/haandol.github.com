@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "소프트웨어 팩토리에 제품 기획과 개발을 어디까지 맡길까?"
-excerpt: What a software factory can plan, build, and verify
+title: "코딩 에이전트와 소프트웨어 팩토리가 바꾼 개발 방식"
+excerpt: Agents plan the work, and product outcomes guide the next change
 author: haandol
 email: ldg55d@gmail.com
 tags: ai agent software-factory agentic-engineering ax alps rftcr rlo evaluation
 publish: true
 published: true
 date: 2026-11-23 11:37:21 +0900
-last_modified_at: 2026-11-23 11:37:21 +0900
+last_modified_at: 2026-11-23 12:37:44 +0900
 lang: ko
 translation_key: software-factory-product-development
 english_url: /en/2026/11/23/software-factory-product-development.html
