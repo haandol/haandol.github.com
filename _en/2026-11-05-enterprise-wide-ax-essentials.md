@@ -8,7 +8,7 @@ tags: ai agent ax ddd platform organization software-factory knowledge harness-e
 publish: true
 published: true
 date: 2026-11-05 14:30:00 +0900
-last_modified_at: 2026-11-17 14:42:26 +0900
+last_modified_at: 2026-11-23 14:27:34 +0900
 lang: en
 translation_key: enterprise-wide-ax-essentials
 korean_url: /2026/11/05/enterprise-wide-ax-essentials.html
@@ -31,7 +31,7 @@ This business automation requires data connections, access controls, business kn
 
 **Enterprise AX should be built by providing and connecting reusable solutions at each stage.** Establish solutions for shared knowledge, process analysis, requirements, business automation, and software development, then configure the customer's business rules and processes on that foundation.
 
-The solutions need to own change analysis, requirements updates, implementation, and verification so business requests can become operational changes without waiting for manual development.
+For example, a refund code change may take minutes, yet a policy change still takes time from two teams if someone has to rewrite finance’s approval rules in a specification and the order team checks test orders one by one. Capturing the new conditions together with examples lets the solutions carry the change through implementation and verification.
 
 Business experts' intent must retain the same meaning in the implementation. This is why **keeping business models and implementation aligned in meaning**, a core principle of DDD (Domain-Driven Design), matters here. Business agents should revise workflows against this model, with a Software Factory providing the development capability to implement, verify, and deliver any necessary code.
 
@@ -146,7 +146,11 @@ Its partner guidance identifies a reusable **harness** of business knowledge, to
 
 Palantir provides Foundry for data and business models, AIP for agents and AI workflows, and Apollo for deployment and infrastructure. FDEs work with customers to build capabilities on this foundation.[^3] The Ontology at its center connects business objects and relationships with actions and functions, carrying business meaning into executable logic.[^4]
 
-The common pattern is **combining a reusable technical foundation with each customer's business model**. Using shared capabilities still requires a design that preserves the meaning of customer-specific rules in both the model and implementation.
+### Choosing who runs the shared solution
+
+Two business units with different refund policies can share order lookup, access checks, and execution logs. If each unit can configure its approval rules and exceptions in a managed solution, it makes sense to let the provider run it. If someone still has to check a missing condition before every payout, there is a reason to extend a shared solution to handle that condition.
+
+Extending the solution requires a team willing to develop and operate it after handover. The team maintaining the shared solution supplies releases, security patches, and baseline checks. The adopting team connects its order system and approval rules, then runs its own checks when it upgrades. If several teams need the same connector, the maintainers can add it to the shared solution. Each business unit decides its own approval rules.
 
 ## 3. Shared knowledge for business and coding agents
 
@@ -265,7 +269,7 @@ sequenceDiagram
   participant A as Agent solution
   participant F as Software Factory
   O->>P: Change and success criteria
-  P->>R: Current and target processes
+  P->>R: Target process and evidence
   R->>A: Conditions, exceptions, test cases
   A->>A: Configure workflow
   opt Implementation needed
@@ -282,19 +286,19 @@ sequenceDiagram
 
 The process analysis solution uses shared knowledge and business-expert explanations to describe the current process (As-Is) and design the target process for agents (To-Be). It gathers events, rules, exceptions, and responsibilities, as in agent storming or [Event Storming](/2020/12/10/demystifying-event-storming.html) (Korean), and proposes what to automate and which connections to change.
 
-For refunds, it analyzes how support intake, order-team shipping checks, and finance approval connect. Experts decide the conditions and authority for agents to act and the exceptions people retain. The result becomes input to the requirements management solution.
+For refunds, trace a case from support intake through the order team’s shipping check to finance approval, linking each step to the record that supports it. If the manual requires finance approval but the records name no approver, flag the gap for the people who do the work. Experts use that evidence to decide when an agent can act and which exceptions need human judgment.
 
 ### Requirements management solution: defining change and verification criteria
 
 Given “Refund orders canceled before shipping without separate approval,” the requirements management solution checks the shared meanings of shipping, cancellation, approval, and refund. It defines the necessary data, inputs and outputs, allowed conditions, exceptions, and cases with expected results, then passes them to execution and development solutions.
 
-Experts judge business meaning and success criteria. The solution maintains those decisions as implementation contracts and verification cases, updating affected requirements and cases when the business criteria change.
+If the support screen also changes, review the specification and its working prototype together as one version. A support specialist can try one order canceled before shipping and one canceled afterward to confirm which qualifies for an automatic refund. The same two cases can guide development and verification.
 
 ### Business agent solution: configuring, executing, observing, and improving work
 
 The business agent solution connects agents, tools, and permissions into workflows that satisfy the requirements. It executes them, checks inputs, outputs, business rules, failure handling, and results, and records execution. Missing capabilities are requested from the Software Factory with their business criteria.
 
-Self-improving agents use execution and review findings to change the order of steps, revise instructions, and adjust tool use, then verify the changes. The solution needs this capability to turn operational findings into improvements to subsequent runs.
+Self-improving agents use execution and review findings to change the order of steps, revise instructions, and adjust tool use, then verify the changes. A decision that consistently gives the same result for the same inputs can move into code. For instance, a check can block a second payout when a refund request arrives twice. Verify it with the same duplicate-request cases used to evaluate the agent.
 
 ### Software Factory: implementing and integrating missing capabilities
 
@@ -344,9 +348,9 @@ If the common platform team builds every business-specific feature, growing dema
 
 ### Checking with one business change
 
-Use an actual business change to check whether the system can handle it without technical specialists reinterpreting the request. When a refund policy changes, check whether the domain expert can request the new conditions in business terms and verify the system's changes through business scenarios.
+A pilot should test whether the business team can handle the next change itself. First record how long a comparable refund policy change takes today, who intervenes, and how often. During setup, the FDE and the adopting team verify a change together. For the next policy change, the domain expert requests it in business terms and checks the result produced by the solutions. The adopting team also practices finding a failed run and correcting the issue or rolling back the change.
 
-Include the time experts spend explaining and checking results alongside processing time, failures, and rework. If every change still requires an FDE or developer to reinterpret the request, some execution may have been automated while the dependency for changes and maintenance remains.
+Compare the time from agreement on requirements to the first test run, the time experts spend explaining and checking the change, and errors in existing refund scenarios. If coding takes less time but approval queues or rework grow, those stages are where to look next.
 
 ## Conclusion
 
