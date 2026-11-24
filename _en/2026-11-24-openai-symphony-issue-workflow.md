@@ -8,7 +8,7 @@ tags: openai symphony codex software-factory agentic-engineering
 publish: true
 published: true
 date: 2026-11-24 17:36:13 +0900
-last_modified_at: 2026-11-24 17:36:13 +0900
+last_modified_at: 2026-11-25 08:28:54 +0900
 lang: en
 translation_key: openai-symphony-issue-workflow
 korean_url: /2026/11/24/openai-symphony-issue-workflow.html
@@ -37,13 +37,13 @@ The first version was a single Codex session running inside `tmux`, a tool that 
 
 At an internal demo, the team showed agents handling work and attaching a video of the finished feature in action to its ticket. The project channel grew, and other teams started using the system on their own. That adoption convinced the team to share Symphony outside OpenAI.[^1]
 
-The team removed dependencies on its internal repository and described the core behavior in a standalone **specification**, `SPEC.md`. They gave that document to Codex and asked it to build the service in Elixir. That program is the **reference implementation** available in the public repository.[^1]
+The team removed dependencies on its internal repository and described the core behavior in a standalone **specification**, `SPEC.md`. They gave that document to Codex and asked it to build the service in Elixir. That program is the **reference implementation** available in the public repository. Other teams can use the same specification to build a service suited to their own environment.[^1]
 
 ## 2. One long-running service, one Codex session per active job
 
-Symphony reads the work a team has assigned and its current status from an **issue tracker** such as Linear or GitHub Issues. The team specifies how many jobs can run at once and what the agent should do in a repository file called **`WORKFLOW.md`**. The service reads the file at the path selected at startup and validates the settings.[^4]
+Symphony reads the work a team has assigned and its current status from an **issue tracker** such as Linear or GitHub Issues. The team specifies how many jobs can run at once and what the agent should do in a repository file called **`WORKFLOW.md`**. At startup, the workflow loader reads this file and separates the settings at the top from the prompt template below. The service validates the settings before polling the board.[^4]
 
-Inside the service, the **orchestrator** decides what to start and stop. A tracker adapter translates each provider’s issues into a common format. When the orchestrator assigns work, an **agent runner** prepares the workspace and starts a conversation with Codex there. Give it two jobs at the same time and two Codex sessions follow the same team rules, each editing files in its own directory.[^4][^6]
+Inside the service, the **orchestrator** decides what to start and stop. A tracker adapter translates each provider’s issues into a common format. When the orchestrator assigns work, an **agent runner** asks the workspace manager for that issue’s directory and starts a conversation with Codex there. Give it two jobs at the same time and two Codex sessions follow the same team rules, each editing files in its own directory.[^4][^6]
 
 {% raw %}
 ```mermaid
@@ -81,39 +81,79 @@ You are working on a Linear ticket `{{ issue.identifier }}`
 ```
 {% endraw %}
 
-The runner fills in the issue identifier on the last line before sending it to Codex. It also includes the title, current state, and description from the tracker in the same prompt, so Codex knows what behavior to change. The rest of the prompt tells the agent to reproduce the problem, keep the plan and check results in a single issue comment, and open a pull request (PR). After running the checks and addressing the review feedback, Codex moves the issue to `Human Review`.[^5]
+The runner fills in the issue identifier on the last line. The first request also includes the title, current state, and description from the tracker. In the example workflow, Codex moves a new `Todo` issue to `In Progress` and creates or opens **one issue comment called the Codex Workpad**. It keeps the plan, acceptance criteria, and checks in that comment, updating it as work progresses. Any test plan specified on the issue goes on the checklist.[^5]
 
-**`Human Review` is absent from the list of active states.** When Codex follows the prompt and moves the issue there, the orchestrator stops the run. If a reviewer requests changes and moves the issue to `Rework`, Codex can pick it up again. If the reviewer approves the merge and selects `Merging`, Codex follows the merge procedure for that state.
+Codex links its pull request (PR) to the issue, checks the results for the latest commit, and reads the review feedback. If a comment calls for a change, Codex makes it and runs the checks again. Once that work is complete, it moves the issue to `Human Review`. **That state is missing from the active list above**, so the orchestrator stops the run while a person reviews the result.[^5]
+
+Approval moves the issue to `Merging`, making it eligible again. The example tells Codex to follow the team’s merge procedure and move the issue to `Done` once the PR has landed. A request for changes that sends the issue to `Rework` has a different effect. This particular workflow tells Codex to reread the issue and feedback, then close the old PR. It starts a fresh branch from the latest `main` and writes a new Workpad comment on the issue with a revised plan. The team gets to decide how much work a review decision reopens.[^5]
 
 ## 4. Running sessions in parallel and recovering interrupted work
 
-The Elixir `Orchestrator` maintains one in-memory record of its scheduling decisions. On each poll, it checks running jobs against the tracker before assigning new work to free slots. Among jobs of equal priority, it takes the oldest first. A job that is running or waiting for a retry is already claimed, so a second runner can’t pick it up. The specification’s default polling interval is 30 seconds. OpenAI’s example workflow sets it to five.[^4][^5][^6]
+### Choosing what can start
 
-Once assigned, the runner creates or reopens the directory for the job’s identifier. The team supplies an `after_create` hook, a command to run when a directory is first created, if it wants to populate that directory. OpenAI’s example uses the hook to clone the Symphony repository itself. Commands that need to run before every attempt go in `before_run`. With the directory ready, the runner launches `codex app-server`, the mode that lets Symphony send requests and receive responses and execution events from Codex.[^5][^6]
+On each poll, the orchestrator checks running jobs against the tracker first. It stops jobs that have become ineligible and leaves the others running. Then it considers candidates with the required state and labels in priority order, oldest first within a priority. It skips jobs already running or reserved for a retry, and starts a runner only when the overall limit and the limit for that state both allow it. The specification defaults to a 30-second polling interval. OpenAI’s full example `WORKFLOW.md` sets it to five seconds.[^4][^5][^6]
 
-When a test fails, **Codex** reads the output. It can find where the code diverges from the expected behavior, edit it, and rerun the check. When Codex finishes a turn, the runner decides whether to continue the conversation. When the runner itself exits, **the orchestrator** checks the exit reason and the last session event to decide whether to retry.[^4][^6][^8]
+A free slot alone may not be enough. OpenAI’s team recorded in Linear that a React upgrade depended on a Vite migration. The Elixir Linear adapter marks a `Todo` issue as ineligible while a prerequisite is still open. The orchestrator can skip the upgrade and assign other work that can already start.[^1][^11]
+
+### While Codex is editing the code
+
+The runner creates or reopens a directory named for the issue. If two jobs edit the same file, their separate copies let each agent test its own changes without picking up the other agent’s unfinished edits. The `after_create` hook runs only when a directory is new. OpenAI’s example uses it to clone the Symphony repository. Setup that must also run on later attempts in the same directory belongs in `before_run`. Separate sandbox settings control where Codex can write outside that directory and what network access it has.[^5][^6]
+
+The runner launches `codex app-server` in that directory. The Elixir implementation initializes the connection, opens a conversation with `thread/start`, and sends the issue details and team instructions with `turn/start`. The work Codex does between that request and its response is one **turn**.[^12]
+
+{% raw %}
+```mermaid
+sequenceDiagram
+    participant T as Project board
+    participant R as Runner
+    participant C as Codex
+    R->>C: Open a thread in the workspace and send the first request
+    C->>C: Read the code and tests, then make the change
+    C->>C: Fix failing checks and run them again
+    C->>T: Record progress and evidence via the tracker tool
+    C-->>R: Turn completed
+    R->>T: Refresh state and eligibility
+    alt Still eligible and below the turn limit
+        R->>C: Start the next turn in the same thread
+    else Awaiting review or turn limit reached
+        R->>C: End the session
+    end
+```
+{% endraw %}
+
+When a check fails, **Codex** reads the output and chooses what to fix. It can edit and test several times within a turn. Meanwhile, the runner forwards progress events to the orchestrator. **After the turn, the runner reads the tracker again.** If the issue still calls for work, the runner can ask Codex to continue in the same thread without resending the entire first prompt. The default limit is 20 turns per run.[^4][^6][^12]
+
+### What survives an interruption
+
+When the runner itself exits, the orchestrator checks the reason and the last session event. A process can also be alive but stalled. If the time since the last Codex event exceeds the configured timeout (five minutes by default), the orchestrator stops the worker. It marks the job as blocked if the session was waiting for input or approval. Otherwise, it schedules a retry.[^4][^6]
 
 | What finished | How Symphony continues |
 | --- | --- |
-| Codex finished working on one request and responded | If the work is still eligible and there are turns left, the runner sends the next request in the same conversation. One such request and response is a turn. |
+| Codex finished working on one request and responded | If the work is still eligible and there are turns left, the runner sends the next request in the same conversation. The thread still holds the earlier requests and check results. |
 | The runner exited normally with no outstanding request for input or approval | Symphony checks the issue one second later. If it is still eligible and a slot is free, a **new session** opens in the same directory. |
 | An execution error stopped the runner | Unless the run is waiting for a person to respond, Symphony schedules a retry. Successive failures increase the delay, starting at 10, 20, and 40 seconds. |
 | The runner exited with a recorded request for input or approval | The orchestrator records the reason and marks the job as blocked. It does not start a retry timer for that job. |
 | The Symphony service restarted | In-memory sessions and timers don’t carry over. The service reads the tracker, cleans up workspaces for terminal issues, and can start eligible jobs again in their surviving directories. |
 
-To investigate a stalled job, an operator can follow its issue and session identifiers through the logs. The reference implementation also shows the latest event and token usage for active sessions and which jobs are waiting for a retry.[^6][^8]
+A fresh session doesn’t inherit the previous conversation. In the example workflow, Codex checks **the remaining items in the Workpad, the changes in the workspace, and any PR already linked to the issue**. If a session was interrupted just after opening a PR, the next one checks that PR’s status first. The board and the files preserve progress. The next session still has to inspect them to see which actions actually succeeded. Operators can use the issue and session identifiers in the logs to find the last event and the reason for a retry.[^5][^6][^8]
 
 ## 5. What Symphony would do in EncBird
 
 In EncBird, the English-learning app I develop, verified changes are first integrated into the primary checkout’s local `main` branch. Pushing them to the remote repository or deploying the app requires a separate request.
 
-Suppose EncBird adopted Symphony and a learner filed GitHub issue 600 asking to rename a saved English conversation practice session. The GitHub adapter recognizes open and closed issues, so this team could make open issues with a `symphony` label eligible for work. The team could use `after_create` to clone the local `main` from EncBird’s primary repository into `GH-600` and create a working branch. The runner would start Codex in that directory with the latest local code, including changes that haven’t been pushed.[^9]
+Suppose EncBird adopted Symphony and GitHub issue 600 requested a **weekly learning report**. The issue could say, “Show total study time for the last seven days, the five expressions the learner most often got wrong, and expressions to practice next week. All three must be readable on mobile.” Suppose the team also asks Codex to copy these criteria into its Workpad checklist.
 
-The reviewer would inspect **a local commit in the workspace**. The prompt would tell Codex to run the web app’s type checks, tests, and build, then record the results and commit ID on the issue. As its last action, Codex would replace `symphony` with `human-review`. The job would become ineligible, and the directory would remain. The reviewer could inspect the code there, leave a comment, and switch the labels back to request changes. On approval, they would integrate the change into the primary checkout outside `GH-600` before closing the issue, since Symphony cleans up workspaces for terminal issues.[^4][^9]
+EncBird could make open issues with the `symphony` label eligible for work. If a slot is free at the next poll, the runner prepares a directory called `GH-600`. An `after_create` hook could clone the local `main` from EncBird’s primary repository into it and create a working branch. The agent would get changes on local `main` even if they hadn’t been pushed yet.[^9]
+
+Three study records are enough to catch a one-day error in that total. Give the learner 20 minutes of study today, 10 minutes six days ago, and five minutes seven days ago. A seven-day report that includes today should show 30 minutes. If it shows 35, Codex fixes the date filter and reruns the same check. Suppose the sum now passes but the session stops before the mobile check. With “seven-day total verified, mobile check pending” in the Workpad and the edited files in the workspace, the next session can compare the note with the current code and pick up the remaining check.
+
+The team reviews a local commit in the workspace. Once Codex has checked the weekly total, the lists of expressions, and the mobile screen, it records the web app’s type-check, test, and build results plus the commit ID on the issue. **Its last action** is to replace `symphony` with `human-review`. Removing the required label earlier could let the next poll stop the runner before it saved the commit or recorded the checks.[^4][^9]
+
+To request changes, the reviewer leaves a comment and switches the labels back. A new session can read the feedback and continue with the code in the same directory. On approval, the reviewer integrates the changes into the primary checkout outside `GH-600` before closing the issue, since Symphony cleans up workspaces for terminal issues.[^4][^9]
 
 ## 6. When Symphony picks up a new team rule
 
-If the reviewer keeps asking “Is the new title still there when you reopen the screen?”, the team could add that check to `WORKFLOW.md` and ask the agent to record the result. An agent can prepare that change and send it for review too.
+If the reviewer keeps asking “Did you include a record just outside the seven-day window?”, the team could add an instruction to `WORKFLOW.md` to check the date boundaries and record the results whenever the report changes. An agent can prepare that change and send it for review too.
 
 Codex edits the file in its workspace. Symphony reads **the file at the path selected at startup**. In the EncBird example, if that path points to `WORKFLOW.md` in the primary checkout, merging the reviewed change into the local `main` branch updates the file Symphony reads. A team that deploys through a remote repository to a separate server would merge into the remote `main` branch and then update the checkout on the server.[^10]
 
@@ -145,3 +185,5 @@ What stood out to me in OpenAI’s account was how the team’s product manager 
 [^8]: OpenAI Symphony. [Runtime logs and observability](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/SPEC.md#13-logging-status-and-observability), [Recovery after a restart](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/SPEC.md#143-partial-state-recovery-restart)
 [^9]: OpenAI Symphony. [GitHub Issues adapter](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/github/adapter.ex), [Issue identifiers and labels](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/github/client.ex)
 [^10]: OpenAI Symphony. [Workflow path](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/SPEC.md#51-file-discovery-and-path-resolution), [Dynamic reload](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/SPEC.md#62-dynamic-reload-semantics), [WorkflowStore](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/workflow_store.ex)
+[^11]: OpenAI Symphony. [Checking prerequisites in the Linear adapter](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/linear/client.ex)
+[^12]: OpenAI Symphony. [Starting sessions and continuing turns](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/SPEC.md#102-session-startup-responsibilities), [Codex App Server client](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/codex/app_server.ex)
