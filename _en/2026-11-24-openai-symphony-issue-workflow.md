@@ -8,7 +8,7 @@ tags: openai symphony codex software-factory agentic-engineering
 publish: true
 published: true
 date: 2026-11-24 17:36:13 +0900
-last_modified_at: 2026-11-25 19:09:15 +0900
+last_modified_at: 2026-11-25 19:14:57 +0900
 lang: en
 translation_key: openai-symphony-issue-workflow
 korean_url: /2026/11/24/openai-symphony-issue-workflow.html
@@ -167,6 +167,12 @@ The team reviews a local commit in the workspace. Once Codex has checked the wee
 
 To request changes, the reviewer leaves a comment and switches the labels back. A new session can read the feedback and continue with the code in the same directory. On approval, the reviewer integrates the changes into the primary checkout outside `GH-600` before closing the issue, since Symphony cleans up workspaces for terminal issues.[^4][^9]
 
+### When several teams share a board
+
+OpenAI describes the Elixir reference implementation as an evaluation prototype. In the default local setup, the daemon keeps assignments and retry state in memory, and runners launch Codex processes on the host. If two such daemons poll the same board, neither sees the other’s assignments. Both could launch a runner for the same issue.[^8][^13] One way to run jobs for several teams in the cloud is to elect one daemon at a time to assign work and scale the workers separately in per-job containers.
+
+What happens if the server is replaced just after the report passes the seven-day total check? The new daemon can find the issue on the board and assign it again. But if the edited code existed only on the old server’s temporary disk, all the new worker gets is the note saying “mobile check pending.” Keeping each issue’s workspace on a persistent volume would let the new worker mount the same directory and run the mobile check against the code that passed the total check.
+
 ## 6. When Symphony picks up a new team rule
 
 If the reviewer keeps asking “Did you include a record just outside the seven-day window?”, the team could add an instruction to `WORKFLOW.md` to check the date boundaries and record the results whenever the report changes. An agent can prepare that change and send it for review too.
@@ -201,11 +207,7 @@ In my earlier article on observability, I argued that diagnosing a failure takes
 
 ## Closing thoughts
 
-What stood out to me in OpenAI’s account was how the team’s product manager and designer use Symphony. They can request a feature on the board and receive a video showing it working in the actual product.[^1] The person who asked for the change can say “That’s what I meant” or “This part needs another pass” without having to open a Codex session.
-
-I think it would take substantial work to run this as a production service shared by several teams. OpenAI describes the Elixir reference implementation as an evaluation prototype. In the default local setup, the daemon keeps assignments and retry timers in memory, and runners launch Codex processes on the host. Imagine replacing the EncBird host just after the seven-day total passes its check. The new daemon can read the board and assign the issue again. But if the edited files were only on the old host’s ephemeral disk, the new Codex session can read “mobile check pending” in the Workpad and still have no copy of the change to test.[^8][^13]
-
-Two early design decisions in a cloud-native deployment are **who can assign each job and how a replacement worker gets its working copy**. Two daemons polling the same board with separate in-memory claim records could each launch a runner for the same issue. One option is to elect a single daemon to assign work and scale the workers separately in per-job containers. An issue-specific persistent volume would let a replacement worker mount the same workspace on another host. The new worker could open the files that passed the seven-day total check and pick up the mobile check recorded in the Workpad.
+What stayed with me was that OpenAI’s product manager and designer get a video of the feature they asked for.[^1] Running Symphony across teams would take more work, but I like that the person who requested a change can judge whether it does what they wanted without following every Codex session.
 
 [^1]: Alex Kotliarskyi, Victor Zhu, Zach Brock, OpenAI. [An open-source spec for Codex orchestration: Symphony](https://openai.com/index/open-source-codex-orchestration-symphony/), 2026-04-27.
 [^2]: [Building a Software Factory: Lessons from AWS Emulator](/en/2026/11/16/building-software-factory-with-aws-emulator.html)
