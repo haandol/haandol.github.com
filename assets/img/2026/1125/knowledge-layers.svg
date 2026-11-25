@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" xml:lang="ko" width="544" height="396" viewBox="0 0 544 396" role="img" aria-labelledby="title description" font-family="system-ui, -apple-system, BlinkMacSystemFont, Apple SD Gothic Neo, Segoe UI, sans-serif">
+  <title id="title">선환불 규칙을 구현하는 세 가지 지식 계층</title>
+  <desc id="description">위에서 아래로 업무 프로세스 온톨로지, ADR, 코드와 테스트를 배치했다. 반품 팀의 선환불 승인을 기능의 계약으로 구체화하고, 승인 기록에 따라 결제 서비스 호출을 검증한다.</desc>
+  <rect width="544" height="396" rx="10" fill="#fff"/>
+  <g transform="translate(10 8)">
+    <rect width="524" height="100" rx="9" fill="#e7f3ef"/>
+    <rect x="2" y="13" width="4" height="74" rx="2" fill="#176952"/>
+    <text x="20" y="32" font-size="21" font-weight="700" fill="#163e34">업무 프로세스 온톨로지</text>
+    <text x="504" y="32" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#176952">ontology-writer</text>
+    <text x="20" y="61" font-size="17" fill="#29353d">반품 팀이 선환불을 승인하면</text>
+    <text x="20" y="83" font-size="17" fill="#29353d">상품 회수 전에도 환불을 요청할 수 있다.</text>
+  </g>
+  <g transform="translate(0 108)">
+    <path d="M52 2V31m-5-6 5 6 5-6" fill="none" stroke="#566876" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="68" y="24" font-size="15" fill="#465966">기능이 보장할 조건으로 구체화</text>
+  </g>
+  <g transform="translate(10 147)">
+    <rect width="524" height="100" rx="9" fill="#eaf0f9"/>
+    <rect x="2" y="13" width="4" height="74" rx="2" fill="#3c6294"/>
+    <text x="20" y="32" font-size="21" font-weight="700" fill="#213d61">ADR · 설계 결정 기록</text>
+    <text x="504" y="32" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#3c6294">adr-writer</text>
+    <text x="20" y="61" font-size="17" fill="#29353d">회수 전 환불 요청은 해당 반품 건의 승인 기록이 있을 때만</text>
+    <text x="20" y="83" font-size="17" fill="#29353d">결제 서비스에 전달한다.</text>
+  </g>
+  <g transform="translate(0 247)">
+    <path d="M52 2V31m-5-6 5 6 5-6" fill="none" stroke="#566876" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="68" y="24" font-size="15" fill="#465966">구현하고 검증</text>
+  </g>
+  <g transform="translate(10 286)">
+    <rect width="524" height="100" rx="9" fill="#f0edf6"/>
+    <rect x="2" y="13" width="4" height="74" rx="2" fill="#705789"/>
+    <text x="20" y="32" font-size="21" font-weight="700" fill="#44334f">코드와 테스트</text>
+    <text x="20" y="61" font-size="17" fill="#29353d">승인 기록을 확인한 뒤 결제 서비스를 호출한다.</text>
+    <text x="20" y="83" font-size="17" fill="#29353d">해당 반품 건의 승인이 없으면 호출하지 않는지 테스트한다.</text>
+  </g>
+</svg>

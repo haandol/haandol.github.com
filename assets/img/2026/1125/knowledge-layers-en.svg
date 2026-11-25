@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" xml:lang="en" width="544" height="396" viewBox="0 0 544 396" role="img" aria-labelledby="title description" font-family="system-ui, -apple-system, BlinkMacSystemFont, Apple SD Gothic Neo, Segoe UI, sans-serif">
+  <title id="title">Three knowledge layers for advance refunds</title>
+  <desc id="description">From top to bottom: business process ontology, architecture decision records, and code and tests. An approval rule becomes a contract that the implementation enforces for each return.</desc>
+  <rect width="544" height="396" rx="10" fill="#fff"/>
+  <g transform="translate(10 8)">
+    <rect width="524" height="100" rx="9" fill="#e7f3ef"/>
+    <rect x="2" y="13" width="4" height="74" rx="2" fill="#176952"/>
+    <text x="20" y="32" font-size="21" font-weight="700" fill="#163e34">Business process ontology</text>
+    <text x="504" y="32" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#176952">ontology-writer</text>
+    <text x="20" y="61" font-size="17" fill="#29353d">Once the returns team approves an advance refund,</text>
+    <text x="20" y="83" font-size="17" fill="#29353d">the refund can be requested before collection.</text>
+  </g>
+  <g transform="translate(0 108)">
+    <path d="M52 2V31m-5-6 5 6 5-6" fill="none" stroke="#566876" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="68" y="24" font-size="15" fill="#465966">Define the feature contract</text>
+  </g>
+  <g transform="translate(10 147)">
+    <rect width="524" height="100" rx="9" fill="#eaf0f9"/>
+    <rect x="2" y="13" width="4" height="74" rx="2" fill="#3c6294"/>
+    <text x="20" y="32" font-size="21" font-weight="700" fill="#213d61">Architecture decision record</text>
+    <text x="504" y="32" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#3c6294">adr-writer</text>
+    <text x="20" y="61" font-size="17" fill="#29353d">Before collection, forward a refund request to payments</text>
+    <text x="20" y="83" font-size="17" fill="#29353d">only if that return has a matching approval.</text>
+  </g>
+  <g transform="translate(0 247)">
+    <path d="M52 2V31m-5-6 5 6 5-6" fill="none" stroke="#566876" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="68" y="24" font-size="15" fill="#465966">Implement and test</text>
+  </g>
+  <g transform="translate(10 286)">
+    <rect width="524" height="100" rx="9" fill="#f0edf6"/>
+    <rect x="2" y="13" width="4" height="74" rx="2" fill="#705789"/>
+    <text x="20" y="32" font-size="21" font-weight="700" fill="#44334f">Code and tests</text>
+    <text x="20" y="61" font-size="17" fill="#29353d">Check the approval before calling payments.</text>
+    <text x="20" y="83" font-size="17" fill="#29353d">Without a matching approval, verify zero calls to payments.</text>
+  </g>
+</svg>
