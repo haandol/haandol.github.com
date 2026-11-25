@@ -8,7 +8,7 @@ tags: openai symphony codex software-factory agentic-engineering
 publish: true
 published: true
 date: 2026-11-24 17:36:13 +0900
-last_modified_at: 2026-11-25 09:08:50 +0900
+last_modified_at: 2026-11-25 19:09:15 +0900
 lang: en
 translation_key: openai-symphony-issue-workflow
 korean_url: /2026/11/24/openai-symphony-issue-workflow.html
@@ -187,6 +187,18 @@ In the reference implementation, `WorkflowStore` periodically checks the selecte
 
 Learners see changes to the report screen when EncBird ships the app. Changing the scheduling algorithm requires deploying a new version of Symphony. To change how the report is checked and handed over, the team updates `WORKFLOW.md`.
 
+## 7. How Performance Factory uses telemetry to investigate a regression
+
+In OpenAI’s Symphony example, Codex merges the PR after a reviewer approves it, then moves the issue to `Done`. But if the reason for changing the code was that ChatGPT had slowed down, when is the job done? OpenAI’s performance team described **Performance Factory** on November 19. I see it as an example of **AIOps**, the use of AI to automate service operations.[^15]
+
+When a performance alert fires, a dedicated task service opens an investigation. A dispatcher periodically checks which tasks are ready for their next step and starts Codex turns in the cloud. An agent can query metrics, logs, and traces that follow a request across services, then record its findings on the task. While a PR awaits review, the session can end. When a review comment matches the task’s subscription, the task becomes ready again and the dispatcher can assign the next turn.[^15]
+
+In one investigation, an agent traced failing ChatGPT conversations to image download errors and recorded that it had found the cause. A separate Codex session reviewing the diagnosis noticed that **image requests were still failing after the internal service responsible for locating files had recovered**. The first diagnosis couldn’t account for those later failures, so the reviewer reopened the investigation.[^15]
+
+In this workflow, once an engineer reviews and deploys a fix, recovery still has to be verified. Another agent compares production performance with its earlier baseline and closes the task if performance has recovered. If there’s no improvement, the task goes back to investigation. If recovery is partial, the agent closes the original task and opens a new one for the remaining slowdown.[^15]
+
+In my earlier article on observability, I argued that diagnosing a failure takes metrics and logs from across the services a request passes through. In the software factory article, I argued that an agent can decide what to do next only if it can see whether the same failures decline after deployment.[^16][^17] Performance Factory puts that idea into practice. **An agent can look beyond the service that raised the alert and check whether requests actually recover after a fix.**
+
 ## Closing thoughts
 
 What stood out to me in OpenAI’s account was how the team’s product manager and designer use Symphony. They can request a feature on the board and receive a video showing it working in the actual product.[^1] The person who asked for the change can say “That’s what I meant” or “This part needs another pass” without having to open a Codex session.
@@ -209,3 +221,6 @@ Two early design decisions in a cloud-native deployment are **who can assign eac
 [^12]: OpenAI Symphony. [Starting sessions and continuing turns](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/SPEC.md#102-session-startup-responsibilities), [Codex App Server client](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/codex/app_server.ex)
 [^13]: OpenAI Symphony, [Elixir reference implementation, intended use and per-project setup](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/README.md), [CLI workflow path handling](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/cli.ex)
 [^14]: OpenAI Symphony, [PromptBuilder for issue and attempt data](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/prompt_builder.ex), [AgentRunner handling of first and continuation turns](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/agent_runner.ex)
+[^15]: Okay Zed, Cyrus Forbes, OpenAI. [How OpenAI’s Performance Factory keeps ChatGPT fast](https://openai.com/index/how-openai-performance-factory-keeps-chatgpt-fast/), 2026-11-19.
+[^16]: [Observability and OpenTelemetry, Part 1 (in Korean)](/2021/11/30/demystifying-observability-and-opentelemetry-1.html)
+[^17]: [How a Software Factory Can Improve Itself — Evals, KPIs, and Tension Metrics](/en/2026/10/05/software-factory-evals-and-tension-metrics.html)

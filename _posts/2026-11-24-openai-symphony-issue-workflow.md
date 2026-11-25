@@ -8,7 +8,7 @@ tags: openai symphony codex software-factory agentic-engineering
 publish: true
 published: true
 date: 2026-11-24 17:36:13 +0900
-last_modified_at: 2026-11-25 09:08:50 +0900
+last_modified_at: 2026-11-25 19:09:15 +0900
 lang: ko
 translation_key: openai-symphony-issue-workflow
 english_url: /en/2026/11/24/openai-symphony-issue-workflow.html
@@ -186,6 +186,18 @@ flowchart TD
 
 잉크버드의 리포트 화면은 앱을 배포해야 사용자에게 바뀐 모습으로 보인다. 오케스트레이터의 배정 알고리즘을 고쳤다면 Symphony를 새 버전으로 배포해야 한다. 리포트를 어떻게 검사하고 넘길지만 바꿀 때는 `WORKFLOW.md`를 갱신하면 된다.
 
+## 7. Performance Factory가 운영 지표로 성능 회귀를 조사하는 방식
+
+OpenAI의 Symphony 예제에서 Codex는 리뷰어가 승인한 PR을 병합한 뒤 이슈를 `Done`으로 옮긴다. 그렇다면 ChatGPT가 느려져서 코드를 고친 경우에는 언제 일을 끝내도 될까? OpenAI 성능 팀이 11월 19일 소개한 **Performance Factory**는 이런 문제를 다룬다. 나는 이 사례가 **AIOps**, 즉 AI로 서비스 운영을 자동화하는 방식에 가깝다고 생각한다.[^15]
+
+성능 저하 알림이 울리면 전용 작업 서비스에 조사 건이 생긴다. 디스패처는 다음 단계를 진행할 수 있는 작업을 주기적으로 찾아 클라우드에서 Codex를 실행한다. 에이전트는 지표와 로그, 요청이 여러 서비스를 거친 경로를 보여 주는 트레이스를 조회하고 조사 결과를 작업에 기록한다. PR 리뷰를 기다리는 동안에는 세션을 계속 띄워 둘 필요가 없다. PR에 새 리뷰 댓글이 달렸다는 알림을 받으면 그 작업이 다시 배정 대상이 되고, 디스패처가 다음 턴을 맡긴다.[^15]
+
+OpenAI가 소개한 장애 조사에서 첫 에이전트는 ChatGPT 대화 실패를 추적하다가 이미지 다운로드 오류를 찾았다. 에이전트는 원인이 밝혀졌다고 기록했다. 이 진단을 검토한 다른 Codex 세션은 **파일 위치를 찾아 주는 내부 서비스가 복구된 뒤에도 이미지 요청은 계속 실패했다**는 점을 발견했다. 첫 진단으로는 그 시간대의 실패를 설명할 수 없어서 조사를 다시 열었다.[^15]
+
+이 워크플로에서 엔지니어가 수정안을 검토해 배포한 뒤에는 복구 확인 단계가 남는다. 다른 에이전트가 성능을 이전 기준선과 대조해 회복됐으면 작업을 닫는다. 개선이 없으면 조사로 돌려보내고, 일부만 회복됐으면 기존 작업을 닫고 남은 성능 저하를 새 작업으로 연다.[^15]
+
+예전에 옵저버빌리티를 다룬 글에서는 요청 하나가 거친 여러 서비스의 지표와 로그를 함께 볼 수 있어야 장애 원인을 좁힐 수 있다고 썼다. 소프트웨어 팩토리 글에서는 배포 뒤에도 같은 실패가 줄었는지 살펴야 에이전트에게 다음 판단까지 맡길 수 있다고 했다.[^16][^17] Performance Factory가 그 생각을 구현한 대목은 **에이전트가 알림을 낸 서비스 밖의 지표까지 직접 비교하고, 수정 뒤에도 사용자 요청이 회복됐는지 확인한다는 것**이다.
+
 ## 마치며
 
 OpenAI의 회고에서 가장 흥미로웠던 건 PM과 디자이너가 Symphony를 쓰는 방식이다. 원하는 기능을 작업 보드에 적으면, 실제 제품에서 그 기능을 써 보는 영상이 검토 자료로 돌아온다.[^1] 기능을 요청한 사람이 Codex 세션을 열 줄 몰라도 “내가 원한 동작이 맞다”거나 “이 부분은 고쳐 달라”고 직접 말할 수 있다.
@@ -208,3 +220,6 @@ OpenAI의 회고에서 가장 흥미로웠던 건 PM과 디자이너가 Symphony
 [^12]: OpenAI Symphony. [세션 시작과 후속 턴](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/SPEC.md#102-session-startup-responsibilities), [Codex App Server 클라이언트](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/codex/app_server.ex)
 [^13]: OpenAI Symphony, [Elixir 참조 구현의 용도와 프로젝트별 워크플로 설정](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/README.md), [실행 인자와 파일 경로 처리](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/cli.ex)
 [^14]: OpenAI Symphony, [첫 요청에 이슈와 실행 시도 정보를 채우는 PromptBuilder](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/prompt_builder.ex), [첫 턴과 후속 턴을 구분하는 AgentRunner](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/agent_runner.ex)
+[^15]: Okay Zed, Cyrus Forbes, OpenAI. [How OpenAI’s Performance Factory keeps ChatGPT fast](https://openai.com/index/how-openai-performance-factory-keeps-chatgpt-fast/), 2026-11-19.
+[^16]: [쉽게 설명한 옵저버빌리티와 오픈텔레메트리 - 1/2](/2021/11/30/demystifying-observability-and-opentelemetry-1.html)
+[^17]: [Software Factory가 스스로 개선하려면 — Eval과 KPI, 텐션 메트릭](/2026/10/05/software-factory-evals-and-tension-metrics.html)
