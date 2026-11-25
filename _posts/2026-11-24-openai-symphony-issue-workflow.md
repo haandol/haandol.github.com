@@ -8,7 +8,7 @@ tags: openai symphony codex software-factory agentic-engineering
 publish: true
 published: true
 date: 2026-11-24 17:36:13 +0900
-last_modified_at: 2026-11-25 08:38:27 +0900
+last_modified_at: 2026-11-25 09:08:50 +0900
 lang: ko
 translation_key: openai-symphony-issue-workflow
 english_url: /en/2026/11/24/openai-symphony-issue-workflow.html
@@ -32,7 +32,7 @@ english_url: /en/2026/11/24/openai-symphony-issue-workflow.html
 
 팀의 회고에 따르면 개발자 한 사람이 무리 없이 챙길 수 있는 Codex 세션은 대개 3~5개였다. 그보다 많아지면 어느 창에서 무엇을 고치는지 잊거나, 중간에 멈춘 작업을 뒤늦게 발견했다. 팀은 이미 쓰고 있던 Linear 보드에서 에이전트가 직접 할 일을 가져가는 방식을 시험했다.[^1]
 
-첫 버전은 터미널 세션을 계속 띄워 두는 도구인 `tmux` 안에서 돌아가는 Codex 세션 하나였다. 이 세션이 Linear를 주기적으로 확인하고 새 일이 들어오면 하위 에이전트를 띄웠다. 작업을 배정할 수는 있었지만 이 구성을 계속 안정적으로 돌리기는 어려웠다. 팀은 에이전트용 도구와 테스트가 갖춰진 사내 제품 저장소에 두 번째 버전을 만들었다. 기본 기능이 돌아간 뒤에는 **Symphony를 개선하는 작업도 Symphony에 맡겼다.**[^1]
+Symphony의 첫 버전은 터미널 세션을 계속 띄워 두는 도구인 `tmux` 안에서 돌아가는 Codex 세션 하나였다. 이 세션이 Linear를 주기적으로 확인하고 새 일이 들어오면 하위 에이전트를 띄웠다. 작업을 배정할 수는 있었지만 이 구성을 계속 안정적으로 돌리기는 어려웠다. 팀은 에이전트용 도구와 테스트가 갖춰진 사내 제품 저장소에 두 번째 버전을 만들었다. 기본 기능이 돌아간 뒤에는 **Symphony를 개선하는 작업도 Symphony에 맡겼다.**[^1]
 
 사내 시연에서 에이전트는 작업을 마친 뒤 기능이 실제로 작동하는 영상을 티켓에 첨부했다. 이후 다른 팀들도 자발적으로 Symphony를 쓰기 시작하자 개발팀은 회사 밖에도 공개하기로 했다.[^1]
 
@@ -40,7 +40,11 @@ english_url: /en/2026/11/24/openai-symphony-issue-workflow.html
 
 ## 2. 계속 실행되는 서비스와 작업마다 뜨는 Codex
 
-Symphony는 Linear나 GitHub Issues 같은 **이슈 트래커**에서 팀이 맡긴 일과 진행 상태를 읽는다. 작업을 몇 개까지 동시에 실행할지, 에이전트에게 무엇을 시킬지는 팀이 코드 저장소의 **`WORKFLOW.md`**에 적어 둔다. 서비스를 시작하면 워크플로 로더가 파일 앞부분의 설정과 본문의 지시문 템플릿을 읽어 들인다. 설정 검증이 끝나면 보드 조회를 시작한다.[^4]
+Symphony의 Elixir 참조 구현은 계속 떠 있는 **데몬**이다. 개발자가 Linear나 GitHub Issues 같은 이슈 트래커에 일을 등록하면, 이미 실행 중인 데몬이 보드를 주기적으로 읽어 맡길 일을 찾는다. 개발자가 이슈를 만들 때마다 Symphony를 실행할 필요가 없는 이유다.[^4]
+
+데몬을 처음 띄우기 전에 개발팀은 프로젝트 저장소에 **`WORKFLOW.md`**를 준비한다. OpenAI는 예제 파일을 복사해 팀이 쓰는 보드, 복제할 저장소, 검사와 리뷰 절차에 맞게 고치는 방법을 안내한다. 예를 들어 운영자가 프로젝트를 실행 서버의 `/srv/encbird`에 받아 뒀다면, 데몬을 시작할 때 `/srv/encbird/WORKFLOW.md`를 경로 인자로 넘긴다. 경로를 생략하면 프로세스를 시작한 디렉터리의 `WORKFLOW.md`를 사용한다.[^10][^13]
+
+데몬은 이 파일에서 **팀의 실행 설정과 Codex 지시문을 함께 읽는다.** 워크플로 로더가 앞부분의 YAML 설정과 그 아래의 Markdown 본문을 분리한다. 데몬은 설정을 검증한 뒤 보드 조회를 시작하고, 본문은 나중에 각 이슈의 지시문을 만들 템플릿으로 보관한다.[^4][^10]
 
 서비스 안에서 **오케스트레이터**는 어떤 작업을 언제 시작하고 멈출지 결정한다. 어댑터는 Linear와 GitHub에서 가져온 이슈를 오케스트레이터가 읽을 수 있는 공통 형식으로 바꿔 준다. 오케스트레이터가 일을 배정하면 **에이전트 러너**가 작업 공간 관리자에게 해당 이슈의 폴더를 요청하고, 그 안에서 Codex와 대화를 시작한다. 서로 다른 두 작업을 동시에 맡기면 같은 팀 규칙을 읽은 Codex 세션 둘이 각자 자기 폴더에서 코드를 고친다.[^4][^6]
 
@@ -48,12 +52,13 @@ Symphony는 Linear나 GitHub Issues 같은 **이슈 트래커**에서 팀이 맡
 ```mermaid
 flowchart TD
     T["이슈 트래커"] -->|"현재 상태"| O["오케스트레이터"]
-    W["WORKFLOW.md"] -->|"실행 조건·한도"| O
+    W["팀 저장소의 WORKFLOW.md"] -->|"시작 시 지정한 경로"| L["데몬의 워크플로 로더"]
+    L -->|"실행 조건·한도"| O
     subgraph R["작업별 러너"]
         A["러너 A<br/>폴더 A에서 Codex 실행"]
         B["러너 B<br/>폴더 B에서 Codex 실행"]
     end
-    W -->|"폴더 준비 명령·지시문"| R
+    L -->|"폴더 준비 명령·지시문 템플릿"| R
     O -->|"작업 A 배정"| A
     O -->|"작업 B 배정"| B
     A -.->|"실행 결과"| O
@@ -64,23 +69,33 @@ flowchart TD
 
 **트래커**에는 팀이 보는 진행 상태가, **오케스트레이터의 메모리**에는 현재 실행 중인 작업과 재시도 예약이, **작업 폴더**에는 에이전트가 고친 파일이 있다. 사람이 트래커에서 작업을 취소하면 오케스트레이터는 그 변경을 읽어 실행을 멈춘다. 구현을 마친 Codex는 트래커 도구를 호출해 검토를 요청한다. 이 도구가 Symphony를 실행하는 호스트의 자격 증명으로 결과를 기록하면, 사람과 오케스트레이터가 같은 상태를 볼 수 있다.[^4][^7]
 
-## 3. 팀의 개발 절차를 실행하는 WORKFLOW.md
+## 3. WORKFLOW.md가 실행 설정과 Codex의 첫 요청이 되는 과정
 
-OpenAI 예제의 YAML 설정을 보면 Codex가 맡을 Linear 상태는 네 가지이고, 동시에 실행할 수 있는 작업은 최대 열 개다.[^5]
+아래는 OpenAI가 Symphony 저장소 개발에 쓰는 예제에서 일부를 뽑은 것이다. 위쪽 설정에는 러너를 언제 몇 개 띄울지와 빈 작업 폴더에 어떤 코드를 가져올지가 들어 있다. 아래쪽에는 Codex에게 건넬 문장이 있다.[^5]
 
 {% raw %}
 ```markdown
 ---
 tracker:
   active_states: [Todo, In Progress, Merging, Rework]
+polling:
+  interval_ms: 5000
+hooks:
+  after_create: |
+    git clone --depth 1 https://github.com/openai/symphony .
 agent:
   max_concurrent_agents: 10
 ---
 You are working on a Linear ticket `{{ issue.identifier }}`
+Title: {{ issue.title }}
 ```
 {% endraw %}
 
-러너는 마지막 줄의 `issue.identifier` 자리에 실제 이슈 번호를 넣는다. 첫 요청에는 트래커에서 읽은 제목, 현재 상태, 설명도 들어간다. 예제 지시문에 따르면 새 `Todo`를 맡은 Codex는 이슈를 `In Progress`로 옮기고 **`Codex Workpad`라는 이슈 댓글 하나**를 만들거나 기존 댓글을 연다. 여기에 계획과 완료 조건, 실행할 검사를 적고 작업이 진행될 때마다 같은 댓글을 갱신한다. 이슈에 테스트 방법이 적혀 있다면 그것도 검증 목록에 포함한다.[^5]
+**작업을 고를 때** 오케스트레이터는 5초마다 Linear를 조회해 `active_states`에 속하는 일을 찾는다. 예제의 동시 실행 한도는 열 개다. 이미 열 개가 실행 중이면 새 후보는 기다린다. 배정이 이뤄져 새 폴더를 만들면 작업 공간 관리자가 `after_create`의 명령을 그 폴더에서 실행한다. 이 예제는 Symphony 자체를 복제하므로 다른 프로젝트에 쓸 때는 팀이 복제 주소도 바꾼다.[^5][^6]
+
+**첫 턴을 시작할 때** 러너는 데몬이 보관한 본문 템플릿과 방금 배정한 이슈를 가져온다. 예를 들어 Linear 이슈 번호가 `ENG-42`이고 제목이 ‘주간 학습 리포트’라면, Codex가 받는 첫 메시지에는 ‘You are working on a Linear ticket `ENG-42`’와 ‘Title: 주간 학습 리포트’가 들어간다. 전체 예제의 본문에는 이슈 설명과 현재 상태를 넣는 자리도 있다. 러너는 이 값들을 채운 메시지를 `codex app-server`에 보내 Codex의 첫 턴을 시작한다. 같은 대화에서 다음 턴을 열 때는 원래 지시가 남아 있으므로 이어서 작업하라는 안내만 보낸다.[^5][^12][^14]
+
+이 지시문에 따라 Codex는 새 `Todo` 이슈를 `In Progress`로 옮기고 **`Codex Workpad`라는 댓글 하나**에 계획과 완료 조건, 실행할 검사를 적는다. 이슈에 테스트 방법이 있으면 검증 목록에 포함하고, 진행 상황은 같은 댓글을 갱신해 남긴다.[^5]
 
 Codex는 변경 검토 요청(PR)을 이슈에 연결하고, 최신 커밋의 검사 결과와 리뷰 의견을 확인한다. 코드에 반영할 의견이 남았으면 고친 뒤 다시 검사한다. 검사가 통과하고 리뷰 의견을 모두 처리하면 이슈를 `Human Review`로 옮긴다. **이 상태는 위 설정의 활성 상태 목록에 없으므로** 오케스트레이터는 실행을 멈추고 사람이 결과를 검토할 차례가 된다.[^5]
 
@@ -90,7 +105,7 @@ Codex는 변경 검토 요청(PR)을 이슈에 연결하고, 최신 커밋의 �
 
 ### 실행할 작업을 고를 때
 
-오케스트레이터는 매 조회 주기마다 이미 실행 중인 작업부터 트래커와 대조한다. 그사이 실행 대상에서 빠진 작업은 멈춘다. 그런 다음 활성 상태와 필수 라벨을 만족하는 후보를 우선순위순으로 살핀다. 순위가 같으면 먼저 만들어진 이슈가 앞선다. 이미 실행 중이거나 재시도를 예약한 이슈는 건너뛰고, 전체 한도와 해당 상태의 한도에 자리가 있을 때만 러너를 띄운다. 명세의 기본 조회 간격은 30초이고, OpenAI 예제 `WORKFLOW.md` 원본에서는 5초다.[^4][^5][^6]
+오케스트레이터는 매 조회 주기마다 이미 실행 중인 작업부터 트래커와 대조한다. 그사이 실행 대상에서 빠진 작업은 멈춘다. 그런 다음 활성 상태와 필수 라벨을 만족하는 후보를 우선순위순으로 살핀다. 순위가 같으면 먼저 만들어진 이슈가 앞선다. 이미 실행 중이거나 재시도를 예약한 이슈는 건너뛰고, 전체 한도와 해당 상태의 한도에 자리가 있을 때만 러너를 띄운다. 팀이 조회 간격을 따로 정하지 않으면 명세의 기본값인 30초를 쓴다.[^4][^5][^6]
 
 예를 들어 OpenAI 팀은 Linear에서 React 업그레이드의 선행 작업으로 Vite 마이그레이션을 지정했다. Elixir의 Linear 어댑터는 `Todo` 이슈에 아직 종료되지 않은 선행 작업이 있으면 배정 불가로 표시한다. 오케스트레이터는 그 이슈를 건너뛰고 독립적으로 시작할 수 있는 일을 고른다.[^1][^11]
 
@@ -120,7 +135,7 @@ sequenceDiagram
 ```
 {% endraw %}
 
-검사에서 기대값과 다른 결과가 나오면 **Codex**가 출력을 읽고 수정할 파일을 고른다. 한 턴 안에서 여러 번 고치고 검사할 수 있다. 그동안 러너는 진행 이벤트를 오케스트레이터에 전한다. **턴이 끝나면 러너가 트래커를 다시 읽는다.** 여전히 작업할 차례라면 첫 지시 전체를 다시 보내지 않고 같은 대화에서 이어 가도록 한다. 기본 한도는 한 번의 실행에 20턴이다.[^4][^6][^12]
+검사에서 기대값과 다른 결과가 나오면 **Codex**가 출력을 읽고 수정할 파일을 고른다. 한 턴 안에서 여러 번 고치고 검사할 수 있다. 그동안 러너는 진행 이벤트를 오케스트레이터에 전한다. **턴이 끝나면 러너가 트래커를 다시 읽는다.** 이슈가 여전히 실행 대상이고 턴 한도(기본 20턴)가 남아 있으면 같은 대화를 이어간다.[^4][^6][^12]
 
 ### 실행이 끊겼을 때 남는 것
 
@@ -167,13 +182,17 @@ flowchart TD
 ```
 {% endraw %}
 
-호스트의 파일이 바뀌면 Symphony는 설정과 지시문을 다시 읽는다. 서비스나 진행 중인 세션을 다시 띄우지 않고도 다음 작업에 새 지시문을 보낼 수 있다. 동시 실행 한도를 바꾸면 이후 배정에 반영된다. `after_create`를 바꾸면 다음에 폴더를 만들 때 호스트가 실행할 명령도 달라진다. 파일을 다시 읽다가 오류가 나면 마지막 정상 설정을 보관하고 운영자에게 오류를 알린다.[^10]
+참조 구현의 `WorkflowStore`는 지정한 경로의 파일이 바뀌었는지 주기적으로 확인한다. 파일이 바뀌면 다시 읽어 설정을 검증하고, 유효한 설정과 본문 템플릿을 함께 보관한다. 서비스나 진행 중인 세션을 다시 띄우지 않고도 다음 작업에 새 지시문을 보낼 수 있다. 동시 실행 한도를 바꾸면 이후 배정에 반영된다. `after_create`를 바꾸면 다음에 폴더를 만들 때 호스트가 실행할 명령도 달라진다. 파일을 다시 읽다가 오류가 나면 마지막 정상 설정을 보관하고 운영자에게 오류를 알린다.[^10]
 
 잉크버드의 리포트 화면은 앱을 배포해야 사용자에게 바뀐 모습으로 보인다. 오케스트레이터의 배정 알고리즘을 고쳤다면 Symphony를 새 버전으로 배포해야 한다. 리포트를 어떻게 검사하고 넘길지만 바꿀 때는 `WORKFLOW.md`를 갱신하면 된다.
 
 ## 마치며
 
 OpenAI의 회고에서 가장 흥미로웠던 건 PM과 디자이너가 Symphony를 쓰는 방식이다. 원하는 기능을 작업 보드에 적으면, 실제 제품에서 그 기능을 써 보는 영상이 검토 자료로 돌아온다.[^1] 기능을 요청한 사람이 Codex 세션을 열 줄 몰라도 “내가 원한 동작이 맞다”거나 “이 부분은 고쳐 달라”고 직접 말할 수 있다.
+
+이 방식을 여러 팀이 쓰는 프로덕션 서비스로 옮기려면 손볼 곳이 많다고 생각한다. OpenAI도 Elixir 참조 구현을 평가용 프로토타입으로 소개한다. 기본 로컬 구성에서는 데몬이 배정·재시도 상태를 메모리에 두고, 러너는 호스트에서 Codex 프로세스를 띄운다. 잉크버드 예시에서 7일 합계 검사를 끝낸 직후 서버를 교체했다고 해 보자. 새 데몬은 보드를 읽어 이슈를 다시 배정할 수 있다. 하지만 새 Codex 세션이 Workpad에서 ‘모바일 검사 남음’을 읽어도, 수정한 파일이 이전 서버의 임시 디스크에만 있었다면 검사할 코드가 사라진 뒤다.[^8][^13]
+
+클라우드 네이티브 환경에서는 **작업을 배정할 권한과 교체된 워커가 이어받을 작업 사본**부터 설계할 필요가 있다. 같은 보드를 보는 데몬 두 개가 각자 메모리로만 배정을 관리하면 같은 이슈에 러너를 하나씩 띄울 수 있다. 한 가지 방법은 리더로 선출된 데몬 하나가 작업을 배정하고, 실제 코드를 고치는 워커는 작업별 컨테이너로 분리해 필요한 만큼 늘리는 것이다. 작업 폴더를 이슈별 영속 볼륨에 두면 서버가 바뀌어도 다음 워커가 같은 폴더를 다시 연결할 수 있다. 새 워커는 합계 검사를 통과한 파일을 열고 Workpad에 남은 모바일 검사부터 이어갈 수 있다.
 
 [^1]: Alex Kotliarskyi, Victor Zhu, Zach Brock, OpenAI. [An open-source spec for Codex orchestration: Symphony](https://openai.com/index/open-source-codex-orchestration-symphony/), 2026-04-27.
 [^2]: [AWS Emulator로 배우는 소프트웨어 팩토리 구축](/2026/11/16/building-software-factory-with-aws-emulator.html)
@@ -187,3 +206,5 @@ OpenAI의 회고에서 가장 흥미로웠던 건 PM과 디자이너가 Symphony
 [^10]: OpenAI Symphony. [워크플로 경로](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/SPEC.md#51-file-discovery-and-path-resolution), [동적 재적용](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/SPEC.md#62-dynamic-reload-semantics), [WorkflowStore](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/workflow_store.ex)
 [^11]: OpenAI Symphony. [Linear 어댑터의 선행 작업 판정](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/linear/client.ex)
 [^12]: OpenAI Symphony. [세션 시작과 후속 턴](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/SPEC.md#102-session-startup-responsibilities), [Codex App Server 클라이언트](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/codex/app_server.ex)
+[^13]: OpenAI Symphony, [Elixir 참조 구현의 용도와 프로젝트별 워크플로 설정](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/README.md), [실행 인자와 파일 경로 처리](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/cli.ex)
+[^14]: OpenAI Symphony, [첫 요청에 이슈와 실행 시도 정보를 채우는 PromptBuilder](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/prompt_builder.ex), [첫 턴과 후속 턴을 구분하는 AgentRunner](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/elixir/lib/symphony_elixir/agent_runner.ex)
