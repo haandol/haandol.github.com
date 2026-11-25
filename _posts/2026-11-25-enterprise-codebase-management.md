@@ -8,7 +8,7 @@ tags: software-factory codebase multi-repo coding-agent ddd microservices ontolo
 publish: true
 published: true
 date: 2026-11-25 19:01:31 +0900
-last_modified_at: 2026-11-25 19:01:31 +0900
+last_modified_at: 2026-11-25 23:29:30 +0900
 lang: ko
 translation_key: enterprise-codebase-management
 english_url: /en/2026/11/25/enterprise-codebase-management.html
@@ -46,19 +46,96 @@ Spotify는 이 방식으로 SQL 기반 파이프라인 저장소에 코드 변�
 
 내가 경험한 Amazon의 개발 방식에서는 이 책임 구분이 저장소에도 이어진다. 서비스를 제공하는 팀은 다른 팀이 참조할 코드와 계약을 버전별로 관리하고, 우리 팀 저장소에는 우리가 채택한 의존성 버전이 기록된다. 상대 팀이 새 버전을 내놓아도 우리 팀은 기존 계약이 지원되는 동안 그 계약으로 계속 개발할 수 있다.
 
-내가 Amazon에서 쓰는 MCP(Model Context Protocol) 도구로는 사내 코드와 위키 같은 비정형 문서를 검색할 수 있다. 예를 들어 에이전트는 ‘환불 완료’로 문서를 검색해 결제 팀이 쓰는 이벤트 이름을 알아낼 수 있다. 이번에는 그 이름으로 코드를 검색하면 이벤트 정의와 이미 그 이벤트를 처리하고 있는 서비스의 테스트까지 찾아갈 수 있다. 처음부터 저장소나 함수 이름을 알고 있을 필요가 없다.
+내가 Amazon에서 쓰는 MCP(Model Context Protocol) 도구로는 사내 코드와 위키 같은 비정형 문서를 검색할 수 있다. 사내 코드 검색에는 문자열을 찾는 모드와 코드 자체를 임베딩해 비슷한 기능을 찾는 모드가 있다. 예를 들어 에이전트는 ‘환불 완료’로 문서를 검색해 결제 팀이 쓰는 이벤트 이름을 알아낼 수 있다. 이번에는 그 이름으로 코드를 검색하면 이벤트 정의와 이미 그 이벤트를 처리하고 있는 서비스의 테스트까지 찾아갈 수 있다. 처음부터 저장소나 함수 이름을 알고 있을 필요가 없다.
 
 나는 **모든 저장소의 코드와 문서를 한 도구로 검색할 수 있으면 에이전트가 대부분의 개발 문제를 풀 수 있을 것**이라고 생각한다. 에이전트는 원문을 읽으면서 검색어를 바꿀 수 있고, 구현에 쓸 버전은 작업 저장소에서 확인할 수 있기 때문이다. 처음 연동하는 서비스라면 사용할 버전을 골라 기록하고, 이미 쓰는 서비스라면 로컬에 설치된 버전의 계약과 코드를 읽는다.
 
+### OpenSearch로 키워드·유사도 검색을 제공하는 MCP 도구
+
+Builder MCP의 코드 검색에서 참고할 만한 점은 에이전트가 검색 방식을 고르고, 실제 색인 조회는 뒤의 검색 서비스에 맡긴다는 것이다. 사내 검색 도구로는 두 모드를 고를 수 있는 `search_code` 하나를 권한다. 함수명이나 오류 문자열을 알면 `keyword`, 하는 일만 알면 `similarity`를 고른다. 기본 검색 범위는 각 저장소의 기본 브랜치다. 필요하면 저장소(`repo`), 지원 브랜치(`ref`), 경로 패턴(`path_glob`)으로 좁힌다.[^5]
+
+키워드 모드는 코드와 문서를 파일 단위로 읽고, 단어나 식별자가 어느 파일에 나오는지 기록한 OpenSearch 역색인을 조회한다. 유사도 모드는 함수 본문을 직접 임베딩해 별도 벡터 색인에 저장한다. 질의할 때는 같은 모델로 질문을 벡터로 바꾸고, 가까운 함수부터 후보로 가져온다. 어느 경로든 검색 API가 사용자 권한을 확인한 뒤 **저장소, 브랜치, 색인한 커밋, 파일과 줄 번호, 일치한 코드 일부, 해당 커밋의 원문 링크**를 돌려준다.
+
+{% raw %}
+```mermaid
+flowchart TB
+    A["에이전트 → search_code MCP"] --> Q["검색 API · 호출자와 검색 범위 확인"]
+    Q -->|keyword| L[("OpenSearch · 파일 역색인")]
+    Q -->|similarity| E["질의를 코드와 같은 모델로 임베딩"]
+    E --> V[("OpenSearch · 함수 벡터 색인")]
+    G["Git push · 정기 대조"] --> W["원문 큐·작업자<br/>변경 파일 반영"]
+    G --> F["벡터 큐·작업자<br/>변경 함수 임베딩"]
+    W --> L
+    F --> V
+    L --> P["후보별 현재 읽기 권한 확인"]
+    V --> P
+    P --> R["MCP 응답 · 코드 일부와 커밋 고정 링크"]
+```
+{% endraw %}
+
+#### 함수 이름을 모를 때와 알게 된 뒤
+
+환불이 끝나면 어느 함수가 이벤트를 보내는지 찾는다고 하자. 담당 저장소는 `payments`로 알고 있지만 함수 이름은 모른다. 에이전트가 MCP의 `tools/call`에 보내는 인자와, 그 결과를 이용한 다음 호출은 다음과 같다.
+
+```json
+{
+  "name": "search_code",
+  "arguments": {
+    "mode": "similarity",
+    "query": "환불 처리가 완료되면 이벤트를 발행하는 함수",
+    "repo": "payments"
+  }
+}
+```
+
+첫 응답에 `payments@8e2b61a · src/refunds/complete.ts:41–48`과 코드 한 줄 `emit(RefundCompleted)`가 왔다고 하자. 이제 이벤트 이름을 알았으니, 두 번째 호출에서는 저장소 제한을 풀고 이 이름을 쓰는 테스트를 찾는다.
+
+```json
+{
+  "name": "search_code",
+  "arguments": {
+    "mode": "keyword",
+    "query": "RefundCompleted",
+    "path_glob": "**/*.test.ts"
+  }
+}
+```
+
+반환할 코드의 줄 수와 결과 수는 제한하고 다음 페이지 커서를 함께 준다. 에이전트는 필요한 파일만 원문 링크로 열 수 있다. 여기서 찾은 커밋은 **검색 결과의 출처**다. 주문 코드를 고치기 전에는 주문 저장소가 어느 버전의 결제 계약을 쓰는지 확인한다.
+
+#### 커밋과 권한 변경을 검색에 반영하는 방법
+
+에이전트가 잘못된 결론을 내리기 쉬운 순간은 방금 추가한 심볼을 찾았는데 결과가 0건일 때다. 코드가 실제로 없는 것인지, 그 브랜치를 색인하지 않는지, 작업이 밀린 것인지 알 수 있어야 한다. 다음은 이런 차이를 드러내는 운영안이다.
+
+| 상황 | 제안하는 처리 방식 |
+| --- | --- |
+| 새 저장소와 일반 push | 기본 브랜치와 지원 중인 릴리스 브랜치를 처음에 한 번 일괄 색인한다. 이후 push를 받을 때마다 마지막으로 반영한 커밋과의 차이만 큐에 넣는다. 원문 작업자는 바뀐 파일을 쓰고, 벡터 작업자는 새 함수나 본문이 달라진 함수를 임베딩한다. |
+| 이동·삭제·줄 번호 변경 | 임베딩 입력과 모델 버전이 같으면 벡터를 재사용한다. 파일 이동이나 앞부분 편집으로 위치가 달라졌다면 결과의 커밋·경로·줄 범위를 새 소스에 맞게 갱신한다. 옛 경로와 삭제된 파일·함수의 항목은 두 색인에서 정리한다. |
+| 누락·중복·순서 역전 | 두 색인의 마지막 성공 커밋을 브랜치별로 따로 기록한다. 예를 들어 매일 밤 Git의 실제 브랜치 끝과 대조해 누락된 변경이나 삭제를 복구한다. 같은 이벤트를 다시 처리해도 결과는 같아야 하고, 늦게 끝난 이전 작업이 최신 색인을 덮어쓰지 못하게 한다. |
+| 읽기 권한 회수 | 권한 변경도 별도 이벤트로 받아 검색 후보 필터를 갱신한다. 결과를 반환할 때는 원본 저장소의 현재 읽기 권한을 다시 확인한다. 읽기 권한이 없는 후보는 제외하고, 권한 서비스가 응답하지 않으면 검색 결과 대신 오류를 반환한다. 다음 페이지 커서도 호출자와 질의에 묶는다. |
+| 반영 지연·부분 실패 | 원문과 벡터 갱신의 큐와 작업 용량을 분리한다. 임베딩이 밀려도 키워드 검색은 계속 제공한다. 특정 브랜치 검색에는 해당 모드의 마지막 색인 커밋과 시각을 표시한다. 일부 검색이 시간 초과됐으면 부분 결과임을 알리고, 미색인 브랜치도 구분해 응답한다. |
+
+일시적인 색인 실패는 간격을 늘려 재시도하고, 반복해서 실패하는 작업은 별도 큐에 보관해 원인을 고친 뒤 재처리한다. 임베딩 모델을 교체할 때는 기존 모델로 검색을 제공하면서 새 벡터 색인을 채운 뒤, 질의 모델과 색인을 함께 전환한다.
+
+파일럿에서는 예를 들어 **지원 브랜치 push의 95%가 2분 안에 키워드 검색에 보이는지**를 첫 목표로 삼을 수 있다. push를 받은 시점부터 실제 검색에서 추가한 줄이 나타나거나 삭제한 줄이 사라질 때까지 잰다. 유사도 모드도 검색 반영 시간을 따로 재고, 큐에서 가장 오래 기다린 작업의 대기 시간을 확인한다. 두 모드에 얼마를 투자할지는 키워드로 놓친 실제 질의에서 유사도 검색이 필요한 함수를 얼마나 더 찾아주는지 보고 정한다.
+
+#### 무엇을 임베딩하느냐에 따라 달라지는 유지 비용
+
+비용 차이는 리팩터링에서 드러난다. 예를 들어 공통 함수 `calculateRefund()`의 내부 계산을 정리하고 반환값은 그대로 뒀다고 하자. 함수 본문만 임베딩한다면 달라진 본문의 벡터를 갱신하면 된다.
+
+호출 관계를 따라 LLM이 각 함수의 업무상 역할을 설명하고 그 설명을 임베딩하는 방식에서는, `calculateRefund()`를 호출하는 주문 취소 함수도 다시 분석할 대상이 될 수 있다. 주문 취소 코드는 한 줄도 바뀌지 않았어도 기존 설명을 만들 때 환불 함수의 동작을 참조했기 때문이다. 실제 증분 갱신 구현은 호출 그래프를 다시 구성한다. 설명과 벡터를 갱신할 대상은 변경된 함수와 설정된 깊이 안에서 영향을 받는 호출자다.[^6]
+
+공통 함수를 호출하는 곳이 많으면 커밋 한 건으로도 다시 분석할 함수가 많아질 수 있다. 소프트웨어 팩토리에서 변경이 갱신 작업의 처리 속도보다 빠르게 쌓이면, 동작이 실제로 바뀐 함수도 차례를 기다리는 동안 이전 설명으로 검색된다. 내가 운영할 때 우선 보고 싶은 수치는 **새 커밋이 검색되기까지 걸린 시간**과 **바뀐 함수 하나 때문에 다시 분석한 함수 수**다. 이 비용을 계속 치르면서 전사 코드의 해석을 미리 만들어 둘 이유는 적다고 생각한다.
+
 ### 작업 저장소에서 에이전트가 읽는 자료
 
-OpenAI에서 Codex로 제품을 개발하는 한 팀도 에이전트가 작업 중에 읽을 자료를 저장소에서 관리한다. 짧은 `AGENTS.md`는 필요한 문서의 위치를 안내한다. 설계 결정, 데이터베이스 스키마, 외부 도구의 참고 문서를 코드와 함께 버전 관리한다. 채팅에서 합의한 결정도 구현에 필요하면 저장소에 옮긴다. 에이전트가 어느 시점의 코드를 열든 그때의 결정과 코드를 함께 읽을 수 있게 하는 것이다.[^5]
+OpenAI에서 Codex로 제품을 개발하는 한 팀도 에이전트가 작업 중에 읽을 자료를 저장소에서 관리한다. 짧은 `AGENTS.md`는 필요한 문서의 위치를 안내한다. 설계 결정, 데이터베이스 스키마, 외부 도구의 참고 문서를 코드와 함께 버전 관리한다. 채팅에서 합의한 결정도 구현에 필요하면 저장소에 옮긴다. 에이전트가 어느 시점의 코드를 열든 그때의 결정과 코드를 함께 읽을 수 있게 하는 것이다.[^7]
 
-작업 디렉터리에 자료가 들어오면 에이전트는 그 안에서 직접 검색할 수 있다. Cursor는 코드 임베딩을 이용한 의미 검색을 중단했고, 현재는 Instant Grep이 로컬에 만든 **텍스트 인덱스**에서 이름이나 패턴을 찾은 다음 원본 파일을 연다.[^6] Codex CLI는 파일과 텍스트를 찾을 때 `rg`를 우선하고, Claude Code도 파일 이름 패턴과 본문 검색으로 읽을 범위를 좁힌다. 두 도구의 기본 로컬 탐색에는 코드 임베딩 인덱스가 필요하지 않다.[^7]
+작업 디렉터리에 자료가 들어오면 에이전트는 그 안에서 직접 검색할 수 있다. Cursor는 코드 임베딩을 이용한 의미 검색을 중단했고, 현재는 Instant Grep이 로컬에 만든 **텍스트 인덱스**에서 이름이나 패턴을 찾은 다음 원본 파일을 연다.[^8] Codex CLI는 파일과 텍스트를 찾을 때 `rg`를 우선하고, Claude Code도 파일 이름 패턴과 본문 검색으로 읽을 범위를 좁힌다. 두 도구의 기본 로컬 탐색에는 코드 임베딩 인덱스가 필요하지 않다.[^9]
 
 ## 3. MSA의 설계를 멀티레포 코드 관리에 적용하는 다섯 가지 원칙
 
-주문 팀에서 ‘취소 완료’는 상품을 더 이상 보내지 않는다는 뜻일 수 있다. 결제 팀에서 ‘환불 완료’는 고객에게 돈을 돌려주는 처리가 끝났다는 뜻이다. DDD에서는 이렇게 업무 용어와 규칙이 일관된 뜻을 갖는 범위를 *바운디드 컨텍스트*라고 한다. 두 모델 사이에서 정보를 주고받을 때는 양쪽이 이해할 표현을 문서로 정의할 수 있다. DDD의 *Published Language* 패턴이다.[^2][^8]
+주문 팀에서 ‘취소 완료’는 상품을 더 이상 보내지 않는다는 뜻일 수 있다. 결제 팀에서 ‘환불 완료’는 고객에게 돈을 돌려주는 처리가 끝났다는 뜻이다. DDD에서는 이렇게 업무 용어와 규칙이 일관된 뜻을 갖는 범위를 *바운디드 컨텍스트*라고 한다. 두 모델 사이에서 정보를 주고받을 때는 양쪽이 이해할 표현을 문서로 정의할 수 있다. DDD의 *Published Language* 패턴이다.[^2][^10]
 
 결제 팀의 이벤트 명세가 두 팀 사이에서 이런 역할을 한다. 명세를 읽으면 주문 팀도 어떤 이벤트를 ‘환불 완료’로 받아들여야 하는지 알 수 있다. 결제 팀이 내부 상태를 더 잘게 나누더라도 이벤트가 약속한 의미를 유지하면, 주문 팀의 알림 코드는 그대로 동작한다.
 
@@ -99,29 +176,31 @@ flowchart TD
 
 ### 업무 모델을 공유하고 필요한 깊이까지 읽기
 
-반품 팀은 자기 저장소에 Turtle(`.ttl`) 파일을 두고 업무 온톨로지의 버전을 관리할 수 있다. 업무 개념과 관계를 텍스트로 기록하는 데는 이 형식으로 충분하다.[^9]
+반품 팀은 자기 저장소에 Turtle(`.ttl`) 파일을 두고 업무 온톨로지의 버전을 관리할 수 있다. 업무 개념과 관계를 텍스트로 기록하는 데는 이 형식으로 충분하다.[^11]
 
 여러 팀이 전사 공용 저장소에 온톨로지를 함께 두더라도 **선환불 조건을 정하고 그 규칙의 변경을 승인하는 주체는 반품 팀**이다. 이 규칙을 쓰는 팀은 전사 검색으로 원본을 찾고, 자기 저장소에 기록한 버전에 맞춰 구현한다.
 
-프로세스가 복잡해지면 나는 C4 모델의 **같은 대상을 다른 배율로 보는 방식**을 빌리는 편이 낫다고 생각한다. C4가 시스템 전체에서 구성요소로 시야를 좁히듯, 업무 개요에서는 반품·물류·결제 팀이 어디서 일을 주고받는지 본다. 선환불을 바꾸는 사람은 그중 반품 절차를 펼쳐 승인 주체와 회수 전 환불을 허용하는 조건까지 읽는다. 이 확대는 맨 위 온톨로지 안에서 일어난다.[^10]
+프로세스가 복잡해지면 나는 C4 모델의 **같은 대상을 다른 배율로 보는 방식**을 빌리는 편이 낫다고 생각한다. C4가 시스템 전체에서 구성요소로 시야를 좁히듯, 업무 개요에서는 반품·물류·결제 팀이 어디서 일을 주고받는지 본다. 선환불을 바꾸는 사람은 그중 반품 절차를 펼쳐 승인 주체와 회수 전 환불을 허용하는 조건까지 읽는다. 이 확대는 맨 위 온톨로지 안에서 일어난다.[^12]
 
-내가 만든 `ontology-writer`와 `adr-writer` 플러그인에 이 구조를 구현해 두었다. `ontology-writer`는 프로젝트의 `docs/ontology/` 아래에 업무 모델을 Turtle로 저장하고, 구현이 필요한 업무 단계를 해당 기능의 ADR과 연결한다. `adr-writer`는 `docs/adr/`에 기능이 지켜야 할 조건과 설계 근거를 기록하고, `/adr-impl`에서 그 조건에 맞춰 구현하고 테스트한다. 여러 기능이 한 업무 절차로 동작하는지는 `ontology-writer`의 `/ontology-align`에서 확인한다.[^11]
+내가 만든 `ontology-writer`와 `adr-writer` 플러그인에 이 구조를 구현해 두었다. `ontology-writer`는 프로젝트의 `docs/ontology/` 아래에 업무 모델을 Turtle로 저장하고, 구현이 필요한 업무 단계를 해당 기능의 ADR과 연결한다. `adr-writer`는 `docs/adr/`에 기능이 지켜야 할 조건과 설계 근거를 기록하고, `/adr-impl`에서 그 조건에 맞춰 구현하고 테스트한다. 여러 기능이 한 업무 절차로 동작하는지는 `ontology-writer`의 `/ontology-align`에서 확인한다.[^13]
 
 ## 마치며
 
 결제 팀이 새 이벤트를 공개하는 시점과 주문 팀이 그 이벤트를 쓰기로 하는 시점은 다를 수 있다. 결제 팀은 이벤트의 의미와 지원 범위를 계약으로 남기고, 주문 팀은 그 계약을 채택하는 변경을 자기 저장소에 남긴다. 내가 Amazon에서 경험한 개발 방식에서도 이런 경계가 각 팀이 독립적으로 코드를 바꿀 여지를 준다. 에이전트도 전사 검색으로 새 기능을 발견하고, 주문 코드를 고칠 때는 주문 팀이 채택한 계약에 맞춰 일할 수 있다.
 
-AWS Labs가 실험적으로 선보인 CodeKB처럼 여러 저장소의 코드를 미리 분석해 그 결과를 구현의 근거로 삼는 방식에는 개인적으로 동의하지 않는다.[^12]
+AWS Labs의 CodeKB처럼 호출 관계를 분석해 함수 설명을 만들고 그 설명을 임베딩하는 방식은, 변경이 잦은 소프트웨어 팩토리에서 갱신에 드는 비용과 시간 때문에 전사 코드 검색의 기본 설계로 권하고 싶지 않다.[^14]
 
 [^1]: Anthropic, [Redesigning source control at Anthropic](https://www.anthropic.com/research/redesigning-source-control).
 [^2]: Microsoft Azure Architecture Center, [DDD로 마이크로서비스의 경계와 관계 설계하기](https://learn.microsoft.com/en-us/azure/architecture/microservices/model/domain-analysis).
 [^3]: Spotify Engineering, [Background Coding Agents: Supercharging Downstream Consumer Dataset Migrations](https://engineering.atspotify.com/2026/4/background-coding-agents-dataset-migrations-honk-part-4).
 [^4]: AWS, [마이크로서비스의 독립 배포와 인터페이스](https://aws.amazon.com/microservices/), [Amazon 서비스 팀의 소유권](https://aws.amazon.com/executive-insights/content/amazon-two-pizza-team/).
-[^5]: OpenAI, [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/).
-[^6]: [Cursor 팀의 검색 방식 설명](https://forum.cursor.com/t/codebase-indexing-not-working-in-v-3-12-onwards/167527/7)과 [현재 Cursor 검색 문서](https://cursor.com/docs/agent/tools/search).
-[^7]: OpenAI, [Codex CLI 기본 지침](https://github.com/openai/codex/blob/main/codex-rs/protocol/src/prompts/base_instructions/default.md). Anthropic, [How Claude Code works](https://code.claude.com/docs/en/how-claude-code-works).
-[^8]: [개발팀에 에이전틱 엔지니어링 도입하기](/2026/11/17/software-factory-team-tooling-runbook.html).
-[^9]: W3C, [RDF 1.1 Turtle](https://www.w3.org/TR/turtle/).
-[^10]: [쉽게 설명한 C4Model](/2022/12/17/demystifying-c4model.html), Simon Brown, [C4 모델의 다이어그램과 확대 수준](https://c4model.com/diagrams).
-[^11]: 내가 만든 [ontology-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/ontology-writer/README.md)와 [adr-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/adr-writer/README.md).
-[^12]: [AWS Labs 공개 저장소](https://github.com/awslabs/codekb).
+[^5]: MCP, [도구 호출 규약](https://modelcontextprotocol.io/specification/2025-11-25/server/tools). OpenSearch, [원문 질의](https://docs.opensearch.org/latest/query-dsl/full-text/index/), [벡터 근접 검색](https://docs.opensearch.org/latest/query-dsl/specialized/k-nn/index/), [일괄 쓰기](https://docs.opensearch.org/latest/api-reference/document-apis/bulk/), [쓰기와 검색 반영 시점](https://docs.opensearch.org/latest/api-reference/index-apis/refresh/).
+[^6]: AWS Labs 공개 구현, [소스 해시와 호출 깊이로 재분석 대상을 고르는 부분](https://github.com/awslabs/codekb/blob/abcf774772e07660d04b78c74aff4da91586038e/backend/src/analysis/refresh_orchestrator.py#L1341-L1409), [호출 그래프 재구성](https://github.com/awslabs/codekb/blob/abcf774772e07660d04b78c74aff4da91586038e/backend/src/analysis/refresh_orchestrator.py#L1532-L1567).
+[^7]: OpenAI, [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/).
+[^8]: [Cursor 팀의 검색 방식 설명](https://forum.cursor.com/t/codebase-indexing-not-working-in-v-3-12-onwards/167527/7)과 [현재 Cursor 검색 문서](https://cursor.com/docs/agent/tools/search).
+[^9]: OpenAI, [Codex CLI 기본 지침](https://github.com/openai/codex/blob/main/codex-rs/protocol/src/prompts/base_instructions/default.md). Anthropic, [How Claude Code works](https://code.claude.com/docs/en/how-claude-code-works).
+[^10]: [개발팀에 에이전틱 엔지니어링 도입하기](/2026/11/17/software-factory-team-tooling-runbook.html).
+[^11]: W3C, [RDF 1.1 Turtle](https://www.w3.org/TR/turtle/).
+[^12]: [쉽게 설명한 C4Model](/2022/12/17/demystifying-c4model.html), Simon Brown, [C4 모델의 다이어그램과 확대 수준](https://c4model.com/diagrams).
+[^13]: 내가 만든 [ontology-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/ontology-writer/README.md)와 [adr-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/adr-writer/README.md).
+[^14]: [AWS Labs 공개 저장소](https://github.com/awslabs/codekb).
