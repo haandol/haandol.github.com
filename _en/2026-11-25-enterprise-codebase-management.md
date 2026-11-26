@@ -25,7 +25,9 @@ permalink: /en/2026/11/25/enterprise-codebase-management.html
 
 In May 2026, Anthropic merged about 2,500 changes a day into its monorepo on average. By September it was merging more than 30,000 a day. CI alone was checking out code for builds and tests around 25 million times a day. Even hundreds of Git mirrors struggled to keep up. Anthropic built its own version control system and migrated the monorepo from Git to Scion in five months.[^1]
 
-In a software factory, agents take requirements through implementation and testing. As they write code faster, the speed of development also depends on how quickly changes can be merged and the source delivered to the systems that test them. When teams work in separate repositories, they also have to decide **which version of the code the agent should receive**.
+In a software factory, agents take requirements through implementation and testing. As they write code faster, the speed of development also depends on how quickly changes can be merged and the source delivered to the systems that test them.
+
+In [The Two Sides of AX, Part 2](/en/2026/11/17/software-factory-team-tooling-runbook.html), I described how one team brings its code, contracts, and tests together and starts delegating work it can verify. When several teams work in separate repositories, they also have to decide **which version of the code the agent should receive**.
 
 My team at Amazon keeps several components in one repository. The code for other teams' services that we depend on changes independently in their repositories. Our team works in a monorepo, while the organization managing these services works across multiple repositories. For example, to change how the order service calls payments, you need to know which API version the orders team uses.
 
