@@ -308,7 +308,7 @@ The scope and authority of FDE still appear to vary considerably from company to
 
 ---
 
-[^1]: OpenAI, [Forward Deployed Engineer](https://openai.com/careers/forward-deployed-engineer-san-francisco/) — describes an FDE role that owns the path from discovering a customer's problem to deploying a production system.
+[^1]: OpenAI, [Forward Deployed Engineer](https://openai.com/careers/forward-deployed-engineer-san-francisco/) — describes an FDE role that owns the path from discovering a customer's problem to deploying a production system. Kevin Bai, formerly at Palantir, discusses how FDEs build solutions with customers in [Forward Deployed Engineering 101 (from 3:14)](https://youtu.be/KwhgfwOSToQ?t=194).
 
 [^2]: Dmitry Buykin, [Tribal Dungeons of Global Shipping: AI Agents at Global Scale](https://www.youtube.com/watch?v=dQ-_i1tZiws&t=230s), AI Engineer World's Fair 2026 — presents Maersk's SOPs, evaluations, guardrails, and continuous refinement process.
 

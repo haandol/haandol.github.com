@@ -306,7 +306,7 @@ FDE의 기술 작업이 자동화돼도 조직 사이의 권한과 책임을 조
 
 ---
 
-[^1]: OpenAI, [Forward Deployed Engineer](https://openai.com/careers/forward-deployed-engineer-san-francisco/) — 고객의 문제 발견부터 프로덕션 배포까지 함께 책임지는 FDE 역할을 설명한다.
+[^1]: OpenAI, [Forward Deployed Engineer](https://openai.com/careers/forward-deployed-engineer-san-francisco/) — 고객의 문제 발견부터 프로덕션 배포까지 함께 책임지는 FDE 역할을 설명한다. Kevin Bai의 [Forward Deployed Engineering 101 (3분 14초부터)](https://youtu.be/KwhgfwOSToQ?t=194)에서는 FDE가 고객과 함께 플랫폼 위에 솔루션을 만드는 방식을 설명한다.
 
 [^2]: Dmitry Buykin, [Tribal Dungeons of Global Shipping: AI Agents at Global Scale](https://www.youtube.com/watch?v=dQ-_i1tZiws&t=230s), AI Engineer World's Fair 2026 — Maersk의 SOP, 평가, 가드레일과 지속적인 개선 과정을 소개한다.
 

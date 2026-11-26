@@ -360,7 +360,7 @@ FDE가 구축을 마치고 떠난 뒤 비즈니스 전문가가 솔루션의 기
 
 [^1]: AWS, [AWS invests $1 billion to embed AI forward deployed engineers with customers](https://www.aboutamazon.com/news/aws/aws-1-billion-forward-deployed-ai-engineers), 2026-06-30. 고객 계정의 시맨틱 계층·지식 그래프와 고객 엔지니어의 독립 운영 역량을 설명한다.
 [^2]: AWS Partner Network Blog, [Introducing Forward Deployed Engineering for Partners](https://aws.amazon.com/blogs/apn/introducing-forward-deployed-engineering-for-partners-winning-the-future-of-enterprise-ai/). 파트너가 보유·재사용하는 온톨로지·평가·도구 연결·에이전트 운영 하네스를 설명한다.
-[^3]: Palantir, [Integrated platforms: AIP, Foundry, and Apollo](https://www.palantir.com/docs/foundry/architecture-center/platforms). 표준 플랫폼과 고객별 맞춤화, FDE의 관계를 설명한다.
+[^3]: Palantir, [Integrated platforms: AIP, Foundry, and Apollo](https://www.palantir.com/docs/foundry/architecture-center/platforms). 표준 플랫폼과 고객별 맞춤화, FDE의 관계를 설명한다. Kevin Bai는 [Forward Deployed Engineering 101 (7분 16초부터)](https://youtu.be/KwhgfwOSToQ?t=436)에서 여러 고객이 함께 쓸 수 있는 플랫폼 기능과 고객별로 만드는 업무 흐름을 구분한다.
 [^4]: Palantir, [Ontology building](https://www.palantir.com/docs/foundry/ontology/overview). 업무 객체·관계와 액션·함수를 함께 다루는 운영 계층을 설명한다.
 [^5]: [업무 온톨로지 도구의 3D 보기](https://github.com/haandol/alps-writer-plugins/tree/main/plugins/ontology-writer). 잉크버드의 업무 모델에서 생성한 ‘표현 사전’ BC 화면.
 [^6]: [온톨로지 계층의 책임과 변경 방향](https://github.com/haandol/alps-writer-plugins/blob/main/plugins/ontology-writer/references/ontology.md). 업무 온톨로지·ADR·코드의 책임을 나누고, 업무 변경은 하위 구현으로 전달하며 코드 리팩터링은 업무 모델을 변경하지 않도록 정한 설계 원칙.
