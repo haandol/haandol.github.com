@@ -1,0 +1,360 @@
+{
+  "name": "search_code",
+  "description": "Before the agent starts, workspace setup syncs required dependency sources, packages, clients, contracts and tests to the versions recorded by the consumer. Routine changes build and test against this local snapshot without calling search_code. Call this read-only search tool on demand for external examples or conventions, a new or changed contract, or the actual source revision under investigation. Search returns evidence and never installs a dependency or changes a version pin. For purpose=contract, restrict candidates to owner-declared release artifacts and catalog entries. Without an exact revision these are discovery candidates. At an exact revision contract queries exclude catalog entries and return only an owner-published specification (published_contract) or change note (change_notice); only the specification defines the guarantee. Debugging requires the observed source revision. Every exact-revision hit must match the requested commit; if the caller can read the repo but that revision is not indexed, return revision_not_indexed. Never silently search a branch tip instead. Recheck current authorization before returning paths or snippets; an unavailable authorization service produces a tool error with no search data. Index coverage is keyed by repository, revision, mode, and corpus. A contract lookup needs owner-declared release artifacts; a code example or debugging lookup needs the source corpus for the selected mode. Contract-only coverage never satisfies a debug request. For an authorized exact revision with absent or incomplete required coverage, return revision_not_indexed, no hits, and no cursor. Use ok with no hits only after a complete search of the authorized, requested scope. Partial means an indexed search returned incomplete results (for example due to a timeout).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "purpose": {
+        "enum": [
+          "example",
+          "contract",
+          "debug"
+        ],
+        "description": "Use example for non-binding patterns, contract for owner-published artifacts, and debug for evidence at the revision under investigation."
+      },
+      "mode": {
+        "enum": [
+          "keyword",
+          "similarity"
+        ]
+      },
+      "query": {
+        "type": "string",
+        "minLength": 1
+      },
+      "repo": {
+        "type": "string",
+        "minLength": 1
+      },
+      "revision": {
+        "type": "string",
+        "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$",
+        "description": "Exact source commit. Resolve a release or deployment to this commit before calling."
+      },
+      "ref": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Supported branch for exploratory results; defaults to the repository default branch."
+      },
+      "path_glob": {
+        "type": "string",
+        "minLength": 1
+      },
+      "cursor": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Opaque page token bound to the caller and full search request."
+      }
+    },
+    "required": [
+      "purpose",
+      "mode",
+      "query"
+    ],
+    "additionalProperties": false,
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "dependentRequired": {
+      "revision": [
+        "repo"
+      ]
+    },
+    "allOf": [
+      {
+        "not": {
+          "required": [
+            "ref",
+            "revision"
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "purpose": {
+              "const": "contract"
+            }
+          },
+          "required": [
+            "purpose"
+          ]
+        },
+        "then": {
+          "properties": {
+            "mode": {
+              "const": "keyword"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "purpose": {
+              "const": "debug"
+            }
+          },
+          "required": [
+            "purpose"
+          ]
+        },
+        "then": {
+          "required": [
+            "repo",
+            "revision"
+          ]
+        }
+      }
+    ]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "enum": [
+          "ok",
+          "partial",
+          "ref_not_indexed",
+          "revision_not_indexed"
+        ]
+      },
+      "hits": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "repo": {
+              "type": "string",
+              "minLength": 1
+            },
+            "owner": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "commit": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start_line": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "end_line": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "snippet": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source_url": {
+              "type": "string",
+              "format": "uri",
+              "description": "Permission-checked source permalink at exactly commit and path."
+            },
+            "source_kind": {
+              "enum": [
+                "catalog",
+                "contract",
+                "change_note",
+                "guide",
+                "code",
+                "test"
+              ]
+            },
+            "evidence_role": {
+              "enum": [
+                "example",
+                "contract_candidate",
+                "published_contract",
+                "change_notice",
+                "diagnostic"
+              ],
+              "description": "example: non-binding usage; contract_candidate: unpinned owner-declared discovery result; published_contract: owner-published specification at the requested commit; change_notice: owner-published migration note at the requested commit; diagnostic: evidence from the deployed or reproduced commit."
+            }
+          },
+          "required": [
+            "repo",
+            "owner",
+            "ref",
+            "commit",
+            "path",
+            "start_line",
+            "end_line",
+            "snippet",
+            "source_url",
+            "source_kind",
+            "evidence_role"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "evidence_role": {
+                    "const": "published_contract"
+                  }
+                },
+                "required": [
+                  "evidence_role"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "source_kind": {
+                    "const": "contract"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "evidence_role": {
+                    "const": "contract_candidate"
+                  }
+                },
+                "required": [
+                  "evidence_role"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "source_kind": {
+                    "enum": [
+                      "catalog",
+                      "contract",
+                      "change_note"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "evidence_role": {
+                    "const": "change_notice"
+                  }
+                },
+                "required": [
+                  "evidence_role"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "source_kind": {
+                    "const": "change_note"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "next_cursor": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "index_state": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "repo": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "commit": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+            },
+            "indexed_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "mode": {
+              "enum": [
+                "keyword",
+                "similarity"
+              ]
+            },
+            "corpus": {
+              "enum": [
+                "release_artifacts",
+                "source"
+              ],
+              "description": "Coverage for owner-declared release materials or searchable repository source (including tests and guides as applicable)."
+            },
+            "complete": {
+              "type": "boolean",
+              "description": "Whether indexing finished for this mode and corpus at the listed commit."
+            }
+          },
+          "required": [
+            "repo",
+            "ref",
+            "commit",
+            "indexed_at",
+            "mode",
+            "corpus",
+            "complete"
+          ],
+          "additionalProperties": false
+        },
+        "description": "Mode-specific checkpoints for authorized queried scopes. Omit for an unscoped cross-repository search."
+      }
+    },
+    "required": [
+      "status",
+      "hits",
+      "next_cursor"
+    ],
+    "additionalProperties": false,
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "status": {
+              "enum": [
+                "ref_not_indexed",
+                "revision_not_indexed"
+              ]
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "then": {
+          "properties": {
+            "hits": {
+              "maxItems": 0
+            },
+            "next_cursor": {
+              "type": "null"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
