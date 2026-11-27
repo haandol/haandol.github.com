@@ -8,7 +8,7 @@ tags: software-factory codebase multi-repo coding-agent ddd microservices ontolo
 publish: true
 published: true
 date: 2026-11-25 19:01:31 +0900
-last_modified_at: 2026-11-27 13:42:10 +0900
+last_modified_at: 2026-11-27 14:09:14 +0900
 lang: en
 translation_key: enterprise-codebase-management
 korean_url: /2026/11/25/enterprise-codebase-management.html
@@ -52,6 +52,14 @@ In my work at Amazon, that division of responsibility carries over to the reposi
 At Amazon I use MCP (Model Context Protocol) tools to search internal code and unstructured documents such as wiki pages. The internal code search service offers both text matching and semantic search using embeddings of the code itself. An agent might start by searching the docs for “refund complete” and learn the name the payments team uses for the event. Searching the code for that name can lead it to the event definition and to tests in services that already handle it. The agent can start without knowing a repository or function name.
 
 I think **a single company-wide tool that searches the full text of code and documents across all repositories would put most development problems within an agent's reach**. The agent can refine its search as it reads the original files, then check its working repository for the version to use. For a new integration, it can choose and record a version. For an existing one, it can read the contract and code for the version already installed.
+
+### Why GitHub estimated the cost of a full scan
+
+If an agent can find a string with `ripgrep` in its working directory, could a company-wide search just run the same command in every repository? GitHub worked through that question in its 2023 code search beta. On an eight-core Intel machine, ripgrep took 2.769 seconds to run an exhaustive regular expression search on a 13 GB file cached in memory, about 0.6 GB per second per core.[^15]
+
+GitHub extrapolated that measurement to the 115 TB in its search corpus. Even with all the code in memory and work divided perfectly among 32 servers with 64 cores each, GitHub estimated that one query would occupy **all 2,048 cores for about 96 seconds**. At roughly 0.01 queries per second for the cluster, everyone else would have to wait.[^15]
+
+GitHub's own code search engine, Blackbird, selects character sequences called n-grams to index and records which files contain each one. Intersecting the lists for the grams in a query narrows the set of files whose contents need checking.[^15] The same principle applies to internal search. A company-wide text index narrows the candidate files, and the agent can search the source directly in the version pinned by the working repository. This keyword path needs no embeddings.
 
 ### An MCP tool for keyword and similarity search with OpenSearch
 
@@ -200,3 +208,5 @@ The payments team can publish a new event well before the orders team chooses to
 [^12]: [My C4 model walkthrough (in Korean)](/2022/12/17/demystifying-c4model.html) and Simon Brown, [Diagrams and levels of zoom in the C4 model](https://c4model.com/diagrams).
 [^13]: My [ontology-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/ontology-writer/README.md) and [adr-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/adr-writer/README.md) plugins.
 [^14]: OpenAI, [Codex Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide), “Recommended Starter Prompt” and “Other Custom Tools”.
+
+[^15]: Timothy Clem, [The technology behind GitHub’s new code search](https://github.blog/engineering/architecture-optimization/the-technology-behind-githubs-new-code-search/), GitHub Engineering (2023).

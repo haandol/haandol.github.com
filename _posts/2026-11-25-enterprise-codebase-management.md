@@ -8,7 +8,7 @@ tags: software-factory codebase multi-repo coding-agent ddd microservices ontolo
 publish: true
 published: true
 date: 2026-11-25 19:01:31 +0900
-last_modified_at: 2026-11-27 13:42:10 +0900
+last_modified_at: 2026-11-27 14:09:14 +0900
 lang: ko
 translation_key: enterprise-codebase-management
 english_url: /en/2026/11/25/enterprise-codebase-management.html
@@ -51,6 +51,14 @@ Spotify는 이 방식으로 SQL 기반 파이프라인 저장소에 코드 변�
 내가 Amazon에서 쓰는 MCP(Model Context Protocol) 도구로는 사내 코드와 위키 같은 비정형 문서를 검색할 수 있다. 사내 코드 검색에는 문자열을 찾는 모드와 코드 자체를 임베딩해 비슷한 기능을 찾는 모드가 있다. 예를 들어 에이전트는 ‘환불 완료’로 문서를 검색해 결제 팀이 쓰는 이벤트 이름을 알아낼 수 있다. 이번에는 그 이름으로 코드를 검색하면 이벤트 정의와 이미 그 이벤트를 처리하고 있는 서비스의 테스트까지 찾아갈 수 있다. 처음부터 저장소나 함수 이름을 알고 있을 필요가 없다.
 
 나는 **모든 저장소의 코드와 문서를 한 도구로 검색할 수 있으면 에이전트가 대부분의 개발 문제를 풀 수 있을 것**이라고 생각한다. 에이전트는 원문을 읽으면서 검색어를 바꿀 수 있고, 구현에 쓸 버전은 작업 저장소에서 확인할 수 있기 때문이다. 처음 연동하는 서비스라면 사용할 버전을 골라 기록하고, 이미 쓰는 서비스라면 로컬에 설치된 버전의 계약과 코드를 읽는다.
+
+### GitHub가 전수 검색 비용을 계산한 이유
+
+에이전트가 작업 디렉터리에서 `ripgrep`으로 문자열을 찾을 수 있다면, 전사 검색도 저장소마다 같은 명령을 돌리면 될까? GitHub는 2023년 코드 검색 베타에서 이 비용을 계산했다. 8코어 Intel 장비에서 메모리에 캐시된 13GB 파일 전체를 정규식으로 검색하는 데 2.769초가 걸렸다. 코어 하나당 초당 약 0.6GB를 읽는 속도다.[^15]
+
+GitHub는 이 측정값을 당시 검색 대상인 115TB에 대입했다. 코드 전체가 메모리에 있고 64코어 서버 32대가 일을 완벽하게 나눠도, 질의 한 건이 **2,048개 코어를 약 96초 동안** 점유한다는 추산이었다. 클러스터 전체로 초당 약 0.01건을 처리하는 셈이어서, 한 사람이 검색하는 동안 다른 사람은 기다려야 한다.[^15]
+
+GitHub의 자체 코드 검색 엔진 Blackbird는 코드에서 색인할 문자열 조각(n-gram)을 고르고, 조각별로 그 조각이 등장하는 파일 목록을 만든다. 검색어를 이루는 조각들의 목록을 대조하면 원문을 확인할 후보 파일이 줄어든다.[^15] 사내 검색에도 이 원리를 적용할 수 있다. 전사에서는 텍스트 색인으로 관련 파일을 좁히고, 로컬에서는 에이전트가 작업 저장소에 고정된 버전의 원문을 직접 검색한다. 키워드를 찾는 이 경로에는 임베딩이 필요 없다.
 
 ### OpenSearch로 키워드·유사도 검색을 제공하는 MCP 도구
 
@@ -199,3 +207,5 @@ flowchart TD
 [^12]: [쉽게 설명한 C4Model](/2022/12/17/demystifying-c4model.html), Simon Brown, [C4 모델의 다이어그램과 확대 수준](https://c4model.com/diagrams).
 [^13]: 내가 만든 [ontology-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/ontology-writer/README.md)와 [adr-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/adr-writer/README.md).
 [^14]: OpenAI, [Codex Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide)의 “Recommended Starter Prompt”와 “Other Custom Tools”.
+
+[^15]: Timothy Clem, [The technology behind GitHub’s new code search](https://github.blog/engineering/architecture-optimization/the-technology-behind-githubs-new-code-search/), GitHub Engineering (2023).
