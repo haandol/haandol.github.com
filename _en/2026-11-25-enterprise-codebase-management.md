@@ -8,7 +8,7 @@ tags: software-factory codebase multi-repo coding-agent ddd microservices ontolo
 publish: true
 published: true
 date: 2026-11-25 19:01:31 +0900
-last_modified_at: 2026-11-25 23:29:30 +0900
+last_modified_at: 2026-11-27 13:42:10 +0900
 lang: en
 translation_key: enterprise-codebase-management
 korean_url: /2026/11/25/enterprise-codebase-management.html
@@ -122,19 +122,15 @@ Retry transient indexing failures with backoff. Move repeated failures to a sepa
 
 A possible pilot target is **95% of supported-branch pushes visible in keyword search within two minutes**. Measure from receipt of the push until a search returns an added line or stops returning a deleted one. Track that delay and the age of the oldest queued job separately for similarity search. Use real queries that keyword search missed to measure how often similarity search finds the needed function before investing more capacity in it.
 
-#### How the choice of embedding changes maintenance cost
-
-A refactoring makes the cost difference concrete. Suppose the payments team rewrites the calculation inside `calculateRefund()` and preserves its return values. With embeddings of function bodies, it updates the vector for the changed body.
-
-Now consider a system that follows calls, asks an LLM to describe what each function does for the business, and embeds that description. The order cancellation function that calls `calculateRefund()` can become a candidate for reanalysis even if its own code hasn't changed, because its description drew on the refund calculation. One incremental implementation rebuilds the call graph and selects the changed functions and affected callers within a configured depth to refresh their descriptions and vectors.[^6]
-
-The more callers share a function, the more model calls a single commit can trigger. If a software factory merges changes faster than the workers can process them, a function whose behavior really has changed can still be found by its old description while it waits in the queue. **Time from commit to searchable result** shows whether indexing is keeping up. **Functions reanalyzed per changed function** shows how widely the work spreads. I see little reason to keep paying that cost to maintain a precomputed interpretation of the whole company's code.
-
 ### What the agent can read in its workspace
 
 An OpenAI team building a product with Codex also keeps the material its agent needs in the repository. A short `AGENTS.md` points to the relevant documents. Design decisions, database schemas, and reference material for external tools are versioned alongside the code. When a decision made in chat affects implementation, the team brings it into the repository. An agent opening that revision can read the decision and the code it applies to together.[^7]
 
-Today's coding agents can locate and read source in the working directory. Cursor has retired embedding-based semantic code search. Instant Grep builds a **local text index** for names and patterns, and the agent opens the original files it finds.[^8] Codex CLI favors `rg` for finding text and files. Claude Code likewise narrows its search with file patterns and content searches. Neither workflow needs a code embedding index for basic local exploration.[^9]
+The Claude Code team describes a deliberate choice to let the agent **find its own context**. An early internal version indexed the codebase in a vector database and handed Claude relevant snippets before each response. Giving Claude a `Grep` tool let it choose what to search for and read the matching files to gather the context it needed.[^9]
+
+OpenAI's *Codex Prompting Guide* shows a similar choice in the agent's instructions. Its recommended starter prompt, refined through internal evaluations, tells the model to prefer `rg` (ripgrep) when searching text and `rg --files` when listing files. When adding a separate semantic search tool, OpenAI even suggests making its results look different from the ripgrep output the model is accustomed to.[^14]
+
+What stands out to me in both cases is that **the agent can use a clue in the source to choose its next search**. In the refund example, the agent can take the name `RefundCompleted` from the company-wide search and look for it in the order repository. If it finds no uses, it can open the lockfile to see which version of the payments contract that service uses. Cursor retired embedding-based semantic code search and now uses Instant Grep with a **local text index** to find names and patterns before opening the matching files.[^8]
 
 ## 3. Five principles for applying microservice design across repositories
 
@@ -150,7 +146,7 @@ Microservices work together through APIs. The knowledge agents need when they wo
 4. **The central catalog records where knowledge lives, who owns it, and how services relate.** Making catalog entries searchable with the same tool lets an agent look up refunds, locate the specification owned by payments, and identify orders as a consumer. Payments maintains the definitions of the refund statuses in the original specification.
 5. **When work begins, the agent fetches the original material for the version it needs.** It installs and reads the payments specification and client pinned in the order repository's lockfile. If the specification isn't packaged, the agent fetches the original from the commit recorded in the order repository.
 
-Suppose a company-wide search finds a refund completion event in payments v2. The order service uses v1, where a status lookup is the only way to confirm that a refund is complete. If the agent writes code that waits for the v2 event, the customer will never get a notification. Even a freshly updated index would return the same result. That's why I see no value in embedding the company's code ahead of time for this task. With the local v1 specification, the team can write and test code that waits while a refund is “accepted” and sends the notification only when it's “complete.”
+Suppose a company-wide search finds a refund completion event in payments v2. The order service uses v1, where a status lookup is the only way to confirm that a refund is complete. If the agent writes code that waits for the v2 event, the customer will never get a notification. Even if the search result is up to date, the order service is still on v1. With the local v1 specification, the team can write and test code that waits while a refund is “accepted” and sends the notification only when it's “complete.”
 
 {% raw %}
 ```mermaid
@@ -191,19 +187,16 @@ I built two plugins around this structure, `ontology-writer` and `adr-writer`. T
 
 The payments team can publish a new event well before the orders team chooses to use it. Payments documents what the event means and which contract versions support it. Orders records the change that adopts that contract in its own repository. In my work at Amazon, that kind of boundary gives each team room to change its code independently. An agent can discover a new capability through company-wide search and still implement the change against the contract the orders team has adopted.
 
-For a software factory that merges changes frequently, the time and expense of refreshing descriptions derived from the call graph and their embeddings make the approach AWS Labs explored in CodeKB a poor default for company-wide code search.[^14]
-
 [^1]: Anthropic, [Redesigning source control at Anthropic](https://www.anthropic.com/research/redesigning-source-control).
 [^2]: Microsoft Azure Architecture Center, [Use domain analysis to model microservices](https://learn.microsoft.com/en-us/azure/architecture/microservices/model/domain-analysis).
 [^3]: Spotify Engineering, [Background Coding Agents: Supercharging Downstream Consumer Dataset Migrations](https://engineering.atspotify.com/2026/4/background-coding-agents-dataset-migrations-honk-part-4).
 [^4]: AWS, [Microservices, independent deployment, and APIs](https://aws.amazon.com/microservices/) and [service ownership on Amazon teams](https://aws.amazon.com/executive-insights/content/amazon-two-pizza-team/).
 [^5]: MCP, [Tool calls](https://modelcontextprotocol.io/specification/2025-11-25/server/tools). OpenSearch, [full-text queries](https://docs.opensearch.org/latest/query-dsl/full-text/index/), [nearest-neighbor search](https://docs.opensearch.org/latest/query-dsl/specialized/k-nn/index/), [bulk writes](https://docs.opensearch.org/latest/api-reference/document-apis/bulk/), and [when writes become searchable](https://docs.opensearch.org/latest/api-reference/index-apis/refresh/).
-[^6]: AWS Labs implementation, [selecting targets by source hash and call depth](https://github.com/awslabs/codekb/blob/abcf774772e07660d04b78c74aff4da91586038e/backend/src/analysis/refresh_orchestrator.py#L1341-L1409) and [rebuilding the call graph](https://github.com/awslabs/codekb/blob/abcf774772e07660d04b78c74aff4da91586038e/backend/src/analysis/refresh_orchestrator.py#L1532-L1567).
 [^7]: OpenAI, [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/).
 [^8]: [The Cursor team's explanation of the change](https://forum.cursor.com/t/codebase-indexing-not-working-in-v-3-12-onwards/167527/7) and [Cursor's current search documentation](https://cursor.com/docs/agent/tools/search).
-[^9]: OpenAI, [Codex CLI base instructions](https://github.com/openai/codex/blob/main/codex-rs/protocol/src/prompts/base_instructions/default.md). Anthropic, [How Claude Code works](https://code.claude.com/docs/en/how-claude-code-works).
+[^9]: Anthropic, [Seeing like an agent: how we design tools in Claude Code](https://claude.dev/blog/seeing-like-an-agent/), “Designing a search interface”.
 [^10]: [Adopting agentic engineering in a development team](/en/2026/11/17/software-factory-team-tooling-runbook.html).
 [^11]: W3C, [RDF 1.1 Turtle](https://www.w3.org/TR/turtle/).
 [^12]: [My C4 model walkthrough (in Korean)](/2022/12/17/demystifying-c4model.html) and Simon Brown, [Diagrams and levels of zoom in the C4 model](https://c4model.com/diagrams).
 [^13]: My [ontology-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/ontology-writer/README.md) and [adr-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/adr-writer/README.md) plugins.
-[^14]: [AWS Labs project repository](https://github.com/awslabs/codekb).
+[^14]: OpenAI, [Codex Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide), “Recommended Starter Prompt” and “Other Custom Tools”.

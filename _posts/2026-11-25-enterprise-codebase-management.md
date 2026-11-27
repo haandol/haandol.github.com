@@ -8,7 +8,7 @@ tags: software-factory codebase multi-repo coding-agent ddd microservices ontolo
 publish: true
 published: true
 date: 2026-11-25 19:01:31 +0900
-last_modified_at: 2026-11-25 23:29:30 +0900
+last_modified_at: 2026-11-27 13:42:10 +0900
 lang: ko
 translation_key: enterprise-codebase-management
 english_url: /en/2026/11/25/enterprise-codebase-management.html
@@ -121,19 +121,15 @@ flowchart TB
 
 파일럿에서는 예를 들어 **지원 브랜치 push의 95%가 2분 안에 키워드 검색에 보이는지**를 첫 목표로 삼을 수 있다. push를 받은 시점부터 실제 검색에서 추가한 줄이 나타나거나 삭제한 줄이 사라질 때까지 잰다. 유사도 모드도 검색 반영 시간을 따로 재고, 큐에서 가장 오래 기다린 작업의 대기 시간을 확인한다. 두 모드에 얼마를 투자할지는 키워드로 놓친 실제 질의에서 유사도 검색이 필요한 함수를 얼마나 더 찾아주는지 보고 정한다.
 
-#### 무엇을 임베딩하느냐에 따라 달라지는 유지 비용
-
-비용 차이는 리팩터링에서 드러난다. 예를 들어 공통 함수 `calculateRefund()`의 내부 계산을 정리하고 반환값은 그대로 뒀다고 하자. 함수 본문만 임베딩한다면 달라진 본문의 벡터를 갱신하면 된다.
-
-호출 관계를 따라 LLM이 각 함수의 업무상 역할을 설명하고 그 설명을 임베딩하는 방식에서는, `calculateRefund()`를 호출하는 주문 취소 함수도 다시 분석할 대상이 될 수 있다. 주문 취소 코드는 한 줄도 바뀌지 않았어도 기존 설명을 만들 때 환불 함수의 동작을 참조했기 때문이다. 실제 증분 갱신 구현은 호출 그래프를 다시 구성한다. 설명과 벡터를 갱신할 대상은 변경된 함수와 설정된 깊이 안에서 영향을 받는 호출자다.[^6]
-
-공통 함수를 호출하는 곳이 많으면 커밋 한 건으로도 다시 분석할 함수가 많아질 수 있다. 소프트웨어 팩토리에서 변경이 갱신 작업의 처리 속도보다 빠르게 쌓이면, 동작이 실제로 바뀐 함수도 차례를 기다리는 동안 이전 설명으로 검색된다. 내가 운영할 때 우선 보고 싶은 수치는 **새 커밋이 검색되기까지 걸린 시간**과 **바뀐 함수 하나 때문에 다시 분석한 함수 수**다. 이 비용을 계속 치르면서 전사 코드의 해석을 미리 만들어 둘 이유는 적다고 생각한다.
-
 ### 작업 저장소에서 에이전트가 읽는 자료
 
 OpenAI에서 Codex로 제품을 개발하는 한 팀도 에이전트가 작업 중에 읽을 자료를 저장소에서 관리한다. 짧은 `AGENTS.md`는 필요한 문서의 위치를 안내한다. 설계 결정, 데이터베이스 스키마, 외부 도구의 참고 문서를 코드와 함께 버전 관리한다. 채팅에서 합의한 결정도 구현에 필요하면 저장소에 옮긴다. 에이전트가 어느 시점의 코드를 열든 그때의 결정과 코드를 함께 읽을 수 있게 하는 것이다.[^7]
 
-작업 디렉터리에 자료가 들어오면 에이전트는 그 안에서 직접 검색할 수 있다. Cursor는 코드 임베딩을 이용한 의미 검색을 중단했고, 현재는 Instant Grep이 로컬에 만든 **텍스트 인덱스**에서 이름이나 패턴을 찾은 다음 원본 파일을 연다.[^8] Codex CLI는 파일과 텍스트를 찾을 때 `rg`를 우선하고, Claude Code도 파일 이름 패턴과 본문 검색으로 읽을 범위를 좁힌다. 두 도구의 기본 로컬 탐색에는 코드 임베딩 인덱스가 필요하지 않다.[^9]
+Claude Code 팀은 에이전트가 작업 중에 읽을 코드를 **스스로 찾도록** 검색 도구를 설계했다고 설명한다. 사내 초기 버전에서는 코드베이스를 벡터로 미리 색인하고 매 응답 전에 관련 코드 조각을 Claude에게 건넸다. 팀이 `Grep` 도구를 도입하면서 Claude가 직접 검색어를 고르고, 일치하는 파일을 읽으며 필요한 문맥을 모을 수 있게 됐다.[^9]
+
+OpenAI의 *Codex Prompting Guide*에서도 비슷한 설계 선택을 볼 수 있다. 내부 평가를 거쳐 다듬은 권장 프롬프트는 텍스트를 찾을 때 `rg`(ripgrep)를, 파일 목록을 얻을 때 `rg --files`를 우선하라고 지시한다. 별도 의미 검색 도구를 추가할 때는 모델에 익숙한 ripgrep의 출력과 구별되게 결과를 보여 주라는 조언도 있다.[^14]
+
+두 사례에서 내가 주목한 점은 **에이전트가 원문의 단서를 따라 다음 검색을 할 수 있게 한다는 것**이다. 앞의 환불 예시라면 전사 검색에서 찾은 `RefundCompleted`를 주문 저장소에서 다시 검색한다. 사용처가 나오지 않으면 잠금 파일을 열어 어느 버전의 결제 계약을 쓰는지 확인할 수 있다. Cursor는 코드 임베딩을 이용한 의미 검색을 중단했고, 현재는 로컬 **텍스트 인덱스**를 쓰는 Instant Grep으로 이름과 패턴을 찾은 뒤 해당 파일을 연다.[^8]
 
 ## 3. MSA의 설계를 멀티레포 코드 관리에 적용하는 다섯 가지 원칙
 
@@ -149,7 +145,7 @@ MSA에서 서비스가 API를 통해 협업하듯, 여러 저장소에서 일하
 4. **중앙 카탈로그는 지식의 위치, 소유자, 관계를 관리한다.** 카탈로그 항목도 같은 도구로 검색할 수 있게 두면, ‘환불’로 결제 팀의 명세 위치와 이를 사용하는 주문 서비스를 찾을 수 있다. 환불 상태의 정의는 결제 팀이 원문에서 관리한다.
 5. **에이전트는 작업할 때 필요한 버전의 원문을 가져온다.** 주문 저장소의 잠금 파일(lockfile)이 지정한 결제 명세와 클라이언트를 설치해 읽는다. 패키지로 배포하지 않는 명세라면 주문 저장소에 기록한 커밋에서 원문을 가져온다.
 
-예를 들어 전사 검색에서 결제 v2가 발행하는 환불 완료 이벤트를 찾았다고 하자. 주문 서비스가 연동한 v1에서는 상태 조회로만 환불 완료를 확인할 수 있다. 에이전트가 검색 결과를 보고 v2 이벤트를 기다리는 코드를 작성하면 고객은 알림을 받지 못한다. 인덱스를 방금 갱신해도 마찬가지다. 나는 이런 구현을 위해 전사 코드를 미리 임베딩해 둘 효용이 없다고 생각한다. 로컬의 v1 명세를 읽으면 ‘접수’에서는 알림을 보류하고 ‘완료’에서만 보내는 코드와 테스트를 작성할 수 있다.
+예를 들어 전사 검색에서 결제 v2가 발행하는 환불 완료 이벤트를 찾았다고 하자. 주문 서비스가 연동한 v1에서는 상태 조회로만 환불 완료를 확인할 수 있다. 에이전트가 검색 결과를 보고 v2 이벤트를 기다리는 코드를 작성하면 고객은 알림을 받지 못한다. 검색 결과가 최신이어도 주문 서비스가 쓰는 계약은 v1이다. 로컬의 v1 명세를 읽으면 ‘접수’에서는 알림을 보류하고 ‘완료’에서만 보내는 코드와 테스트를 작성할 수 있다.
 
 {% raw %}
 ```mermaid
@@ -190,19 +186,16 @@ flowchart TD
 
 결제 팀이 새 이벤트를 공개하는 시점과 주문 팀이 그 이벤트를 쓰기로 하는 시점은 다를 수 있다. 결제 팀은 이벤트의 의미와 지원 범위를 계약으로 남기고, 주문 팀은 그 계약을 채택하는 변경을 자기 저장소에 남긴다. 내가 Amazon에서 경험한 개발 방식에서도 이런 경계가 각 팀이 독립적으로 코드를 바꿀 여지를 준다. 에이전트도 전사 검색으로 새 기능을 발견하고, 주문 코드를 고칠 때는 주문 팀이 채택한 계약에 맞춰 일할 수 있다.
 
-AWS Labs의 CodeKB처럼 호출 관계를 분석해 함수 설명을 만들고 그 설명을 임베딩하는 방식은, 변경이 잦은 소프트웨어 팩토리에서 갱신에 드는 비용과 시간 때문에 전사 코드 검색의 기본 설계로 권하고 싶지 않다.[^14]
-
 [^1]: Anthropic, [Redesigning source control at Anthropic](https://www.anthropic.com/research/redesigning-source-control).
 [^2]: Microsoft Azure Architecture Center, [DDD로 마이크로서비스의 경계와 관계 설계하기](https://learn.microsoft.com/en-us/azure/architecture/microservices/model/domain-analysis).
 [^3]: Spotify Engineering, [Background Coding Agents: Supercharging Downstream Consumer Dataset Migrations](https://engineering.atspotify.com/2026/4/background-coding-agents-dataset-migrations-honk-part-4).
 [^4]: AWS, [마이크로서비스의 독립 배포와 인터페이스](https://aws.amazon.com/microservices/), [Amazon 서비스 팀의 소유권](https://aws.amazon.com/executive-insights/content/amazon-two-pizza-team/).
 [^5]: MCP, [도구 호출 규약](https://modelcontextprotocol.io/specification/2025-11-25/server/tools). OpenSearch, [원문 질의](https://docs.opensearch.org/latest/query-dsl/full-text/index/), [벡터 근접 검색](https://docs.opensearch.org/latest/query-dsl/specialized/k-nn/index/), [일괄 쓰기](https://docs.opensearch.org/latest/api-reference/document-apis/bulk/), [쓰기와 검색 반영 시점](https://docs.opensearch.org/latest/api-reference/index-apis/refresh/).
-[^6]: AWS Labs 공개 구현, [소스 해시와 호출 깊이로 재분석 대상을 고르는 부분](https://github.com/awslabs/codekb/blob/abcf774772e07660d04b78c74aff4da91586038e/backend/src/analysis/refresh_orchestrator.py#L1341-L1409), [호출 그래프 재구성](https://github.com/awslabs/codekb/blob/abcf774772e07660d04b78c74aff4da91586038e/backend/src/analysis/refresh_orchestrator.py#L1532-L1567).
 [^7]: OpenAI, [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/).
 [^8]: [Cursor 팀의 검색 방식 설명](https://forum.cursor.com/t/codebase-indexing-not-working-in-v-3-12-onwards/167527/7)과 [현재 Cursor 검색 문서](https://cursor.com/docs/agent/tools/search).
-[^9]: OpenAI, [Codex CLI 기본 지침](https://github.com/openai/codex/blob/main/codex-rs/protocol/src/prompts/base_instructions/default.md). Anthropic, [How Claude Code works](https://code.claude.com/docs/en/how-claude-code-works).
+[^9]: Anthropic, [Seeing like an agent: how we design tools in Claude Code](https://claude.dev/blog/seeing-like-an-agent/)의 “Designing a search interface”.
 [^10]: [개발팀에 에이전틱 엔지니어링 도입하기](/2026/11/17/software-factory-team-tooling-runbook.html).
 [^11]: W3C, [RDF 1.1 Turtle](https://www.w3.org/TR/turtle/).
 [^12]: [쉽게 설명한 C4Model](/2022/12/17/demystifying-c4model.html), Simon Brown, [C4 모델의 다이어그램과 확대 수준](https://c4model.com/diagrams).
 [^13]: 내가 만든 [ontology-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/ontology-writer/README.md)와 [adr-writer](https://github.com/haandol/alps-writer-plugins/blob/757049099990adfb4418238711d22dbe19bcbf22/plugins/adr-writer/README.md).
-[^14]: [AWS Labs 공개 저장소](https://github.com/awslabs/codekb).
+[^14]: OpenAI, [Codex Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide)의 “Recommended Starter Prompt”와 “Other Custom Tools”.
